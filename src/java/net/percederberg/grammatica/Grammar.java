@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica;
@@ -38,7 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.LinkedList;
 
 import net.percederberg.grammatica.parser.Analyzer;
 import net.percederberg.grammatica.parser.Parser;
@@ -54,7 +54,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * file and create a lexical analyzer (tokenizer) for the grammar.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.2
+ * @version  1.5
  */
 public class Grammar extends Object {
 
@@ -107,7 +107,7 @@ public class Grammar extends Object {
     /**
      * The tokens found in the processing.
      */
-    private Vector tokens = new Vector();
+    private LinkedList tokens = new LinkedList();
 
     /**
      * The token id map. This is a map from the token pattern id to
@@ -130,7 +130,7 @@ public class Grammar extends Object {
     /**
      * The productions found in the processing.
      */
-    private Vector productions = new Vector();
+    private LinkedList productions = new LinkedList();
 
     /**
      * The production id map. This is a map from the production
