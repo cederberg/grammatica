@@ -1,0 +1,66 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Introduction</h1>
+
+    <p>This is the reference manual for Grammatica version 
+    <param name="version" />.</p>
+
+    <list>
+      <item>
+        <title><ref file="terminology.xml">Terms &amp; 
+        Definitions</ref></title>
+        <text>Definitions and explainations to some of the terminology
+        used in this reference manual.</text>
+      </item>
+
+      <item>
+        <title><ref file="using.xml">Using Grammatica</ref></title>
+        <text>Short introduction to the command-line interface of
+        Grammatica.</text>
+      </item>
+
+      <item>
+        <title><ref file="grammar.xml">Grammar Structure &amp; 
+        Declarations</ref></title>
+        <text>Overview of the grammar file format and header
+        declaration.</text>
+      </item>
+
+      <item>
+        <title><ref file="tokens.xml">Tokens</ref></title>
+        <text>Details the syntax of the token declarations in the
+        grammar.</text>
+      </item>
+
+      <item>
+        <title><ref file="productions.xml">Productions</ref></title>
+        <text>Details the syntax of the production declarations in the
+        grammar.</text>
+      </item>
+
+      <item>
+        <title><ref file="ambiguities.xml">Handling 
+        Ambiguities</ref></title>
+        <text>Examples of some grammar ambiguities and how they can be
+        handled.</text>
+      </item>
+
+      <item>
+        <title><ref file="errors.xml">Error Recovery</ref></title>
+        <text>Information about the automatic error recovery 
+        mechanisms.</text>
+      </item>
+
+      <item>
+        <title><ref file="example.xml">Examples</ref></title>
+        <text>Contains a complete example of a grammar file.</text>
+      </item>
+    </list>
+
+  </body>
+</doc>

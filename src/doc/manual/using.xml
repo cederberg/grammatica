@@ -1,0 +1,96 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Using Grammatica</h1>
+
+    <p>Gramatica is run from the command-line. The available command
+    line options are printed when running without any options, as can
+    be seen in the figure below.</p>
+
+    <figure>
+      <caption>The command-line help output from Grammatica.</caption>
+
+      <content>
+        <pre># java -jar grammatica-<param name="version"/>.jar
+
+Generates source code for a C# or Java parser from a grammar
+file. This program comes with ABSOLUTELY NO WARRANTY; for
+details see the LICENSE.txt file.
+ 
+Syntax: Grammatica &lt;grammarfile&gt; &lt;action&gt; [&lt;options&gt;]
+ 
+Actions:
+  --debug
+      Debugs the grammar by validating it and printing the
+      internal representation.
+  --tokenize &lt;file&gt;
+      Debugs the grammar by using it to tokenize the specified
+      file. No code has to be generated for this.
+  --parse &lt;file&gt;
+      Debugs the grammar by using it to parse the specified
+      file. No code has to be generated for this.
+  --profile &lt;file&gt;
+      Profiles the grammar by using it to parse the specified
+      file and printing a statistic summary.
+  --csoutput &lt;dir&gt;
+      Creates a C# parser for the grammar (in source code).
+      The specified directory will be used as output directory
+      for the source code files.
+  --javaoutput &lt;dir&gt;
+      Creates a Java parser for the grammar (in source code).
+      The specified directory will be used as the base output
+      directory for the source code files.
+ 
+C# Output Options:
+  --csnamespace &lt;package&gt;
+      Sets the C# namespace to use in generated source code
+      files. By default no namespace declaration is included.
+  --csclassname &lt;name&gt;
+      Sets the C# class name prefix to use in generated source
+      code files. By default the grammar file name is used.
+  --cspublic
+      Sets public access for all C# types generated. By default
+      type access is internal.
+ 
+Java Output Options:
+  --javapackage &lt;package&gt;
+      Sets the Java package to use in generated source code
+      files. By default no package declaration is included.
+  --javaclassname &lt;name&gt;
+      Sets the Java class name prefix to use in generated source
+      code files. By default the grammar file name is used.
+  --javapublic
+      Sets public access for all Java types. By default type
+      access is package local.
+ 
+Error: Missing grammar file and/or action</pre>
+      </content>
+    </figure>
+
+    <p>The ordering of the command-line parameters is important. The
+    first argument should always be the grammar file. The second
+    argument should always be one of the available actions, with the
+    additional file or directory parameter. The specific output
+    options for C# and Java are all optional, choosing default values
+    if not specified.</p>
+
+    <p>Grammatica can be used for parsing and tokenizing files, even
+    though no parser has been generated. This feature can be very
+    useful for testing and debugging grammars, as illustrated in the
+    figure below.</p>
+
+    <figure>
+      <caption>Command-line for using Grammatica to parse a test data
+      file.</caption>
+
+      <content>
+        <pre># java -jar grammatica-<param name="version"/>.jar test.grammar --parse test.data</pre>
+      </content>
+    </figure>
+
+  </body>
+</doc>

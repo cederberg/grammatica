@@ -1,0 +1,104 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Grammar Structure &amp; Declarations</h1>
+
+    <p>Grammatica uses its own grammar format, normally stored in
+    files with a <code>.grammar</code> extension. The files are
+    divided into three parts -- header, tokens, and productions. The
+    header part is used for declarations about the grammar, such as
+    the grammar type. The token and production parts are used for
+    token and production declarations, which is explained in later
+    chapters. See the figure below for an example of the file
+    structure.</p>
+
+    <figure>
+      <caption>The overall structure of a grammar file.</caption>
+
+      <content>
+        <pre>%header%
+GRAMMARTYPE = "LL"
+...
+
+%tokens%
+...
+
+%productions%
+...</pre>
+      </content>
+    </figure>
+
+    <p>Grammar files also support comments anywhere in the file.
+    The comment syntax is similar to the comments in C# and Java (as
+    well as many other popular languages). Two example comments can be
+    seen in the example below.</p>
+
+    <figure>
+      <caption>The two types of comments available in grammar
+      files.</caption>
+
+      <content>
+        <pre>/* A comment spanning 
+   multiple lines */
+
+// A comment reaching to end of line</pre>
+      </content>
+    </figure>
+
+    <p>The header part in a grammar file contains definitions of 
+    grammar parameters. These are name-value pairs, with the name
+    normally being all upper-case. In order for Grammatica to process
+    a grammar file, at least the <code>GRAMMARTYPE</code> parameter
+    must be defined. See below for a list of the standard parameter 
+    names and values.</p>
+
+    <list>
+      <item>
+        <title>AUTHOR</title>
+        <text>The grammar author name. Used by Grammatica for
+        creating <code>@author</code> tags in the Java 
+        output.</text>
+      </item>
+
+      <item>
+        <title>COPYRIGHT</title>
+        <text>The grammar copyright statement. Used by Grammatica for
+        the file comments of generated files.</text>
+      </item>
+
+      <item>
+        <title>DATE</title>
+        <text>The grammar version date. Not used by Grammatica.</text>
+      </item>
+
+      <item>
+        <title>DESCRIPTION</title>
+        <text>Contains a description of the grammar. Not used by
+        Grammatica.</text>
+      </item>
+
+      <item>
+        <title>GRAMMARTYPE</title>
+        <text>Defines the grammar type. Valid values are "LL" or "LR",
+        but currently Grammatica only supports LL grammars.</text>
+      </item>
+
+      <item>
+        <title>LICENSE</title>
+        <text>The grammar license statement. Used by Grammatica for
+        the file comments of generated files.</text>
+      </item>
+
+      <item>
+        <title>VERSION</title>
+        <text>The grammar version number. Used by Grammatica for
+        creating <code>@version</code> tags in the Java output.</text>
+      </item>
+    </list>
+
+  </body>
+</doc>

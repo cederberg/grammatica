@@ -1,0 +1,68 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Handling Ambiguities</h1>
+
+    <p>Grammar ambiguities are points in the grammar where multiple
+    alternatives conflict. As the parser is deterministic, a single 
+    alternative must be chosen and grammar ambiguities are therefore 
+    not allowed.</p>
+
+    <p>By looking several tokens ahead, a parser is able to resolve
+    some grammar ambiguities. The LL parser in Grammatica supports
+    looking many tokens ahead. See the figure below for a simple
+    example that can be resolved by looking more than one token
+    ahead.</p>
+
+    <figure>
+      <caption>A simple grammar ambiguity. This ambiguity cause
+      problems for parsers with a single look-ahead token, but
+      Grammatica can handle it by resorting to two look-ahead
+      tokens.</caption>
+
+      <content>
+        <pre>Prod = "a" "b"
+     | "a" "c" ;</pre>
+      </content>
+    </figure>
+
+    <p>Unfortunately, most ambiguities are not as easy to resolve
+    automatically as the one in the figure above. An infinite number
+    of look-ahead tokens may for example not be enough if the
+    collision can itself consist of an infinite number of tokens. In
+    these cases, the grammar must be rewritten to remove the
+    ambiguity. In the figure below one such ambiguity and a resolution
+    is shown.</p>
+
+    <figure>
+      <caption>An unresolvable grammar ambiguity and a refactored
+      production. As the number of conflicting tokens is potentially
+      infinite, this ambiguity cannot be resolved by the use of a 
+      look-ahead parser. Instead the production must be split into
+      two, as illustrated by <code>NewProd</code> and
+      <code>ProdTail</code>.</caption>
+
+      <content>
+        <pre>OldProd = "a"* "b"
+        | "a"* "c" ;
+
+NewProd = "a"* ProdTail ;
+
+ProdTail = "b"
+         | "c" ;</pre>
+      </content>
+    </figure>
+
+    <p>Unresolvable ambiguities can also occur due to loops in the
+    grammar, causing some token sequence to possibly be repeated
+    infinitely. Some ambiguities are also caused by an optional
+    reference conflicting with the next reference inside a production
+    alternative. All these types of ambiguities are detected by
+    Grammatica and reported to the user.</p>
+
+  </body>
+</doc>

@@ -1,0 +1,135 @@
+<doc>
+  <head>
+    <title>Grammatica TODO-List</title>
+  </head>
+
+  <body>
+
+    <h1>Known Issues</h1>
+
+    <p>This is a list of the known issues as of the release of
+    version <param name="version" /> (<param name="date" />). Please 
+    verify that any new problem found is not in this list before 
+    sending a bug report.</p>
+
+    <list>
+      <item>
+        <title>Regular Expressions: Not fully JDK 1.4 compatible</title>
+        <text>The regular expression library is still lacking in some
+        ways compared to the implementation in JDK 1.4 (or Perl 5). 
+        The library should be extended to support as many constructs 
+        as possible. (Bug #3597)</text>
+      </item>
+
+      <item>
+        <title>Documentation: The C# API is not documented</title>
+        <text>The Java API documentation is very similar, but there
+        are important differences in name casing and similar. Proper 
+        C# API documentation in HTML should be generated as part of 
+        the build process. (Bug #3612)</text>
+      </item>
+    </list>
+    
+
+    <h1>Suggested Improvements</h1>
+
+    <p>This is a list of the currently known suggested 
+    improvements.</p>
+
+    <list>
+      <item>
+        <title>General: No Ant and NAnt tasks available</title>
+        <text>Apache Ant and NAnt tasks should be created for 
+        simplifying the usage. These tasks should only support 
+        the code generation, but ought to handle both languages. 
+        (Bug #3620)</text>
+      </item>
+
+      <item>
+        <title>Grammar: Add support for modular grammars</title>
+        <text>By allowing one grammar to reference another, it 
+        would be possible to create more complex modular parsers.
+        This feature also requires support for modular tokenizers
+        and parses, as well as the generation of modular code. 
+        (Bug #3599)</text>
+      </item>
+
+      <item>
+        <title>Grammar: Add localization support</title>
+        <text>This includes finding an architecture that works for 
+        grammar files, making it possible to localize the error 
+        messages without rewriting the grammar file. This 
+        architecture must support different methods depending on 
+        generated source (ResourceBundles in Java, Gnu Gettext in C 
+        &amp; C++). (Bug #3600)</text>
+      </item>
+
+      <item>
+        <title>Grammar: Identical productions should be unified</title>
+        <text>Identical syntetic productions are not indentified as 
+        such. Instead, a new syntetic production is added in each 
+        case. This will cause problems for LR parsers, and is 
+        generally inefficient. Identical syntetic productions should 
+        be unified. (Bug #3602)</text>
+      </item>
+
+      <item>
+        <title>Tokenizer: Improve processing speed</title>
+        <text>There are probably still substantial parsing speed 
+        improvements to gain by improving the tokenizer performance. 
+        All the obvious optimizations have already been done, however. 
+        The next step is probably to create a DFA. (Bug #3603)</text>
+      </item>
+
+      <item>
+        <title>Tokenizer: Add support for modes</title>
+        <text>When reading certain tokens the tokenizer should be 
+        able to enter some kind of "mode", limiting the set of tokens
+        that are considered for a match. This is highly useful in 
+        some grammars, where the token syntax isn't easily 
+        represented with regular expressions. (Bug #3604)</text>
+      </item>
+
+      <item>
+        <title>Tokenizer: Add support for "hidden" tokens</title>
+        <text>This feature could be used to parse source code while 
+        maintaining the whitespace tokens accessible in some way, 
+        very useful for writing a code style checker. (Bug #3605)</text>
+      </item>
+
+      <item>
+        <title>Parser: Add support for LR grammars</title>
+        <text>This probably means writing at least an LALR(1) parser, 
+        and probably also some kind of LR(k) parser. (Bug #3606)</text>
+      </item>
+
+      <item>
+        <title>Parser: Add parsing through code callbacks</title>
+        <text>This would allow more complex grammars to be parsed 
+        where some productions cannot be expressed in EBNF. Instead a
+        callback method would be called to parse some specific 
+        productions. (Bug #3607)</text>
+      </item>
+    
+      <item>
+        <title>Analyzer: Allow node values propagating downwards</title>
+        <text>Improve the analyzer framework to handle node values 
+        propagating downwards or sideways in the tree as well.
+        (Bug #3608)</text>
+      </item>
+
+      <item>
+        <title>Code Generation: Support creation of a C parser</title>
+        <text>This requires the writing of a C runtime library plus 
+        appropriate code generation classes. (Bug #3609)</text>
+      </item>
+  
+      <item>
+        <title>Code Generation: Support creation of a C++ parser</title>
+        <text>This requires the writing of a C++ runtime library plus 
+        appropriate code generation classes. (Bug #3610)</text>
+      </item>
+    </list>
+
+  </body>
+</doc>

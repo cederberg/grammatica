@@ -1,0 +1,54 @@
+<doc>
+  <head>
+    <title>Grammatica Release Documentation</title>
+  </head>
+
+  <body>
+
+    <h1>Introduction</h1>
+
+    <p>Grammatica is a parser generator for C# and Java. It reads a
+    grammar file and creates source code for a parser. The grammar
+    file format describes the language in EBNF, with tokens described
+    as regular expressions. More detailed information is available in
+    the <ref file="features.xml">feature list</ref>.</p>
+  
+    <p>See the <ref url="http://www.nongnu.org/grammatica">Grammatica
+    web site</ref> for the latest version available.</p>
+
+
+    <h1>Release Notes</h1>
+
+    <p>The documents below are the release notes for Grammatica 
+    version <param name="version" /> (<param name="date" />):</p>
+
+    <list>
+      <item>
+        <title><ref file="install.xml">Installation &amp; Running</ref></title>
+        <text>Instructions for installing and running Grammatica.</text>
+      </item>
+
+      <item>
+        <title><ref file="features.xml">Features</ref></title>
+        <text>List of features supported in this version.</text>
+      </item>
+
+      <item>
+        <title><ref file="bugs.xml">Known Issues</ref></title>
+        <text>Information about known issues and future improvements.</text>
+      </item>
+
+      <item>
+        <title><ref file="version.xml">Version History</ref></title>
+        <text>Information about all public releases.</text>
+      </item>
+
+      <item>
+        <title><ref file="authors.xml">Authors</ref></title>
+        <text>Acknowledgements of persons and organizations that have 
+        contributed to Grammatica.</text>
+      </item>
+    </list>
+
+  </body>
+</doc>

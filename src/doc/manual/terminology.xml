@@ -1,0 +1,112 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Terms &amp; Definitions</h1>
+
+    <p>Grammatica uses specific terminology that is important to
+    understand. Those same terms are also used in this reference
+    manual and in other documents. The list below attempts to define
+    and describe the most important of these terms.</p>
+
+    <list>
+      <item>
+        <title>Grammar</title>
+        <text>A definition of a language. Grammatica only supports
+        formal (or artificial) languages that are context-free, i.e.
+        where all ambiguities in the input can be resolved without
+        knowledge of its meaning. A grammar is defined by a set of
+        tokens and productions.</text>
+      </item>
+
+      <item>
+        <title>Token</title>
+        <text>A group of one or more characters belonging together. A
+        token is similar to a word in a natural language, and is the 
+        fundamental building block in the grammar. A token is normally
+        defined in the form of a string or a regular expression.</text>
+      </item>
+
+      <item>
+        <title>Regular Expression</title>
+        <text>A language for matching character sequences. The regular 
+        expression syntax varies slightly between implementations, but
+        a good definition is available in the Java API for the  <ref
+        url="http://java.sun.com/j2se/1.4/docs/api/java/util/regex/Pattern.html">java.util.regexp.Pattern
+        class</ref>. Regular expressions can be used to define tokens
+        in the grammar.</text>
+      </item>
+
+      <item>
+        <title>Production</title>
+        <text>A grammar rule for grouping and tokens together. A
+        production consists of a set of mutually exclusive production
+        alternatives, each specifying a particular sequence of tokens
+        and productions that must be read to match the rule. The
+        productions and their alternatives are defined in EBNF.</text>
+      </item>
+
+      <item>
+        <title>Production Alternative</title>
+        <text>A part of a production. A production alternative
+        specifies the tokens and productions in the order that they
+        must be read. One or more production alternatives form a
+        production, where each of the alternatives is considered
+        mutually exclusive (at most one may match).</text>
+      </item>
+
+      <item>
+        <title>EBNF (Extended Backus-Naur Form)</title>
+        <text>A syntax for defining productions. The EBNF syntax varies
+        slightly between implementations, but a good definition is 
+        available <ref
+        url="http://www.garshol.priv.no/download/text/bnf.html">here</ref>.
+        EBNF is used to define productions in the grammar.</text>
+      </item>
+
+      <item>
+        <title>Parse</title>
+        <text>The process of reading and analyzing a character stream.
+        A parser is a program that can read input characters and
+        structure them according to a grammar.</text>
+      </item>
+
+      <item>
+        <title>Parse Tree</title>
+        <text>A tree data structure formed during the parsing. Each
+        token and production matched is present in the tree, in the 
+        hierarchical order in which they were processed.</text>
+      </item>
+
+      <item>
+        <title>Syntax Tree</title>
+        <text>Similar to a parse tree. Often the term abstract syntax
+        tree (AST) is used as a synonym to parse tree, although an 
+        abstract syntax tree may possibly have been modified after the
+        parsing.</text>
+      </item>
+
+      <item>
+        <title>LL Grammar</title>
+        <text>A left-to-right, leftmost derivation grammar. The first
+        L refers to reading the input from left to right. The second L
+        refers to parsing the symbols in the productions from left to
+        right. An LL grammar is normally right-recursive and must be
+        parsed top-down.</text>
+      </item>
+
+      <item>
+        <title>LR Grammar</title>
+        <text>A left-to-right, rightmost derivation grammar. The first
+        L refers to reading the input from left to right. The second L
+        refers to parsing the symbols in the productions from right to
+        left. An LR grammar is normally left-recursive and must be
+        parsed bottom-up.</text>
+      </item>
+    </list>
+
+  </body>
+</doc>

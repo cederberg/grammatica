@@ -1,0 +1,244 @@
+<doc>
+  <head>
+    <title>Grammatica Version Information</title>
+  </head>
+
+  <body>
+
+    <h1>Version <param name="version"/> (<param name="date"/>):</h1>
+
+    <list>
+      <item>
+        <title>Added profiling for grammars</title>
+        <text>A new action <code>--profile</code> has been added that
+        prints out the statistics from a profiling run of the 
+        grammar. This is useful for improving the grammar and parsing 
+        speed. (Bug #3936)</text>
+      </item>
+
+      <item>
+        <title>Improved tokenizer performance</title>
+        <text>The tokenizer performance has been much improved for
+        string tokens. The speed improvement is about 100% on 
+        average,  meaning that the tokenizer will use half the time
+        for most input and grammars. (Bug #3603)</text>
+      </item>
+      
+      <item>
+        <title>Improved the parse tree output on error</title>
+        <text>The parse tree was previously only printed when a file
+        could be parsed correctly. Now the parse tree is printed 
+        until the first syntax error is found. (Bug #3930)</text>
+      </item>
+
+      <item>
+        <title>Improved error message for missing '%' character</title>
+        <text>When missing the final '%' character in the grammar 
+        file, the error message printed was not logical. This has 
+        been improved by printing an 'unterminated directive' error
+        instead. (Bug #3931)</text>
+      </item>
+
+      <item>
+        <title>Improved the reference manual</title>
+        <text>The reference manual has been improved to the point 
+        where it is considered finished. There is still room for
+        much improvement, however, and such fixes will added in 
+        later versions. (Bug #3598)</text>
+      </item>
+
+      <item>
+        <title>Corrected unexpected token error messages</title>
+        <text>In some circumstances the unexpected token error 
+        messages didn't list all possible tokens. This only ocurred
+        for productions containing alternatives with ambiguities that
+        were resolved with one alternative being set as the default.
+        This has now been corrected, which should also improve the
+        error recovery in these cases. (Bug #3929)</text>
+      </item>
+    </list>
+
+
+    <h1>Version 1.1 (2003-05-26):</h1>
+
+    <list>
+      <item>
+        <title>Added automatic error recovery</title>
+        <text>Automatic error recovery is now always attempted 
+        without any changes to the grammar. Unfortunately the parser
+        library API had to be changed a bit to make this possible. 
+        (Bug #3601)</text>
+      </item>
+
+      <item>
+        <title>Added debug printout of the interpreted grammar</title>
+        <text>A new action <code>--debug</code> has been added that
+        prints out the internal representation of the grammar. This
+        is useful for debugging, as it also prints the look-ahead
+        token sets calculated. (Bug #3692)</text>
+      </item>
+
+      <item>
+        <title>Improved speed of the look-ahead calculation</title>
+        <text>Calculating look-ahead sequences longer than four (4)
+        tokens, could be very slow in previous versions. This was
+        due to the algorithm being used. A new algorithm has now
+        been implemented, speeding up the process and allowing
+        calculation of look-aheads of at least 10 tokens length.
+        (Bug #3674)</text>
+      </item>
+    
+      <item>
+        <title>Corrected stack overflow in regular expressions</title>
+        <text>Regular expressions containing reluctant quantifiers 
+        (such as '*?') caused stack overflow errors when matching 
+        long input strings (about 4096 characters). This has now
+        been fixed in both the C# and Java versions, and new 
+        automatic test cases have been added. (Bug #3632)</text>
+      </item>
+
+      <item>
+        <title>Corrected failing regular expression match</title>
+        <text>Tokens with regular expression patterns sometimes 
+        didn't find a proper match. This only occured for expressions
+        containing quantifiers ('*', '+', '*?' and '+?'), and only 
+        extremely seldom due to a failure to reset previous matches.
+        This was only ever an issue in the Java version, where it has
+        now been fixed. (Bug #3653)</text>
+      </item>
+    </list>
+
+
+    <h1>Version 1.0 (2003-05-14):</h1>
+
+    <list>
+      <item>
+        <title>Improved grammar error reporting</title>
+        <text>Error messages printed by Grammatica have been much 
+        improved in various ways. First, the exception traces are
+        no longer printed by default. Secondly, the faulting line 
+        is printed on many errors (as done by javac). Thirdly, 
+        ambiguity errors are now reported with a list of conflicting
+        tokens, making them easier to understand.</text>
+      </item>
+
+      <item>
+        <title>Corrected parse tree analyzer child handling</title>
+        <text>A bug in the base Analyzer class caused the child() 
+        methods not to be called when processing a parse tree after
+        creation (both for C# &amp; Java). When analyzing through 
+        callbacks things did work as expected, though.</text>
+      </item>
+    </list>
+
+
+    <h1>Version 0.4 (2003-05-08):</h1>
+
+    <list>
+      <item>
+        <title>Added creation of C# parsers (for .NET)</title>
+        <text>The parser runtime library has been ported to C#, so it
+        is now possible to generate parsers for .NET languages. A C# 
+        parser output has also been added to the main program.</text>
+      </item>
+  
+      <item>
+        <title>Added unit tests for generated parsers</title>
+        <text>Validation of the parsers generated for both C# and
+        Java has been automated in unit tests. A bug in the previous
+        release was detected through these tests (see below).</text>
+      </item>
+
+      <item>
+        <title>Added a first draft reference manual</title>
+        <text>A first short reference manual has been added to the
+        documentation. The reference manual is generated to HTML from
+        XML just as the release notes.</text>
+      </item>
+
+      <item>
+        <title>Corrected parse exception creation bug</title>
+        <text>When creating a parse exception, the LL(k) parser in
+        some situations caused a NullPointerException. This has now
+        been corrected.</text>
+      </item>
+	</list>
+
+
+    <h1>Version 0.3 (2003-05-04):</h1>
+    
+    <list>
+      <item>
+        <title>Created XML generated documentation</title>
+        <text>The release documentation is now available in both text
+        and HTML format. Both formats are generated with XSLT from a
+        single source.</text>
+      </item>
+
+      <item>
+        <title>Added look-ahead loop detection</title>
+        <text>The look-ahead calculation now detects grammar loops 
+        and all grammar ambiguities. It should no longer be possible
+        to cause infinite loops with a malformed grammar.</text>
+      </item>
+      
+      <item>
+        <title>Added ambiguity resolution inside alternatives</title>
+        <text>Some ambiguities inside productions couldn't previously 
+        be resolved by the LL(k) parser. Productions like
+        <code>["one"] "one" "two"</code> contain an ambiguity between 
+        the first element and the second, but it is not inherent. This
+        is now handled correctly by adding look-ahead sets for 
+        individual production elements.</text>
+      </item>
+  
+      <item>
+        <title>Added expected tokens to parse errors</title>
+        <text>The parse error exceptions now contains a list of the
+        expected tokens for the unexpected token errors.</text>
+      </item>
+
+      <item>
+        <title>Added automatic unit tests for the parser</title>
+        <text>A JUnit class testing the LL(k) parser has been added.
+        These tests are executed upon every build to verify the 
+        integrity of the parser.</text>
+      </item>
+    </list>    
+
+
+    <h1>Version 0.2 (2003-04-20):</h1>
+
+    <list>
+      <item>
+        <title>Addition of an internal regular expression library</title>
+        <text>This improves tokenizer performance by at least 100% 
+        compared to using the GNU RegExp library.</text>
+      </item>
+
+      <item>
+        <title>Addition of an analyzer framework with parser callbacks</title>
+        <text>A code generator has also been added to create default 
+        methods for all tokens and productions in the grammar.</text>
+      </item>
+
+      <item>
+        <title>Major refactorings of the tokenizer and parser classes</title>
+        <text>Various other classes have also been improved to simplify 
+        future feature additions.</text>
+      </item>
+    </list>
+
+
+    <h1>Version 0.1 (2003-03-29):</h1>
+
+    <list>
+      <item>
+        <title>Initial release</title>
+        <text>The first alpha release. This version was only available
+        to a limited audience.</text>
+      </item>
+    </list>
+
+  </body>
+</doc>

@@ -1,0 +1,56 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Tokens</h1>
+
+    <p>The token definitions in the grammar file consist of a token
+    name and a token pattern. The token name must consist of
+    characters from the set <code>[a-zA-Z0-9_]</code> and may not
+    conflict with any other token name, nor with any of the production
+    names.</p>
+
+    <p>The token patterns can be specified either as a string, in
+    double quotes (<code>&#34;</code>), or as a regular expression, in
+    between special delimiters (<code>&lt;&lt;</code> and
+    <code>&gt;&gt;</code>). The regular expression syntax is largely
+    the one supported by JDK 1.4, as documented in the Java API to the 
+    <ref
+    url="http://java.sun.com/j2se/1.4/docs/api/java/util/regex/Pattern.html">java.util.regexp.Pattern
+    class</ref>. See the figure below for two example token
+    definitions.</p>
+
+    <figure>
+      <caption>Two example token definitions. The first for a simple
+      verbatim string, and the second for a regular
+      expression.</caption>
+
+      <content>
+        <pre>STRING_TOKEN   = "Value"
+REGEXP_TOKEN   = &lt;&lt;.&gt;&gt;</pre>
+      </content>
+    </figure>
+
+    <p>It is also possible to set an ignore or an error flag on a
+    token definition. The ignore flag is used to signal that the token
+    should be discarded after being read, whereas the error flag is
+    used to cause a parse error whenever the token is found. Two
+    example token declarations using these flags are listed in the
+    figure below.</p>
+
+    <figure>
+      <caption>Two example token definitions with ignore and error
+      flags. The error flag also allows adding a specific error
+      message to the parse error thrown when encountered.</caption>
+
+      <content>
+        <pre>WHITESPACE    = &lt;&lt;[ \t\n\r]+&gt;&gt; %ignore%
+UNKNOWN_CHAR  = &lt;&lt;.&gt;&gt; %error unexpected token%</pre>
+      </content>
+    </figure>
+
+  </body>
+</doc>

@@ -1,0 +1,69 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Productions</h1>
+
+    <p>The grammar productions are defined in EBNF. This is a common 
+    notation for grammars, and is <ref 
+    url="http://www.garshol.priv.no/download/text/bnf.html">described
+    elsewhere</ref>. Please be aware of that the grammar files use 
+    their own "dialect" of EBNF, explained below.</p>
+
+    <p>Each production definition consists of a production name and a
+    set of production alternatives. Each alternative in turn contains
+    references to tokens or other productions. Self-referencing is
+    also accepted. A simple example of a production definition is
+    shown in the figure below.</p>
+
+    <figure>
+      <caption>A simple example production. This production contains
+      two alternatives illustrating all the valid ways of referring
+      to a token or a production.</caption>
+
+      <content>
+        <pre>Prod = "TokenString" OtherProd
+     | TOKEN_NAME OtherProd ;</pre>
+      </content>
+    </figure>
+
+    <p>In the example above "=" is used for separating the production
+    name from the definition, instead of the standard EBNF ":=". Also
+    the definition must end with a ";" character. The production name
+    follows the same restrictions as the token name, i.e. it may only
+    contain characters from the set <code>[a-zA-Z0-9_]</code>.</p>
+
+    <p>The grammar files also allow some constructs that are not part
+    of standard BNF or EBNF. In particular this include parenthesizing
+    with the "{", "}", "[", and "]" characters. See the figure below
+    for an example of this. Normal grouping with "(" and ")" is of 
+    course also allowed.</p>
+
+    <figure>
+      <caption>An example of the accepted forms of grouping and
+      repetitions allowed. The "?", "*", and "+" characters are
+      allowed after productions, tokens or normal parenthesis. The 
+      "<code>{...}</code>" parenthesis is a shortform for 
+      "<code>(...)*</code>", and the "<code>[...]</code>" parenthesis
+      is a shortform for "<code>(...)?</code>".</caption>
+
+      <content>
+        <pre>Prod = "1"?
+     | "2"*
+     | "3"+
+     | {"4"}
+     | ["5"] ;</pre>
+      </content>
+    </figure>
+
+    <p>The EBNF dialect used in Grammatica currently does not allow
+    <code>null</code> (i.e. empty) production alternatives. Instead,
+    the same result can be obtained by making all references to the
+    production optional with the <code>[...]</code> construct or
+    similar.</p>
+
+  </body>
+</doc>

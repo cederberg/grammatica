@@ -1,0 +1,67 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Examples</h1>
+
+    <p>The figure below contains a complete and working grammar file
+    example for a simple arithmetic language.</p>
+
+    <figure>
+      <caption>A grammar for a simple arithmetic language.</caption>
+
+      <content>
+        <pre>%header%
+
+GRAMMARTYPE = "LL"
+
+DESCRIPTION = "A grammar for a simple arithmetic language."
+
+AUTHOR      = "Per Cederberg, &lt;per at percederberg dot net&gt;"
+VERSION     = "1.0"
+DATE        = "10 June 2003"
+
+LICENSE     = "Permission is granted to copy this document verbatim in any
+               medium, provided that this copyright notice is left intact."
+
+COPYRIGHT   = "Copyright (c) 2003 Per Cederberg. All rights reserved."
+
+
+%tokens%
+
+ADD                          = "+"
+SUB                          = "-"
+MUL                          = "*"
+DIV                          = "/"
+LEFT_PAREN                   = "("
+RIGHT_PAREN                  = ")"
+NUMBER                       = &lt;&lt;[0-9]+&gt;&gt;
+IDENTIFIER                   = &lt;&lt;[a-z]&gt;&gt;
+WHITESPACE                   = &lt;&lt;[ \t\n\r]+&gt;&gt; %ignore%
+
+
+%productions%
+
+Expression = Term [ExpressionTail] ;
+
+ExpressionTail = "+" Expression
+               | "-" Expression ;
+
+Term = Factor [TermTail] ;
+     
+TermTail = "*" Term
+         | "/" Term ;
+
+Factor = Atom
+       | "(" Expression ")" ;
+
+Atom = NUMBER
+     | IDENTIFIER ;</pre>
+      </content>
+    </figure>
+
+  </body>
+</doc>

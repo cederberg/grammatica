@@ -1,0 +1,72 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Error Recovery</h1>
+
+    <p>Grammatica supports automatic recovery of both parse and
+    analysis errors. Measures are also taken to reduce the number of
+    dependency errors, i.e. errors caused by previously reported 
+    errors. The automatic recovery is not perfect, however, so in 
+    some circumstances errors are omitted or included, although they
+    shouldn't have been.</p>
+    
+    <p>Unexpected character errors (i.e. lexical errors) are handled
+    by reporting the error and ignoring the character. The parser 
+    will also enter recovery mode, which means that no further errors
+    will be reported until three tokens have been read correctly. In 
+    practice, this means that only the first character in an 
+    erroneous sequence will be reported, although all are ignored. In
+    the figure below this is illustrated for a grammar file.</p>
+    
+    <figure>
+      <caption>An erroneous character sequence for a grammar file. If
+      this sequence occurs in a grammar file (uncommented), only the 
+      '<code>$</code>' character will be reported. The remaining 
+      characters are also erroneous, but the error messages for them
+      will be supressed.</caption>
+
+      <content>
+        <pre>$@#!</pre>
+      </content>
+    </figure>
+
+    <p>Unexpected token errors (i.e. syntax errors) are handled by
+    reporting the error and ignoring tokens until a valid token is
+    found. The parser also enters error recovery mode, as explained
+    above. In the figure below the parser error recovery behaviour is
+    illustrated.</p>
+    
+    <figure>
+      <caption>An erroneous token in a grammar production. The 
+      regular expression token <code>&lt;&lt;.&gt;&gt;</code> is not
+      allowed inside a production, and will cause an error. The 
+      parser will recover by ignoring all tokens until the 
+      '<code>;</code>' character.</caption>
+
+      <content>
+        <pre>Prod = "one" &lt;&lt;.&gt;&gt; "two" ;</pre>
+      </content>
+    </figure>
+
+    <p>Analysis errors are only reported as long as the parser has
+    not encountered a lexical or syntactical error. In fact, after 
+    such an error has been encountered, no further calls to the 
+    analyzer are made at all. All analyzer errors encountered during 
+    parsing are reported, but when analyzing an existing parse tree 
+    some filtering is attempted to avoid dependency errors.</p>
+
+    <p>Due to the error recovery, care must be taken when 
+    implementing an analyzer. The callback methods will be called
+    even though previous callbacks may have failed. In particular,
+    this means that child nodes may be absent or reordered, and node 
+    values may be missing, making null pointer errors more probable. 
+    Helper methods that perform the necessary null checking have 
+    therefore been created in the base Analyzer class, and it is 
+    strongly recommended to use them.</p>
+
+  </body>
+</doc>

@@ -1,0 +1,90 @@
+<doc>
+  <head>
+    <title>Grammatica Features</title>
+  </head>
+
+  <body>
+
+    <h1>Existing Features</h1>
+
+    <p>This is a summary of the features currently present in 
+    Grammatica.</p>
+
+    <list>
+      <item>
+        <title>Standard grammar syntax definitions</title>
+        <text>The grammar files define the tokens with regular
+        expressions, and the syntax with plain EBNF. It is also 
+        possible to specify tokens as strings, avoiding escaping 
+        of any special regular expression characters.</text>
+      </item>
+
+      <item>
+        <title>Clean &amp; reusable grammar files</title>
+        <text>No parser source code is present in the grammar files,
+        providing a cleaner separation between the grammar and the
+        parser. This means that the grammar files can be reused by 
+        other applications.</text>
+      </item>
+
+      <item>
+        <title>Support for LL(k) grammars</title>
+        <text>LL grammars with various number of look-ahead tokens 
+        are supported. There is no need to declare the number of
+        look-ahead tokens needed.</text>
+      </item>
+
+      <item>
+        <title>Detailed error messages for generated parsers</title>
+        <text>Messages generated when an error is found always 
+        describe the problem with all required details. In particular,
+        the list of expected tokens is always presented.</text>
+      </item>
+
+      <item>
+        <title>Automatic error recovery</title>
+        <text>Error recovery is always attempted by the parsers
+        generated, without any changes needed in the grammar 
+        files. This makes generated parsers much more usable.</text>
+      </item>
+
+      <item>
+        <title>Analysis though callbacks or syntax trees</title>
+        <text>It is possible to parse the grammar either through 
+        callbacks or by traversing the syntax tree. When using 
+        callbacks, the syntax tree creation can be avoided.</text>
+      </item>
+
+      <item>
+        <title>Parser generation for C# and Java</title>
+        <text>Both C# and Java parsers can be generated from the same
+        grammar file. Both parsers behave in the same way and have the
+        same feature set, including the regular expression
+        support.</text>
+      </item>
+
+      <item>
+        <title>Readable and commented output source code</title>
+        <text>The source code generated is fully readable, being
+        correctly indented and commented.</text>
+      </item>
+        
+      <item>
+        <title>Run-time parser creation</title>
+        <text>With the Grammatica parser libraries, an ad-hoc parser
+        can be created at run-time without the need for generating
+        source code. This can be used for easier debugging of 
+        grammars, or for creating parsers interactively.</text>
+      </item>
+    </list>
+
+
+    <h1>Upcoming Features</h1>
+
+    <p>No commitment has been made regarding which new features will
+    be present in future releases. See the 
+    <ref file="bugs.xml">TODO-list</ref> for a the currently known 
+    future improvements.</p>
+
+  </body>
+</doc>
