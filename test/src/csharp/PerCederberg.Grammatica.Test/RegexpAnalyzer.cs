@@ -124,7 +124,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -229,7 +230,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -254,7 +256,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -279,7 +282,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -304,7 +308,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -329,7 +334,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -354,7 +360,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -379,7 +386,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -404,7 +412,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -429,7 +438,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -454,7 +464,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -479,7 +490,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -504,7 +516,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -529,7 +542,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -554,7 +568,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -579,7 +594,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -618,7 +634,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -657,7 +674,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -696,7 +714,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -735,7 +754,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -774,7 +794,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
@@ -813,7 +834,8 @@ namespace PerCederberg.Grammatica.Test {
          * 
          * <param name='node'>the node being exited</param>
          * 
-         * <returns>the node to add to the parse tree</returns>
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
          * 
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>

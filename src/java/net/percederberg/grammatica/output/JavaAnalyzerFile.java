@@ -72,7 +72,8 @@ class JavaAnalyzerFile {
     private static final String EXIT_COMMENT =
         "Called when exiting a parse tree node.\n\n" +
         "@param node           the node being exited\n\n" +
-        "@return the node to add to the parse tree\n\n" +
+        "@return the node to add to the parse tree, or\n" +
+        "        null if no parse tree should be created\n\n" +
         "@throws ParseException if the node analysis discovered errors";
    
     /**

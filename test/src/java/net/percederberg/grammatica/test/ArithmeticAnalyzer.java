@@ -108,7 +108,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -194,7 +195,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -217,7 +219,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -240,7 +243,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -263,7 +267,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -286,7 +291,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -309,7 +315,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -332,7 +339,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -355,7 +363,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -379,7 +388,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -419,7 +429,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -458,7 +469,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -496,7 +508,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -533,7 +546,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */
@@ -570,7 +584,8 @@ abstract class ArithmeticAnalyzer extends Analyzer {
      * 
      * @param node           the node being exited
      * 
-     * @return the node to add to the parse tree
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
      * 
      * @throws ParseException if the node analysis discovered errors
      */

@@ -9,6 +9,13 @@
 
     <list>
       <item>
+        <title>Improved and clarified the Analyzer API</title>
+        <text>The Analyzer class API has been clarified by improving
+        the generated comments slightly and by adding a 
+        <code>getChildValues()</code> method. (Bug #4181)</text>
+      </item>
+
+      <item>
         <title>Corrected generation of C# analyzer classes</title>
         <text>The generation of C# analyzer classes was completely
         broken in all previous releases, due to missing keywords and

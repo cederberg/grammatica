@@ -75,7 +75,8 @@ class CSharpAnalyzerFile {
     private static final String EXIT_COMMENT =
         "<summary>Called when exiting a parse tree node.</summary>\n\n" +
         "<param name='node'>the node being exited</param>\n\n" +
-        "<returns>the node to add to the parse tree</returns>\n\n" +
+        "<returns>the node to add to the parse tree, or\n" +
+        "         null if no parse tree should be created</returns>\n\n" +
         "<exception cref='ParseException'>if the node analysis\n" +
         "discovered errors</exception>";
    
