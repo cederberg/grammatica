@@ -14,19 +14,24 @@
 
     <list>
       <item>
+        <title>Parser: Some grammar ambiguities may go undetected</title>
+        <text>When the last element of an alternative is optional, 
+        some ambiguities may go undetected. This is due to not 
+        properly comparing the tokens in the optional element with 
+        the tokens after the production. The ambiguious grammar 
+        <code>A = B ["x"];  B = "y" ["x"];</code> illustrates this.
+        In some cases this may also lead to parse errors as ambiguities
+        have not been resolved with the appropriate number of look-ahead
+        tokens. This error is present in all versions of Grammatica,
+        but occurs infrequently. (Bug #4117)</text>
+      </item>
+
+      <item>
         <title>Regular Expressions: Not fully JDK 1.4 compatible</title>
         <text>The regular expression library is still lacking in some
         ways compared to the implementation in JDK 1.4 (or Perl 5). 
         The library should be extended to support as many constructs 
         as possible. (Bug #3597)</text>
-      </item>
-
-      <item>
-        <title>Documentation: The C# API is not documented</title>
-        <text>The Java API documentation is very similar, but there
-        are important differences in name casing and similar. Proper 
-        C# API documentation in HTML should be generated as part of 
-        the build process. (Bug #3612)</text>
       </item>
     </list>
     
@@ -62,6 +67,17 @@
         architecture must support different methods depending on 
         generated source (ResourceBundles in Java, Gnu Gettext in C 
         &amp; C++). (Bug #3600)</text>
+      </item>
+
+      <item>
+        <title>Grammar: Production representation should be improved</title>
+        <text>The internal representation of a production makes it 
+        hard for several alternatives to share a several left-hand
+        side elements. This may cause inherent ambiguities to be
+        found, as the number of look-ahead tokens needed to separate
+        the alternatives is infinite. If these alternatives could 
+        share the first elements, this ambiguity would not require
+        a rewrite of the grammar. (Bug #4322)</text>
       </item>
 
       <item>
@@ -112,6 +128,16 @@
       </item>
     
       <item>
+        <title>Parser: Support parsing several files with one instance</title>
+        <text>A single parser instance should be possible to use for 
+        parsing several files, something not allowed by the current 
+        API. The current solution is ineffective when parsing multiple
+        files through the same parser, as the look-ahead token sets 
+        must be calculated again every time a new file is parsed.
+        (Bug #4500)</text>
+      </item>
+    
+      <item>
         <title>Analyzer: Allow node values propagating downwards</title>
         <text>Improve the analyzer framework to handle node values 
         propagating downwards or sideways in the tree as well.
@@ -128,6 +154,13 @@
         <title>Code Generation: Support creation of a C++ parser</title>
         <text>This requires the writing of a C++ runtime library plus 
         appropriate code generation classes. (Bug #3610)</text>
+      </item>
+      
+      <item>
+        <title>Error Handling: Add file reference in errors</title>
+        <text>The exceptions could be extended with a file location
+        object (a file reference) to simplify the error handling 
+        when several files are parsed. (Bug #4180)</text>
       </item>
     </list>
 
