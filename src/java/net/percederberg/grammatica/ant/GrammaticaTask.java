@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.ant;
@@ -48,7 +48,7 @@ import net.percederberg.grammatica.parser.ParserLogException;
  * A Grammatica Ant task.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.4
+ * @version  1.5
  * @since    1.4
  */
 public class GrammaticaTask extends Task {
@@ -120,6 +120,15 @@ public class GrammaticaTask extends Task {
     }
     
     /**
+     * Adds a new Visual Basic code generation inner element.
+     * 
+     * @param elem           the Visual Basic code generation element
+     */
+    public void addVisualBasic(VisualBasicElement elem) {
+        processors.add(elem);
+    }
+    
+    /**
      * Executes the task.
      * 
      * @throws BuildException if the task execution failed
@@ -134,7 +143,8 @@ public class GrammaticaTask extends Task {
         }
         if (processors.size() <= 0) {
             throw new BuildException(
-                "missing <validate>, <java>, or <csharp> inner element");
+                "missing <validate>, <java>, <csharp> or <visualbasic> " +
+                "inner element");
         }
         for (i = 0; i < processors.size(); i++) {
             ((ProcessingElement) processors.get(i)).validate();

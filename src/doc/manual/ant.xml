@@ -60,7 +60,7 @@
 
       <item>
         <title>namespace</title>
-        <text>The C# namespace to use. If not present, no namespace
+        <text>The namespace to use. If not present, no namespace
         declarations will be created (default).</text>
       </item>
 
@@ -110,6 +110,39 @@
         (classes and interfaces) will have public access. Otherwise
         they will have package protected access. Defaults to 
         "false".</text>
+      </item>
+    </list>
+
+    <h1>The &lt;visualbasic&gt; Subelement</h1>
+
+    <p>The <code>&lt;visualbasic&gt;</code> subelement controls the
+    Visual Basic.NET source code generation. It allows the following
+    attributes:</p>
+    
+    <list>
+      <item>
+        <title>dir</title>
+        <text>The source code output directory. This attribute is 
+        required</text>
+      </item>
+
+      <item>
+        <title>namespace</title>
+        <text>The namespace to use. If not present, no namespace
+        declarations will be created (default).</text>
+      </item>
+
+      <item>
+        <title>prefix</title>
+        <text>The class name prefix. By default, this is set to the
+        base name of the grammar file.</text>
+      </item>
+
+      <item>
+        <title>public</title>
+        <text>The public type access flag. If set to true all types
+        (classes and interfaces) will have public access. Otherwise
+        they will have internal access. Defaults to "false".</text>
       </item>
     </list>
 
