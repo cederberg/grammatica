@@ -1,0 +1,163 @@
+<doc>
+  <head>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Apache Ant Interface</h1>
+
+    <p>Grammatica can be run from Apache Ant. In order for Apache to
+    find the Grammatica task, however, a simple task declaration is 
+    required. An example of such a task declaration is present in the
+    figure below:</p>
+
+    <figure>
+      <caption>The Ant task declaration needed to make the 
+      <code>grammatica</code> task available.</caption>
+    
+      <content>
+        <pre>&lt;taskdef name="grammatica"
+         classname="net.percederberg.grammatica.ant.GrammaticaTask"
+         classpath="grammatica-<param name="version"/>.jar" /&gt;</pre>
+      </content>
+    </figure>
+
+    <h1>The &lt;grammatica&gt; Task</h1>
+
+    <p>The <code>&lt;grammatica&gt;</code> task allows the following 
+    attributes:</p>
+    
+    <list>
+      <item>
+        <title>grammar</title>
+        <text>The grammar file to use. This attribute is required</text>
+      </item>
+
+      <item>
+        <title>failonerror</title>
+        <text>Stops the build process if a grammar error was found.
+        Defaults to "true".</text>
+      </item>
+    </list>
+
+    <p>The grammar processing is defined in one or more subelements,
+    such as <code>&lt;csharp&gt;</code>, <code>&lt;java&gt;</code>, 
+    or <code>&lt;validation&gt;</code>. At least one such subelement 
+    must be present, but multiple elements are also allowed.</p>
+
+    <h1>The &lt;csharp&gt; Subelement</h1>
+
+    <p>The <code>&lt;csharp&gt;</code> subelement controls the C# 
+    source code generation. It allows the following attributes:</p>
+    
+    <list>
+      <item>
+        <title>dir</title>
+        <text>The source code output directory. This attribute is 
+        required</text>
+      </item>
+
+      <item>
+        <title>namespace</title>
+        <text>The C# namespace to use. If not present, no namespace
+        declarations will be created (default).</text>
+      </item>
+
+      <item>
+        <title>prefix</title>
+        <text>The class name prefix. By default, this is set to the
+        base name of the grammar file.</text>
+      </item>
+
+      <item>
+        <title>public</title>
+        <text>The public type access flag. If set to true all types
+        (classes and interfaces) will have public access. Otherwise
+        they will have internal access. Defaults to "false".</text>
+      </item>
+    </list>
+
+    <h1>The &lt;java&gt; Subelement</h1>
+
+    <p>The <code>&lt;java&gt;</code> subelement controls the Java
+    source code generation. It allows the following attributes:</p>
+    
+    <list>
+      <item>
+        <title>dir</title>
+        <text>The source code output directory. This attribute is 
+        required</text>
+      </item>
+
+      <item>
+        <title>package</title>
+        <text>The Java package to use. If not present, the default
+        package will be used (i.e. no package declaration). Note that
+        required package subdirectories will be created under the 
+        <code>dir</code> directory.</text>
+      </item>
+
+      <item>
+        <title>prefix</title>
+        <text>The class name prefix. By default, this is set to the
+        base name of the grammar file.</text>
+      </item>
+
+      <item>
+        <title>public</title>
+        <text>The public type access flag. If set to true all types
+        (classes and interfaces) will have public access. Otherwise
+        they will have package protected access. Defaults to 
+        "false".</text>
+      </item>
+    </list>
+
+    <h1>The &lt;validation&gt; Element</h1>
+
+    <p>The <code>&lt;validation&gt;</code> subelement allows for 
+    different tests and validations of the grammar and/or data files.
+    It allows the following attributes:</p>
+    
+    <list>
+      <item>
+        <title>type</title>
+        <text>The validation type. This attribute is required, and 
+        must be set to "debug", "tokenize", "parse", or 
+        "profile".</text>
+      </item>
+
+      <item>
+        <title>inputfile</title>
+        <text>The data input file to validate. This attribute is 
+        required for all but the "debug" type (that ignores this 
+        attribute).</text>
+      </item>
+
+      <item>
+        <title>quiet</title>
+        <text>The quiet output flag. If set to "true", no parse tree
+        or similar will be printed. Defaults to "false".</text>
+      </item>
+    </list>
+
+    <h1>Example Code</h1>
+
+    <p>A simple example of how to use the Grammatica Ant task is 
+    shown in the figure below.</p>
+
+    <figure>
+      <caption>A piece of simple Ant code for using Grammatica create 
+      a Java parser for <code>simple.grammar</code>.</caption>
+
+      <content>
+        <pre>&lt;grammatica grammar="simple.grammar"&gt;
+  &lt;java dir="src"
+        package="com.test.simple"
+        public="true" /&gt;
+&lt;/grammatica&gt;</pre>
+      </content>
+    </figure>
+
+  </body>
+</doc>

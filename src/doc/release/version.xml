@@ -9,6 +9,18 @@
 
     <list>
       <item>
+        <title>Added Apache Ant task</title>
+        <text>An Apache Ant task has been added to the distribution.
+        See the reference manual for details on how to use it. 
+        (Bug #3620)</text>
+      </item>
+    </list>
+
+
+    <h1>Version 1.3 (2003-07-27):</h1>
+
+    <list>
+      <item>
         <title>Added C# API documentation</title>
         <text>C# API documentation has now been added to the 
         release documentation. The build file uses CppDoc to

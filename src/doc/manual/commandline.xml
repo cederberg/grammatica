@@ -5,11 +5,11 @@
 
   <body>
 
-    <h1>Using Grammatica</h1>
+    <h1>Command-Line Interface</h1>
 
-    <p>Gramatica is run from the command-line. The available command
-    line options are printed when running without any options, as can
-    be seen in the figure below.</p>
+    <p>Gramatica can be run from the command-line. The available 
+    command line options are printed when running without any 
+    options, as can be seen in the figure below.</p>
 
     <figure>
       <caption>The command-line help output from Grammatica.</caption>

@@ -19,9 +19,13 @@
       </item>
 
       <item>
-        <title><ref file="using.xml">Using Grammatica</ref></title>
-        <text>Short introduction to the command-line interface of
-        Grammatica.</text>
+        <title><ref file="commandline.xml">Command-Line Interface</ref></title>
+        <text>Description of the command-line interface.</text>
+      </item>
+
+      <item>
+        <title><ref file="ant.xml">Apache Ant Interface</ref></title>
+        <text>Description of the Apache Ant interface.</text>
       </item>
 
       <item>

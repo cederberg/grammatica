@@ -27,7 +27,7 @@
       </item>
 
       <item>
-        <text>Mono 0.24 (or another .NET 1.0 compatible), for C#
+        <text>Mono 0.26 (or another .NET 1.0 compatible), for C#
         parsers.</text>
       </item>
     </list>
@@ -40,12 +40,29 @@
     file.</p>
 
 
-    <h1>Running</h1>
+    <h1>Running from Command-Line</h1>
 
     <p>The following command runs Grammatica and prints the 
     command-line options:</p>
 
     <pre>java -jar lib/grammatica-<param name="version"/>.jar</pre>
+
+
+    <h1>Running from Apache Ant</h1>
+
+    <p>Grammatica is also available as an Apache Ant task. Add the 
+    <code>grammatica-<param name="version"/>.jar</code> to the 
+    <code>CLASSPATH</code>, and add the following to include the
+    Grammatica task:</p>
+    
+    <pre>&lt;taskdef name="grammatica"
+         classname="net.percederberg.grammatica.ant.GrammaticaTask" /&gt;</pre>
+
+    <p>See the reference manual for the details on how to use the
+    <code>&lt;grammatica&gt;</code> task.</p>
+
+
+    <h1>Running Generated Parsers</h1>
 
     <p>All generated parsers require the corresponding Grammatica 
     run-time library in order to run. The run-time libraries for 
@@ -63,6 +80,6 @@
         for C# parsers</text>
       </item>
     </list>
-
+    
   </body>
 </doc>
