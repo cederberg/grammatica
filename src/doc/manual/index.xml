@@ -58,7 +58,8 @@
 
       <item>
         <title><ref file="example.xml">Examples</ref></title>
-        <text>Contains a complete example of a grammar file.</text>
+        <text>Examples of a complete grammar file and Java source
+        code for creating a parser.</text>
       </item>
     </list>
 

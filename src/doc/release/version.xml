@@ -14,6 +14,13 @@
         release documentation. The build file uses CppDoc to
         generate the HTML documents. (Bug #3612)</text>
       </item>
+      
+      <item>
+        <title>Added source code examples to documentation</title>
+        <text>Some examples of Java source code for creating a
+        parser has been added to the reference manual. 
+        (Bug #4093)</text>
+      </item>
 
       <item>
         <title>Improved and clarified the Analyzer API</title>

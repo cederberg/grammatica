@@ -7,8 +7,16 @@
 
     <h1>Examples</h1>
 
-    <p>The figure below contains a complete and working grammar file
-    example for a simple arithmetic language.</p>
+	<p>These examples come from the <code>test/src/grammar</code> and
+	<code>test/src/java</code> directories. The source code has been
+	simplified in these examples in order to be easier to read. Please
+	refer to the original source code in the above directories for the
+	complete compilable versions. Also note that the corresponding C#
+	examples are found in the <code>test/src/csharp</code> 
+	directory.</p>
+
+    <p>The figure below contains a complete and working example of a
+    grammar file for a simple arithmetic language.</p>
 
     <figure>
       <caption>A grammar for a simple arithmetic language.</caption>
@@ -60,6 +68,122 @@ Factor = Atom
 
 Atom = NUMBER
      | IDENTIFIER ;</pre>
+      </content>
+    </figure>
+
+	<p>To create a parser for the grammar above, the parser source 
+	code must first be created. If the grammar above has been stored
+	in the file <code>arithmetic.grammar</code>, this can be 
+	accomplished with the following command:</p>
+	
+    <pre># java -jar lib/grammatica-<param name="version"/>.jar arithmetic.grammar --javaoutput test</pre>
+
+    <p>This will create the files <code>ArithmeticAnalyzer.java</code>, 
+    <code>ArithmeticConstants.java</code>, 
+    <code>ArithmeticParser.java</code>, and 
+    <code>ArithmeticTokenizer.java</code> in the <code>test</code> 
+    subdirectory. These files contain the source code for the parser.
+    In order to call the parser, the method in the figure below can 
+    be inserted into another Java class.</p>
+    
+    <figure>
+      <caption>The source code for a method parsing an arithmetic
+      string.</caption>
+      
+      <content>
+        <pre>private Node parseArithmetic(String input) {
+    Parser  parser = null;
+
+    parser = new ArithmeticParser(new StringReader(input));
+    return parser.parse();
+}</pre>
+      </content>
+    </figure>
+
+    <p>In the case of the arithmetic language, is it also interesting 
+    to analyze and evaluate the contents of the string. This can be 
+    done by subclassing the <code>ArithmeticAnalyzer</code> class and 
+    overloading the callback methods for the relevant productions. A 
+    small example of this can be seen in the figure below.</p>
+
+    <figure>
+      <caption>The partial (and incomplete) source code for an 
+      analyzer calculating the result of an arithmetic 
+      expression.</caption>
+      
+      <content>
+        <pre>class ArithmeticCalculator extends ArithmeticAnalyzer {
+
+    protected Node exitNumber(Token node) {
+        node.addValue(new Integer(node.getImage()));
+        return node;
+    }
+
+    protected Node exitExpression(Production node) {
+        ArrayList  values = getChildValues(node);
+        Integer    value1;
+        Integer    value2;
+        String     op;
+        int        result;
+        
+        if (values.size() == 1) {
+            result = ((Integer) values.get(0)).intValue();
+        } else {
+            value1 = (Integer) values.get(0);
+            value2 = (Integer) values.get(2);
+            op = (String) values.get(1);
+            result = operate(op, value1, value2);
+        }
+        node.addValue(new Integer(result));
+        return node;
+    }
+
+    protected Node exitExpressionTail(Production node) {
+        node.addValues(getChildValues(node));
+        return node;
+    }
+
+    protected Node exitTerm(Production node) {
+        ArrayList  values = getChildValues(node);
+        Integer    value1;
+        Integer    value2;
+        String     op;
+        int        result;
+        
+        if (values.size() == 1) {
+            result = ((Integer) values.get(0)).intValue();
+        } else {
+            value1 = (Integer) values.get(0);
+            value2 = (Integer) values.get(2);
+            op = (String) values.get(1);
+            result = operate(op, value1, value2);
+        }
+        node.addValue(new Integer(result));
+        return node;
+    }
+
+    protected Node exitTermTail(Production node) {
+        node.addValues(getChildValues(node));
+        return node;
+    }
+
+    protected Node exitFactor(Production node) throws ParseException {
+        int  result;
+        
+        if (node.getChildCount() == 1) {
+            result = getIntValue(getChildAt(node, 0), 0);
+        } else {
+            result = getIntValue(getChildAt(node, 1), 0);
+        }
+        node.addValue(new Integer(result));
+        return node;
+    }
+
+    protected Node exitAtom(Production node) {
+        node.addValues(getChildValues(node));
+        return node;
+    }
+</pre>
       </content>
     </figure>
 
