@@ -101,7 +101,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @param tokenizer       the tokenizer to use
          */
         internal Parser(Tokenizer tokenizer) 
-            : this(tokenizer, new Analyzer()) {
+            : this(tokenizer, null) {
         }
 
         /**
@@ -112,7 +112,11 @@ namespace PerCederberg.Grammatica.Parser {
          */
         internal Parser(Tokenizer tokenizer, Analyzer analyzer) {
             this.tokenizer = tokenizer;
-            this.analyzer = analyzer;
+            if (analyzer == null) {
+                this.analyzer = new Analyzer();
+            } else {
+                this.analyzer = analyzer;
+            }
         }
 
         /**
