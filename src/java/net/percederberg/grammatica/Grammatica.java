@@ -516,7 +516,7 @@ public class Grammatica extends Object {
             while (tokenizer.next() != null) {
                 counter++;
             }
-            time = System.currentTimeMillis() - time;
+            time = System.currentTimeMillis() - time + 1;
             System.out.println("  Time elapsed:  " + time + " millisec");
             System.out.println("  Tokens found:  " + counter);
             System.out.println("  Average speed: " + (counter / time) +
@@ -540,7 +540,7 @@ public class Grammatica extends Object {
             System.out.println("Parsing " + file);
             time = System.currentTimeMillis();
             node = parser.parse();
-            time = System.currentTimeMillis() - time;
+            time = System.currentTimeMillis() - time + 1;
             counter = 1 + node.getDescendantCount();
             System.out.println("  Time elapsed:  " + time + " millisec");
             System.out.println("  Nodes found:   " + counter);
