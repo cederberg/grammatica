@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -178,9 +178,9 @@ public class JavaMethod extends CodeElement {
      * @param args         the argument list, excluding parenthesis
      * @param returnType   the return type
      */
-    public JavaMethod(int modifiers, 
-                      String name, 
-                      String args, 
+    public JavaMethod(int modifiers,
+                      String name,
+                      String args,
                       String returnType) {
 
         this.modifiers = modifiers;
@@ -229,9 +229,9 @@ public class JavaMethod extends CodeElement {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -242,19 +242,19 @@ public class JavaMethod extends CodeElement {
 
     /**
      * Checks if the method source code can the printed. This method
-     * will return false if the method is abstract or if the print 
+     * will return false if the method is abstract or if the print
      * code flag is set to false.
-     * 
+     *
      * @return true if method source code can be printed, or
      *         false otherwise
      */
     public boolean canPrintCode() {
         return printCode && (modifiers & ABSTRACT) == 0;
     }
-    
+
     /**
      * Sets the print code flag.
-     * 
+     *
      * @param value          the new print code flag value
      */
     public void setPrintCode(boolean value) {
@@ -305,7 +305,7 @@ public class JavaMethod extends CodeElement {
         if (canPrintCode()) {
             res.append(" {\n");
             if (brokenThrows && code.size() > 0) {
-                res.append("\n"); 
+                res.append("\n");
             }
             for (int i = 0; i < code.size(); i++) {
                 if (code.elementAt(i).toString().length() > 0) {

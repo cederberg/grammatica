@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -102,9 +102,9 @@ public class JavaComment extends CodeElement {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -147,10 +147,10 @@ public class JavaComment extends CodeElement {
             out.println(indentStr + " */");
         }
     }
-    
+
     /**
      * Prints a single comment line.
-     * 
+     *
      * @param out            the output stream
      * @param indent         the indentation string
      * @param line           the comment line to print

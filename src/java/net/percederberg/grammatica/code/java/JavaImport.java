@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -100,7 +100,7 @@ public class JavaImport extends CodeElement {
     }
 
     /**
-     * Compares this object to another one. The comparison is based 
+     * Compares this object to another one. The comparison is based
      * primarily on the code element category, and secondarily on the
      * package name.
      *
@@ -112,7 +112,7 @@ public class JavaImport extends CodeElement {
      */
     public int compareTo(Object obj) {
         int  value = super.compareTo(obj);
-        
+
         if (value == 0) {
             return toString().compareTo(obj.toString());
         } else {
@@ -146,9 +146,9 @@ public class JavaImport extends CodeElement {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number

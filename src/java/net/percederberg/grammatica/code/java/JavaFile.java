@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -91,8 +91,8 @@ public class JavaFile extends CodeElementContainer {
 
     /**
      * Returns the file name. Note that if no class has been added to
-     * the file, a default file name will be returned. 
-     * 
+     * the file, a default file name will be returned.
+     *
      * @return the file name
      */
     public String toString() {
@@ -128,7 +128,7 @@ public class JavaFile extends CodeElementContainer {
      */
     public void addClass(JavaClass cls) {
         if (first == null) {
-            first = cls; 
+            first = cls;
         }
         addElement(cls);
     }
@@ -140,15 +140,15 @@ public class JavaFile extends CodeElementContainer {
      */
     public void addInterface(JavaInterface ifc) {
         if (first == null) {
-            first = ifc; 
+            first = ifc;
         }
         addElement(ifc);
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -158,7 +158,7 @@ public class JavaFile extends CodeElementContainer {
     }
 
     /**
-     * Writes the source code for this file. Any previous file with 
+     * Writes the source code for this file. Any previous file with
      * this name will be overwritten.
      *
      * @param style          the code style to use
@@ -174,7 +174,7 @@ public class JavaFile extends CodeElementContainer {
         print(out, style, 0);
         out.close();
     }
-    
+
     /**
      * Prints the file contents to the specified output stream.
      *
