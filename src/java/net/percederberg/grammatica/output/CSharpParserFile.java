@@ -236,7 +236,6 @@ class CSharpParserFile {
      */
     public void addProductionConstant(ProductionPattern pattern) {
         String   constant;
-        Integer  id = new Integer(pattern.getId());
         
         if (pattern.isSyntetic()) {
             constant = "SUBPRODUCTION_" + constantId;

@@ -472,7 +472,6 @@ public class Grammatica extends Object {
         Tokenizer  tokenizer;
         Analyzer   analyzer;
         Parser     parser;
-        Token      token;
         
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));

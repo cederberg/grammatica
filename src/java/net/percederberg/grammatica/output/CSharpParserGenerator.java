@@ -78,9 +78,7 @@ public class CSharpParserGenerator extends ParserGenerator {
      * Initializes various instance variables.
      */
     private void initialize() {
-        StringBuffer  buffer;
         String        str;
-        int           pos;
 
         // Set base name
         str = getGrammar().getFileName();

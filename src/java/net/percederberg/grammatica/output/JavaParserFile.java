@@ -227,7 +227,6 @@ class JavaParserFile {
         String        constant;
         JavaVariable  var;
         int           modifiers;
-        Integer       id = new Integer(pattern.getId());
         
         if (pattern.isSyntetic()) {
             constant = "SUBPRODUCTION_" + constantId;

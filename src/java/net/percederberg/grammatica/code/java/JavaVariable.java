@@ -255,7 +255,6 @@ public class JavaVariable extends CodeElement {
         String       indentStr = style.getIndent(indent);
         String       codeIndentStr = style.getIndent(indent + 1);
         StringBuffer res;
-        Vector       v;
 
         // Check for simple init values
         if (initValueVector.size() == 0 && initValue == null) {

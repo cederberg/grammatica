@@ -226,7 +226,6 @@ class CSharpAnalyzerFile {
 
         String   constant = constants.getConstant(pattern.getId());
         String   name;  
-        Integer  id = new Integer(pattern.getId());
 
         if (!pattern.isSyntetic()) {
             name = gen.getCodeStyle().getMixedCase(pattern.getName(), 

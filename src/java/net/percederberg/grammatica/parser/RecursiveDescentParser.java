@@ -175,7 +175,6 @@ public class RecursiveDescentParser extends Parser {
     private Node parsePattern(ProductionPattern pattern) 
         throws ParseException {
 
-        Token                         token = peekToken(0);
         ProductionPatternAlternative  alt;
         ProductionPatternAlternative  defaultAlt;
 
@@ -602,11 +601,10 @@ public class RecursiveDescentParser extends Parser {
                                        LookAheadSet filter) 
         throws ParserCreationException {
 
-        ProductionPattern  pattern;
-        LookAheadSet       result;
-        LookAheadSet       first;
-        LookAheadSet       follow;
-        int                max;
+        LookAheadSet  result;
+        LookAheadSet  first;
+        LookAheadSet  follow;
+        int           max;
 
         // Find initial element look-ahead
         first = findLookAhead(elem, length, 0, stack, filter);

@@ -173,7 +173,6 @@ namespace PerCederberg.Grammatica.Parser {
          *             correctly
          */
         private Node ParsePattern(ProductionPattern pattern) {
-            Token                         token = PeekToken(0);
             ProductionPatternAlternative  alt;
             ProductionPatternAlternative  defaultAlt;
             
@@ -592,11 +591,10 @@ namespace PerCederberg.Grammatica.Parser {
                                            CallStack stack,
                                            LookAheadSet filter) {
     
-            ProductionPattern  pattern;
-            LookAheadSet       result;
-            LookAheadSet       first;
-            LookAheadSet       follow;
-            int                max;
+            LookAheadSet  result;
+            LookAheadSet  first;
+            LookAheadSet  follow;
+            int           max;
     
             // Find initial element look-ahead
             first = FindLookAhead(elem, length, 0, stack, filter);

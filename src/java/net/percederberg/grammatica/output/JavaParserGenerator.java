@@ -87,7 +87,6 @@ public class JavaParserGenerator extends ParserGenerator {
     private void initialize() {
         StringBuffer  buffer;
         String        str;
-        int           pos;
 
         // Set base name
         str = getGrammar().getFileName();
