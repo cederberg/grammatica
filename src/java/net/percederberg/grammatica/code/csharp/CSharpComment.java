@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code.csharp;
@@ -41,7 +41,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * A class generating a C# comment.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class CSharpComment extends CodeElement {
 
@@ -164,11 +164,16 @@ public class CSharpComment extends CodeElement {
      */
     private void printLine(PrintWriter out, String indent, String line) {
         if (type == DOCUMENTATION || type == BLOCK) {
-            out.println(indent + " * " + line);
+            out.print(indent + " *");
         } else if (type == DOCUMENTATION_SINGLE) {
-            out.println(indent + "/// " + line);
+            out.print(indent + "///");
         } else {
-            out.println(indent + "// " + line);
+            out.print(indent + "//");
+        }
+        if (line.equals("")) {
+            out.println();
+        } else {
+            out.println(" " + line);
         }
     }
 }

@@ -143,6 +143,8 @@ public class VisualBasicComment extends CodeElement {
     private void printLine(PrintWriter out, String indent, String line) {
         if (type == DOCUMENTATION) {
             out.println(indent + "'''" + line);
+        } else if (line.equals("")) {
+            out.println(indent + "'");
         } else {
             out.println(indent + "' " + line);
         }
