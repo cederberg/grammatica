@@ -52,21 +52,21 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public enum ErrorType {
 
-            /*
+            /**
              * The internal error type is only used to signal an 
              * error that is a result of a bug in the parser or
              * tokenizer code.
              */
             INTERNAL,
     
-            /*
+            /**
              * The invalid parser error type is used when the parser 
              * as such is invalid. This error is typically caused by 
              * using a parser without any patterns.
              */
             INVALID_PARSER,
     
-            /*
+            /**
              * The invalid token error type is used when a token 
              * pattern is erroneous. This error is typically caused 
              * by an invalid pattern type or an erroneous regular 
@@ -74,7 +74,7 @@ namespace PerCederberg.Grammatica.Parser {
              */
             INVALID_TOKEN,
         
-            /*
+            /**
              * The invalid production error type is used when a 
              * production pattern is erroneous. This error is 
              * typically caused by referencing undeclared productions, 
@@ -82,14 +82,14 @@ namespace PerCederberg.Grammatica.Parser {
              */
             INVALID_PRODUCTION,
     
-            /*
+            /**
              * The infinite loop error type is used when an infinite 
              * loop has been detected in the grammar. One of the
              * productions in the loop will be reported.
              */
             INFINITE_LOOP,
     
-            /*
+            /**
              * The inherent ambiguity error type is used when the set
              * of production patterns (i.e. the grammar) contains
              * ambiguities that cannot be resolved.

@@ -52,13 +52,13 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public enum PatternType {
 
-            /*
+            /**
              * The string pattern type is used for tokens that only
              * match an exact string.
              */
             STRING,
 
-            /*
+            /**
              * The regular expression pattern type is used for tokens
              * that match a regular expression.
              */
