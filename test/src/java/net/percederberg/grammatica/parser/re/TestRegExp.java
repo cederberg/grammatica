@@ -216,7 +216,7 @@ public class TestRegExp extends TestCase {
         failCreateRegExp("\\x1g");
         matchRegExp("\\x41", "A");
         matchRegExp("\\x4f", "O");
-        matchRegExp("\\xABC", "«C");
+        matchRegExp("\\xABC", "\u00ABC");
     }
 
     /**
@@ -230,7 +230,7 @@ public class TestRegExp extends TestCase {
         failCreateRegExp("\\u111g");
         matchRegExp("\\u0041", "A");
         matchRegExp("\\u004f", "O");
-        matchRegExp("\\u00ABC", "«C");
+        matchRegExp("\\u00ABC", "\u00ABC");
     }
 
     /**

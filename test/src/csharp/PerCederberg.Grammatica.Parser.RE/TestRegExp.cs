@@ -213,7 +213,7 @@ public class TestRegExp {
         FailCreateRegExp("\\x1g");
         MatchRegExp("\\x41", "A");
         MatchRegExp("\\x4f", "O");
-        MatchRegExp("\\xABC", "«C");
+        MatchRegExp("\\xABC", "\x00ABC");
     }
 
     /**
@@ -227,7 +227,7 @@ public class TestRegExp {
         FailCreateRegExp("\\u111g");
         MatchRegExp("\\u0041", "A");
         MatchRegExp("\\u004f", "O");
-        MatchRegExp("\\u00ABC", "«C");
+        MatchRegExp("\\u00ABC", "\x00ABC");
     }
 
     /**
