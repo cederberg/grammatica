@@ -50,38 +50,38 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public enum ErrorType {
 
-            /**
+            /*
              * The internal error type is only used to signal an error
              * that is a result of a bug in the parser or tokenizer
              * code.
              */
             INTERNAL, 
 
-            /**
+            /*
              * The I/O error type is used for stream I/O errors. 
              */
             IO,
     
-            /**
+            /*
              * The unexpected end of file error type is used when end
              * of file is encountered instead of a valid token.
              */
             UNEXPECTED_EOF,
 
-            /**
+            /*
              * The unexpected character error type is used when a
              * character is read that isn't handled by one of the
              * token patterns.
              */
             UNEXPECTED_CHAR,
 
-            /**
+            /*
              * The unexpected token error type is used when another
              * token than the expected one is encountered.
              */
             UNEXPECTED_TOKEN,
     
-            /**
+            /*
              * The invalid token error type is used when a token
              * pattern with an error message is matched. The
              * additional information provided should contain the
@@ -89,7 +89,7 @@ namespace PerCederberg.Grammatica.Parser {
              */
             INVALID_TOKEN,
 
-            /**
+            /*
              * The analysis error type is used when an error is
              * encountered in the analysis. The additional information
              * provided should contain the error message.

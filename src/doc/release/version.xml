@@ -9,6 +9,13 @@
 
     <list>
       <item>
+        <title>Added C# API documentation</title>
+        <text>C# API documentation has now been added to the 
+        release documentation. The build file uses CppDoc to
+        generate the HTML documents. (Bug #3612)</text>
+      </item>
+
+      <item>
         <title>Improved and clarified the Analyzer API</title>
         <text>The Analyzer class API has been clarified by improving
         the generated comments slightly and by adding a 

@@ -212,7 +212,8 @@
   
 
 <!-- DOCUMENTATION TARGETS -->
-  <target name="doc" depends="init,doc-clean,doc-text,doc-html,doc-java">
+  <target name="doc" 
+          depends="init,doc-clean,doc-text,doc-html,doc-java,doc-csharp">
   </target>
 
   <target name="doc-clean">
@@ -220,6 +221,7 @@
     <mkdir dir="${build.dir}/doc" />
     <mkdir dir="${build.dir}/doc/manual" />
     <mkdir dir="${build.dir}/doc/api/java" />
+    <mkdir dir="${build.dir}/doc/api/csharp" />
   </target>
 
   <target name="doc-text">
@@ -267,6 +269,16 @@
              author="false"
              windowtitle="Grammatica ${build.version} Documentation" 
              failonerror="true" />
+  </target>
+
+  <target name="doc-csharp">
+    <exec executable="cppdoc"
+          dir="${build.dir}/doc/api/csharp"
+          failonerror="true">
+      <arg value="-classdir=." />
+      <arg value="-title=Grammatica ${build.version} Documentation" />
+      <arg value="${build.dir}/src/csharp" />
+    </exec>
   </target>
 
 

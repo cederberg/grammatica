@@ -369,6 +369,8 @@ public class Analyzer {
      * @param node           the parse tree node
      *
      * @return a list with all the child node values
+     * 
+     * @since 1.3
      */
     protected ArrayList getChildValues(Node node) {
         ArrayList  result = new ArrayList();

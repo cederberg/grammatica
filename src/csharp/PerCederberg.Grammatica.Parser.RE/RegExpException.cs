@@ -51,20 +51,20 @@ namespace PerCederberg.Grammatica.Parser.RE {
          */
         public enum ErrorType {
 
-            /**
+            /*
              * The unexpected character error constant. This error is
              * used when a character was read that didn't match the
              * allowed set of characters at the given position.
              */
             UNEXPECTED_CHARACTER,
 
-            /**
+            /*
              * The unterminated pattern error constant. This error is
              * used when more characters were expected in the pattern.
              */
             UNTERMINATED_PATTERN,
     
-            /**
+            /*
              * The unsupported special character error constant. This
              * error is used when special regular expression
              * characters are used in the pattern, but not supported
@@ -72,7 +72,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
              */
             UNSUPPORTED_SPECIAL_CHARACTER,
     
-            /**
+            /*
              * The unsupported escape character error constant. This
              * error is used when an escape character construct is
              * used in the pattern, but not supported in this
@@ -80,7 +80,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
              */
             UNSUPPORTED_ESCAPE_CHARACTER,
     
-            /**
+            /*
              * The invalid repeat count error constant. This error is
              * used when a repetition count of zero is specified, or
              * when the minimum exceeds the maximum.
