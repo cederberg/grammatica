@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -39,7 +39,7 @@ import java.io.FileReader;
  * A test program for the RegExp class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class DebugRegExp {
 
@@ -72,7 +72,7 @@ public class DebugRegExp {
 
         // Create regular expression
         try {
-            System.out.println(new RegExp(str));
+            System.out.println(new RegExp(str, false));
         } catch (RegExpException e) {
             e.printStackTrace();
             System.exit(1);

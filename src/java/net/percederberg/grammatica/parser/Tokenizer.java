@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -50,9 +50,14 @@ import net.percederberg.grammatica.parser.re.RegExpException;
  * don't match any of the token patterns, a parse exception is thrown.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.4
+ * @version  1.5
  */
 public class Tokenizer {
+
+    /**
+     * The ignore character case flag.
+     */
+    private boolean ignoreCase = false;
 
     /**
      * The token list feature flag.
@@ -114,12 +119,28 @@ public class Tokenizer {
     private Token previousToken = null;
 
     /**
-     * Creates a new tokenizer for the specified input stream.
+     * Creates a new case-sensitive tokenizer for the specified input
+     * stream.
      *
      * @param input          the input stream to read
      */
     public Tokenizer(Reader input) {
+        this(input, false);
+    }
+
+    /**
+     * Creates a new tokenizer for the specified input stream. The
+     * tokenizer can be set to process tokens either in case-sensitive
+     * or case-insensitive mode.
+     *
+     * @param input          the input stream to read
+     * @param ignoreCase     the character case ignore flag
+     *
+     * @since 1.5
+     */
+    public Tokenizer(Reader input, boolean ignoreCase) {
         this.input = input;
+        this.ignoreCase = ignoreCase;
     }
 
     /**
@@ -508,7 +529,7 @@ public class Tokenizer {
             throws RegExpException {
 
             this.pattern = pattern;
-            this.regExp = new RegExp(pattern.getPattern());
+            this.regExp = new RegExp(pattern.getPattern(), ignoreCase);
             this.matcher = regExp.matcher(buffer);
         }
 
@@ -709,7 +730,7 @@ public class Tokenizer {
          */
         public void addPattern(TokenPattern pattern) {
             patterns.add(pattern);
-            start.addMatch(pattern.getPattern(), pattern);
+            start.addMatch(pattern.getPattern(), ignoreCase, pattern);
         }
 
         /**
@@ -724,7 +745,7 @@ public class Tokenizer {
          */
         public boolean matchFrom(int pos) {
             reset();
-            match = (TokenPattern) start.matchFrom(this, pos);
+            match = (TokenPattern) start.matchFrom(this, pos, ignoreCase);
             return match != null;
         }
 
@@ -774,24 +795,27 @@ public class Tokenizer {
         /**
          * Adds a string match to this automaton. New states and
          * transitions will be added to extend this automaton to
-         * support the specified string.
+         * support the specified string. If the lower-case flag is
+         * set, the string will be converted to lower-case before
+         * being added.
          *
          * @param str            the string to match
+         * @param lowerCase      the lower-case conversion flag
          * @param value          the match value
          */
-        public void addMatch(String str, Object value) {
+        public void addMatch(String str, boolean lowerCase, Object value) {
             Automaton  state;
 
             if (str.equals("")) {
                 this.value = value;
             } else {
-                state = tree.find(str.charAt(0));
+                state = tree.find(str.charAt(0), lowerCase);
                 if (state == null) {
                     state = new Automaton();
-                    state.addMatch(str.substring(1), value);
-                    tree.add(str.charAt(0), state);
+                    state.addMatch(str.substring(1), lowerCase, value);
+                    tree.add(str.charAt(0), lowerCase, state);
                 } else {
-                    state.addMatch(str.substring(1), value);
+                    state.addMatch(str.substring(1), lowerCase, value);
                 }
             }
         }
@@ -800,24 +824,29 @@ public class Tokenizer {
          * Checks if the automaton matches the tokenizer buffer from
          * the specified position. This method will set the end of
          * buffer flag in the specified token matcher if the end of
-         * buffer is reached.
+         * buffer is reached. The comparison can be done either with
+         * only lower-case characters, or in a case-sensitive manner.
          *
          * @param m              the string token matcher
          * @param pos            the starting position
+         * @param lowerCase      the lower-case comparison flag
          *
          * @return the match value, or
          *         null if no match is found
          */
-        public Object matchFrom(StringTokenMatcher m, int pos) {
+        public Object matchFrom(StringTokenMatcher m,
+                                int pos,
+                                boolean lowerCase) {
+
             Object     result = null;
             Automaton  state;
 
             if (pos >= buffer.length()) {
                 m.setReadEndOfString();
             } else if (tree != null) {
-                state = tree.find(buffer.charAt(pos));
+                state = tree.find(buffer.charAt(pos), lowerCase);
                 if (state != null) {
-                    result = state.matchFrom(m, pos + 1);
+                    result = state.matchFrom(m, pos + 1, lowerCase);
                 }
             }
             return (result == null) ? value : result;
@@ -862,40 +891,51 @@ public class Tokenizer {
 
         /**
          * Finds an automaton state from the specified transition
-         * character. This method searches this transition tree for
-         * a matching transition.
+         * character. This method searches this transition tree for a
+         * matching transition. The comparison can be done either with
+         * only lower-case characters, or in a case-sensitive manner.
          *
          * @param c              the character to search for
+         * @param lowerCase      the lower-case comparison flag
          *
          * @return the automaton state found, or
          *         null if no transition exists
          */
-        public Automaton find(char c) {
+        public Automaton find(char c, boolean lowerCase) {
+            if (lowerCase) {
+                c = Character.toLowerCase(c);
+            }
             if (value == '\0' || value == c) {
                 return state;
             } else if (value > c) {
-                return left.find(c);
+                return left.find(c, false);
             } else {
-                return right.find(c);
+                return right.find(c, false);
             }
         }
 
         /**
-         * Adds a transition to this tree.
+         * Adds a transition to this tree. If the lower-case flag is
+         * set, the character will be converted to lower-case before
+         * being added.
          *
          * @param c              the character to transition for
+         * @param lowerCase      the lower-case conversion flag
          * @param state          the state to transition to
          */
-        public void add(char c, Automaton state) {
+        public void add(char c, boolean lowerCase, Automaton state) {
+            if (lowerCase) {
+                c = Character.toLowerCase(c);
+            }
             if (value == '\0') {
                 this.value = c;
                 this.state = state;
                 this.left = new AutomatonTree();
                 this.right = new AutomatonTree();
             } else if (value > c) {
-                left.add(c, state);
+                left.add(c, false, state);
             } else {
-                right.add(c, state);
+                right.add(c, false, state);
             }
         }
     }

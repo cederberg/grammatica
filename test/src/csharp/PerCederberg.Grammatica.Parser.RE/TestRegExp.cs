@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -40,7 +40,7 @@ using PerCederberg.Grammatica.Parser.RE;
  * A test case for the RegExp class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class TestRegExp {
 
@@ -467,7 +467,7 @@ public class TestRegExp {
      */
     private RegExp CreateRegExp(string pattern) {
         try {
-            return new RegExp(pattern);
+            return new RegExp(pattern, false);
         } catch (RegExpException e) {
             Fail("couldn't create regular expression '" + pattern +
                  "': " + e.Message);
@@ -484,7 +484,7 @@ public class TestRegExp {
      */
     private void FailCreateRegExp(string pattern) {
         try {
-            new RegExp(pattern);
+            new RegExp(pattern, false);
             Fail("regular expression '" + pattern + "' could be " +
                  "created although it isn't valid");
         } catch (RegExpException e) {

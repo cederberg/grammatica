@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -44,7 +44,7 @@ import java.util.ArrayList;
  * set will be considered to match.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class CharacterSetElement extends Element {
 
@@ -204,6 +204,9 @@ class CharacterSetElement extends Element {
             return -1;
         }
         c = str.charAt(start);
+        if (m.isCaseInsensitive()) {
+            c = Character.toLowerCase(c);
+        }
         return inSet(c) ? 1 : -1;
     }
 

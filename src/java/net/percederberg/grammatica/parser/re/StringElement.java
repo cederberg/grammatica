@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -40,7 +40,7 @@ import java.io.PrintWriter;
  * exact string. Once created, the string element is immutable.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class StringElement extends Element {
 
@@ -101,6 +101,8 @@ class StringElement extends Element {
      *         -1 if no match was found
      */
     public int match(Matcher m, CharBuffer str, int start, int skip) {
+        char  c;
+
         if (skip != 0) {
             return -1;
         }
@@ -109,7 +111,11 @@ class StringElement extends Element {
                 m.setReadEndOfString();
                 return -1;
             }
-            if (str.charAt(start + i) != value.charAt(i)) {
+            c = str.charAt(start + i);
+            if (m.isCaseInsensitive()) {
+                c = Character.toLowerCase(c);
+            }
+            if (c != value.charAt(i)) {
                 return -1;
             }
         }

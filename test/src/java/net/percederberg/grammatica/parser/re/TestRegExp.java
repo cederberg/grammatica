@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
  * A test case for the RegExp class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class TestRegExp extends TestCase {
 
@@ -510,7 +510,7 @@ public class TestRegExp extends TestCase {
      */
     private RegExp createRegExp(String pattern) {
         try {
-            return new RegExp(pattern);
+            return new RegExp(pattern, false);
         } catch (RegExpException e) {
             fail("couldn't create regular expression '" + pattern +
                  "': " + e.getMessage());
@@ -527,7 +527,7 @@ public class TestRegExp extends TestCase {
      */
     private void failCreateRegExp(String pattern) {
         try {
-            new RegExp(pattern);
+            new RegExp(pattern, false);
             fail("regular expression '" + pattern + "' could be " +
                  "created although it isn't valid");
         } catch (RegExpException e) {

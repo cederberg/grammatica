@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -44,7 +44,7 @@ import java.util.ArrayList;
  * operate simultanously on the same regular expression.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class RegExp {
 
@@ -59,13 +59,18 @@ public class RegExp {
     private String pattern;
 
     /**
+     * The character case ignore flag.
+     */
+    private boolean ignoreCase;
+
+    /**
      * The current position in the pattern. This variable is used by
      * the parsing methods.
      */
     private int pos;
 
     /**
-     * Creates a new regular expression.
+     * Creates a new case-sensitive regular expression.
      *
      * @param pattern        the regular expression pattern
      *
@@ -73,7 +78,26 @@ public class RegExp {
      *             parsed correctly
      */
     public RegExp(String pattern) throws RegExpException {
+        this(pattern, false);
+    }
+
+    /**
+     * Creates a new regular expression. The regular expression can be
+     * either case-sensitive or case-insensitive.
+     *
+     * @param pattern        the regular expression pattern
+     * @param ignoreCase     the character case ignore flag
+     *
+     * @throws RegExpException if the regular expression couldn't be
+     *             parsed correctly
+     *
+     * @since 1.5
+     */
+    public RegExp(String pattern, boolean ignoreCase)
+        throws RegExpException {
+
         this.pattern = pattern;
+        this.ignoreCase = ignoreCase;
         this.pos = 0;
         this.element = parseExpr();
         if (pos < pattern.length()) {
@@ -92,7 +116,7 @@ public class RegExp {
      * @return the regular expresion matcher
      */
     public Matcher matcher(CharBuffer str) {
-        return new Matcher((Element) element.clone(), str);
+        return new Matcher((Element) element.clone(), str, ignoreCase);
     }
 
     /**
@@ -126,8 +150,14 @@ public class RegExp {
         StringWriter  str;
 
         str = new StringWriter();
-        str.write("  Regexp Pattern: " + pattern + "\n");
-        str.write("  Regexp Compiled:\n");
+        str.write("Regular Expression\n");
+        str.write("  Pattern: " + pattern + "\n");
+        str.write("  Flags:");
+        if (ignoreCase) {
+            str.write(" caseignore");
+        }
+        str.write("\n");
+        str.write("  Compiled:\n");
         element.printTo(new PrintWriter(str), "    ");
         return str.toString();
     }
@@ -367,9 +397,9 @@ public class RegExp {
 
                     readChar('-');
                     end = readChar();
-                    charset.addRange(start, end);
+                    charset.addRange(fixChar(start), fixChar(end));
                 } else {
-                    charset.addCharacter(start);
+                    charset.addCharacter(fixChar(start));
                 }
             }
         }
@@ -397,7 +427,7 @@ public class RegExp {
                 pos,
                 pattern);
         default:
-            return new StringElement(readChar());
+            return new StringElement(fixChar(readChar()));
         }
     }
 
@@ -436,7 +466,7 @@ public class RegExp {
             }
             try {
                 c = (char) Integer.parseInt(str, 8);
-                return new StringElement(c);
+                return new StringElement(fixChar(c));
             } catch (NumberFormatException e) {
                 throw new RegExpException(
                     RegExpException.UNSUPPORTED_ESCAPE_CHARACTER,
@@ -448,7 +478,7 @@ public class RegExp {
                   String.valueOf(readChar());
             try {
                 c = (char) Integer.parseInt(str, 16);
-                return new StringElement(c);
+                return new StringElement(fixChar(c));
             } catch (NumberFormatException e) {
                 throw new RegExpException(
                     RegExpException.UNSUPPORTED_ESCAPE_CHARACTER,
@@ -462,7 +492,7 @@ public class RegExp {
                   String.valueOf(readChar());
             try {
                 c = (char) Integer.parseInt(str, 16);
-                return new StringElement(c);
+                return new StringElement(fixChar(c));
             } catch (NumberFormatException e) {
                 throw new RegExpException(
                     RegExpException.UNSUPPORTED_ESCAPE_CHARACTER,
@@ -500,8 +530,21 @@ public class RegExp {
                     pos - 2,
                     pattern);
             }
-            return new StringElement(c);
+            return new StringElement(fixChar(c));
         }
+    }
+
+    /**
+     * Adjusts a character for inclusion in a string or character set
+     * element. For case-insensitive regular expressions, this
+     * transforms the character to lower-case.
+     *
+     * @param c               the input character
+     *
+     * @return the adjusted character
+     */
+    private char fixChar(char c) {
+        return ignoreCase ? Character.toLowerCase(c) : c;
     }
 
     /**

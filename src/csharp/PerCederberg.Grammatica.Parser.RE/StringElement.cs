@@ -28,9 +28,10 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
+using System;
 using System.IO;
 
 namespace PerCederberg.Grammatica.Parser.RE {
@@ -40,7 +41,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
      * an exact string. Once created, the string element is immutable.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     internal class StringElement : Element {
 
@@ -105,6 +106,8 @@ namespace PerCederberg.Grammatica.Parser.RE {
                                   int start,
                                   int skip) {
 
+            char  c;
+
             if (skip != 0) {
                 return -1;
             }
@@ -113,7 +116,11 @@ namespace PerCederberg.Grammatica.Parser.RE {
                     m.SetReadEndOfString();
                     return -1;
                 }
-                if (str[start + i] != value[i]) {
+                c = str[start + i];
+                if (m.IsCaseInsensitive()) {
+                    c = Char.ToLower(c);
+                }
+                if (c != value[i]) {
                     return -1;
                 }
             }

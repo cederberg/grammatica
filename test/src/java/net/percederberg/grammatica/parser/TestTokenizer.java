@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  * A test case for the Tokenizer class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.4
+ * @version  1.5
  */
 public class TestTokenizer extends TestCase {
 
@@ -56,25 +56,30 @@ public class TestTokenizer extends TestCase {
     private static final int KEYWORD = 1;
 
     /**
+     * The identifier token identifier.
+     */
+    private static final int IDENTIFIER = 2;
+
+    /**
      * The number token identifier.
      */
-    private static final int NUMBER = 2;
+    private static final int NUMBER = 3;
 
     /**
      * The whitespace token identifier.
      */
-    private static final int WHITESPACE = 3;
+    private static final int WHITESPACE = 4;
 
     /**
      * The error token identifier.
      */
-    private static final int ERROR = 4;
+    private static final int ERROR = 5;
 
     /**
      * Test various invalid patterns.
      */
     public void testInvalidPattern() {
-        Tokenizer     tokenizer = createTokenizer("");
+        Tokenizer     tokenizer = createTokenizer("", false);
         TokenPattern  pattern;
 
         pattern = new TokenPattern(NUMBER,
@@ -93,7 +98,7 @@ public class TestTokenizer extends TestCase {
      * Tests the tokenizer with empty input.
      */
     public void testEmptyInput() {
-        Tokenizer  tokenizer = createDefaultTokenizer("");
+        Tokenizer  tokenizer = createDefaultTokenizer("", false);
 
         readToken(tokenizer, EOF);
     }
@@ -102,7 +107,7 @@ public class TestTokenizer extends TestCase {
      * Tests the ignored tokens.
      */
     public void testIgnoreTokens() {
-        Tokenizer  tokenizer = createDefaultTokenizer(" 12 keyword 0 ");
+        Tokenizer  tokenizer = createDefaultTokenizer(" 12 keyword 0 ", false);
 
         readToken(tokenizer, NUMBER);
         readToken(tokenizer, KEYWORD);
@@ -114,7 +119,7 @@ public class TestTokenizer extends TestCase {
      * Tests the ignored tokens.
      */
     public void testErrorTokens() {
-        Tokenizer  tokenizer = createDefaultTokenizer("12 error1  ");
+        Tokenizer  tokenizer = createDefaultTokenizer("12 error1  ", false);
 
         readToken(tokenizer, NUMBER);
         failReadToken(tokenizer);
@@ -126,7 +131,7 @@ public class TestTokenizer extends TestCase {
      * Test the parse error recovery.
      */
     public void testParseError() {
-        Tokenizer  tokenizer = createDefaultTokenizer("12 (keyword)");
+        Tokenizer  tokenizer = createDefaultTokenizer("12 (keyword)", false);
 
         readToken(tokenizer, NUMBER);
         failReadToken(tokenizer);
@@ -139,7 +144,7 @@ public class TestTokenizer extends TestCase {
      * Tests the token list functions.
      */
     public void testTokenList() {
-        Tokenizer  tokenizer = createDefaultTokenizer("12 keyword 0");
+        Tokenizer  tokenizer = createDefaultTokenizer("12 keyword 0", false);
         Token      token;
 
         assertEquals("default token list setting",
@@ -171,14 +176,26 @@ public class TestTokenizer extends TestCase {
     }
 
     /**
+     * Tests the case-insensitive mode.
+     */
+    public void testCaseInsensitive() {
+        Tokenizer  tokenizer = createDefaultTokenizer("kEyWOrd aBc ", true);
+
+        readToken(tokenizer, KEYWORD);
+        readToken(tokenizer, IDENTIFIER);
+        readToken(tokenizer, EOF);
+    }
+
+    /**
      * Creates a new tokenizer.
      *
      * @param input          the input string
+     * @param ignoreCase     the character case ignore flag
      *
      * @return a new tokenizer
      */
-    private Tokenizer createTokenizer(String input) {
-        return new Tokenizer(new StringReader(input));
+    private Tokenizer createTokenizer(String input, boolean ignoreCase) {
+        return new Tokenizer(new StringReader(input), ignoreCase);
     }
 
     /**
@@ -186,17 +203,25 @@ public class TestTokenizer extends TestCase {
      * language.
      *
      * @param input          the input string
+     * @param ignoreCase     the character case ignore flag
      *
      * @return a new tokenizer
      */
-    private Tokenizer createDefaultTokenizer(String input) {
-        Tokenizer     tokenizer = createTokenizer(input);
+    private Tokenizer createDefaultTokenizer(String input,
+                                             boolean ignoreCase) {
+
+        Tokenizer     tokenizer = createTokenizer(input, ignoreCase);
         TokenPattern  pattern;
 
         pattern = new TokenPattern(KEYWORD,
                                    "KEYWORD",
                                    TokenPattern.STRING_TYPE,
                                    "keyword");
+        addPattern(tokenizer, pattern);
+        pattern = new TokenPattern(IDENTIFIER,
+                                   "IDENTIFIER",
+                                   TokenPattern.REGEXP_TYPE,
+                                   "[A-Z]+");
         addPattern(tokenizer, pattern);
         pattern = new TokenPattern(NUMBER,
                                    "NUMBER",

@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -41,7 +41,7 @@ package net.percederberg.grammatica.parser.re;
  * that were set. This class is not thread-safe.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class Matcher {
 
@@ -54,6 +54,11 @@ public class Matcher {
      * The string to work with
      */
     private CharBuffer str;
+
+    /**
+     * The character case ignore flag.
+     */
+    private boolean ignoreCase;
 
     /**
      * The start of the latest match found.
@@ -76,12 +81,26 @@ public class Matcher {
      *
      * @param e              the base regular expression element
      * @param str            the string to work with
+     * @param ignoreCase     the character case ignore flag
      */
-    protected Matcher(Element e, CharBuffer str) {
+    protected Matcher(Element e, CharBuffer str, boolean ignoreCase) {
         this.element = e;
         this.str = str;
+        this.ignoreCase = ignoreCase;
         this.start = 0;
         reset();
+    }
+
+    /**
+     * Checks if this matcher compares in case-insensitive mode.
+     *
+     * @return true if the matching is case-insensitive, or
+     *         false otherwise
+     *
+     * @since 1.5
+     */
+    public boolean isCaseInsensitive() {
+        return ignoreCase;
     }
 
     /**

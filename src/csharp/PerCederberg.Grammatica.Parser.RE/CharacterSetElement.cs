@@ -28,9 +28,10 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -45,7 +46,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
      * characters not inside the set will be considered to match.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     internal class CharacterSetElement : Element {
 
@@ -209,6 +210,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 return -1;
             }
             c = str[start];
+            if (m.IsCaseInsensitive()) {
+                c = Char.ToLower(c);
+            }
             return InSet(c) ? 1 : -1;
         }
 

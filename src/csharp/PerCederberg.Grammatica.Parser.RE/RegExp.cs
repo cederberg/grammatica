@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -47,7 +47,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
      * expression.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class RegExp {
 
@@ -62,21 +62,43 @@ namespace PerCederberg.Grammatica.Parser.RE {
         private string pattern;
 
         /**
+         * The character case ignore flag.
+         */
+        private bool ignoreCase;
+
+        /**
          * The current position in the pattern. This variable is used by
          * the parsing methods.
          */
         private int pos;
 
         /**
-         * Creates a new regular expression.
+         * Creates a new case-sensitive regular expression.
          *
          * @param pattern        the regular expression pattern
          *
          * @throws RegExpException if the regular expression couldn't be
          *             parsed correctly
          */
-        public RegExp(string pattern) {
+        public RegExp(string pattern)
+            : this(pattern, false) {
+        }
+
+        /**
+         * Creates a new regular expression. The regular expression
+         * can be either case-sensitive or case-insensitive.
+         *
+         * @param pattern        the regular expression pattern
+         * @param ignoreCase     the character case ignore flag
+         *
+         * @throws RegExpException if the regular expression couldn't be
+         *             parsed correctly
+         *
+         * @since 1.5
+         */
+        public RegExp(string pattern, bool ignoreCase) {
             this.pattern = pattern;
+            this.ignoreCase = ignoreCase;
             this.pos = 0;
             this.element = ParseExpr();
             if (pos < pattern.Length) {
@@ -95,7 +117,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * @return the regular expresion matcher
          */
         public Matcher Matcher(string str) {
-            return new Matcher((Element) element.Clone(), str);
+            return new Matcher((Element) element.Clone(), str, ignoreCase);
         }
 
         /**
@@ -109,6 +131,11 @@ namespace PerCederberg.Grammatica.Parser.RE {
             str = new StringWriter();
             str.WriteLine("Regular Expression");
             str.WriteLine("  Pattern: " + pattern);
+            str.Write("  Flags:");
+            if (ignoreCase) {
+                str.Write(" caseignore");
+            }
+            str.WriteLine();
             str.WriteLine("  Compiled:");
             element.PrintTo(str, "    ");
             return str.ToString();
@@ -351,9 +378,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
                         ReadChar('-');
                         end = ReadChar();
-                        charset.AddRange(start, end);
+                        charset.AddRange(FixChar(start), FixChar(end));
                     } else {
-                        charset.AddCharacter(start);
+                        charset.AddCharacter(FixChar(start));
                     }
                     break;
                 }
@@ -382,7 +409,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
                     pos,
                     pattern);
             default:
-                return new StringElement(ReadChar());
+                return new StringElement(FixChar(ReadChar()));
             }
         }
 
@@ -422,14 +449,14 @@ namespace PerCederberg.Grammatica.Parser.RE {
                         value += ReadChar() - '0';
                     }
                 }
-                return new StringElement((char) value);
+                return new StringElement(FixChar((char) value));
             case 'x':
                 str = ReadChar().ToString() +
                       ReadChar().ToString();
                 try {
                     value = Int32.Parse(str,
                                         NumberStyles.AllowHexSpecifier);
-                    return new StringElement((char) value);
+                    return new StringElement(FixChar((char) value));
                 } catch (FormatException) {
                     throw new RegExpException(
                         RegExpException.ErrorType.UNSUPPORTED_ESCAPE_CHARACTER,
@@ -444,7 +471,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 try {
                     value = Int32.Parse(str,
                                         NumberStyles.AllowHexSpecifier);
-                    return new StringElement((char) value);
+                    return new StringElement(FixChar((char) value));
                 } catch (FormatException) {
                     throw new RegExpException(
                         RegExpException.ErrorType.UNSUPPORTED_ESCAPE_CHARACTER,
@@ -482,8 +509,21 @@ namespace PerCederberg.Grammatica.Parser.RE {
                         pos - 2,
                         pattern);
                 }
-                return new StringElement(c);
+                return new StringElement(FixChar(c));
             }
+        }
+
+        /**
+         * Adjusts a character for inclusion in a string or character
+         * set element. For case-insensitive regular expressions, this
+         * transforms the character to lower-case.
+         *
+         * @param c               the input character
+         *
+         * @return the adjusted character
+         */
+        private char FixChar(char c) {
+            return ignoreCase ? Char.ToLower(c) : c;
         }
 
         /**
