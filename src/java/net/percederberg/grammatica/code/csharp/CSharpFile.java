@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -63,10 +63,10 @@ public class CSharpFile extends CodeElementContainer {
     public CSharpFile(File basedir, String basename) {
         this.file = new File(basedir, basename + ".cs");
     }
-    
+
     /**
      * Returns the file name.
-     * 
+     *
      * @return the file name.
      */
     public String toString() {
@@ -74,9 +74,9 @@ public class CSharpFile extends CodeElementContainer {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -105,7 +105,7 @@ public class CSharpFile extends CodeElementContainer {
 
     /**
      * Adds a namespace declaration to the file.
-     * 
+     *
      * @param n              the namespace declaration to add
      */
     public void addNamespace(CSharpNamespace n) {
@@ -114,7 +114,7 @@ public class CSharpFile extends CodeElementContainer {
 
     /**
      * Adds a class declaration to the file.
-     * 
+     *
      * @param c              the class declaration to add
      */
     public void addClass(CSharpClass c) {
@@ -131,7 +131,7 @@ public class CSharpFile extends CodeElementContainer {
     }
 
     /**
-     * Writes the source code for this file. Any previous file with 
+     * Writes the source code for this file. Any previous file with
      * this name will be overwritten.
      *
      * @param style          the code style to use
@@ -145,7 +145,7 @@ public class CSharpFile extends CodeElementContainer {
         print(out, style, 0);
         out.close();
     }
-    
+
     /**
      * Prints the file contents to the specified output stream.
      *

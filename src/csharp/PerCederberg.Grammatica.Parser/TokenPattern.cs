@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -37,10 +37,10 @@ using System.Text;
 namespace PerCederberg.Grammatica.Parser {
 
     /**
-     * A token pattern. This class contains the definition of a token 
+     * A token pattern. This class contains the definition of a token
      * (i.e. it's pattern), and allows testing a string against this
      * pattern. A token pattern is uniquely identified by an integer id,
-     * that must be provided upon creation. 
+     * that must be provided upon creation.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
      * @version  1.1
@@ -129,9 +129,9 @@ namespace PerCederberg.Grammatica.Parser {
          * @param type           the token pattern type
          * @param pattern        the token pattern
          */
-        public TokenPattern(int id, 
-                            string name, 
-                            PatternType type, 
+        public TokenPattern(int id,
+                            string name,
+                            PatternType type,
                             string pattern) {
 
             this.id = id;
@@ -141,21 +141,21 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Checks if the pattern corresponds to an error token. If this 
-         * is true, it means that an error should be reported if a 
+         * Checks if the pattern corresponds to an error token. If this
+         * is true, it means that an error should be reported if a
          * matching token is found.
-         * 
+         *
          * @return true if the pattern maps to an error token, or
          *         false otherwise
          */
         public bool IsError() {
             return error;
         }
-    
+
         /**
-         * Checks if the pattern corresponds to an ignored token. If this 
+         * Checks if the pattern corresponds to an ignored token. If this
          * is true, it means that the token should be ignored if found.
-         * 
+         *
          * @return true if the pattern maps to an ignored token, or
          *         false otherwise
          */
@@ -165,7 +165,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the unique token pattern identity value.
-         * 
+         *
          * @return the token pattern id
          */
         public int GetId() {
@@ -174,7 +174,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the token pattern name.
-         * 
+         *
          * @return the token pattern name
          */
         public string GetName() {
@@ -183,16 +183,16 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the token pattern type.
-         * 
+         *
          * @return the token pattern type
          */
         public PatternType GetPatternType() {
             return type;
         }
-    
+
         /**
          * Returns te token pattern.
-         * 
+         *
          * @return the token pattern
          */
         public string GetPattern() {
@@ -202,7 +202,7 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Returns the token error message if the pattern corresponds to
          * an error token.
-         *  
+         *
          * @return the token error message
          */
         public string GetErrorMessage() {
@@ -212,7 +212,7 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Returns the token ignore message if the pattern corresponds to
          * an ignored token.
-         *  
+         *
          * @return the token ignore message
          */
         public string GetIgnoreMessage() {

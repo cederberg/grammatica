@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -51,14 +51,14 @@ public class CSharpEnumeration extends CSharpType {
     public static final int PUBLIC = CSharpModifier.PUBLIC;
 
     /**
-     * The protected internal access modifier constant. May only be 
+     * The protected internal access modifier constant. May only be
      * used when declared inside another type.
      */
-    public static final int PROTECTED_INTERNAL = 
+    public static final int PROTECTED_INTERNAL =
         CSharpModifier.PROTECTED_INTERNAL;
 
     /**
-     * The protected access modifier constant. May only be used when 
+     * The protected access modifier constant. May only be used when
      * declared inside another type.
      */
     public static final int PROTECTED = CSharpModifier.PROTECTED;
@@ -69,13 +69,13 @@ public class CSharpEnumeration extends CSharpType {
     public static final int INTERNAL = CSharpModifier.INTERNAL;
 
     /**
-     * The private access modifier constant. May only be used when 
+     * The private access modifier constant. May only be used when
      * declared inside another type.
      */
     public static final int PRIVATE = CSharpModifier.PRIVATE;
 
     /**
-     * The new modifier constant. May only be used when declared 
+     * The new modifier constant. May only be used when declared
      * inside another type.
      */
     public static final int NEW = CSharpModifier.NEW;
@@ -95,7 +95,7 @@ public class CSharpEnumeration extends CSharpType {
     }
 
     /**
-     * Creates a new enumeration code generator with the specified 
+     * Creates a new enumeration code generator with the specified
      * modifiers.
      *
      * @param modifiers      the modifier flag constants
@@ -106,9 +106,9 @@ public class CSharpEnumeration extends CSharpType {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -119,16 +119,16 @@ public class CSharpEnumeration extends CSharpType {
 
     /**
      * Adds a constant to the enumeration.
-     * 
+     *
      * @param name           the constant name
      */
     public void addConstant(String name) {
         addConstant(name, null);
     }
-    
+
     /**
      * Adds a constant to the enumeration.
-     * 
+     *
      * @param name           the constant name
      * @param value          the constant value
      */
@@ -138,17 +138,17 @@ public class CSharpEnumeration extends CSharpType {
 
     /**
      * Adds a constant to the enumeration.
-     * 
+     *
      * @param name           the constant name
      * @param value          the constant value, or null
      * @param comment        the constant comment
      */
-    public void addConstant(String name, 
-                            String value, 
+    public void addConstant(String name,
+                            String value,
                             CSharpComment comment) {
 
         Constant  c = new Constant(name, value);
-        
+
         if (comment != null) {
             c.setComment(comment);
         }
@@ -166,47 +166,47 @@ public class CSharpEnumeration extends CSharpType {
     public void print(PrintWriter out, CodeStyle style, int indent) {
         print(out, style, indent, "enum");
     }
-    
+
     /**
-     * Prints the lines separating two elements. By default this 
+     * Prints the lines separating two elements. By default this
      * method prints a newline before the first element, and between
-     * elements with different category numbers.  
+     * elements with different category numbers.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param prev           the previous element, or null if first
      * @param next           the next element, or null if last
      */
-    protected void printSeparator(PrintWriter out, 
-                                  CodeStyle style, 
-                                  CodeElement prev, 
+    protected void printSeparator(PrintWriter out,
+                                  CodeStyle style,
+                                  CodeElement prev,
                                   CodeElement next) {
         // Do nothing
     }
 
     /**
      * A class generating a C# enumeration constant declaration.
-     */    
+     */
     private class Constant extends CodeElement {
-        
+
         /**
          * The constant name.
          */
         private String name;
-        
+
         /**
          * The constant value.
          */
         private String value;
-        
+
         /**
          * The constant comment.
          */
         private CSharpComment comment;
-        
+
         /**
          * Creates a new constant.
-         * 
+         *
          * @param name           the constant name
          * @param value          the constant value
          */
@@ -215,11 +215,11 @@ public class CSharpEnumeration extends CSharpType {
             this.value = value;
             this.comment = null;
         }
-        
+
         /**
-         * Returns a numeric category number for the code element. A lower 
+         * Returns a numeric category number for the code element. A lower
          * category number implies that the code element should be placed
-         * before code elements with a higher category number within a 
+         * before code elements with a higher category number within a
          * declaration.
          *
          * @return the category number
@@ -229,9 +229,9 @@ public class CSharpEnumeration extends CSharpType {
         }
 
         /**
-         * Sets the constant comment. This method overwrites any 
-         * previous comment. 
-         * 
+         * Sets the constant comment. This method overwrites any
+         * previous comment.
+         *
          * @param comment        the new constant comment
          */
         public void setComment(CSharpComment comment) {
@@ -257,7 +257,7 @@ public class CSharpEnumeration extends CSharpType {
                 out.print(value);
             }
             if (this != last) {
-                out.print(","); 
+                out.print(",");
             }
             out.println();
         }

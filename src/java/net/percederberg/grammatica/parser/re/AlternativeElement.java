@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -37,7 +37,7 @@ import java.io.PrintWriter;
 
 /**
  * A regular expression alternative element. This element matches the
- * longest alternative element. 
+ * longest alternative element.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.0
@@ -51,12 +51,12 @@ class AlternativeElement extends Element {
 
     /**
      * The second alternative element.
-     */    
+     */
     private Element elem2;
 
     /**
      * Creates a new alternative element.
-     * 
+     *
      * @param first          the first alternative
      * @param second         the second alternative
      */
@@ -70,7 +70,7 @@ class AlternativeElement extends Element {
      * of the same class matching the same strings. Copies of elements
      * are necessary to allow elements to cache intermediate results
      * while matching strings without interfering with other threads.
-     * 
+     *
      * @return a copy of this element
      */
     public Object clone() {
@@ -78,17 +78,17 @@ class AlternativeElement extends Element {
     }
 
     /**
-     * Returns the length of a matching string starting at the 
+     * Returns the length of a matching string starting at the
      * specified position. The number of matches to skip can also be
-     * specified, but numbers higher than zero (0) cause a failed 
-     * match for any element that doesn't attempt to combine other 
+     * specified, but numbers higher than zero (0) cause a failed
+     * match for any element that doesn't attempt to combine other
      * elements.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      */
@@ -98,7 +98,7 @@ class AlternativeElement extends Element {
         int  length2 = -1;
         int  skip1 = 0;
         int  skip2 = 0;
-        
+
         while (length >= 0 && skip1 + skip2 <= skip) {
             length1 = elem1.match(m, str, start, skip1);
             length2 = elem2.match(m, str, start, skip2);
@@ -109,13 +109,13 @@ class AlternativeElement extends Element {
                 length = length2;
                 skip2++;
             }
-        } 
+        }
         return length;
     }
 
     /**
      * Prints this element to the specified output stream.
-     * 
+     *
      * @param output         the output stream to use
      * @param indent         the current indentation
      */

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -52,8 +52,8 @@ import net.percederberg.grammatica.parser.Token;
 import net.percederberg.grammatica.parser.Tokenizer;
 
 /**
- * The main application. This class provides the command-line 
- * interface for invoking the application. See separate documentation 
+ * The main application. This class provides the command-line
+ * interface for invoking the application. See separate documentation
  * for information on usage and command-line parameters.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -221,15 +221,15 @@ public class Grammatica extends Object {
             System.err.println();
         }
     }
-    
+
     /**
      * Prints a general error message.
-     * 
+     *
      * @param e              the detailed exception
      */
     private static void printError(Exception e) {
         StringBuffer  buffer = new StringBuffer();
-        
+
         buffer.append("Error: ");
         buffer.append(e.getMessage());
         System.err.println(buffer.toString());
@@ -237,13 +237,13 @@ public class Grammatica extends Object {
 
     /**
      * Prints a file not found error message.
-     * 
+     *
      * @param file           the file name not found
      * @param e              the detailed exception
      */
     private static void printError(String file, FileNotFoundException e) {
         StringBuffer  buffer = new StringBuffer();
-        
+
         buffer.append("Error: couldn't open file:");
         buffer.append("\n    ");
         buffer.append(file);
@@ -252,7 +252,7 @@ public class Grammatica extends Object {
 
     /**
      * Prints a parse error message.
-     * 
+     *
      * @param file           the input file name
      * @param e              the detailed exception
      */
@@ -284,10 +284,10 @@ public class Grammatica extends Object {
         }
         System.err.println(buffer.toString());
     }
-    
+
     /**
      * Prints a list of parse error messages.
-     * 
+     *
      * @param file           the input file name
      * @param e              the parser log exception
      */
@@ -299,13 +299,13 @@ public class Grammatica extends Object {
 
     /**
      * Prints a grammar error message.
-     * 
+     *
      * @param e              the detailed exception
      */
     private static void printError(GrammarException e) {
         StringBuffer  buffer = new StringBuffer();
-        String        lines;        
-        
+        String        lines;
+
         buffer.append("Error: in ");
         buffer.append(e.getFile());
         if (e.getStartLine() > 0) {
@@ -328,36 +328,36 @@ public class Grammatica extends Object {
         }
         System.err.println(buffer.toString());
     }
-    
+
     /**
      * Prints an internal error message. This type of error should
      * only be reported when run-time exceptions occur, such as null
      * pointer and the likes. All these error should be reported as
      * bugs to the program maintainers.
-     * 
+     *
      * @param e              the exception to be reported
      */
     private static void printInternalError(Exception e) {
         System.err.println(INTERNAL_ERROR);
         e.printStackTrace();
     }
-    
+
     /**
      * Breaks a string into multiple lines. This method will also add
-     * a prefix to each line in the resulting string. The prefix 
+     * a prefix to each line in the resulting string. The prefix
      * length will be taken into account when breaking the line. Line
-     * breaks will only be inserted as replacements for space 
+     * breaks will only be inserted as replacements for space
      * characters.
-     * 
+     *
      * @param str            the string to line break
      * @param prefix         the prefix to add to each line
      * @param length         the maximum line length
-     * 
+     *
      * @return the new formatted string
      */
-    private static String linebreakString(String str, 
-                                          String prefix, 
-                                          int length) {    
+    private static String linebreakString(String str,
+                                          String prefix,
+                                          int length) {
 
         StringBuffer  buffer = new StringBuffer();
         int           pos;
@@ -381,13 +381,13 @@ public class Grammatica extends Object {
     }
 
     /**
-     * Reads a number of lines from a file. In the file couldn't be 
+     * Reads a number of lines from a file. In the file couldn't be
      * opened or read correctly, null will be returned.
-     * 
+     *
      * @param file           the name of the file to read
      * @param start          the first line number to read, from one (1)
      * @param end            the last line number to read, from one (1)
-     * 
+     *
      * @return the lines read including newline characters
      */
     private static String readLines(String file, int start, int end) {
@@ -399,7 +399,7 @@ public class Grammatica extends Object {
         if (start < 1 || end < start) {
             return null;
         }
-        
+
         // Read line from file
         try {
             input = new BufferedReader(new FileReader(file));
@@ -423,13 +423,13 @@ public class Grammatica extends Object {
 
     /**
      * Debugs a grammar by printing the internal representation.
-     * 
+     *
      * @param grammar        the grammar to use
      */
     private static void debug(Grammar grammar) {
         Tokenizer  tokenizer = null;
         Parser     parser = null;
-        
+
         // Create tokenizer and parser
         try {
             tokenizer = grammar.createTokenizer(null);
@@ -453,14 +453,14 @@ public class Grammatica extends Object {
     /**
      * Tokenizes the specified file with the token patterns from the
      * grammar.
-     * 
+     *
      * @param grammar        the grammar to use
      * @param file           the file to parse
      */
     private static void tokenize(Grammar grammar, File file) {
         Tokenizer  tokenizer;
         Token      token;
-        
+
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
             System.out.println("Tokens from " + file + ":");
@@ -478,10 +478,10 @@ public class Grammatica extends Object {
             System.exit(1);
         }
     }
-    
+
     /**
      * Parses the specified file with the grammar.
-     * 
+     *
      * @param grammar        the grammar to use
      * @param file           the file to parse
      */
@@ -489,7 +489,7 @@ public class Grammatica extends Object {
         Tokenizer  tokenizer;
         Analyzer   analyzer;
         Parser     parser;
-        
+
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
             analyzer = new TreePrinter(System.out);
@@ -512,9 +512,9 @@ public class Grammatica extends Object {
     }
 
     /**
-     * Parses the specified file with the grammar and prints 
+     * Parses the specified file with the grammar and prints
      * profiling information.
-     * 
+     *
      * @param grammar        the grammar to use
      * @param file           the file to parse
      */
@@ -524,7 +524,7 @@ public class Grammatica extends Object {
         Node       node;
         long       time;
         int        counter;
-        
+
         // Profile tokenizer
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
@@ -579,11 +579,11 @@ public class Grammatica extends Object {
             System.exit(1);
         }
     }
-    
+
     /**
-     * Parses the command-line arguments and generates the Java source 
-     * code for a parser. 
-     * 
+     * Parses the command-line arguments and generates the Java source
+     * code for a parser.
+     *
      * @param args           the command-line arguments
      * @param grammar        the grammar to use
      */
@@ -605,7 +605,7 @@ public class Grammatica extends Object {
                 System.exit(1);
             }
         }
-        
+
         // Write parser source code
         try {
             System.out.println("Writing Java parser source code...");
@@ -618,9 +618,9 @@ public class Grammatica extends Object {
     }
 
     /**
-     * Parses the command-line arguments and generates the C# source 
-     * code for a parser. 
-     * 
+     * Parses the command-line arguments and generates the C# source
+     * code for a parser.
+     *
      * @param args           the command-line arguments
      * @param grammar        the grammar to use
      */
@@ -657,7 +657,7 @@ public class Grammatica extends Object {
     /**
      * Parses the command-line arguments and generates the Visual
      * Basic source code for a parser.
-     * 
+     *
      * @param args           the command-line arguments
      * @param grammar        the grammar to use
      */

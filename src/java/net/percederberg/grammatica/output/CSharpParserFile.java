@@ -69,7 +69,7 @@ class CSharpParserFile {
     private static final String ENUM_COMMENT =
         "<summary>An enumeration with the generated production node\n" +
         "identity constants.</summary>";
-   
+
     /**
      * The first constructor comment.
      */
@@ -112,12 +112,12 @@ class CSharpParserFile {
      * The file to write.
      */
     private CSharpFile file;
-    
+
     /**
      * The class to write.
      */
     private CSharpClass cls;
-    
+
     /**
      * The syntetic contants enumeration.
      */
@@ -127,7 +127,7 @@ class CSharpParserFile {
      * The class initializer method.
      */
     private CSharpMethod initMethod;
-    
+
     /**
      * A map with the production constants in this class. This map
      * is indexed with the pattern id and contains the production
@@ -142,11 +142,11 @@ class CSharpParserFile {
 
     /**
      * Creates a new parser file.
-     * 
+     *
      * @param gen            the parser generator to use
      * @param tokenizer      the tokenizer file generator
      */
-    public CSharpParserFile(CSharpParserGenerator gen, 
+    public CSharpParserFile(CSharpParserGenerator gen,
                             CSharpTokenizerFile tokenizer) {
 
         String  name = gen.getBaseName() + "Parser";
@@ -160,8 +160,8 @@ class CSharpParserFile {
         } else {
             modifiers = CSharpClass.INTERNAL;
         }
-        this.cls = new CSharpClass(modifiers, 
-                                   name, 
+        this.cls = new CSharpClass(modifiers,
+                                   name,
                                    "RecursiveDescentParser");
         this.enm = new CSharpEnumeration(CSharpEnumeration.PRIVATE,
                                           "SynteticPatterns");
@@ -174,7 +174,7 @@ class CSharpParserFile {
 
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         CSharpConstructor  constr;
         String             str;
@@ -198,7 +198,7 @@ class CSharpParserFile {
 
         // Add type comment
         cls.addComment(new CSharpComment(TYPE_COMMENT));
-        
+
         // Add enumeration
         cls.addEnumeration(enm);
         enm.addComment(new CSharpComment(ENUM_COMMENT));
@@ -207,21 +207,21 @@ class CSharpParserFile {
         constr = new CSharpConstructor("TextReader input");
         cls.addConstructor(constr);
         constr.addComment(new CSharpComment(CONSTRUCTOR1_COMMENT));
-        constr.addInitializer("base(" + 
-                              tokenizer.getConstructorCall("input") + 
+        constr.addInitializer("base(" +
+                              tokenizer.getConstructorCall("input") +
                               ")");
         constr.addCode("CreatePatterns();");
-        
+
         // Add constructor
         constr = new CSharpConstructor("TextReader input, " +
                                        "Analyzer analyzer");
         cls.addConstructor(constr);
         constr.addComment(new CSharpComment(CONSTRUCTOR2_COMMENT));
-        constr.addInitializer("base(" + 
+        constr.addInitializer("base(" +
                               tokenizer.getConstructorCall("input") +
                               ", analyzer)");
         constr.addCode("CreatePatterns();");
-        
+
         // Add init method
         cls.addMethod(initMethod);
         initMethod.addComment(new CSharpComment(INIT_METHOD_COMMENT));
@@ -231,12 +231,12 @@ class CSharpParserFile {
 
     /**
      * Adds a production constant definition to this file.
-     * 
+     *
      * @param pattern        the production pattern
      */
     public void addProductionConstant(ProductionPattern pattern) {
         String   constant;
-        
+
         if (pattern.isSyntetic()) {
             constant = "SUBPRODUCTION_" + constantId;
             enm.addConstant(constant, String.valueOf(constantId + 3000));
@@ -247,15 +247,15 @@ class CSharpParserFile {
 
     /**
      * Adds a production pattern definition to this file.
-     * 
+     *
      * @param pattern        the production pattern
      * @param constants      the constants file generator
      */
-    public void addProduction(ProductionPattern pattern, 
+    public void addProduction(ProductionPattern pattern,
                               CSharpConstantsFile constants) {
         StringBuffer  code;
         String        str;
-        
+
         // Create new pattern
         code = new StringBuffer();
         code.append("pattern = new ProductionPattern((int) ");
@@ -276,10 +276,10 @@ class CSharpParserFile {
         if (pattern.isSyntetic()) {
             initMethod.addCode("pattern.SetSyntetic(true);");
         }
-        
+
         // Create pattern rules
         for (int i = 0; i < pattern.getAlternativeCount(); i++) {
-            addProductionAlternative(pattern.getAlternative(i), 
+            addProductionAlternative(pattern.getAlternative(i),
                                      constants);
         }
 
@@ -288,16 +288,16 @@ class CSharpParserFile {
     }
 
     /**
-     * Adds a production pattern alternative definition to the init 
+     * Adds a production pattern alternative definition to the init
      * method.
-     * 
+     *
      * @param alt            the production pattern alternative
      * @param constants      the constants file generator
      */
-    private void addProductionAlternative(ProductionPatternAlternative alt, 
+    private void addProductionAlternative(ProductionPatternAlternative alt,
                                           CSharpConstantsFile constants) {
 
-        ProductionPatternElement  elem; 
+        ProductionPatternElement  elem;
         StringBuffer              code;
 
         initMethod.addCode("alt = new ProductionPatternAlternative();");
@@ -328,13 +328,13 @@ class CSharpParserFile {
 
     /**
      * Returns the constant name for a specified pattern or token id.
-     * 
+     *
      * @param constants      the constants file
      * @param id             the pattern id
-     * 
+     *
      * @return the constant name to use
      */
-    private String getConstant(CSharpConstantsFile constants, int id) { 
+    private String getConstant(CSharpConstantsFile constants, int id) {
         Integer  value = new Integer(id);
 
         if (constantNames.containsKey(value)) {
@@ -346,9 +346,9 @@ class CSharpParserFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         file.writeCode(gen.getCodeStyle());

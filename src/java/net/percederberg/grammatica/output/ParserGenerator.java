@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -69,7 +69,7 @@ public abstract class ParserGenerator {
 
     /**
      * Creates a new parser generator.
-     * 
+     *
      * @param grammar        the grammar to use
      */
     protected ParserGenerator(Grammar grammar) {
@@ -110,7 +110,7 @@ public abstract class ParserGenerator {
 
     /**
      * Returns the grammar that this parser generator works on.
-     * 
+     *
      * @return the parser generator grammar
      */
     public Grammar getGrammar() {
@@ -119,7 +119,7 @@ public abstract class ParserGenerator {
 
     /**
      * Returns the base directory where files will be created.
-     * 
+     *
      * @return the base directory
      */
     public File getBaseDir() {
@@ -128,25 +128,25 @@ public abstract class ParserGenerator {
 
     /**
      * Sets the base directory where files will be created.
-     * 
+     *
      * @param dir            the base directory
      */
     public void setBaseDir(File dir) {
         this.baseDir = dir;
     }
-    
+
     /**
      * Returns the file comment.
-     * 
+     *
      * @return the file comment
      */
     public String getFileComment() {
         return fileComment;
     }
-    
+
     /**
      * Writes the source code files.
-     * 
+     *
      * @throws IOException if the files couldn't be written correctly
      */
     public abstract void write() throws IOException;

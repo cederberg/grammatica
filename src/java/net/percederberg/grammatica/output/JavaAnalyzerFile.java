@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -75,7 +75,7 @@ class JavaAnalyzerFile {
         "@return the node to add to the parse tree, or\n" +
         "        null if no parse tree should be created\n\n" +
         "@throws ParseException if the node analysis discovered errors";
-   
+
     /**
      * The child method comment.
      */
@@ -104,12 +104,12 @@ class JavaAnalyzerFile {
      * The Java enter method.
      */
     private JavaMethod enter;
-    
+
     /**
      * The Java exit method.
      */
     private JavaMethod exit;
-   
+
     /**
      * The Java child method.
      */
@@ -117,7 +117,7 @@ class JavaAnalyzerFile {
 
     /**
      * Creates a new analyzer file.
-     * 
+     *
      * @param gen            the parser generator to use
      */
     public JavaAnalyzerFile(JavaParserGenerator gen) {
@@ -147,10 +147,10 @@ class JavaAnalyzerFile {
                                     "void");
         initializeCode();
     }
-    
+
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         String  str;
 
@@ -162,15 +162,15 @@ class JavaAnalyzerFile {
         file.addComment(new JavaComment(JavaComment.BLOCK, str));
 
         // Add imports
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Analyzer"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Node"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ParseException"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Production"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Token"));
 
         // Add class comment
@@ -179,13 +179,13 @@ class JavaAnalyzerFile {
             str += "\n\n" + gen.getClassComment();
         }
         cls.addComment(new JavaComment(str));
-        
+
         // Add enter method
         enter.addComment(new JavaComment(ENTER_COMMENT));
         enter.addThrows("ParseException");
         enter.addCode("switch (node.getId()) {");
         cls.addMethod(enter);
-        
+
         // Add exit method
         exit.addComment(new JavaComment(EXIT_COMMENT));
         exit.addThrows("ParseException");
@@ -201,15 +201,15 @@ class JavaAnalyzerFile {
 
     /**
      * Adds the token analysis methods to this file.
-     * 
+     *
      * @param pattern        the token pattern
-     * @param constants      the constants file              
+     * @param constants      the constants file
      */
-    public void addToken(TokenPattern pattern, 
+    public void addToken(TokenPattern pattern,
                          JavaConstantsFile constants) {
-        
+
         String  constant = constants.getConstant(pattern.getId());
-        String  name;  
+        String  name;
 
         if (!pattern.isIgnore()) {
             name = gen.getCodeStyle().getMixedCase(pattern.getName(), true);
@@ -222,18 +222,18 @@ class JavaAnalyzerFile {
 
     /**
      * Adds the production analysis methods to this file.
-     * 
+     *
      * @param pattern        the production pattern
-     * @param constants      the constants file              
+     * @param constants      the constants file
      */
     public void addProduction(ProductionPattern pattern,
                               JavaConstantsFile constants) {
 
         String   constant = constants.getConstant(pattern.getId());
-        String   name;  
+        String   name;
 
         if (!pattern.isSyntetic()) {
-            name = gen.getCodeStyle().getMixedCase(pattern.getName(), 
+            name = gen.getCodeStyle().getMixedCase(pattern.getName(),
                                                    true);
             addEnterCase(constant, name, "Production");
             addEnterMethod(name, "Production");
@@ -245,8 +245,8 @@ class JavaAnalyzerFile {
     }
 
     /**
-     * Adds an enter method switch case. 
-     * 
+     * Adds an enter method switch case.
+     *
      * @param constant       the node constant
      * @param name           the node name
      * @param type           the node type
@@ -258,8 +258,8 @@ class JavaAnalyzerFile {
     }
 
     /**
-     * Adds an exit method switch case. 
-     * 
+     * Adds an exit method switch case.
+     *
      * @param constant       the node constant
      * @param name           the node name
      * @param type           the node type
@@ -270,8 +270,8 @@ class JavaAnalyzerFile {
     }
 
     /**
-     * Adds a child method switch case. 
-     * 
+     * Adds a child method switch case.
+     *
      * @param constant       the node constant
      * @param name           the node name
      */
@@ -283,7 +283,7 @@ class JavaAnalyzerFile {
 
     /**
      * Adds an enter node method to this file.
-     * 
+     *
      * @param name           the node name
      * @param type           the node type
      */
@@ -301,7 +301,7 @@ class JavaAnalyzerFile {
 
     /**
      * Adds an exit node method to this file.
-     * 
+     *
      * @param name           the node name
      * @param type           the node type
      */
@@ -320,7 +320,7 @@ class JavaAnalyzerFile {
 
     /**
      * Adds an add child method to this file.
-     * 
+     *
      * @param name           the node name
      */
     private void addChildMethod(String name) {
@@ -338,9 +338,9 @@ class JavaAnalyzerFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         enter.addCode("}");

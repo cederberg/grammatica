@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -35,9 +35,9 @@ package net.percederberg.grammatica.code;
 
 /**
  * The abstract base class for all code styles. The code style classes
- * allows configuring some aspects of the source code generated. The 
- * code style classes also contain helper methods for the code 
- * generators. 
+ * allows configuring some aspects of the source code generated. The
+ * code style classes also contain helper methods for the code
+ * generators.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.5
@@ -81,8 +81,8 @@ public class CodeStyle {
     }
 
     /**
-     * Returns the right print margin. 
-     * 
+     * Returns the right print margin.
+     *
      * @return the print margin
      */
     public int getMargin() {
@@ -104,10 +104,10 @@ public class CodeStyle {
         }
         return buffer.toString();
     }
-    
+
     /**
      * Creates a string constant from the specified string. This will
-     * add " characters to start and the end, and all " character 
+     * add " characters to start and the end, and all " character
      * inside the string will be escaped. Also, any occurence of the
      * escape character itself will be doubled (i.e. "\" becomes "\\").
      *
@@ -118,7 +118,7 @@ public class CodeStyle {
      */
     public String getStringConstant(String str, char escape) {
         StringBuffer  res = new StringBuffer();
-        
+
         res.append('"');
         res.append(addStringEscapes(str, escape));
         res.append('"');
@@ -129,13 +129,13 @@ public class CodeStyle {
     /**
      * Returns the upper-case version of a string. This method also
      * handles transitions from a lower-case letter to an upper-case
-     * letter (inside the string) by appending a '_'. This will 
-     * maintain the word stem separation, also in the upper-case 
-     * string. Any characters outside the [A-Za-z0-9_] range will be 
+     * letter (inside the string) by appending a '_'. This will
+     * maintain the word stem separation, also in the upper-case
+     * string. Any characters outside the [A-Za-z0-9_] range will be
      * removed from the string.
-     * 
+     *
      * @param str            the string to transform
-     * 
+     *
      * @return the all upper-case version of the string
      */
     public String getUpperCase(String str) {
@@ -149,7 +149,7 @@ public class CodeStyle {
                 res.append("_");
             }
             last = str.charAt(i);
-            if (('A' <= last && last <= 'Z') 
+            if (('A' <= last && last <= 'Z')
              || ('a' <= last && last <= 'z')
              || ('0' <= last && last <= '9')
              || last == '_') {
@@ -158,19 +158,19 @@ public class CodeStyle {
             }
         }
 
-        return res.toString();        
+        return res.toString();
     }
 
     /**
      * Returns the lower-case version of a string. This method also
      * handles transitions from a lower-case letter to an upper-case
-     * letter (inside the string) by appending a '_'. This will 
-     * maintain the word stem separation, also in the lower-case 
-     * string. Any characters outside the [A-Za-z0-9_] range will be 
+     * letter (inside the string) by appending a '_'. This will
+     * maintain the word stem separation, also in the lower-case
+     * string. Any characters outside the [A-Za-z0-9_] range will be
      * removed from the string.
-     * 
+     *
      * @param str            the string to transform
-     * 
+     *
      * @return the all lower-case version of the string
      */
     public String getLowerCase(String str) {
@@ -184,7 +184,7 @@ public class CodeStyle {
                 res.append("_");
             }
             last = str.charAt(i);
-            if (('A' <= last && last <= 'Z') 
+            if (('A' <= last && last <= 'Z')
              || ('a' <= last && last <= 'z')
              || ('0' <= last && last <= '9')
              || last == '_') {
@@ -193,20 +193,20 @@ public class CodeStyle {
             }
         }
 
-        return res.toString();        
+        return res.toString();
     }
 
     /**
-     * Returns the mixed-case version of a string. This method also 
-     * handles '_' characters by adding a transition from a lower-case 
-     * letter to an upper-case letter (in the result string). This 
-     * will maintain the word stem separation, in mixed-case. Any 
-     * characters outside the [A-Za-z0-9] range will be removed from 
+     * Returns the mixed-case version of a string. This method also
+     * handles '_' characters by adding a transition from a lower-case
+     * letter to an upper-case letter (in the result string). This
+     * will maintain the word stem separation, in mixed-case. Any
+     * characters outside the [A-Za-z0-9] range will be removed from
      * the string.
-     * 
+     *
      * @param str            the string to transform
      * @param initialUpper   the first character upper-case flag
-     * 
+     *
      * @return the mixed-case version of the string
      */
     public String getMixedCase(String str, boolean initialUpper) {
@@ -222,7 +222,7 @@ public class CodeStyle {
                 initialUpper = true;
             }
             last = str.charAt(i);
-            if (('A' <= last && last <= 'Z') 
+            if (('A' <= last && last <= 'Z')
              || ('a' <= last && last <= 'z')
              || ('0' <= last && last <= '9')) {
 
@@ -235,7 +235,7 @@ public class CodeStyle {
             }
         }
 
-        return res.toString();        
+        return res.toString();
     }
 
     /**
@@ -244,12 +244,12 @@ public class CodeStyle {
      *
      * @param str            the string to convert
      * @param escape         the escape character to use
-     * 
+     *
      * @return the converted string
      */
     public String addStringEscapes(String str, char escape) {
         StringBuffer  res = new StringBuffer();
-        
+
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == '"') {
                 res.append(escape);

@@ -54,12 +54,12 @@ namespace PerCederberg.Grammatica.Parser {
     internal class LookAheadSet {
 
         /**
-         * The set of token look-ahead sequences. Each sequence in 
+         * The set of token look-ahead sequences. Each sequence in
          * turn is represented by an ArrayList with Integers for the
          * token id:s.
          */
         private ArrayList elements = new ArrayList();
-        
+
         /**
          * The maximum length of any look-ahead sequence.
          */
@@ -68,21 +68,21 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Creates a new look-ahead set with the specified maximum
          * length.
-         * 
+         *
          * @param maxLength      the maximum token sequence length
          */
         public LookAheadSet(int maxLength) {
             this.maxLength = maxLength;
         }
-        
+
         /**
          * Creates a duplicate look-ahead set, possibly with a
          * different maximum length.
-         * 
+         *
          * @param maxLength      the maximum token sequence length
          * @param set            the look-ahead set to copy
          */
-        public LookAheadSet(int maxLength, LookAheadSet set) 
+        public LookAheadSet(int maxLength, LookAheadSet set)
             : this(maxLength) {
 
             AddAll(set);
@@ -90,7 +90,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the size of this look-ahead set.
-         * 
+         *
          * @return the number of token sequences in the set
          */
         public int Size() {
@@ -100,13 +100,13 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Returns the length of the shortest token sequence in this
          * set. This method will return zero (0) if the set is empty.
-         * 
+         *
          * @return the length of the shortest token sequence
          */
         public int GetMinLength() {
             Sequence  seq;
             int       min = -1;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (min < 0 || seq.Length() < min) {
@@ -119,13 +119,13 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Returns the length of the longest token sequence in this
          * set. This method will return zero (0) if the set is empty.
-         * 
+         *
          * @return the length of the longest token sequence
          */
         public int GetMaxLength() {
             Sequence  seq;
             int       max = 0;
-        
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (seq.Length() > max) {
@@ -138,7 +138,7 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Returns a list of the initial token id:s in this look-ahead
          * set. The list returned will not contain any duplicates.
-         * 
+         *
          * @return a list of the inital token id:s in this look-ahead set
          */
         public int[] GetInitialTokens() {
@@ -146,7 +146,7 @@ namespace PerCederberg.Grammatica.Parser {
             int[]      result;
             object     token;
             int        i;
-        
+
             for (i = 0; i < elements.Count; i++) {
                 token = ((Sequence) elements[i]).GetToken(0);
                 if (token != null && !list.Contains(token)) {
@@ -163,13 +163,13 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Checks if this look-ahead set contains a repetitive token
          * sequence.
-         * 
+         *
          * @return true if at least one token sequence is repetitive, or
          *         false otherwise
          */
         public bool IsRepetitive() {
             Sequence  seq;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (seq.IsRepetitive()) {
@@ -184,13 +184,13 @@ namespace PerCederberg.Grammatica.Parser {
          * sequence in this set.
          *
          * @param parser         the parser to check
-         *  
+         *
          * @return true if the next tokens are in the set, or
          *         false otherwise
          */
         public bool IsNext(Parser parser) {
             Sequence  seq;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (seq.IsNext(parser)) {
@@ -199,20 +199,20 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return false;
         }
-        
+
         /**
          * Checks if the next token(s) in the parser match any token
          * sequence in this set.
          *
          * @param parser         the parser to check
          * @param length         the maximum number of tokens to check
-         *  
+         *
          * @return true if the next tokens are in the set, or
          *         false otherwise
          */
         public bool IsNext(Parser parser, int length) {
             Sequence  seq;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (seq.IsNext(parser, length)) {
@@ -221,15 +221,15 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return false;
         }
-    
+
         /**
          * Checks if another look-ahead set has an overlapping token
          * sequence. An overlapping token sequence is a token sequence
          * that is identical to another sequence, but for the length.
          * I.e. one of the two sequences may be longer than the other.
-         * 
+         *
          * @param set            the look-ahead set to check
-         * 
+         *
          * @return true if there is some token sequence that overlaps, or
          *         false otherwise
          */
@@ -241,15 +241,15 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return false;
         }
-    
+
         /**
          * Checks if a token sequence is overlapping. An overlapping token
-         * sequence is a token sequence that is identical to another 
+         * sequence is a token sequence that is identical to another
          * sequence, but for the length. I.e. one of the two sequences may
-         * be longer than the other. 
-         * 
+         * be longer than the other.
+         *
          * @param seq            the token sequence to check
-         * 
+         *
          * @return true if there is some token sequence that overlaps, or
          *         false otherwise
          */
@@ -268,9 +268,9 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Checks if the specified token sequence is present in the
          * set.
-         * 
+         *
          * @param elem           the token sequence to check
-         * 
+         *
          * @return true if the sequence is present in this set, or
          *         false otherwise
          */
@@ -281,11 +281,11 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Checks if some token sequence is present in both this set
          * and a specified one.
-         * 
+         *
          * @param set            the look-ahead set to compare with
-         * 
+         *
          * @return true if the look-ahead sets intersect, or
-         *         false otherwise 
+         *         false otherwise
          */
         public bool Intersects(LookAheadSet set) {
             for (int i = 0; i < elements.Count; i++) {
@@ -298,9 +298,9 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Finds an identical token sequence if present in the set.
-         * 
+         *
          * @param elem           the token sequence to search for
-         * 
+         *
          * @return an identical the token sequence if found, or
          *         null if not found
          */
@@ -318,7 +318,7 @@ namespace PerCederberg.Grammatica.Parser {
          * be added if it is not already in the set. Also, if the
          * sequence is longer than the allowed maximum, a truncated
          * sequence will be added instead.
-         * 
+         *
          * @param seq            the token sequence to add
          */
         private void Add(Sequence seq) {
@@ -334,7 +334,7 @@ namespace PerCederberg.Grammatica.Parser {
          * Adds a new token sequence with a single token to this set.
          * The sequence will only be added if it is not already in the
          * set.
-         * 
+         *
          * @param token          the token to add
          */
         public void Add(int token) {
@@ -344,7 +344,7 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Adds all the token sequences from a specified set. Only
          * sequences not already in this set will be added.
-         * 
+         *
          * @param set            the set to add from
          */
         public void AddAll(LookAheadSet set) {
@@ -363,7 +363,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Removes a token sequence from this set.
-         * 
+         *
          * @param seq            the token sequence to remove
          */
         private void Remove(Sequence seq) {
@@ -371,9 +371,9 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Removes all the token sequences from a specified set. Only 
+         * Removes all the token sequences from a specified set. Only
          * sequences already in this set will be removed.
-         * 
+         *
          * @param set            the set to remove from
          */
         public void RemoveAll(LookAheadSet set) {
@@ -387,19 +387,19 @@ namespace PerCederberg.Grammatica.Parser {
          * the specified token. The new look-ahead set will contain
          * the rest of all the token sequences that started with the
          * specified token.
-         * 
-         * @param token          the token to read 
-         * 
-         * @return a new look-ahead set containing the remaining tokens 
+         *
+         * @param token          the token to read
+         *
+         * @return a new look-ahead set containing the remaining tokens
          */
         public LookAheadSet CreateNextSet(int token) {
             LookAheadSet  result = new LookAheadSet(maxLength - 1);
             Sequence      seq;
             object        value;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
-                value = seq.GetToken(0); 
+                value = seq.GetToken(0);
                 if (value != null && token == (int) value) {
                     result.Add(seq.Subsequence(1));
                 }
@@ -412,16 +412,16 @@ namespace PerCederberg.Grammatica.Parser {
          * this set with another set. The token sequences in the net
          * set will only have the repeat flag set if it was set in
          * both the identical token sequences.
-         * 
+         *
          * @param set            the set to intersect with
-         * 
+         *
          * @return a new look-ahead set containing the intersection
          */
         public LookAheadSet CreateIntersection(LookAheadSet set) {
             LookAheadSet  result = new LookAheadSet(maxLength);
             Sequence      seq1;
             Sequence      seq2;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq1 = (Sequence) elements[i];
                 seq2 = set.FindSequence(seq1);
@@ -441,16 +441,16 @@ namespace PerCederberg.Grammatica.Parser {
          * elements from the specified set onto all elements in this
          * set. This is sometimes referred to as the cartesian
          * product.
-         * 
+         *
          * @param set            the set to combine with
-         * 
+         *
          * @return a new look-ahead set containing the combination
          */
         public LookAheadSet CreateCombination(LookAheadSet set) {
             LookAheadSet  result = new LookAheadSet(maxLength);
             Sequence      first;
             Sequence      second;
-            
+
             // Handle special cases
             if (this.Size() <= 0) {
                 return set;
@@ -464,7 +464,7 @@ namespace PerCederberg.Grammatica.Parser {
                 if (first.Length() >= maxLength) {
                     result.Add(first);
                 } else if (first.Length() <= 0) {
-                    result.AddAll(set);  
+                    result.AddAll(set);
                 } else {
                     for (int j = 0; j < set.elements.Count; j++) {
                         second = (Sequence) set.elements[j];
@@ -479,15 +479,15 @@ namespace PerCederberg.Grammatica.Parser {
          * Creates a new look-ahead set with overlaps from another. All
          * token sequences in this set that overlaps with the other set
          * will be added to the new look-ahead set.
-         * 
+         *
          * @param set            the look-ahead set to check with
-         * 
+         *
          * @return a new look-ahead set containing the overlaps
          */
         public LookAheadSet CreateOverlaps(LookAheadSet set) {
             LookAheadSet  result = new LookAheadSet(maxLength);
             Sequence      seq;
-        
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (set.IsOverlap(seq)) {
@@ -501,16 +501,16 @@ namespace PerCederberg.Grammatica.Parser {
          * Creates a new look-ahead set filter. The filter will contain
          * all sequences from this set, possibly left trimmed by each one
          * of the sequences in the specified set.
-         * 
+         *
          * @param set            the look-ahead set to trim with
-         * 
+         *
          * @return a new look-ahead set filter
          */
         public LookAheadSet CreateFilter(LookAheadSet set) {
             LookAheadSet  result = new LookAheadSet(maxLength);
             Sequence      first;
             Sequence      second;
-        
+
             // Handle special cases
             if (this.Size() <= 0 || set.Size() <= 0) {
                 return this;
@@ -532,38 +532,38 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * Creates a new identical look-ahead set, except for the
          * repeat flag being set in each token sequence.
-         * 
-         * @return a new repetitive look-ahead set 
+         *
+         * @return a new repetitive look-ahead set
          */
         public LookAheadSet CreateRepetitive() {
             LookAheadSet  result = new LookAheadSet(maxLength);
             Sequence      seq;
-            
+
             for (int i = 0; i < elements.Count; i++) {
                 seq = (Sequence) elements[i];
                 if (seq.IsRepetitive()) {
                     result.Add(seq);
                 } else {
-                    result.Add(new Sequence(true, seq));  
+                    result.Add(new Sequence(true, seq));
                 }
             }
             return result;
         }
-        
+
         /**
          * Returns a string representation of this object.
-         * 
+         *
          * @return a string representation of this object
          */
         public override string ToString() {
             return ToString(null);
         }
-    
+
         /**
          * Returns a string representation of this object.
-         * 
+         *
          * @param tokenizer      the tokenizer containing the tokens
-         * 
+         *
          * @return a string representation of this object
          */
         public string ToString(Tokenizer tokenizer) {
@@ -595,13 +595,13 @@ namespace PerCederberg.Grammatica.Parser {
              * The repeat flag. If this flag is set, the token
              * sequence or some part of it may be repeated infinitely.
              */
-            private bool repeat = false;        
+            private bool repeat = false;
 
             /**
              * The list of token ids in this sequence.
              */
             private ArrayList tokens = null;
-        
+
             /**
              * Creates a new empty token sequence. The repeat flag
              * will be set to false.
@@ -613,7 +613,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             /**
              * Creates a new token sequence with a single token.
-             * 
+             *
              * @param repeat         the repeat flag value
              * @param token          the token to add
              */
@@ -622,13 +622,13 @@ namespace PerCederberg.Grammatica.Parser {
                 this.tokens = new ArrayList(1);
                 this.tokens.Add(token);
             }
-            
+
             /**
              * Creates a new token sequence that is a duplicate of
              * another sequence. Only a limited number of tokens will
              * be copied however. The repeat flag from the original
              * will be kept intact.
-             * 
+             *
              * @param length         the maximum number of tokens to copy
              * @param seq            the sequence to copy
              */
@@ -639,7 +639,7 @@ namespace PerCederberg.Grammatica.Parser {
                     length = seq.Length();
                 }
                 for (int i = 0; i < length; i++) {
-                    tokens.Add(seq.tokens[i]); 
+                    tokens.Add(seq.tokens[i]);
                 }
             }
 
@@ -647,7 +647,7 @@ namespace PerCederberg.Grammatica.Parser {
              * Creates a new token sequence that is a duplicate of
              * another sequence. The new value of the repeat flag will
              * be used however.
-             * 
+             *
              * @param repeat         the new repeat flag value
              * @param seq            the sequence to copy
              */
@@ -658,7 +658,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             /**
              * Returns the length of the token sequence.
-             * 
+             *
              * @return the number of tokens in the sequence
              */
             public int Length() {
@@ -667,9 +667,9 @@ namespace PerCederberg.Grammatica.Parser {
 
             /**
              * Returns a token at a specified position in the sequence.
-             * 
+             *
              * @param pos            the sequence position
-             * 
+             *
              * @return the token id found, or null
              */
             public object GetToken(int pos) {
@@ -685,11 +685,11 @@ namespace PerCederberg.Grammatica.Parser {
              * Only token sequences with the same tokens in the same
              * order will be considered equal. The repeat flag will be
              * disregarded.
-             * 
+             *
              * @param obj            the object to compare with
-             * 
+             *
              * @return true if the objects are equal, or
-             *         false otherwise 
+             *         false otherwise
              */
             public override bool Equals(object obj) {
                 if (obj is Sequence) {
@@ -701,14 +701,14 @@ namespace PerCederberg.Grammatica.Parser {
 
             /**
              * Checks if this sequence is equal to another sequence.
-             * Only sequences with the same tokens in the same order 
+             * Only sequences with the same tokens in the same order
              * will be considered equal. The repeat flag will be
              * disregarded.
-             * 
+             *
              * @param seq            the sequence to compare with
-             * 
+             *
              * @return true if the sequences are equal, or
-             *         false otherwise 
+             *         false otherwise
              */
             public bool Equals(Sequence seq) {
                 if (tokens.Count != seq.tokens.Count) {
@@ -726,9 +726,9 @@ namespace PerCederberg.Grammatica.Parser {
              * Checks if this token sequence starts with the tokens from
              * another sequence. If the other sequence is longer than this
              * sequence, this method will always return false.
-             * 
+             *
              * @param seq            the token sequence to check
-             * 
+             *
              * @return true if this sequence starts with the other, or
              *         false otherwise
              */
@@ -745,9 +745,9 @@ namespace PerCederberg.Grammatica.Parser {
             }
 
             /**
-             * Checks if this token sequence is repetitive. A repetitive 
+             * Checks if this token sequence is repetitive. A repetitive
              * token sequence is one with the repeat flag set.
-             * 
+             *
              * @return true if this token sequence is repetitive, or
              *         false otherwise
              */
@@ -758,16 +758,16 @@ namespace PerCederberg.Grammatica.Parser {
             /**
              * Checks if the next token(s) in the parser matches this
              * token sequence.
-             * 
+             *
              * @param parser         the parser to check
-             * 
+             *
              * @return true if the next tokens are in the sequence, or
              *         false otherwise
              */
             public bool IsNext(Parser parser) {
                 Token   token;
                 int     id;
-            
+
                 for (int i = 0; i < tokens.Count; i++) {
                     id = (int) tokens[i];
                     token = parser.PeekToken(i);
@@ -781,17 +781,17 @@ namespace PerCederberg.Grammatica.Parser {
             /**
              * Checks if the next token(s) in the parser matches this
              * token sequence.
-             * 
+             *
              * @param parser         the parser to check
              * @param length         the maximum number of tokens to check
-             * 
+             *
              * @return true if the next tokens are in the sequence, or
              *         false otherwise
              */
             public bool IsNext(Parser parser, int length) {
                 Token  token;
                 int    id;
-            
+
                 if (length > tokens.Count) {
                     length = tokens.Count;
                 }
@@ -807,18 +807,18 @@ namespace PerCederberg.Grammatica.Parser {
 
             /**
              * Returns a string representation of this object.
-             * 
+             *
              * @return a string representation of this object
              */
             public override string ToString() {
                 return ToString(null);
             }
-        
+
             /**
              * Returns a string representation of this object.
              *
              * @param tokenizer      the tokenizer containing the tokens
-             *  
+             *
              * @return a string representation of this object
              */
             public string ToString(Tokenizer tokenizer) {
@@ -845,15 +845,15 @@ namespace PerCederberg.Grammatica.Parser {
                 }
                 return buffer.ToString();
             }
-        
+
             /**
              * Creates a new token sequence that is the concatenation
              * of this sequence and another. A maximum length for the
              * new sequence is also specified.
-             * 
+             *
              * @param length         the maximum length of the result
              * @param seq            the other sequence
-             * 
+             *
              * @return the concatenated token sequence
              */
             public Sequence Concat(int length, Sequence seq) {
@@ -872,18 +872,18 @@ namespace PerCederberg.Grammatica.Parser {
                 }
                 return res;
             }
-        
+
             /**
              * Creates a new token sequence that is a subsequence of
              * this one.
-             * 
-             * @param start          the subsequence start position 
-             * 
+             *
+             * @param start          the subsequence start position
+             *
              * @return the new token subsequence
              */
             public Sequence Subsequence(int start) {
                 Sequence  res = new Sequence(Length(), this);
-                
+
                 while (start > 0 && res.tokens.Count > 0) {
                     res.tokens.RemoveAt(0);
                     start--;

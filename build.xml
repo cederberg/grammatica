@@ -13,7 +13,7 @@
   General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software 
+  along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
   USA
 
@@ -44,7 +44,7 @@
 
   <target name="init">
     <tstamp>
-      <format property="build.printdate" 
+      <format property="build.printdate"
               pattern="yyyy-MM-dd" />
     </tstamp>
     <condition property="build.version" value="${DSTAMP}">
@@ -53,7 +53,7 @@
       </not>
     </condition>
     <property name="build.date" value="${DSTAMP}" />
-  </target>  
+  </target>
 
 
 <!-- CODE GENERATION TARGETS -->
@@ -71,12 +71,12 @@
 
 
 <!-- COMPILATION TARGETS -->
-  <target name="compile" 
+  <target name="compile"
           depends="init,codegen,compile-clean,compile-java,compile-csharp">
     <jar jarfile="${build.dir}/lib/grammatica-${build.version}.jar"
          includesfile="${build.dir}/LICENSE.txt">
       <manifest>
-        <attribute name="Main-Class" 
+        <attribute name="Main-Class"
                    value="net.percederberg.grammatica.Grammatica" />
       </manifest>
       <fileset dir="${build.dir}" includes="*.txt" />
@@ -114,7 +114,7 @@
       <arg value="--classpath=${build.gcj.classpath}" />
       <arg value="--main=net.percederberg.grammatica.Grammatica" />
       <arg line="-o ${build.dir}/bin/grammatica" />
-      <fileset dir="${build.dir}/src/java" 
+      <fileset dir="${build.dir}/src/java"
                includes="**/*.java" />
     </apply>
   </target>
@@ -125,7 +125,7 @@
          debug="on"
          warnlevel="4"
          failonerror="true">
-      <src dir="${build.dir}/src/csharp" 
+      <src dir="${build.dir}/src/csharp"
            includes="**/*.cs" />
     </csc>
   </target>
@@ -134,7 +134,7 @@
 <!-- TEST TARGETS -->
   <target name="test" depends="compile,test-codegen,test-java,test-csharp">
   </target>
-  
+
   <target name="test-codegen">
     <grammatica grammar="${build.dir}/test/src/grammar/arithmetic.grammar">
       <java dir="${build.dir}/test/src/java"
@@ -169,7 +169,7 @@
       </classpath>
      </junit>
   </target>
-  
+
   <target name="test-csharp">
     <csc destfile="${build.dir}/lib/cstestall.exe"
          targettype="exe"
@@ -189,10 +189,10 @@
     </exec>
     <delete file="${build.dir}/lib/cstestall.exe" />
   </target>
-  
+
 
 <!-- DOCUMENTATION TARGETS -->
-  <target name="doc" 
+  <target name="doc"
           depends="init,doc-clean,doc-text,doc-html,doc-java,doc-csharp">
   </target>
 
@@ -247,7 +247,7 @@
              version="false"
              use="true"
              author="false"
-             windowtitle="Grammatica ${build.version} Documentation" 
+             windowtitle="Grammatica ${build.version} Documentation"
              failonerror="true" />
   </target>
 

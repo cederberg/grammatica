@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -63,7 +63,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
              * used when more characters were expected in the pattern.
              */
             UNTERMINATED_PATTERN,
-    
+
             /**
              * The unsupported special character error constant. This
              * error is used when special regular expression
@@ -71,7 +71,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
              * in this implementation.
              */
             UNSUPPORTED_SPECIAL_CHARACTER,
-    
+
             /**
              * The unsupported escape character error constant. This
              * error is used when an escape character construct is
@@ -79,7 +79,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
              * implementation.
              */
             UNSUPPORTED_ESCAPE_CHARACTER,
-    
+
             /**
              * The invalid repeat count error constant. This error is
              * used when a repetition count of zero is specified, or
@@ -92,7 +92,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * The error type constant.
          */
         private ErrorType type;
-    
+
         /**
          * The error position.
          */
@@ -100,12 +100,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * The regular expression pattern.
-         */    
+         */
         private string pattern;
 
         /**
          * Creates a new regular expression exception.
-         * 
+         *
          * @param type           the error type constant
          * @param pos            the error position
          * @param pattern        the regular expression pattern
@@ -115,25 +115,25 @@ namespace PerCederberg.Grammatica.Parser.RE {
             this.position = pos;
             this.pattern = pattern;
         }
-    
+
         /**
          * The message property. This property contains the detailed
          * exception error message.
          */
         public override string Message {
             get{
-                return GetMessage(); 
-            }   
+                return GetMessage();
+            }
         }
 
         /**
          * Returns the exception error message.
-         * 
+         *
          * @return the exception error message
          */
         public string GetMessage() {
             StringBuilder  buffer = new StringBuilder();
-            
+
             // Append error type name
             switch (type) {
             case ErrorType.UNEXPECTED_CHARACTER:
@@ -165,11 +165,11 @@ namespace PerCederberg.Grammatica.Parser.RE {
             } else {
                 buffer.Append("<end of pattern>");
             }
-            
+
             // Append position
             buffer.Append(" at position ");
             buffer.Append(position);
-            
+
             return buffer.ToString();
         }
     }

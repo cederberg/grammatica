@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -110,37 +110,37 @@ public class Grammar extends Object {
     private Vector tokens = new Vector();
 
     /**
-     * The token id map. This is a map from the token pattern id to 
+     * The token id map. This is a map from the token pattern id to
      * the token pattern.
      */
     private HashMap tokenIds = new HashMap();
 
     /**
-     * The token name map. This is map from the token pattern name to 
-     * the token pattern. 
+     * The token name map. This is map from the token pattern name to
+     * the token pattern.
      */
     private HashMap tokenNames = new HashMap();
 
     /**
-     * The token pattern map. This is map from the token pattern 
-     * string to the token pattern object. 
+     * The token pattern map. This is map from the token pattern
+     * string to the token pattern object.
      */
     private HashMap tokenPatterns = new HashMap();
-    
+
     /**
      * The productions found in the processing.
      */
     private Vector productions = new Vector();
 
     /**
-     * The production id map. This is a map from the production 
+     * The production id map. This is a map from the production
      * pattern id to the production pattern.
      */
     private HashMap productionIds = new HashMap();
 
     /**
-     * The production name map. This is map from the production 
-     * pattern name to the production pattern. 
+     * The production name map. This is map from the production
+     * pattern name to the production pattern.
      */
     private HashMap productionNames = new HashMap();
 
@@ -156,11 +156,11 @@ public class Grammar extends Object {
      *
      * @throws FileNotFoundException if the grammar file could not be
      *             found
-     * @throws ParserLogException if the grammar file couldn't be 
+     * @throws ParserLogException if the grammar file couldn't be
      *             parsed correctly
      * @throws GrammarException if the grammar wasn't valid
      */
-    public Grammar(File file) throws FileNotFoundException, 
+    public Grammar(File file) throws FileNotFoundException,
         ParserLogException, GrammarException {
 
         GrammarParser       parser;
@@ -180,12 +180,12 @@ public class Grammar extends Object {
 
     /**
      * Checks that the grammar is valid.
-     * 
+     *
      * @throws GrammarException if the grammar wasn't valid
      */
     private void verify() throws GrammarException {
         String  type;
-        
+
         // Check grammar type
         type = (String) declarations.get(GRAMMAR_TYPE_DECLARATION);
         if (type == null) {
@@ -199,7 +199,7 @@ public class Grammar extends Object {
                 "unrecognized " + GRAMMAR_TYPE_DECLARATION + " value: '" +
                 type + "', currently only 'LL' is supported");
         }
-        
+
         // Check tokens and productions
         if (productions.size() > 0) {
             createParser(createTokenizer(null));
@@ -208,19 +208,19 @@ public class Grammar extends Object {
 
     /**
      * Creates a tokenizer from this grammar.
-     * 
+     *
      * @param in             the input stream to use
-     * 
+     *
      * @return the newly created tokenizer
-     * 
-     * @throws GrammarException if the tokenizer couldn't be created 
+     *
+     * @throws GrammarException if the tokenizer couldn't be created
      *             or initialized correctly
      */
-    public Tokenizer createTokenizer(Reader in) 
+    public Tokenizer createTokenizer(Reader in)
         throws GrammarException {
 
         Tokenizer  tokenizer;
-        
+
         try {
             tokenizer = new Tokenizer(in);
             for (int i = 0; i < tokens.size(); i++) {
@@ -231,7 +231,7 @@ public class Grammar extends Object {
                 throw new GrammarException(fileName, e.getMessage());
             } else {
                 LineRange range = (LineRange) lines.get(e.getName());
-                throw new GrammarException(fileName, 
+                throw new GrammarException(fileName,
                                            e.getMessage(),
                                            range.getStart(),
                                            range.getEnd());
@@ -243,36 +243,36 @@ public class Grammar extends Object {
 
     /**
      * Creates a parser from this grammar.
-     * 
+     *
      * @param tokenizer      the tokenizer to use
-     * 
+     *
      * @return the newly created parser
-     * 
-     * @throws GrammarException if the parser couldn't be created or 
+     *
+     * @throws GrammarException if the parser couldn't be created or
      *             initialized correctly
      */
-    public Parser createParser(Tokenizer tokenizer) 
+    public Parser createParser(Tokenizer tokenizer)
         throws GrammarException {
-            
+
         return createParser(tokenizer, null);
     }
 
     /**
      * Creates a parser from this grammar.
-     * 
+     *
      * @param tokenizer      the tokenizer to use
      * @param analyzer       the analyzer to use
-     * 
+     *
      * @return the newly created parser
-     * 
-     * @throws GrammarException if the parser couldn't be created or 
+     *
+     * @throws GrammarException if the parser couldn't be created or
      *             initialized correctly
      */
-    public Parser createParser(Tokenizer tokenizer, Analyzer analyzer) 
+    public Parser createParser(Tokenizer tokenizer, Analyzer analyzer)
         throws GrammarException {
 
         Parser  parser;
-        
+
         try {
             parser = new RecursiveDescentParser(tokenizer, analyzer);
             for (int i = 0; i < productions.size(); i++) {
@@ -284,7 +284,7 @@ public class Grammar extends Object {
             if (range == null) {
                 throw new GrammarException(fileName, e.getMessage());
             } else {
-                throw new GrammarException(fileName, 
+                throw new GrammarException(fileName,
                                            e.getMessage(),
                                            range.getStart(),
                                            range.getEnd());
@@ -296,7 +296,7 @@ public class Grammar extends Object {
 
     /**
      * Returns the grammar file name and path.
-     * 
+     *
      * @return the grammar file name and path
      */
     public String getFileName() {
@@ -304,31 +304,31 @@ public class Grammar extends Object {
     }
 
     /**
-     * Returns the declaration value for the specified name. 
-     * 
+     * Returns the declaration value for the specified name.
+     *
      * @param name           the declaration name
-     * 
-     * @return the declaration value, or 
+     *
+     * @return the declaration value, or
      *         null if not specified in the grammar header
      */
     public String getDeclaration(String name) {
         return (String) declarations.get(name);
     }
-    
+
     /**
-     * Returns the number of token patterns in the grammar. 
-     * 
+     * Returns the number of token patterns in the grammar.
+     *
      * @return the number of token patterns
      */
     public int getTokenPatternCount() {
         return tokens.size();
     }
-    
+
     /**
      * Returns a specific token pattern.
-     * 
+     *
      * @param pos            the pattern position, 0 <= pos < count
-     * 
+     *
      * @return the token pattern
      */
     public TokenPattern getTokenPattern(int pos) {
@@ -337,9 +337,9 @@ public class Grammar extends Object {
 
     /**
      * Returns a token pattern identified by its id.
-     * 
+     *
      * @param id             the pattern id
-     * 
+     *
      * @return the token pattern, or null
      */
     public TokenPattern getTokenPatternById(int id) {
@@ -348,9 +348,9 @@ public class Grammar extends Object {
 
     /**
      * Returns a token pattern identified by its name.
-     * 
+     *
      * @param name           the pattern name
-     * 
+     *
      * @return the token pattern, or null
      */
     public TokenPattern getTokenPatternByName(String name) {
@@ -359,10 +359,10 @@ public class Grammar extends Object {
 
     /**
      * Returns a token pattern identified by its pattern string. This
-     * method will only return matches for patterns of string type.  
-     * 
+     * method will only return matches for patterns of string type.
+     *
      * @param image          the pattern string
-     * 
+     *
      * @return the token pattern, or null
      */
     TokenPattern getTokenPatternByImage(String image) {
@@ -370,30 +370,30 @@ public class Grammar extends Object {
     }
 
     /**
-     * Returns the number of production patterns in the grammar. 
-     * 
+     * Returns the number of production patterns in the grammar.
+     *
      * @return the number of production patterns
      */
     public int getProductionPatternCount() {
         return productions.size();
     }
-    
+
     /**
      * Returns a specific production pattern.
-     * 
+     *
      * @param pos            the pattern position, 0 <= pos < count
-     * 
+     *
      * @return the production pattern
      */
     public ProductionPattern getProductionPattern(int pos) {
         return (ProductionPattern) productions.get(pos);
     }
-    
+
     /**
      * Returns a production pattern identified by its id.
-     * 
+     *
      * @param id             the pattern id
-     * 
+     *
      * @return the production pattern, or null
      */
     public ProductionPattern getProductionPatternById(int id) {
@@ -402,9 +402,9 @@ public class Grammar extends Object {
 
     /**
      * Returns a production pattern identified by its name.
-     * 
+     *
      * @param name           the pattern name
-     * 
+     *
      * @return the production pattern, or null
      */
     public ProductionPattern getProductionPatternByName(String name) {
@@ -413,7 +413,7 @@ public class Grammar extends Object {
 
     /**
      * Adds a grammar declaration name-value pair.
-     * 
+     *
      * @param name           the name part
      * @param value          the value part
      */
@@ -423,7 +423,7 @@ public class Grammar extends Object {
 
     /**
      * Adds a token pattern to this grammar.
-     * 
+     *
      * @param token          the token pattern to add
      * @param start          the starting line
      * @param end            the ending line
@@ -437,10 +437,10 @@ public class Grammar extends Object {
         }
         lines.put(token.getName(), new LineRange(start, end));
     }
-    
+
     /**
      * Adds a production pattern to this grammar.
-     * 
+     *
      * @param production     the production pattern to add
      * @param start          the starting line
      * @param end            the ending line
@@ -451,18 +451,18 @@ public class Grammar extends Object {
         productionNames.put(production.getName(), production);
         lines.put(production.getName(), new LineRange(start, end));
     }
-    
+
 
     /**
      * A line number range.
      */
     private class LineRange {
-        
+
         /**
          * The first line number.
          */
         private int start;
-        
+
         /**
          * The last line number.
          */
@@ -470,7 +470,7 @@ public class Grammar extends Object {
 
         /**
          * Creates a new line number range.
-         * 
+         *
          * @param start      the first line number
          * @param end        the last line number
          */
@@ -478,19 +478,19 @@ public class Grammar extends Object {
             this.start = start;
             this.end = end;
         }
-        
+
         /**
          * Returns the first line number.
-         * 
+         *
          * @return the first line number
          */
         public int getStart() {
             return start;
         }
-        
+
         /**
          * Returns the last line number.
-         * 
+         *
          * @return the last line number
          */
         public int getEnd() {

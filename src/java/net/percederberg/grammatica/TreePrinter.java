@@ -42,7 +42,7 @@ import net.percederberg.grammatica.parser.Node;
 
 /**
  * A parse tree printer. This class prints the parse tree while it is
- * being parsed. 
+ * being parsed.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.4
@@ -53,7 +53,7 @@ public class TreePrinter extends Analyzer {
     /**
      * The current indentation level.
      */
-    private int indentation = 0; 
+    private int indentation = 0;
 
     /**
      * The output stream to use.
@@ -62,7 +62,7 @@ public class TreePrinter extends Analyzer {
 
     /**
      * Creates a new parse tree printer.
-     * 
+     *
      * @param output         the output stream to use
      */
     public TreePrinter(OutputStream output) {
@@ -71,7 +71,7 @@ public class TreePrinter extends Analyzer {
 
     /**
      * Creates a new parse tree printer.
-     * 
+     *
      * @param output         the output stream to use
      */
     public TreePrinter(Writer output) {
@@ -84,9 +84,9 @@ public class TreePrinter extends Analyzer {
 
     /**
      * Called when entering a parse tree node. By default this method
-     * does nothing. A subclass can override this method to handle 
-     * each node separately.  
-     * 
+     * does nothing. A subclass can override this method to handle
+     * each node separately.
+     *
      * @param node           the node being entered
      */
     protected void enter(Node node) {
@@ -100,12 +100,12 @@ public class TreePrinter extends Analyzer {
 
     /**
      * Called when exiting a parse tree node. By default this method
-     * returns the node. A subclass can override this method to handle 
-     * each node separately. If no parse tree should be created, this 
+     * returns the node. A subclass can override this method to handle
+     * each node separately. If no parse tree should be created, this
      * method should return null.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null to remove the node
      */

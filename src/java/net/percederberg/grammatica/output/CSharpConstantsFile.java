@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -75,14 +75,14 @@ class CSharpConstantsFile {
     private CSharpEnumeration enm;
 
     /**
-     * The mapping from id to constant name. This map contains all 
-     * tokens and productions added to the file. 
+     * The mapping from id to constant name. This map contains all
+     * tokens and productions added to the file.
      */
     private HashMap constantNames = new HashMap();
 
     /**
      * Creates a new constants file.
-     * 
+     *
      * @param gen            the parser generator to use
      */
     public CSharpConstantsFile(CSharpParserGenerator gen) {
@@ -99,10 +99,10 @@ class CSharpConstantsFile {
         this.enm = new CSharpEnumeration(modifiers, name);
         initializeCode();
     }
-    
+
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         String  str;
 
@@ -125,7 +125,7 @@ class CSharpConstantsFile {
 
     /**
      * Adds a token constant definition to this file.
-     * 
+     *
      * @param pattern        the token pattern
      */
     public void addToken(TokenPattern pattern) {
@@ -139,13 +139,13 @@ class CSharpConstantsFile {
     /**
      * Adds a production constant definition to this file. This method
      * checks if the production pattern has already been added.
-     * 
+     *
      * @param pattern        the production pattern
      */
     public void addProduction(ProductionPattern pattern) {
         String  constant;
 
-        if (!pattern.isSyntetic()) { 
+        if (!pattern.isSyntetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             enm.addConstant(constant, String.valueOf(pattern.getId()));
             constantNames.put(new Integer(pattern.getId()), constant);
@@ -155,15 +155,15 @@ class CSharpConstantsFile {
     /**
      * Creates source code for accessing one of the constants in this
      * file.
-     * 
+     *
      * @param id             the node type (pattern) id
-     * 
+     *
      * @return the constant name, or
      *         null if not found
      */
     public String getConstant(int id) {
         String  name = (String) constantNames.get(new Integer(id));
-        
+
         if (name == null) {
             return null;
         } else {
@@ -173,9 +173,9 @@ class CSharpConstantsFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         file.writeCode(gen.getCodeStyle());

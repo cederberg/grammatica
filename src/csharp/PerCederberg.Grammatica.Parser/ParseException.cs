@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -55,13 +55,13 @@ namespace PerCederberg.Grammatica.Parser {
              * that is a result of a bug in the parser or tokenizer
              * code.
              */
-            INTERNAL, 
+            INTERNAL,
 
             /**
-             * The I/O error type is used for stream I/O errors. 
+             * The I/O error type is used for stream I/O errors.
              */
             IO,
-    
+
             /**
              * The unexpected end of file error type is used when end
              * of file is encountered instead of a valid token.
@@ -80,7 +80,7 @@ namespace PerCederberg.Grammatica.Parser {
              * token than the expected one is encountered.
              */
             UNEXPECTED_TOKEN,
-    
+
             /**
              * The invalid token error type is used when a token
              * pattern with an error message is matched. The
@@ -101,7 +101,7 @@ namespace PerCederberg.Grammatica.Parser {
          * The error type.
          */
         private ErrorType type;
-    
+
         /**
          * The additional information string.
          */
@@ -117,7 +117,7 @@ namespace PerCederberg.Grammatica.Parser {
          * The line number.
          */
         private int line;
-    
+
         /**
          * The column number.
          */
@@ -125,16 +125,16 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Creates a new parse exception.
-         * 
+         *
          * @param type           the parse error type
          * @param info           the additional information
          * @param line           the line number, or -1 for unknown
          * @param column         the column number, or -1 for unknown
          */
-        public ParseException(ErrorType type, 
-                              string info, 
-                              int line, 
-                              int column) 
+        public ParseException(ErrorType type,
+                              string info,
+                              int line,
+                              int column)
             : this(type, info, null, line, column) {
         }
 
@@ -143,17 +143,17 @@ namespace PerCederberg.Grammatica.Parser {
          * used to supply the detailed information array, which is
          * only used for expected token errors. The list then contains
          * descriptions of the expected tokens.
-         * 
+         *
          * @param type           the parse error type
          * @param info           the additional information
          * @param details        the additional detailed information
          * @param line           the line number, or -1 for unknown
          * @param column         the column number, or -1 for unknown
          */
-        public ParseException(ErrorType type, 
+        public ParseException(ErrorType type,
                               string info,
                               ArrayList details,
-                              int line, 
+                              int line,
                               int column) {
 
             this.type = type;
@@ -169,13 +169,13 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public override string Message {
             get{
-                return GetMessage(); 
-            }   
+                return GetMessage();
+            }
         }
 
         /**
-         * Returns the error type. 
-         * 
+         * Returns the error type.
+         *
          * @return the error type
          */
         public ErrorType GetErrorType() {
@@ -184,7 +184,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the additional error information.
-         * 
+         *
          * @return the additional error information
          */
         public string GetInfo() {
@@ -192,8 +192,8 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the additional detailed error information. 
-         * 
+         * Returns the additional detailed error information.
+         *
          * @return the additional detailed error information
          */
         public ArrayList GetDetails() {
@@ -202,27 +202,27 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the line number where the error occured.
-         * 
-         * @return the line number of the error, or 
+         *
+         * @return the line number of the error, or
          *         -1 if unknown
          */
         public int GetLine() {
             return line;
         }
-    
+
         /**
          * Returns the column number where the error occured.
-         * 
-         * @return the column number of the error, or 
+         *
+         * @return the column number of the error, or
          *         -1 if unknown
          */
         public int GetColumn() {
             return column;
         }
-    
+
         /**
          * Returns a default error message.
-         * 
+         *
          * @return a default error message
          */
         public string GetMessage() {
@@ -243,15 +243,15 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the error message. This message will contain all the 
-         * information available, except for the line and column number 
+         * Returns the error message. This message will contain all the
+         * information available, except for the line and column number
          * information.
-         * 
+         *
          * @return the error message
          */
         public string GetErrorMessage() {
             StringBuilder  buffer = new StringBuilder();
-    
+
             // Add type and info
             switch (type) {
             case ErrorType.IO:
@@ -294,16 +294,16 @@ namespace PerCederberg.Grammatica.Parser {
 
             return buffer.ToString();
         }
-    
+
         /**
          * Returns a string containing all the detailed information in
          * a list. The elements are separated with a comma.
-         * 
+         *
          * @return the detailed information string
          */
         private string GetMessageDetails() {
             StringBuilder  buffer = new StringBuilder();
-        
+
             for (int i = 0; i < details.Count; i++) {
                 if (i > 0) {
                     buffer.Append(", ");

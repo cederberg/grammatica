@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -44,10 +44,10 @@ import net.percederberg.grammatica.parser.Token;
 import net.percederberg.grammatica.parser.TokenPattern;
 
 /**
- * A second pass grammar analyzer. This class processes the grammar 
- * parse tree and adds all production pattern rules to the patterns. 
- * All required syntetic production patterns will also be added to 
- * the grammar.  
+ * A second pass grammar analyzer. This class processes the grammar
+ * parse tree and adds all production pattern rules to the patterns.
+ * All required syntetic production patterns will also be added to
+ * the grammar.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.0
@@ -61,7 +61,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
 
     /**
      * The current production pattern. This is set when processing the
-     * production declaration, and is used when creating syntetic 
+     * production declaration, and is used when creating syntetic
      * productions.
      */
     private ProductionPattern currentProduction = null;
@@ -73,7 +73,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
 
     /**
      * Creates a new grammar analyser.
-     * 
+     *
      * @param grammar        the grammar where objects are added
      */
     public SecondPassAnalyzer(Grammar grammar) {
@@ -83,11 +83,11 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
     /**
      * Sets the node value to the token or production pattern. If no
      * matching pattern was found, an exception is thrown.
-     * 
+     *
      * @param node           the token node
-     * 
+     *
      * @return the token node
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitIdentifier(Token node) throws ParseException {
@@ -110,19 +110,19 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
     }
 
     /**
-     * Sets the node value to the token pattern. If no matching 
+     * Sets the node value to the token pattern. If no matching
      * pattern was found, an exception is thrown.
-     * 
+     *
      * @param node           the token node
-     * 
+     *
      * @return the token node
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitQuotedString(Token node) throws ParseException {
         String        str;
         TokenPattern  token;
-        
+
         str = node.getImage();
         str = str.substring(1, str.length() - 1);
         token = grammar.getTokenPatternByImage(str);
@@ -140,9 +140,9 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
 
     /**
      * Removes the parse tree by returning null.
-     * 
+     *
      * @param node           the production node
-     * 
+     *
      * @return the new production node
      */
     protected Node exitGrammar(Production node) {
@@ -150,11 +150,11 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
     }
 
     /**
-     * Removes the production part from the parse tree by returning 
+     * Removes the production part from the parse tree by returning
      * null.
-     * 
+     *
      * @param node           the production node
-     * 
+     *
      * @return the new production node
      */
     protected Node exitProductionPart(Production node) {
@@ -162,10 +162,10 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
     }
 
     /**
-     * Sets the production name variable when encountering the 
-     * identifier child. This variable is used when creating new 
+     * Sets the production name variable when encountering the
+     * identifier child. This variable is used when creating new
      * subproductions.
-     * 
+     *
      * @param node           the production node
      * @param child          the child to add
      *
@@ -174,24 +174,24 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
     protected void childProductionDeclaration(Production node, Node child)
         throws ParseException {
 
-        super.childProductionDeclaration(node, child); 
+        super.childProductionDeclaration(node, child);
         if (child.getId() == GrammarConstants.IDENTIFIER) {
             currentProduction = (ProductionPattern) child.getValue(0);
         }
     }
 
     /**
-     * Adds all the pattern rules to the production pattern. This 
+     * Adds all the pattern rules to the production pattern. This
      * method also removes the production declaration from the parse
      * tree by returning null.
-     * 
+     *
      * @param node           the production node
-     * 
+     *
      * @return the new production node
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionDeclaration(Production node) 
+    protected Node exitProductionDeclaration(Production node)
         throws ParseException {
 
         ProductionPattern             pattern;
@@ -217,11 +217,11 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
 
     /**
      * Sets the node values to the pattern rules.
-     * 
+     *
      * @param node           the production node
-     * 
+     *
      * @return the new production node
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitProduction(Production node) throws ParseException {
@@ -248,14 +248,14 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
 
     /**
      * Sets the node value to the production pattern element.
-     * 
+     *
      * @param node           the production node
-     * 
+     *
      * @return the new production node
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionAtom(Production node) 
+    protected Node exitProductionAtom(Production node)
         throws ParseException {
 
         Node     child;
@@ -296,7 +296,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
             }
             elem = getProductionElement(getChildAt(node, 1));
             token = elem.isToken();
-            id = elem.getId(); 
+            id = elem.getId();
             break;
         }
 
@@ -319,20 +319,20 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
     }
 
     /**
-     * Returns the production pattern element for a production node. 
+     * Returns the production pattern element for a production node.
      * The production node only contains a set of production rules, so
      * this method normally creates a syntetic production and adds all
-     * the rules to it. If only a single rule was present in the rule 
+     * the rules to it. If only a single rule was present in the rule
      * set, and if it contained only an single mandatory element, that
      * element will be returned instead.
-     * 
+     *
      * @param node           the production parse tree node
-     * 
+     *
      * @return the production pattern element
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
-    private ProductionPatternElement getProductionElement(Node node) 
+    private ProductionPatternElement getProductionElement(Node node)
         throws ParseException {
 
         ProductionPattern             prod;
@@ -343,7 +343,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
         if (node.getValueCount() == 1 && isSimple(alt)) {
             return alt.getElement(0);
         } else {
-            str = currentProduction.getName() + "(" + 
+            str = currentProduction.getName() + "(" +
                   (nextSynteticId - 3000) + ")";
             prod = new ProductionPattern(nextSynteticId, str);
             prod.setSyntetic(true);
@@ -359,28 +359,28 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
                         node.getStartColumn());
                 }
             }
-            grammar.addProduction(prod, 
-                                  node.getStartLine(), 
+            grammar.addProduction(prod,
+                                  node.getStartLine(),
                                   node.getEndLine());
-            return new ProductionPatternElement(false, 
+            return new ProductionPatternElement(false,
                                                 nextSynteticId++,
-                                                1, 
+                                                1,
                                                 1);
         }
     }
 
     /**
-     * Checks if a production pattern alternative contains a single 
+     * Checks if a production pattern alternative contains a single
      * mandatory element.
-     * 
+     *
      * @param alt            the production pattern alternative
-     * 
+     *
      * @return true if the alternative is simple, or
      *         false otherwise
      */
     private boolean isSimple(ProductionPatternAlternative alt) {
-        return alt.getElementCount() == 1 
+        return alt.getElementCount() == 1
             && alt.getMinElementCount() == 1
-            && alt.getMaxElementCount() == 1; 
+            && alt.getMaxElementCount() == 1;
     }
 }

@@ -55,7 +55,7 @@ public class CSharpMethod extends CodeElement {
     /**
      * The protected internal access modifier constant.
      */
-    public static final int PROTECTED_INTERNAL = 
+    public static final int PROTECTED_INTERNAL =
         CSharpModifier.PROTECTED_INTERNAL;
 
     /**
@@ -188,9 +188,9 @@ public class CSharpMethod extends CodeElement {
      * @param args         the argument list, excluding parenthesis
      * @param returnType   the return type
      */
-    public CSharpMethod(int modifiers, 
-                        String name, 
-                        String args, 
+    public CSharpMethod(int modifiers,
+                        String name,
+                        String args,
                         String returnType) {
 
         this.modifiers = modifiers;
@@ -229,9 +229,9 @@ public class CSharpMethod extends CodeElement {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -242,19 +242,19 @@ public class CSharpMethod extends CodeElement {
 
     /**
      * Checks if the method source code can the printed. This method
-     * will return false if the method is abstract or if the print 
+     * will return false if the method is abstract or if the print
      * code flag is set to false.
-     * 
+     *
      * @return true if method source code can be printed, or
      *         false otherwise
      */
     public boolean canPrintCode() {
         return printCode && (modifiers & ABSTRACT) == 0;
     }
-    
+
     /**
      * Sets the print code flag.
-     * 
+     *
      * @param value          the new print code flag value
      */
     public void setPrintCode(boolean value) {

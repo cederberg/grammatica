@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -44,18 +44,18 @@ import java.util.ArrayList;
 public class ParseException extends Exception {
 
     /**
-     * The internal error type constant. This type is only used to 
+     * The internal error type constant. This type is only used to
      * signal an error that is a result of a bug in the parser or
      * tokenizer code.
      */
     public static final int INTERNAL_ERROR = 0;
 
     /**
-     * The I/O error type constant. This type is used for stream I/O 
-     * errors. 
+     * The I/O error type constant. This type is used for stream I/O
+     * errors.
      */
     public static final int IO_ERROR = 1;
-    
+
     /**
      * The unexpected end of file error type constant. This type is
      * used when end of file is encountered instead of a valid token.
@@ -70,23 +70,23 @@ public class ParseException extends Exception {
     public static final int UNEXPECTED_CHAR_ERROR = 3;
 
     /**
-     * The unexpected token error type constant. This type is used 
+     * The unexpected token error type constant. This type is used
      * when another token than the expected one is encountered.
      */
     public static final int UNEXPECTED_TOKEN_ERROR = 4;
-    
+
     /**
      * The invalid token error type constant. This type is used when
-     * a token pattern with an error message is matched. The 
-     * additional information provided should contain the error 
-     * message. 
+     * a token pattern with an error message is matched. The
+     * additional information provided should contain the error
+     * message.
      */
     public static final int INVALID_TOKEN_ERROR = 5;
-    
+
     /**
-     * The analysis error type constant. This type is used when an 
-     * error is encountered in the analysis. The additional 
-     * information provided should contain the error message. 
+     * The analysis error type constant. This type is used when an
+     * error is encountered in the analysis. The additional
+     * information provided should contain the error message.
      */
     public static final int ANALYSIS_ERROR = 6;
 
@@ -94,7 +94,7 @@ public class ParseException extends Exception {
      * The error type.
      */
     private int type;
-    
+
     /**
      * The additional information string.
      */
@@ -110,7 +110,7 @@ public class ParseException extends Exception {
      * The line number.
      */
     private int line;
-    
+
     /**
      * The column number.
      */
@@ -118,15 +118,15 @@ public class ParseException extends Exception {
 
     /**
      * Creates a new parse exception.
-     * 
+     *
      * @param type           the parse error type
      * @param info           the additional information
      * @param line           the line number, or -1 for unknown
      * @param column         the column number, or -1 for unknown
      */
-    public ParseException(int type, 
-                          String info, 
-                          int line, 
+    public ParseException(int type,
+                          String info,
+                          int line,
                           int column) {
 
         this(type, info, null, line, column);
@@ -137,17 +137,17 @@ public class ParseException extends Exception {
      * to supply the detailed information array, which is only used
      * for expected token errors. The list then contains descriptions
      * of the expected tokens.
-     * 
+     *
      * @param type           the parse error type
      * @param info           the additional information
      * @param details        the additional detailed information
      * @param line           the line number, or -1 for unknown
      * @param column         the column number, or -1 for unknown
      */
-    public ParseException(int type, 
+    public ParseException(int type,
                           String info,
                           ArrayList details,
-                          int line, 
+                          int line,
                           int column) {
 
         super();
@@ -159,8 +159,8 @@ public class ParseException extends Exception {
     }
 
     /**
-     * Returns the error type. 
-     * 
+     * Returns the error type.
+     *
      * @return the error type
      */
     public int getErrorType() {
@@ -169,7 +169,7 @@ public class ParseException extends Exception {
 
     /**
      * Returns the additional error information.
-     * 
+     *
      * @return the additional error information
      */
     public String getInfo() {
@@ -177,8 +177,8 @@ public class ParseException extends Exception {
     }
 
     /**
-     * Returns the additional detailed error information. 
-     * 
+     * Returns the additional detailed error information.
+     *
      * @return the additional detailed error information
      */
     public ArrayList getDetails() {
@@ -187,29 +187,29 @@ public class ParseException extends Exception {
 
     /**
      * Returns the line number where the error occured.
-     * 
-     * @return the line number of the error, or 
+     *
+     * @return the line number of the error, or
      *         -1 if unknown
      */
     public int getLine() {
         return line;
     }
-    
+
     /**
      * Returns the column number where the error occured.
-     * 
-     * @return the column number of the error, or 
+     *
+     * @return the column number of the error, or
      *         -1 if unknown
      */
     public int getColumn() {
         return column;
     }
-    
+
     /**
      * Returns the detailed error message. This message will contain
      * the same string as getErrorMessage(), but with line number and
      * column number information appended.
-     * 
+     *
      * @return the detailed error message
      */
     public String getMessage() {
@@ -228,12 +228,12 @@ public class ParseException extends Exception {
 
         return buffer.toString();
     }
-    
+
     /**
-     * Returns the error message. This message will contain all the 
-     * information available, except for the line and column number 
+     * Returns the error message. This message will contain all the
+     * information available, except for the line and column number
      * information.
-     * 
+     *
      * @return the error message
      */
     public String getErrorMessage() {
@@ -283,12 +283,12 @@ public class ParseException extends Exception {
     /**
      * Returns a string containing all the detailed information in
      * a list. The elements are separated with a comma.
-     * 
+     *
      * @return the detailed information string
      */
     private String getMessageDetails() {
         StringBuffer  buffer = new StringBuffer();
-        
+
         for (int i = 0; i < details.size(); i++) {
             if (i > 0) {
                 buffer.append(", ");

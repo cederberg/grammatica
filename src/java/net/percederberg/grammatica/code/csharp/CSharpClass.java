@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -52,14 +52,14 @@ public class CSharpClass extends CSharpType {
     public static final int PUBLIC = CSharpModifier.PUBLIC;
 
     /**
-     * The protected internal access modifier constant. May only be 
+     * The protected internal access modifier constant. May only be
      * used when declared inside another type.
      */
-    public static final int PROTECTED_INTERNAL = 
+    public static final int PROTECTED_INTERNAL =
         CSharpModifier.PROTECTED_INTERNAL;
 
     /**
-     * The protected access modifier constant. May only be used when 
+     * The protected access modifier constant. May only be used when
      * declared inside another type.
      */
     public static final int PROTECTED = CSharpModifier.PROTECTED;
@@ -70,7 +70,7 @@ public class CSharpClass extends CSharpType {
     public static final int INTERNAL = CSharpModifier.INTERNAL;
 
     /**
-     * The private access modifier constant. May only be used when 
+     * The private access modifier constant. May only be used when
      * declared inside another type.
      */
     public static final int PRIVATE = CSharpModifier.PRIVATE;
@@ -86,7 +86,7 @@ public class CSharpClass extends CSharpType {
     public static final int SEALED = CSharpModifier.SEALED;
 
     /**
-     * The new modifier constant. May only be used when declared 
+     * The new modifier constant. May only be used when declared
      * inside another type.
      */
     public static final int NEW = CSharpModifier.NEW;
@@ -102,7 +102,7 @@ public class CSharpClass extends CSharpType {
     }
 
     /**
-     * Creates a new class code generator with the specified 
+     * Creates a new class code generator with the specified
      * modifiers.
      *
      * @param modifiers      the modifier flag constants
@@ -138,17 +138,17 @@ public class CSharpClass extends CSharpType {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
      */
     public int category() {
-        return 10;        
+        return 10;
     }
-    
+
     /**
      * Adds an inner class as a member.
      *
@@ -198,16 +198,16 @@ public class CSharpClass extends CSharpType {
     }
 
     /**
-     * Prints the lines separating two elements. 
+     * Prints the lines separating two elements.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param prev           the previous element, or null if first
      * @param next           the next element, or null if last
      */
-    protected void printSeparator(PrintWriter out, 
-                                  CodeStyle style, 
-                                  CodeElement prev, 
+    protected void printSeparator(PrintWriter out,
+                                  CodeStyle style,
+                                  CodeElement prev,
                                   CodeElement next) {
 
         if (next == null) {

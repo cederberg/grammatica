@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -69,9 +69,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Creates a new regular expression.
-         * 
+         *
          * @param pattern        the regular expression pattern
-         * 
+         *
          * @throws RegExpException if the regular expression couldn't be
          *             parsed correctly
          */
@@ -89,9 +89,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Creates a new matcher for the specified string.
-         * 
+         *
          * @param str            the string to work with
-         * 
+         *
          * @return the regular expresion matcher
          */
         public Matcher Matcher(string str) {
@@ -100,12 +100,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Returns a string representation of the regular expression.
-         * 
+         *
          * @return a string representation of the regular expression
          */
         public override string ToString() {
             StringWriter  str;
-            
+
             str = new StringWriter();
             str.WriteLine("Regular Expression");
             str.WriteLine("  Pattern: " + pattern);
@@ -117,16 +117,16 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Parses a regular expression. This method handles the Expr
          * production in the grammar (see regexp.grammar).
-         * 
+         *
          * @return the element representing this expression
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseExpr() {
             Element  first;
             Element  second;
-        
+
             first = ParseTerm();
             if (PeekChar(0) != '|') {
                 return first;
@@ -136,19 +136,19 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 return new AlternativeElement(first, second);
             }
         }
-    
+
         /**
-         * Parses a regular expression term. This method handles the 
+         * Parses a regular expression term. This method handles the
          * Term production in the grammar (see regexp.grammar).
-         * 
+         *
          * @return the element representing this term
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseTerm() {
             ArrayList  list = new ArrayList();
-        
+
             list.Add(ParseFact());
             while (true) {
                 switch (PeekChar(0)) {
@@ -169,12 +169,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Parses a regular expression factor. This method handles the 
+         * Parses a regular expression factor. This method handles the
          * Fact production in the grammar (see regexp.grammar).
-         * 
+         *
          * @return the element representing this factor
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseFact() {
@@ -193,12 +193,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Parses a regular expression atom. This method handles the 
+         * Parses a regular expression atom. This method handles the
          * Atom production in the grammar (see regexp.grammar).
-         * 
+         *
          * @return the element representing this atom
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseAtom() {
@@ -237,14 +237,14 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Parses a regular expression atom modifier. This method handles 
+         * Parses a regular expression atom modifier. This method handles
          * the AtomModifier production in the grammar (see regexp.grammar).
          *
          * @param elem           the element to modify
-         *  
-         * @return the modified element 
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @return the modified element
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseAtomModifier(Element elem) {
@@ -293,7 +293,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
                     pos - 1,
                     pattern);
             }
-            
+
             // Read operator mode
             if (PeekChar(0) == '?') {
                 ReadChar('?');
@@ -302,17 +302,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 ReadChar('+');
                 type = RepeatElement.RepeatType.POSSESSIVE;
             }
-            
+
             return new RepeatElement(elem, min, max, type);
         }
 
         /**
-         * Parses a regular expression character set. This method handles 
+         * Parses a regular expression character set. This method handles
          * the contents of the '[...]' construct in a regular expression.
-         * 
+         *
          * @return the element representing this character set
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseCharSet() {
@@ -321,14 +321,14 @@ namespace PerCederberg.Grammatica.Parser.RE {
             bool                 repeat = true;
             char                 start;
             char                 end;
-            
+
             if (PeekChar(0) == '^') {
                 ReadChar('^');
                 charset = new CharacterSetElement(true);
             } else {
                 charset = new CharacterSetElement(false);
             }
-            
+
             while (PeekChar(0) > 0 && repeat) {
                 start = (char) PeekChar(0);
                 switch (start) {
@@ -346,9 +346,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 default:
                     ReadChar(start);
                     if (PeekChar(0) == '-'
-                        && PeekChar(1) > 0 
+                        && PeekChar(1) > 0
                         && PeekChar(1) != ']') {
-                        
+
                         ReadChar('-');
                         end = ReadChar();
                         charset.AddRange(start, end);
@@ -358,17 +358,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
                     break;
                 }
             }
-        
+
             return charset;
         }
 
         /**
-         * Parses a regular expression character. This method handles 
+         * Parses a regular expression character. This method handles
          * a single normal character in a regular expression.
-         * 
+         *
          * @return the element representing this character
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseChar() {
@@ -387,19 +387,19 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Parses a regular expression character escape. This method 
+         * Parses a regular expression character escape. This method
          * handles a single character escape in a regular expression.
-         * 
+         *
          * @return the element representing this character escape
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private Element ParseEscapeChar() {
             char    c;
             string  str;
             int     value;
-        
+
             ReadChar('\\');
             c = ReadChar();
             switch (c) {
@@ -424,10 +424,10 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 }
                 return new StringElement((char) value);
             case 'x':
-                str = ReadChar().ToString() + 
+                str = ReadChar().ToString() +
                       ReadChar().ToString();
                 try {
-                    value = Int32.Parse(str, 
+                    value = Int32.Parse(str,
                                         NumberStyles.AllowHexSpecifier);
                     return new StringElement((char) value);
                 } catch (FormatException) {
@@ -437,12 +437,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
                         pattern);
                 }
             case 'u':
-                str = ReadChar().ToString() + 
+                str = ReadChar().ToString() +
                       ReadChar().ToString() +
                       ReadChar().ToString() +
                       ReadChar().ToString();
                 try {
-                    value = Int32.Parse(str, 
+                    value = Int32.Parse(str,
                                         NumberStyles.AllowHexSpecifier);
                     return new StringElement((char) value);
                 } catch (FormatException) {
@@ -480,7 +480,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
                     throw new RegExpException(
                         RegExpException.ErrorType.UNSUPPORTED_ESCAPE_CHARACTER,
                         pos - 2,
-                        pattern);             
+                        pattern);
                 }
                 return new StringElement(c);
             }
@@ -489,17 +489,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Reads a number from the pattern. If the next character isn't a
          * numeric character, an exception is thrown. This method reads
-         * several consecutive numeric characters. 
-         * 
+         * several consecutive numeric characters.
+         *
          * @return the numeric value read
-         * 
-         * @throws RegExpException if an error was encountered in the 
+         *
+         * @throws RegExpException if an error was encountered in the
          *             pattern string
          */
         private int ReadNumber() {
             StringBuilder  buf = new StringBuilder();
             int            c;
-            
+
             c = PeekChar(0);
             while ('0' <= c && c <= '9') {
                 buf.Append(ReadChar());
@@ -517,18 +517,18 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Reads the next character in the pattern. If no next character
          * exists, an exception is thrown.
-         * 
-         * @return the character read 
-         * 
-         * @throws RegExpException if no next character was available in  
+         *
+         * @return the character read
+         *
+         * @throws RegExpException if no next character was available in
          *             the pattern string
          */
         private char ReadChar() {
             int  c = PeekChar(0);
-            
+
             if (c < 0) {
                 throw new RegExpException(
-                    RegExpException.ErrorType.UNTERMINATED_PATTERN, 
+                    RegExpException.ErrorType.UNTERMINATED_PATTERN,
                     pos,
                     pattern);
             } else {
@@ -538,21 +538,21 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Reads the next character in the pattern. If the character 
+         * Reads the next character in the pattern. If the character
          * wasn't the specified one, an exception is thrown.
-         * 
+         *
          * @param c              the character to read
-         * 
-         * @return the character read 
-         * 
+         *
+         * @return the character read
+         *
          * @throws RegExpException if the character read didn't match the
-         *             specified one, or if no next character was 
+         *             specified one, or if no next character was
          *             available in the pattern string
          */
         private char ReadChar(char c) {
             if (c != ReadChar()) {
                 throw new RegExpException(
-                    RegExpException.ErrorType.UNEXPECTED_CHARACTER, 
+                    RegExpException.ErrorType.UNEXPECTED_CHARACTER,
                     pos - 1,
                     pattern);
             }
@@ -560,12 +560,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Returns a character that has not yet been read from the 
-         * pattern. If the requested position is beyond the end of the 
+         * Returns a character that has not yet been read from the
+         * pattern. If the requested position is beyond the end of the
          * pattern string, -1 is returned.
-         * 
+         *
          * @param count          the preview position, from zero (0)
-         * 
+         *
          * @return the character found, or
          *         -1 if beyond the end of the pattern string
          */
@@ -576,14 +576,14 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 return -1;
             }
         }
-    
+
         /**
-         * Combines a list of elements. This method takes care to always 
-         * concatenate adjacent string elements into a single string 
-         * element.  
-         * 
+         * Combines a list of elements. This method takes care to always
+         * concatenate adjacent string elements into a single string
+         * element.
+         *
          * @param list           the list with elements
-         * 
+         *
          * @return the combined element
          */
         private Element CombineElements(ArrayList list) {
@@ -596,7 +596,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
             prev = (Element) list[0];
             for (i = 1; i < list.Count; i++) {
                 elem = (Element) list[i];
-                if (prev is StringElement 
+                if (prev is StringElement
                  && elem is StringElement) {
 
                     str = ((StringElement) prev).GetString() +

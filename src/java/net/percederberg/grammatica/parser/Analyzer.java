@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -36,18 +36,18 @@ package net.percederberg.grammatica.parser;
 import java.util.ArrayList;
 
 /**
- * A parse tree analyzer. This class provides callback methods that 
+ * A parse tree analyzer. This class provides callback methods that
  * may be used either during parsing, or for a parse tree traversal.
  * This class should be subclassed to provide adequate handling of the
  * parse tree nodes.
- * 
+ *
  * The general contract for the analyzer class does not guarantee a
- * strict call order for the callback methods. Depending on the type 
- * of parser, the enter() and exit() methods for production nodes can 
- * be called either in a top-down or a bottom-up fashion. The only 
- * guarantee provided by this API, is that the calls for any given 
+ * strict call order for the callback methods. Depending on the type
+ * of parser, the enter() and exit() methods for production nodes can
+ * be called either in a top-down or a bottom-up fashion. The only
+ * guarantee provided by this API, is that the calls for any given
  * node will always be in the order enter(), child(), and exit(). If
- * various child() calls are made, they will be made from left to 
+ * various child() calls are made, they will be made from left to
  * right as child nodes are added (to the right).
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -62,44 +62,44 @@ public class Analyzer {
     }
 
     /**
-     * Analyzes a parse tree node by traversing all it's child nodes. 
-     * The tree traversal is depth-first, and the appropriate 
-     * callback methods will be called. If the node is a production 
-     * node, a new production node will be created and children will 
-     * be added by recursively processing the children of the 
-     * specified production node. This method is used to process a 
+     * Analyzes a parse tree node by traversing all it's child nodes.
+     * The tree traversal is depth-first, and the appropriate
+     * callback methods will be called. If the node is a production
+     * node, a new production node will be created and children will
+     * be added by recursively processing the children of the
+     * specified production node. This method is used to process a
      * parse tree after creation.
-     * 
+     *
      * @param node           the parse tree node to process
-     * 
-     * @return the resulting parse tree node 
-     * 
-     * @throws ParserLogException if the node analysis discovered 
+     *
+     * @return the resulting parse tree node
+     *
+     * @throws ParserLogException if the node analysis discovered
      *             errors
      */
     public Node analyze(Node node) throws ParserLogException {
         ParserLogException  log = new ParserLogException();
-        
+
         node = analyze(node, log);
         if (log.getErrorCount() > 0) {
             throw log;
         }
         return node;
     }
-    
+
     /**
-     * Analyzes a parse tree node by traversing all it's child nodes. 
-     * The tree traversal is depth-first, and the appropriate 
-     * callback methods will be called. If the node is a production 
-     * node, a new production node will be created and children will 
-     * be added by recursively processing the children of the 
-     * specified production node. This method is used to process a 
+     * Analyzes a parse tree node by traversing all it's child nodes.
+     * The tree traversal is depth-first, and the appropriate
+     * callback methods will be called. If the node is a production
+     * node, a new production node will be created and children will
+     * be added by recursively processing the children of the
+     * specified production node. This method is used to process a
      * parse tree after creation.
-     * 
+     *
      * @param node           the parse tree node to process
      * @param log            the parser error log
-     * 
-     * @return the resulting parse tree node 
+     *
+     * @return the resulting parse tree node
      */
     private Node analyze(Node node, ParserLogException log) {
         Production  prod;
@@ -148,11 +148,11 @@ public class Analyzer {
 
     /**
      * Called when entering a parse tree node. By default this method
-     * does nothing. A subclass can override this method to handle 
-     * each node separately.  
-     * 
+     * does nothing. A subclass can override this method to handle
+     * each node separately.
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enter(Node node) throws ParseException {
@@ -160,55 +160,55 @@ public class Analyzer {
 
     /**
      * Called when exiting a parse tree node. By default this method
-     * returns the node. A subclass can override this method to handle 
-     * each node separately. If no parse tree should be created, this 
+     * returns the node. A subclass can override this method to handle
+     * each node separately. If no parse tree should be created, this
      * method should return null.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exit(Node node) throws ParseException {
         return node;
     }
-    
+
     /**
-     * Called when adding a child to a parse tree node. By default 
-     * this method adds the child to the production node. A subclass 
-     * can override this method to handle each node separately. Note 
-     * that the child node may be null if the corresponding exit() 
+     * Called when adding a child to a parse tree node. By default
+     * this method adds the child to the production node. A subclass
+     * can override this method to handle each node separately. Note
+     * that the child node may be null if the corresponding exit()
      * method returned null.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void child(Production node, Node child) 
+    protected void child(Production node, Node child)
         throws ParseException {
 
         node.addChild(child);
     }
-    
+
     /**
      * Returns a child at the specified position. If either the node
-     * or the child node is null, this method will throw a parse 
+     * or the child node is null, this method will throw a parse
      * exception with the internal error type.
-     * 
-     * @param node           the parent node 
+     *
+     * @param node           the parent node
      * @param pos            the child position
-     * 
+     *
      * @return the child node
-     * 
-     * @throws ParseException if either the node or the child node 
+     *
+     * @throws ParseException if either the node or the child node
      *             was null
      */
     protected Node getChildAt(Node node, int pos) throws ParseException {
         Node  child;
-        
+
         if (node == null) {
             throw new ParseException(
                 ParseException.INTERNAL_ERROR,
@@ -227,22 +227,22 @@ public class Analyzer {
         }
         return child;
     }
-    
+
     /**
      * Returns the first child with the specified id. If the node is
-     * null, or no child with the specified id could be found, this 
-     * method will throw a parse exception with the internal error 
+     * null, or no child with the specified id could be found, this
+     * method will throw a parse exception with the internal error
      * type.
-     * 
-     * @param node           the parent node 
+     *
+     * @param node           the parent node
      * @param id             the child node id
-     * 
+     *
      * @return the child node
-     * 
-     * @throws ParseException if the node was null, or a child node 
+     *
+     * @throws ParseException if the node was null, or a child node
      *             couldn't be found
      */
-    protected Node getChildWithId(Node node, int id) 
+    protected Node getChildWithId(Node node, int id)
         throws ParseException {
 
         Node  child;
@@ -266,17 +266,17 @@ public class Analyzer {
             node.getStartLine(),
             node.getStartColumn());
     }
-    
+
     /**
-     * Returns the node value at the specified position. If either 
-     * the node or the value is null, this method will throw a parse 
+     * Returns the node value at the specified position. If either
+     * the node or the value is null, this method will throw a parse
      * exception with the internal error type.
-     * 
-     * @param node           the parse tree node 
+     *
+     * @param node           the parse tree node
      * @param pos            the child position
-     * 
+     *
      * @return the value object
-     * 
+     *
      * @throws ParseException if either the node or the value was null
      */
     protected Object getValue(Node node, int pos) throws ParseException {
@@ -300,24 +300,24 @@ public class Analyzer {
         }
         return value;
     }
-    
+
     /**
-     * Returns the node integer value at the specified position. If 
-     * either the node is null, or the value is not an instance of 
-     * the Integer class, this method will throw a parse exception 
+     * Returns the node integer value at the specified position. If
+     * either the node is null, or the value is not an instance of
+     * the Integer class, this method will throw a parse exception
      * with the internal error type.
-     * 
-     * @param node           the parse tree node 
+     *
+     * @param node           the parse tree node
      * @param pos            the child position
-     * 
+     *
      * @return the value object
-     * 
-     * @throws ParseException if either the node was null, or the 
-     *             value wasn't an integer 
+     *
+     * @throws ParseException if either the node was null, or the
+     *             value wasn't an integer
      */
     protected int getIntValue(Node node, int pos) throws ParseException {
         Object  value;
-        
+
         value = getValue(node, pos);
         if (value instanceof Integer) {
             return ((Integer) value).intValue();
@@ -332,24 +332,24 @@ public class Analyzer {
     }
 
     /**
-     * Returns the node string value at the specified position. If 
-     * either the node is null, or the value is not an instance of 
-     * the String class, this method will throw a parse exception 
+     * Returns the node string value at the specified position. If
+     * either the node is null, or the value is not an instance of
+     * the String class, this method will throw a parse exception
      * with the internal error type.
-     * 
-     * @param node           the parse tree node 
+     *
+     * @param node           the parse tree node
      * @param pos            the child position
-     * 
+     *
      * @return the value object
-     * 
-     * @throws ParseException if either the node was null, or the 
-     *             value wasn't a string 
+     *
+     * @throws ParseException if either the node was null, or the
+     *             value wasn't a string
      */
-    protected String getStringValue(Node node, int pos) 
+    protected String getStringValue(Node node, int pos)
         throws ParseException {
-    
+
         Object  value;
-        
+
         value = getValue(node, pos);
         if (value instanceof String) {
             return (String) value;
@@ -362,21 +362,21 @@ public class Analyzer {
                 node.getStartColumn());
         }
     }
-    
+
     /**
      * Returns all the node values for all child nodes.
      *
      * @param node           the parse tree node
      *
      * @return a list with all the child node values
-     * 
+     *
      * @since 1.3
      */
     protected ArrayList getChildValues(Node node) {
         ArrayList  result = new ArrayList();
         Node       child;
         ArrayList  values;
-                                                                                
+
         for (int i = 0; i < node.getChildCount(); i++) {
             child = node.getChildAt(i);
             values = child.getAllValues();

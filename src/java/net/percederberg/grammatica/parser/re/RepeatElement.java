@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -37,8 +37,8 @@ import java.io.PrintWriter;
 import java.util.BitSet;
 
 /**
- * A regular expression element repeater. The element repeats the 
- * matches from a specified element, attempting to reach the maximum 
+ * A regular expression element repeater. The element repeats the
+ * matches from a specified element, attempting to reach the maximum
  * repetition count.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -50,12 +50,12 @@ class RepeatElement extends Element {
      * The greedy repeat type constant.
      */
     public static final int GREEDY = 1;
-    
+
     /**
      * The reluctant repeat type constant.
      */
     public static final int RELUCTANT = 2;
-    
+
     /**
      * The possesive repeat type constant.
      */
@@ -65,7 +65,7 @@ class RepeatElement extends Element {
      * The element to repeat.
      */
     private Element elem;
-    
+
     /**
      * The minimum number of repetitions.
      */
@@ -73,7 +73,7 @@ class RepeatElement extends Element {
 
     /**
      * The maximum number of repetitions.
-     */    
+     */
     private int max;
 
     /**
@@ -82,7 +82,7 @@ class RepeatElement extends Element {
     private int type;
 
     /**
-     * The start position of the last set of matches. 
+     * The start position of the last set of matches.
      */
     private int matchStart;
 
@@ -94,12 +94,12 @@ class RepeatElement extends Element {
 
     /**
      * Creats a new element repeater.
-     * 
+     *
      * @param elem           the element to repeat
      * @param min            the minimum count
      * @param max            the maximum count
      * @param type           the repeat type constant
-     * 
+     *
      * @see #GREEDY
      * @see #RELUCTANT
      * @see #POSSESIVE
@@ -122,7 +122,7 @@ class RepeatElement extends Element {
      * of the same class matching the same strings. Copies of elements
      * are necessary to allow elements to cache intermediate results
      * while matching strings without interfering with other threads.
-     * 
+     *
      * @return a copy of this element
      */
     public Object clone() {
@@ -130,15 +130,15 @@ class RepeatElement extends Element {
     }
 
     /**
-     * Returns the length of a matching string starting at the 
+     * Returns the length of a matching string starting at the
      * specified position. The number of matches to skip can also be
      * specified.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the matching string, or
      *         -1 if no match was found
      */
@@ -162,20 +162,20 @@ class RepeatElement extends Element {
     }
 
     /**
-     * Returns the length of the longest possible matching string 
-     * starting at the specified position. The number of matches to 
+     * Returns the length of the longest possible matching string
+     * starting at the specified position. The number of matches to
      * skip can also be specified.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      */
-    private int matchGreedy(Matcher m, 
-                            CharBuffer str, 
+    private int matchGreedy(Matcher m,
+                            CharBuffer str,
                             int start,
                             int skip) {
 
@@ -205,22 +205,22 @@ class RepeatElement extends Element {
 
     /**
      * Returns the length of the shortest possible matchine string
-     * starting at the specified position. The number of matches to 
+     * starting at the specified position. The number of matches to
      * skip can also be specified.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the shortest matching string, or
      *         -1 if no match was found
      */
-    private int matchReluctant(Matcher m, 
-                               CharBuffer str, 
+    private int matchReluctant(Matcher m,
+                               CharBuffer str,
                                int start,
                                int skip) {
-    
+
         // Find all matches
         if (matchStart != start) {
             matchStart = start;
@@ -241,26 +241,26 @@ class RepeatElement extends Element {
     }
 
     /**
-     * Returns the length of the maximum number of elements matching 
-     * the string starting at the specified position. This method 
+     * Returns the length of the maximum number of elements matching
+     * the string starting at the specified position. This method
      * allows no backtracking, i.e. no skips..
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param count          the start count, normally zero (0)
-     * 
+     *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      */
-    private int matchPossessive(Matcher m, 
-                                CharBuffer str, 
+    private int matchPossessive(Matcher m,
+                                CharBuffer str,
                                 int start,
                                 int count) {
-                                   
+
         int  length = 0;
         int  subLength = 1;
-        
+
         // Match as many elements as possible
         while (subLength > 0 && count < max) {
             subLength = elem.match(m, str, start + length, 0);
@@ -279,20 +279,20 @@ class RepeatElement extends Element {
     }
 
     /**
-     * Finds all matches and adds the lengths to the matches set.  
-     * 
-     * @param m              the matcher being used 
+     * Finds all matches and adds the lengths to the matches set.
+     *
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param length         the match length at the start position
      * @param count          the number of sub-elements matched
      * @param attempt        the number of match attempts here
      */
-    private void findMatches(Matcher m, 
-                             CharBuffer str, 
+    private void findMatches(Matcher m,
+                             CharBuffer str,
                              int start,
                              int length,
-                             int count, 
+                             int count,
                              int attempt) {
 
         int  subLength;
@@ -304,7 +304,7 @@ class RepeatElement extends Element {
         if (min <= count && attempt == 0) {
             matches.set(length);
         }
-        
+
         // Check element match
         subLength = elem.match(m, str, start, attempt);
         if (subLength < 0) {
@@ -316,19 +316,19 @@ class RepeatElement extends Element {
             return;
         }
 
-        // Find alternative and subsequent matches 
+        // Find alternative and subsequent matches
         findMatches(m, str, start, length, count, attempt + 1);
-        findMatches(m, 
-                    str, 
-                    start + subLength, 
-                    length + subLength, 
-                    count + 1, 
-                    0); 
+        findMatches(m,
+                    str,
+                    start + subLength,
+                    length + subLength,
+                    count + 1,
+                    0);
     }
 
     /**
      * Prints this element to the specified output stream.
-     * 
+     *
      * @param output         the output stream to use
      * @param indent         the current indentation
      */

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -60,9 +60,9 @@ namespace PerCederberg.Grammatica.Parser {
         private string name;
 
         /**
-         * The syntectic production flag. If this flag is set, the 
-         * production identified by this pattern has been artificially 
-         * inserted into the grammar.  
+         * The syntectic production flag. If this flag is set, the
+         * production identified by this pattern has been artificially
+         * inserted into the grammar.
          */
         private bool syntetic;
 
@@ -73,7 +73,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * The default production pattern alternative. This alternative
-         * is used when no other alternatives match. It may be set to 
+         * is used when no other alternatives match. It may be set to
          * -1, meaning that there is no default (or fallback) alternative.
          */
         private int defaultAlt;
@@ -82,10 +82,10 @@ namespace PerCederberg.Grammatica.Parser {
          * The look-ahead set associated with this pattern.
          */
         private LookAheadSet lookAhead;
-        
+
         /**
          * Creates a new production pattern.
-         * 
+         *
          * @param id             the production pattern id
          * @param name           the production pattern name
          */
@@ -104,7 +104,7 @@ namespace PerCederberg.Grammatica.Parser {
          * artificially inserted into the grammar. No parse tree nodes
          * will be created for such nodes, instead the child nodes
          * will be added directly to the parent node.
-         *   
+         *
          * @return true if this production pattern is syntetic, or
          *         false otherwise
          */
@@ -116,13 +116,13 @@ namespace PerCederberg.Grammatica.Parser {
          * Checks if this pattern is recursive on the left-hand side.
          * This method checks if any of the production pattern
          * alternatives is left-recursive.
-         *  
+         *
          * @return true if at least one alternative is left recursive, or
          *         false otherwise
          */
         public bool IsLeftRecursive() {
             ProductionPatternAlternative  alt;
-            
+
             for (int i = 0; i < alternatives.Count; i++) {
                 alt = (ProductionPatternAlternative) alternatives[i];
                 if (alt.IsLeftRecursive()) {
@@ -131,12 +131,12 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return false;
         }
-    
+
         /**
          * Checks if this pattern is recursive on the right-hand side.
          * This method checks if any of the production pattern
          * alternatives is right-recursive.
-         *  
+         *
          * @return true if at least one alternative is right recursive, or
          *         false otherwise
          */
@@ -156,7 +156,7 @@ namespace PerCederberg.Grammatica.Parser {
          * Checks if this pattern would match an empty stream of
          * tokens. This method checks if any one of the production
          * pattern alternatives would match the empty token stream.
-         *  
+         *
          * @return true if at least one alternative match no tokens, or
          *         false otherwise
          */
@@ -174,16 +174,16 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the unique production pattern identity value.
-         * 
+         *
          * @return the production pattern id
          */
         public int GetId() {
             return id;
         }
-    
+
         /**
          * Returns the production pattern name.
-         * 
+         *
          * @return the production pattern name
          */
         public string GetName() {
@@ -191,11 +191,11 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Sets the syntetic production pattern flag. If this flag is set, 
-         * the production identified by this pattern has been artificially 
-         * inserted into the grammar. By default this flag is set to 
+         * Sets the syntetic production pattern flag. If this flag is set,
+         * the production identified by this pattern has been artificially
+         * inserted into the grammar. By default this flag is set to
          * false.
-         * 
+         *
          * @param syntetic       the new value of the syntetic flag
          */
         public void SetSyntetic(bool syntetic) {
@@ -204,18 +204,18 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the number of alternatives in this pattern.
-         *  
+         *
          * @return the number of alternatives in this pattern
          */
         public int GetAlternativeCount() {
             return alternatives.Count;
         }
-    
+
         /**
          * Returns an alternative in this pattern.
-         * 
+         *
          * @param pos            the alternative position, 0 <= pos < count
-         * 
+         *
          * @return the alternative found
          */
         public ProductionPatternAlternative GetAlternative(int pos) {
@@ -224,23 +224,23 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Adds a production pattern alternative.
-         * 
+         *
          * @param alt            the production pattern alternative to add
-         * 
+         *
          * @throws ParserCreationException if an identical alternative has
          *             already been added
-         */    
+         */
         public void AddAlternative(ProductionPatternAlternative alt) {
             if (alternatives.Contains(alt)) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
                     name,
-                    "two identical alternatives exist"); 
+                    "two identical alternatives exist");
             }
             alt.SetPattern(this);
             alternatives.Add(alt);
         }
-        
+
         /**
          * Returns a string representation of this object.
          *
@@ -273,16 +273,16 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the look-ahead set associated with this alternative.
-         * 
+         *
          * @return the look-ahead set associated with this alternative
          */
         internal LookAheadSet GetLookAhead() {
             return lookAhead;
         }
-    
+
         /**
          * Sets the look-ahead set for this alternative.
-         * 
+         *
          * @param lookAhead      the new look-ahead set
          */
         internal void SetLookAhead(LookAheadSet lookAhead) {
@@ -290,10 +290,10 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the default pattern alternative. The default 
-         * alternative is used when no other alternative matches.  
-         * 
-         * @return the default pattern alternative, or 
+         * Returns the default pattern alternative. The default
+         * alternative is used when no other alternative matches.
+         *
+         * @return the default pattern alternative, or
          *         null if none has been set
          */
         internal ProductionPatternAlternative GetDefaultAlternative() {
@@ -304,11 +304,11 @@ namespace PerCederberg.Grammatica.Parser {
                 return null;
             }
         }
-    
+
         /**
          * Sets the default pattern alternative. The default alternative
          * is used when no other alternative matches.
-         *   
+         *
          * @param pos            the position of the default alternative
          */
         internal void SetDefaultAlternative(int pos) {

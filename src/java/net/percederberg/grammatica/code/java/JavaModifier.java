@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -34,8 +34,8 @@
 package net.percederberg.grammatica.code.java;
 
 /**
- * A class containing the Java modifier constants. This class 
- * shouldn't be used directly, but each class should declare it's own 
+ * A class containing the Java modifier constants. This class
+ * shouldn't be used directly, but each class should declare it's own
  * constants being equal to the constants here.
  *
  * @author   Per Cederberg, <per at percederberg dot net>

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -34,8 +34,8 @@
 package net.percederberg.grammatica.parser.re;
 
 /**
- * A regular expression exception. This exception is thrown if a 
- * regular expression couldn't be processed (or "compiled") properly. 
+ * A regular expression exception. This exception is thrown if a
+ * regular expression couldn't be processed (or "compiled") properly.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.0
@@ -43,9 +43,9 @@ package net.percederberg.grammatica.parser.re;
 public class RegExpException extends Exception {
 
     /**
-     * The unexpected character error constant. This error is used 
+     * The unexpected character error constant. This error is used
      * when a character was read that didn't match the allowed set of
-     * characters at the given position. 
+     * characters at the given position.
      */
     public static final int UNEXPECTED_CHARACTER = 1;
 
@@ -54,24 +54,24 @@ public class RegExpException extends Exception {
      * when more characters were expected in the pattern.
      */
     public static final int UNTERMINATED_PATTERN = 2;
-    
+
     /**
      * The unsupported special character error constant. This error
      * is used when special regular expression characters are used in
      * the pattern, but not supported in this implementation.
      */
     public static final int UNSUPPORTED_SPECIAL_CHARACTER = 3;
-    
+
     /**
      * The unsupported escape character error constant. This error is
      * used when an escape character construct is used in the pattern,
      * but not supported in this implementation.
      */
     public static final int UNSUPPORTED_ESCAPE_CHARACTER = 4;
-    
+
     /**
-     * The invalid repeat count error constant. This error is used 
-     * when a repetition count of zero is specified, or when the 
+     * The invalid repeat count error constant. This error is used
+     * when a repetition count of zero is specified, or when the
      * minimum exceeds the maximum.
      */
     public static final int INVALID_REPEAT_COUNT = 5;
@@ -80,7 +80,7 @@ public class RegExpException extends Exception {
      * The error type constant.
      */
     private int type;
-    
+
     /**
      * The error position.
      */
@@ -88,12 +88,12 @@ public class RegExpException extends Exception {
 
     /**
      * The regular expression pattern.
-     */    
+     */
     private String pattern;
 
     /**
      * Creates a new regular expression exception.
-     * 
+     *
      * @param type           the error type constant
      * @param pos            the error position
      * @param pattern        the regular expression pattern
@@ -103,15 +103,15 @@ public class RegExpException extends Exception {
         this.position = pos;
         this.pattern = pattern;
     }
-    
+
     /**
      * Returns the exception error message.
-     * 
+     *
      * @return the exception error message
      */
     public String getMessage() {
         StringBuffer  buffer = new StringBuffer();
-        
+
         // Append error type name
         switch (type) {
         case UNEXPECTED_CHARACTER:

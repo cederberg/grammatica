@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -47,19 +47,19 @@ namespace PerCederberg.Grammatica.Parser {
     public abstract class Node {
 
         /**
-         * The parent node. 
+         * The parent node.
          */
         private Node parent = null;
 
         /**
-         * The computed node values. 
+         * The computed node values.
          */
         private ArrayList values = null;
 
         /**
          * Checks if this node is hidden, i.e. if it should not be
          * visible outside the parser.
-         * 
+         *
          * @return true if the node should be hidden, or
          *         false otherwise
          */
@@ -71,14 +71,14 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the node type id. This value is set as a unique
          * identifier for each type of node, in order to simplify
          * later identification.
-         * 
+         *
          * @return the node type id
          */
         public abstract int GetId();
 
         /**
          * Returns the node name.
-         * 
+         *
          * @return the node name
          */
         public abstract string GetName();
@@ -87,13 +87,13 @@ namespace PerCederberg.Grammatica.Parser {
          * The line number of the first character in this node. If the
          * node has child elements, this value will be fetched from
          * the first child.
-         * 
+         *
          * @return the line number of the first character, or
          *         -1 if not applicable
          */
         public virtual int GetStartLine() {
             int  line;
-            
+
             for (int i = 0; i < GetChildCount(); i++) {
                 line = GetChildAt(i).GetStartLine();
                 if (line >= 0) {
@@ -102,18 +102,18 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return -1;
         }
-    
+
         /**
          * The column number of the first character in this node. If
          * the node has child elements, this value will be fetched
          * from the first child.
-         * 
+         *
          * @return the column number of the first token character, or
          *         -1 if not applicable
          */
         public virtual int GetStartColumn() {
             int  col;
-            
+
             for (int i = 0; i < GetChildCount(); i++) {
                 col = GetChildAt(i).GetStartColumn();
                 if (col >= 0) {
@@ -122,18 +122,18 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return -1;
         }
-    
+
         /**
          * The line number of the last character in this node. If the
          * node has child elements, this value will be fetched from
          * the last child.
-         * 
+         *
          * @return the line number of the last token character, or
          *         -1 if not applicable
          */
         public virtual int GetEndLine() {
             int  line;
-            
+
             for (int i = GetChildCount() - 1; i >= 0; i--) {
                 line = GetChildAt(i).GetEndLine();
                 if (line >= 0) {
@@ -142,18 +142,18 @@ namespace PerCederberg.Grammatica.Parser {
             }
             return -1;
         }
-    
+
         /**
          * The column number of the last character in this node. If
          * the node has child elements, this value will be fetched
          * from the last child.
-         * 
+         *
          * @return the column number of the last token character, or
          *         -1 if not applicable
          */
         public virtual int GetEndColumn() {
             int  col;
-            
+
             for (int i = GetChildCount() - 1; i >= 0; i--) {
                 col = GetChildAt(i).GetEndColumn();
                 if (col >= 0) {
@@ -164,8 +164,8 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the parent node. 
-         * 
+         * Returns the parent node.
+         *
          * @return the parent parse tree node
          */
         public Node GetParent() {
@@ -174,7 +174,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Sets the parent node.
-         * 
+         *
          * @param parent         the new parent node
          */
         internal void SetParent(Node parent) {
@@ -183,7 +183,7 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the number of child nodes.
-         * 
+         *
          * @return the number of child nodes
          */
         public virtual int GetChildCount() {
@@ -192,26 +192,26 @@ namespace PerCederberg.Grammatica.Parser {
 
         /**
          * Returns the child node with the specified index.
-         * 
+         *
          * @param index          the child index, 0 <= index < count
-         * 
-         * @return the child node found, or 
+         *
+         * @return the child node found, or
          *         null if index out of bounds
          */
         public virtual Node GetChildAt(int index) {
-            return null; 
+            return null;
         }
-    
+
         /**
          * Returns the number of descendant nodes.
-         * 
+         *
          * @return the number of descendant nodes
-         * 
+         *
          * @since 1.2
          */
         public int GetDescendantCount() {
             int  count = 0;
-        
+
             for (int i = 0; i < GetChildCount(); i++) {
                 count += 1 + GetChildAt(i).GetDescendantCount();
             }
@@ -238,7 +238,7 @@ namespace PerCederberg.Grammatica.Parser {
          * value may be used for storing intermediate results in the
          * parse tree during analysis.
          *
-         * @param pos             the value position, 0 <= pos < count 
+         * @param pos             the value position, 0 <= pos < count
          *
          * @return the computed node value, or
          *         null if not set
@@ -250,14 +250,14 @@ namespace PerCederberg.Grammatica.Parser {
                 return values[pos];
             }
         }
-    
+
         /**
          * Returns the list with all the computed values for this
          * node. Note that the list is not a copy, so changes will
          * affect the values in this node (as it is the same object).
          *
          * @return a list with all values, or
-         *         null if no values have been set 
+         *         null if no values have been set
          */
         public ArrayList GetAllValues() {
             return values;
@@ -267,7 +267,7 @@ namespace PerCederberg.Grammatica.Parser {
          * Adds a computed value to this node. The computed value may
          * be used for storing intermediate results in the parse tree
          * during analysis.
-         * 
+         *
          * @param value          the node value
          */
         public void AddValue(object value) {
@@ -278,7 +278,7 @@ namespace PerCederberg.Grammatica.Parser {
                 values.Add(value);
             }
         }
-    
+
         /**
          * Adds a set of computed values to this node.
          *
@@ -291,7 +291,7 @@ namespace PerCederberg.Grammatica.Parser {
                 }
         	}
         }
-        
+
         /**
          * Removes all computed values stored in this node.
          */
@@ -300,20 +300,20 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Prints this node and all subnodes to the specified output 
+         * Prints this node and all subnodes to the specified output
          * stream.
-         * 
+         *
          * @param output         the output stream to use
          */
         public void PrintTo(TextWriter output) {
             PrintTo(output, "");
             output.Flush();
         }
-    
+
         /**
-         * Prints this node and all subnodes to the specified output 
+         * Prints this node and all subnodes to the specified output
          * stream.
-         * 
+         *
          * @param output         the output stream to use
          * @param indent         the indentation string
          */

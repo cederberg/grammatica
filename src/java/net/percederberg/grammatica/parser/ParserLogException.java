@@ -58,18 +58,18 @@ public class ParserLogException extends Exception {
 
     /**
      * Returns the number of errors in this log.
-     * 
+     *
      * @return the number of errors in this log
      */
     public int getErrorCount() {
-        return errors.size();    
+        return errors.size();
     }
-    
+
     /**
      * Returns a specific error from the log.
-     * 
+     *
      * @param index          the error index, 0 <= index < count
-     * 
+     *
      * @return the parse error requested
      */
     public ParseException getError(int index) {
@@ -78,23 +78,23 @@ public class ParserLogException extends Exception {
 
     /**
      * Adds a parse error to the log.
-     * 
+     *
      * @param e              the parse error to add
-     */    
+     */
     public void addError(ParseException e) {
         errors.add(e);
     }
-    
+
     /**
      * Returns the detailed error message. This message will contain
      * the error messages from all errors in this log, separated by
      * a newline.
-     * 
+     *
      * @return the detailed error message
      */
     public String getMessage() {
         StringBuffer  buffer = new StringBuffer();
-        
+
         for (int i = 0; i < getErrorCount(); i++) {
             if (i > 0) {
                 buffer.append("\n");
@@ -102,5 +102,5 @@ public class ParserLogException extends Exception {
             buffer.append(getError(i).getMessage());
         }
         return buffer.toString();
-    }    
+    }
 }

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -34,7 +34,7 @@
 package net.percederberg.grammatica.parser.re;
 
 /**
- * A regular expression string matcher. This class handles the 
+ * A regular expression string matcher. This class handles the
  * matching of a specific string with a specific regular expression.
  * It contains state information about the matching process, as for
  * example the position of the latest match, and a number of flags
@@ -49,7 +49,7 @@ public class Matcher {
      * The base regular expression element.
      */
     private Element element;
-    
+
     /**
      * The string to work with
      */
@@ -59,7 +59,7 @@ public class Matcher {
      * The start of the latest match found.
      */
     private int start;
-    
+
     /**
      * The length of the latest match found.
      */
@@ -73,7 +73,7 @@ public class Matcher {
 
     /**
      * Creates a new matcher with the specified element.
-     * 
+     *
      * @param e              the base regular expression element
      * @param str            the string to work with
      */
@@ -85,8 +85,8 @@ public class Matcher {
     }
 
     /**
-     * Resets the information about the last match. This will clear 
-     * all flags and set the match length to a negative value. This 
+     * Resets the information about the last match. This will clear
+     * all flags and set the match length to a negative value. This
      * method is automatically called by all matching methods.
      */
     public void reset() {
@@ -95,9 +95,9 @@ public class Matcher {
     }
 
     /**
-     * Returns the start position of the latest match. If no match has 
+     * Returns the start position of the latest match. If no match has
      * been encountered, this method returns zero (0).
-     * 
+     *
      * @return the start position of the latest match
      */
     public int start() {
@@ -105,11 +105,11 @@ public class Matcher {
     }
 
     /**
-     * Returns the end position of the latest match. This is one 
+     * Returns the end position of the latest match. This is one
      * character after the match end, i.e. the first character after
-     * the match. If no match has been encountered, this method 
+     * the match. If no match has been encountered, this method
      * returns the same value as start().
-     * 
+     *
      * @return the end position of the latest match
      */
     public int end() {
@@ -122,19 +122,19 @@ public class Matcher {
 
     /**
      * Returns the length of the latest match.
-     * 
+     *
      * @return the length of the latest match, or
      *         -1 if no match was found
      */
     public int length() {
         return length;
     }
-    
+
     /**
-     * Checks if the end of the string was encountered during the last 
+     * Checks if the end of the string was encountered during the last
      * match attempt. This flag signals that more input may be needed
      * in order to get a match (or a longer match).
-     * 
+     *
      * @return true if the end of string was encountered, or
      *         false otherwise
      */
@@ -151,9 +151,9 @@ public class Matcher {
     }
 
     /**
-     * Attempts to find a match starting at the beginning of the 
+     * Attempts to find a match starting at the beginning of the
      * string.
-     * 
+     *
      * @return true if a match was found, or
      *         false otherwise
      */
@@ -164,9 +164,9 @@ public class Matcher {
     /**
      * Attempts to find a match starting at the specified position in
      * the string.
-     * 
+     *
      * @param pos            the starting position of the match
-     * 
+     *
      * @return true if a match was found, or
      *         false otherwise
      */
@@ -178,9 +178,9 @@ public class Matcher {
     }
 
     /**
-     * Returns the latest matched string. If no string has been 
+     * Returns the latest matched string. If no string has been
      * matched, an empty string will be returned.
-     * 
+     *
      * @return the latest matched string
      */
     public String toString() {

@@ -39,8 +39,8 @@ import net.percederberg.grammatica.Grammar;
 
 /**
  * An grammar processing element. A processing element transforms the
- * grammar to some other form, normally source code. One or more 
- * processing elements may be present in the Grammatica Ant task. 
+ * grammar to some other form, normally source code. One or more
+ * processing elements may be present in the Grammatica Ant task.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.4
@@ -50,18 +50,18 @@ public interface ProcessingElement {
 
     /**
      * Validates all attributes in the element.
-     * 
+     *
      * @throws BuildException if some attribute was missing or had an
      *             invalid value
      */
     void validate() throws BuildException;
-    
+
     /**
      * Proceses the specified grammar.
-     * 
+     *
      * @param grammar        the grammar to process
-     * 
-     * @throws BuildException if the grammar couldn't be processed 
+     *
+     * @throws BuildException if the grammar couldn't be processed
      *             correctly
      */
     void process(Grammar grammar) throws BuildException;

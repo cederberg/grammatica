@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -49,7 +49,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * The base regular expression element.
          */
         private Element element;
-    
+
         /**
          * The string to work with
          */
@@ -59,7 +59,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * The start of the latest match found.
          */
         private int start;
-    
+
         /**
          * The length of the latest match found.
          */
@@ -73,7 +73,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Creates a new matcher with the specified element.
-         * 
+         *
          * @param e              the base regular expression element
          * @param str            the string to work with
          */
@@ -98,7 +98,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Returns the start position of the latest match. If no match
          * has been encountered, this method returns zero (0).
-         * 
+         *
          * @return the start position of the latest match
          */
         public int Start() {
@@ -110,7 +110,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * character after the match end, i.e. the first character
          * after the match. If no match has been encountered, this
          * method returns the same value as start().
-         * 
+         *
          * @return the end position of the latest match
          */
         public int End() {
@@ -123,19 +123,19 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Returns the length of the latest match.
-         * 
+         *
          * @return the length of the latest match, or
          *         -1 if no match was found
          */
         public int Length() {
             return length;
         }
-    
+
         /**
          * Checks if the end of the string was encountered during the
          * last match attempt. This flag signals that more input may
          * be needed in order to get a match (or a longer match).
-         * 
+         *
          * @return true if the end of string was encountered, or
          *         false otherwise
          */
@@ -146,7 +146,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Attempts to find a match starting at the beginning of the
          * string.
-         * 
+         *
          * @return true if a match was found, or
          *         false otherwise
          */
@@ -157,9 +157,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Attempts to find a match starting at the specified position
          * in the string.
-         * 
+         *
          * @param pos            the starting position of the match
-         * 
+         *
          * @return true if a match was found, or
          *         false otherwise
          */
@@ -173,7 +173,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Returns the latest matched string. If no string has been
          * matched, an empty string will be returned.
-         * 
+         *
          * @return the latest matched string
          */
         public override string ToString() {

@@ -60,12 +60,12 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * @since    1.4
  */
 public class ValidationElement implements ProcessingElement {
-    
+
     /**
      * The validation type.
      */
     private String type = null;
-    
+
     /**
      * The input test file.
      */
@@ -83,9 +83,9 @@ public class ValidationElement implements ProcessingElement {
     }
 
     /**
-     * Sets the validation type. The type must be one of "debug", 
+     * Sets the validation type. The type must be one of "debug",
      * "tokenize", "parse", or "profile".
-     * 
+     *
      * @param type           the validation type
      */
     public void setType(String type) {
@@ -95,7 +95,7 @@ public class ValidationElement implements ProcessingElement {
     /**
      * Sets the input test file. The test file is not needed for the
      * debug validation type.
-     * 
+     *
      * @param file           the input test file
      */
     public void setInputfile(File file) {
@@ -113,7 +113,7 @@ public class ValidationElement implements ProcessingElement {
 
     /**
      * Validates all attributes in the element.
-     * 
+     *
      * @throws BuildException if some attribute was missing or had an
      *             invalid value
      */
@@ -136,13 +136,13 @@ public class ValidationElement implements ProcessingElement {
                 "missing 'inputfile' attribute in <validate>");
         }
     }
-    
+
     /**
      * Proceses the specified grammar.
-     * 
+     *
      * @param grammar        the grammar to process
-     * 
-     * @throws BuildException if the grammar couldn't be processed 
+     *
+     * @throws BuildException if the grammar couldn't be processed
      *             correctly
      */
     public void process(Grammar grammar) throws BuildException {
@@ -158,18 +158,18 @@ public class ValidationElement implements ProcessingElement {
             throw new BuildException("unknown <validation> type: " + type);
         }
     }
-    
+
     /**
      * Debugs a grammar by printing the internal representation.
-     * 
+     *
      * @param grammar        the grammar to use
-     * 
+     *
      * @throws BuildException if a parser couldn't be created
      */
     private void debug(Grammar grammar) throws BuildException {
         Tokenizer  tokenizer = null;
         Parser     parser = null;
-        
+
         // Create tokenizer and parser
         try {
             tokenizer = grammar.createTokenizer(null);
@@ -191,20 +191,20 @@ public class ValidationElement implements ProcessingElement {
             System.out.print(parser);
         }
     }
-    
+
     /**
      * Tokenizes the input file with the token patterns from the
      * grammar.
-     * 
+     *
      * @param grammar        the grammar to use
-     * 
+     *
      * @throws BuildException if the input file couldn't be tokenized
      *             correctly
      */
     private void tokenize(Grammar grammar) throws BuildException {
         Tokenizer  tokenizer;
         Token      token;
-        
+
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
             if (!quiet) {
@@ -221,16 +221,16 @@ public class ValidationElement implements ProcessingElement {
             throw new BuildException("in grammar " + grammar.getFileName() +
                                      ": " + e.getMessage());
         } catch (ParseException e) {
-            throw new BuildException("in file " + file + ": " + 
+            throw new BuildException("in file " + file + ": " +
                                      e.getMessage());
         }
     }
 
     /**
      * Parses the input file with the grammar.
-     * 
+     *
      * @param grammar        the grammar to use
-     * 
+     *
      * @throws BuildException if the input file couldn't be parsed
      *             correctly
      */
@@ -238,7 +238,7 @@ public class ValidationElement implements ProcessingElement {
         Tokenizer  tokenizer;
         Analyzer   analyzer;
         Parser     parser;
-        
+
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
             if (quiet) {
@@ -260,17 +260,17 @@ public class ValidationElement implements ProcessingElement {
             throw new BuildException("in grammar " + grammar.getFileName() +
                                      ": " + e.getMessage());
         } catch (ParserLogException e) {
-            throw new BuildException("in file " + file + ": " + 
+            throw new BuildException("in file " + file + ": " +
                                      e.getMessage());
         }
     }
 
     /**
-     * Parses the input file with the grammar and prints profiling 
+     * Parses the input file with the grammar and prints profiling
      * information.
-     * 
+     *
      * @param grammar        the grammar to use
-     * 
+     *
      * @throws BuildException if the input file couldn't be profiled
      *             correctly
      */
@@ -280,7 +280,7 @@ public class ValidationElement implements ProcessingElement {
         Node       node;
         long       time;
         int        counter;
-        
+
         // Profile tokenizer
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
@@ -301,7 +301,7 @@ public class ValidationElement implements ProcessingElement {
             throw new BuildException("in grammar " + grammar.getFileName() +
                                      ": " + e.getMessage());
         } catch (ParseException e) {
-            throw new BuildException("in file " + file + ": " + 
+            throw new BuildException("in file " + file + ": " +
                                      e.getMessage());
         }
 
@@ -327,7 +327,7 @@ public class ValidationElement implements ProcessingElement {
             throw new BuildException("in grammar " + grammar.getFileName() +
                                      ": " + e.getMessage());
         } catch (ParserLogException e) {
-            throw new BuildException("in file " + file + ": " + 
+            throw new BuildException("in file " + file + ": " +
                                      e.getMessage());
         }
     }

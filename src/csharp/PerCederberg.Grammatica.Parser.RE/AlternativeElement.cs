@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -51,12 +51,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * The second alternative element.
-         */    
+         */
         private Element elem2;
 
         /**
          * Creates a new alternative element.
-         * 
+         *
          * @param first          the first alternative
          * @param second         the second alternative
          */
@@ -71,7 +71,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * Copies of elements are necessary to allow elements to cache
          * intermediate results while matching strings without
          * interfering with other threads.
-         * 
+         *
          * @return a copy of this element
          */
         public override object Clone() {
@@ -85,17 +85,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * failed match for any element that doesn't attempt to
          * combine other elements.
          *
-         * @param m              the matcher being used 
+         * @param m              the matcher being used
          * @param str            the string to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
-         * 
+         *
          * @return the length of the longest matching string, or
          *         -1 if no match was found
          */
-        public override int Match(Matcher m, 
-                                  string str, 
-                                  int start, 
+        public override int Match(Matcher m,
+                                  string str,
+                                  int start,
                                   int skip) {
 
             int  length = 0;
@@ -103,7 +103,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
             int  length2 = -1;
             int  skip1 = 0;
             int  skip2 = 0;
-        
+
             while (length >= 0 && skip1 + skip2 <= skip) {
                 length1 = elem1.Match(m, str, start, skip1);
                 length2 = elem2.Match(m, str, start, skip2);
@@ -114,13 +114,13 @@ namespace PerCederberg.Grammatica.Parser.RE {
                     length = length2;
                     skip2++;
                 }
-            } 
+            }
             return length;
         }
 
         /**
          * Prints this element to the specified output stream.
-         * 
+         *
          * @param output         the output stream to use
          * @param indent         the current indentation
          */

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -67,7 +67,7 @@ class JavaParserFile {
      */
     private static final String PRODUCTION_COMMENT =
         "A generated production node identity constant.";
-   
+
     /**
      * The first constructor comment.
      */
@@ -109,17 +109,17 @@ class JavaParserFile {
      * The Java file to write.
      */
     private JavaFile file;
-    
+
     /**
      * The Java class to write.
      */
     private JavaClass cls;
-    
+
     /**
      * The Java class initializer method.
      */
     private JavaMethod initMethod;
-    
+
     /**
      * A map with the production constants in this class. This map
      * is indexed with the pattern id and contains the production
@@ -134,11 +134,11 @@ class JavaParserFile {
 
     /**
      * Creates a new parser file.
-     * 
+     *
      * @param gen            the parser generator to use
      * @param tokenizer      the tokenizer file generator
      */
-    public JavaParserFile(JavaParserGenerator gen, 
+    public JavaParserFile(JavaParserGenerator gen,
                           JavaTokenizerFile tokenizer) {
 
         int  modifiers;
@@ -151,8 +151,8 @@ class JavaParserFile {
         } else {
             modifiers = JavaClass.PACKAGE_LOCAL;
         }
-        this.cls = new JavaClass(modifiers, 
-                                 gen.getBaseName() + "Parser", 
+        this.cls = new JavaClass(modifiers,
+                                 gen.getBaseName() + "Parser",
                                  "RecursiveDescentParser");
         this.initMethod = new JavaMethod(JavaMethod.PRIVATE,
                                          "createPatterns",
@@ -163,22 +163,22 @@ class JavaParserFile {
 
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         JavaConstructor  constr;
         String           str;
 
         // Add imports
         file.addImport(new JavaImport("java.io", "Reader"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Analyzer"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ParserCreationException"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ProductionPattern"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ProductionPatternAlternative"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "RecursiveDescentParser"));
 
         // Add class
@@ -188,7 +188,7 @@ class JavaParserFile {
             str += "\n\n" + gen.getClassComment();
         }
         cls.addComment(new JavaComment(str));
-        
+
         // Add file comment
         str = file.toString() + "\n\n" + gen.getFileComment();
         file.addComment(new JavaComment(JavaComment.BLOCK, str));
@@ -200,7 +200,7 @@ class JavaParserFile {
         constr.addThrows("ParserCreationException");
         constr.addCode("super(" + tokenizer.getConstructorCall("in") + ");");
         constr.addCode("createPatterns();");
-        
+
         // Add constructor
         constr = new JavaConstructor("Reader in, Analyzer analyzer");
         cls.addConstructor(constr);
@@ -209,7 +209,7 @@ class JavaParserFile {
         constr.addCode("super(" + tokenizer.getConstructorCall("in") +
                        ", analyzer);");
         constr.addCode("createPatterns();");
-        
+
         // Add init method
         cls.addMethod(initMethod);
         initMethod.addComment(new JavaComment(INIT_METHOD_COMMENT));
@@ -220,21 +220,21 @@ class JavaParserFile {
 
     /**
      * Adds a production constant definition to this file.
-     * 
+     *
      * @param pattern        the production pattern
      */
     public void addProductionConstant(ProductionPattern pattern) {
         String        constant;
         JavaVariable  var;
         int           modifiers;
-        
+
         if (pattern.isSyntetic()) {
             constant = "SUBPRODUCTION_" + constantId;
             modifiers = JavaVariable.PRIVATE + JavaVariable.STATIC +
                         JavaVariable.FINAL;
-            var = new JavaVariable(modifiers, 
-                                   "int", 
-                                   constant, 
+            var = new JavaVariable(modifiers,
+                                   "int",
+                                   constant,
                                    String.valueOf(constantId + 3000));
             var.addComment(new JavaComment(PRODUCTION_COMMENT));
             cls.addVariable(var);
@@ -245,15 +245,15 @@ class JavaParserFile {
 
     /**
      * Adds a production pattern definition to this file.
-     * 
+     *
      * @param pattern        the production pattern
      * @param constants      the constants file generator
      */
-    public void addProduction(ProductionPattern pattern, 
+    public void addProduction(ProductionPattern pattern,
                               JavaConstantsFile constants) {
         StringBuffer  code;
         String        str;
-        
+
         // Create new pattern
         code = new StringBuffer();
         code.append("pattern = new ProductionPattern(");
@@ -274,10 +274,10 @@ class JavaParserFile {
         if (pattern.isSyntetic()) {
             initMethod.addCode("pattern.setSyntetic(true);");
         }
-        
+
         // Create pattern rules
         for (int i = 0; i < pattern.getAlternativeCount(); i++) {
-            addProductionAlternative(pattern.getAlternative(i), 
+            addProductionAlternative(pattern.getAlternative(i),
                                      constants);
         }
 
@@ -286,16 +286,16 @@ class JavaParserFile {
     }
 
     /**
-     * Adds a production pattern alternative definition to the init 
+     * Adds a production pattern alternative definition to the init
      * method.
-     * 
+     *
      * @param alt            the production pattern alternative
      * @param constants      the constants file generator
      */
-    private void addProductionAlternative(ProductionPatternAlternative alt, 
+    private void addProductionAlternative(ProductionPatternAlternative alt,
                                           JavaConstantsFile constants) {
 
-        ProductionPatternElement  elem; 
+        ProductionPatternElement  elem;
         StringBuffer              code;
 
         initMethod.addCode("alt = new ProductionPatternAlternative();");
@@ -325,13 +325,13 @@ class JavaParserFile {
 
     /**
      * Returns the constant name for a specified pattern or token id.
-     * 
+     *
      * @param constants      the constants file
      * @param id             the pattern id
-     * 
+     *
      * @return the constant name to use
      */
-    private String getConstant(JavaConstantsFile constants, int id) { 
+    private String getConstant(JavaConstantsFile constants, int id) {
         Integer  value = new Integer(id);
 
         if (constantNames.containsKey(value)) {
@@ -343,9 +343,9 @@ class JavaParserFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         file.writeCode(gen.getCodeStyle());

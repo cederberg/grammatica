@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -69,7 +69,7 @@ class JavaConstantsFile {
      */
     private static final String PRODUCTION_COMMENT =
         "A production node identity constant.";
-   
+
     /**
      * The Java parser generator.
      */
@@ -86,14 +86,14 @@ class JavaConstantsFile {
     private JavaInterface ifc;
 
     /**
-     * The mapping from id to constant name. This map contains all 
-     * tokens and productions added to the file. 
+     * The mapping from id to constant name. This map contains all
+     * tokens and productions added to the file.
      */
     private HashMap constantNames = new HashMap();
 
     /**
      * Creates a new constants file.
-     * 
+     *
      * @param gen            the parser generator to use
      */
     public JavaConstantsFile(JavaParserGenerator gen) {
@@ -106,14 +106,14 @@ class JavaConstantsFile {
         } else {
             modifiers = JavaInterface.PACKAGE_LOCAL;
         }
-        this.ifc = new JavaInterface(modifiers, 
+        this.ifc = new JavaInterface(modifiers,
                                      gen.getBaseName() + "Constants");
         initializeCode();
     }
-    
+
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         String  str;
 
@@ -134,7 +134,7 @@ class JavaConstantsFile {
 
     /**
      * Adds a token constant definition to this file.
-     * 
+     *
      * @param pattern        the token pattern
      */
     public void addToken(TokenPattern pattern) {
@@ -145,9 +145,9 @@ class JavaConstantsFile {
         constant = gen.getCodeStyle().getUpperCase(pattern.getName());
         modifiers = JavaVariable.PUBLIC + JavaVariable.STATIC +
                     JavaVariable.FINAL;
-        var = new JavaVariable(modifiers, 
-                               "int", 
-                               constant, 
+        var = new JavaVariable(modifiers,
+                               "int",
+                               constant,
                                "" + pattern.getId());
         var.addComment(new JavaComment(TOKEN_COMMENT));
         ifc.addVariable(var);
@@ -157,7 +157,7 @@ class JavaConstantsFile {
     /**
      * Adds a production constant definition to this file. This method
      * checks if the production pattern has already been added.
-     * 
+     *
      * @param pattern        the production pattern
      */
     public void addProduction(ProductionPattern pattern) {
@@ -165,13 +165,13 @@ class JavaConstantsFile {
         JavaVariable  var;
         int           modifiers;
 
-        if (!pattern.isSyntetic()) { 
+        if (!pattern.isSyntetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             modifiers = JavaVariable.PUBLIC + JavaVariable.STATIC +
                         JavaVariable.FINAL;
-            var = new JavaVariable(modifiers, 
-                                   "int", 
-                                   constant, 
+            var = new JavaVariable(modifiers,
+                                   "int",
+                                   constant,
                                    "" + pattern.getId());
             var.addComment(new JavaComment(PRODUCTION_COMMENT));
             ifc.addVariable(var);
@@ -182,15 +182,15 @@ class JavaConstantsFile {
     /**
      * Creates source code for accessing one of the constants in this
      * file.
-     * 
+     *
      * @param id             the node type (pattern) id
-     * 
+     *
      * @return the constant name, or
      *         null if not found
      */
     public String getConstant(int id) {
         String  name = (String) constantNames.get(new Integer(id));
-        
+
         if (name == null) {
             return null;
         } else {
@@ -200,9 +200,9 @@ class JavaConstantsFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         file.writeCode(gen.getCodeStyle());

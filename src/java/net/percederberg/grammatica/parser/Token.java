@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -34,27 +34,27 @@
 package net.percederberg.grammatica.parser;
 
 /**
- * A token node. This class represents a token (i.e. a set of adjacent 
- * characters) in a parse tree. The tokens are created by a tokenizer, 
- * that groups characters together into tokens according to a set of 
+ * A token node. This class represents a token (i.e. a set of adjacent
+ * characters) in a parse tree. The tokens are created by a tokenizer,
+ * that groups characters together into tokens according to a set of
  * token patterns.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.4
  */
 public class Token extends Node {
-    
+
     /**
      * The token pattern used for this token.
      */
     private TokenPattern pattern;
 
     /**
-     * The characters that constitute this token. This is normally 
+     * The characters that constitute this token. This is normally
      * referred to as the token image.
      */
     private String image;
-    
+
     /**
      * The line number of the first character in the token image.
      */
@@ -64,7 +64,7 @@ public class Token extends Node {
      * The column number of the first character in the token image.
      */
     private int startColumn;
-    
+
     /**
      * The line number of the last character in the token image.
      */
@@ -72,22 +72,22 @@ public class Token extends Node {
 
     /**
      * The column number of the last character in the token image.
-     */    
+     */
     private int endColumn;
-    
+
     /**
      * The previous token in the list of tokens.
      */
     private Token previous = null;
-    
+
     /**
-     * The next token in the list of tokens. 
+     * The next token in the list of tokens.
      */
     private Token next = null;
 
     /**
      * Creates a new token.
-     * 
+     *
      * @param pattern        the token pattern
      * @param image          the token image (i.e. characters)
      * @param line           the line number of the first character
@@ -106,21 +106,21 @@ public class Token extends Node {
             this.endColumn = image.length() - pos;
         }
     }
-    
+
     /**
      * Returns the token (pattern) id. This value is set as a unique
      * identifier when creating the token pattern to simplify later
      * identification.
-     * 
+     *
      * @return the token id
      */
     public int getId() {
-        return pattern.getId();    
+        return pattern.getId();
     }
 
     /**
      * Returns the token node name.
-     * 
+     *
      * @return the token node name
      */
     public String getName() {
@@ -138,35 +138,35 @@ public class Token extends Node {
     }
 
     /**
-     * The line number of the first character in the token image. 
-     * 
+     * The line number of the first character in the token image.
+     *
      * @return the line number of the first token character
      */
     public int getStartLine() {
         return startLine;
     }
-    
+
     /**
-     * The column number of the first character in the token image. 
-     * 
+     * The column number of the first character in the token image.
+     *
      * @return the column number of the first token character
      */
     public int getStartColumn() {
         return startColumn;
     }
-    
+
     /**
-     * The line number of the last character in the token image. 
-     * 
+     * The line number of the last character in the token image.
+     *
      * @return the line number of the last token character
      */
     public int getEndLine() {
         return endLine;
     }
-    
+
     /**
-     * The column number of the last character in the token image. 
-     * 
+     * The column number of the last character in the token image.
+     *
      * @return the column number of the last token character
      */
     public int getEndColumn() {
@@ -175,7 +175,7 @@ public class Token extends Node {
 
     /**
      * Returns the token pattern.
-     * 
+     *
      * @return the token pattern
      */
     TokenPattern getPattern() {
@@ -185,30 +185,30 @@ public class Token extends Node {
     /**
      * Returns the previuos token. The previous token may be a token
      * that has been ignored in the parsing. Note that if the token
-     * list feature hasn't been used in the tokenizer, this method 
+     * list feature hasn't been used in the tokenizer, this method
      * will always return null. By default the token list feature is
      * not used.
-     *  
+     *
      * @return the previous token, or
      *         null if no such token is available
-     * 
+     *
      * @see #getNextToken
      * @see Tokenizer#getUseTokenList
      * @see Tokenizer#setUseTokenList
-     * 
+     *
      * @since 1.4
      */
     public Token getPreviousToken() {
         return previous;
     }
-    
+
     /**
-     * Sets the previous token in the token list. This method will 
-     * also modify the token specified to have this token as it's 
-     * next token. 
-     * 
-     * @param previous       the previous token, or null for none 
-     * 
+     * Sets the previous token in the token list. This method will
+     * also modify the token specified to have this token as it's
+     * next token.
+     *
+     * @param previous       the previous token, or null for none
+     *
      * @since 1.4
      */
     void setPreviousToken(Token previous) {
@@ -222,19 +222,19 @@ public class Token extends Node {
     }
 
     /**
-     * Returns the next token. The next token may be a token that has 
-     * been ignored in the parsing. Note that if the token list 
-     * feature hasn't been used in the tokenizer, this method will 
-     * always return null. By default the token list feature is not 
+     * Returns the next token. The next token may be a token that has
+     * been ignored in the parsing. Note that if the token list
+     * feature hasn't been used in the tokenizer, this method will
+     * always return null. By default the token list feature is not
      * used.
-     *  
+     *
      * @return the next token, or
      *         null if no such token is available
-     * 
+     *
      * @see #getPreviousToken
      * @see Tokenizer#getUseTokenList
      * @see Tokenizer#setUseTokenList
-     * 
+     *
      * @since 1.4
      */
     public Token getNextToken() {
@@ -242,12 +242,12 @@ public class Token extends Node {
     }
 
     /**
-     * Sets the next token in the token list. This method will also 
-     * modify the token specified to have this token as it's 
-     * previous token. 
-     * 
-     * @param next           the next token, or null for none 
-     * 
+     * Sets the next token in the token list. This method will also
+     * modify the token specified to have this token as it's
+     * previous token.
+     *
+     * @param next           the next token, or null for none
+     *
      * @since 1.4
      */
     void setNextToken(Token next) {
@@ -262,15 +262,15 @@ public class Token extends Node {
 
     /**
      * Returns a detailed string representation of this token.
-     * 
+     *
      * @return a detailed string representation of this token
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     public String toString() {
         StringBuffer  buffer = new StringBuffer();
         int           newline = image.indexOf('\n');
-        
+
         buffer.append(pattern.getName());
         buffer.append("(");
         buffer.append(pattern.getId());
@@ -288,15 +288,15 @@ public class Token extends Node {
         buffer.append(startLine);
         buffer.append(", col: ");
         buffer.append(startColumn);
-        
+
         return buffer.toString();
     }
-    
+
     /**
      * Returns a short string representation of this token. The string
-     * will only contain the token image and possibly the token 
+     * will only contain the token image and possibly the token
      * pattern name.
-     * 
+     *
      * @return a short string representation of this token
      */
     public String toShortString() {
@@ -319,7 +319,7 @@ public class Token extends Node {
             buffer.append(pattern.getName());
             buffer.append(">");
         }
-        
+
         return buffer.toString();
     }
 }

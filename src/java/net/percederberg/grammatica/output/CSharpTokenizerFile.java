@@ -87,20 +87,20 @@ class CSharpTokenizerFile {
      * The file to write.
      */
     private CSharpFile file;
-    
+
     /**
      * The class to write.
      */
     private CSharpClass cls;
-    
+
     /**
      * The class initializer method.
      */
     private CSharpMethod initMethod;
-    
+
     /**
      * Creates a new tokenizer file.
-     * 
+     *
      * @param gen            the parser generator to use
      */
     public CSharpTokenizerFile(CSharpParserGenerator gen) {
@@ -124,7 +124,7 @@ class CSharpTokenizerFile {
 
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         CSharpConstructor  constr;
         String             str;
@@ -155,32 +155,32 @@ class CSharpTokenizerFile {
         constr.addComment(new CSharpComment(CONSTRUCTOR_COMMENT));
         constr.addInitializer("base(input)");
         constr.addCode("CreatePatterns();");
-        
+
         // Add init method
         cls.addMethod(initMethod);
         initMethod.addComment(new CSharpComment(INIT_METHOD_COMMENT));
         initMethod.addCode("TokenPattern  pattern;");
     }
-    
+
     /**
      * Adds a token pattern definition to this file.
-     * 
+     *
      * @param pattern        the token pattern
      * @param constants      the constants file generator
      */
-    public void addToken(TokenPattern pattern, 
+    public void addToken(TokenPattern pattern,
                          CSharpConstantsFile constants) {
 
         StringBuffer  code = new StringBuffer();
         String        str;
-        
+
         // Create new pattern
         code.append("pattern = new TokenPattern((int) ");
         code.append(constants.getConstant(pattern.getId()));
         code.append(",\n");
         code.append("                           \"");
         code.append(pattern.getName());
-        code.append("\",\n"); 
+        code.append("\",\n");
         code.append("                           TokenPattern.PatternType.");
         switch (pattern.getType()) {
         case TokenPattern.STRING_TYPE:
@@ -190,7 +190,7 @@ class CSharpTokenizerFile {
             code.append("REGEXP");
             break;
         }
-        code.append(",\n"); 
+        code.append(",\n");
         code.append("                           ");
         str = pattern.getPattern();
         code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
@@ -203,7 +203,7 @@ class CSharpTokenizerFile {
                 str = pattern.getErrorMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
-            code.append(");\n");            
+            code.append(");\n");
         }
         if (pattern.isIgnore()) {
             code.append("pattern.SetIgnore(");
@@ -211,7 +211,7 @@ class CSharpTokenizerFile {
                 str = pattern.getIgnoreMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
-            code.append(");\n");            
+            code.append(");\n");
         }
 
         // Add pattern to tokenizer
@@ -223,9 +223,9 @@ class CSharpTokenizerFile {
     /**
      * Creates source code performing a call to the constructor for
      * the tokenizer.
-     * 
+     *
      * @param param          the input parameters
-     * 
+     *
      * @return the source code for the call
      */
     protected String getConstructorCall(String param) {
@@ -234,9 +234,9 @@ class CSharpTokenizerFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         file.writeCode(gen.getCodeStyle());

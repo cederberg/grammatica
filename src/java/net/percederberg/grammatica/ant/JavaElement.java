@@ -55,61 +55,61 @@ public class JavaElement implements ProcessingElement {
      * The output directory.
      */
     private File dir = null;
-    
+
     /**
      * The package name.
      */
     private String basePackage = null;
-    
+
     /**
      * The class name prefix.
      */
     private String prefix = null;
-    
+
     /**
      * The public access flag.
      */
     private boolean publicAccess = false;
 
     /**
-     * Creates a new Java output element. 
+     * Creates a new Java output element.
      */
     public JavaElement() {
     }
 
     /**
      * Sets the output directory.
-     * 
+     *
      * @param dir            the new output directory
      */
     public void setDir(File dir) {
         this.dir = dir;
     }
-    
+
     /**
-     * Sets the output package name. By default not package 
+     * Sets the output package name. By default not package
      * declaration will be used.
-     * 
-     * @param basePackage    the new output package name 
+     *
+     * @param basePackage    the new output package name
      */
     public void setPackage(String basePackage) {
         this.basePackage = basePackage;
     }
-    
+
     /**
      * Sets the output class name prefix. By default the grammar file
      * name will be used.
-     * 
+     *
      * @param prefix         the new output class name prefix
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
-    
+
     /**
      * Sets the public access to types flag. By default only package
      * protected access is allowed.
-     * 
+     *
      * @param publicAccess   the public access flag
      */
     public void setPublic(boolean publicAccess) {
@@ -118,7 +118,7 @@ public class JavaElement implements ProcessingElement {
 
     /**
      * Validates all attributes in the element.
-     * 
+     *
      * @throws BuildException if some attribute was missing or had an
      *             invalid value
      */
@@ -128,13 +128,13 @@ public class JavaElement implements ProcessingElement {
                 "missing 'dir' attribute in <java> element");
         }
     }
-    
+
     /**
      * Proceses the specified grammar.
-     * 
+     *
      * @param grammar        the grammar to process
-     * 
-     * @throws BuildException if the grammar couldn't be processed 
+     *
+     * @throws BuildException if the grammar couldn't be processed
      *             correctly
      */
     public void process(Grammar grammar) throws BuildException {

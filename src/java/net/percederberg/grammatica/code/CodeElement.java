@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -46,9 +46,9 @@ import java.io.PrintWriter;
 public abstract class CodeElement implements Comparable {
 
     /**
-     * Compares this object to another one. The comparison is based 
-     * on the code element category, reporting equality between 
-     * elements within the same category. Objects not being code 
+     * Compares this object to another one. The comparison is based
+     * on the code element category, reporting equality between
+     * elements within the same category. Objects not being code
      * elements will cause zero (0) to be returned.
      *
      * @param obj            the object to compare to
@@ -66,9 +66,9 @@ public abstract class CodeElement implements Comparable {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -82,7 +82,7 @@ public abstract class CodeElement implements Comparable {
      * @param style          the code style to use
      * @param indent         the indentation level
      */
-    public abstract void print(PrintWriter out, 
-                               CodeStyle style, 
+    public abstract void print(PrintWriter out,
+                               CodeStyle style,
                                int indent);
 }

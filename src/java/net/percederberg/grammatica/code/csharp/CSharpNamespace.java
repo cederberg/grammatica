@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -49,10 +49,10 @@ public class CSharpNamespace extends CodeElementContainer {
      * The fully qualified namespace name.
      */
     private String name;
-    
+
     /**
      * Creates a new namespace.
-     * 
+     *
      * @param name           the fully qualified namespace name
      */
     public CSharpNamespace(String name) {
@@ -60,9 +60,9 @@ public class CSharpNamespace extends CodeElementContainer {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -73,7 +73,7 @@ public class CSharpNamespace extends CodeElementContainer {
 
     /**
      * Adds a class declaration to the namespace.
-     * 
+     *
      * @param c              the class declaration to add
      */
     public void addClass(CSharpClass c) {

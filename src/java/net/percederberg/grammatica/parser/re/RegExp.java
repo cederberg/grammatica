@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -38,9 +38,9 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 /**
- * A regular expression. This class creates and holds an internal 
- * data structure representing a regular expression. It also allows 
- * creating matchers. This class is thread-safe. Multiple matchers may 
+ * A regular expression. This class creates and holds an internal
+ * data structure representing a regular expression. It also allows
+ * creating matchers. This class is thread-safe. Multiple matchers may
  * operate simultanously on the same regular expression.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -66,9 +66,9 @@ public class RegExp {
 
     /**
      * Creates a new regular expression.
-     * 
+     *
      * @param pattern        the regular expression pattern
-     * 
+     *
      * @throws RegExpException if the regular expression couldn't be
      *             parsed correctly
      */
@@ -86,9 +86,9 @@ public class RegExp {
 
     /**
      * Creates a new matcher for the specified string.
-     * 
+     *
      * @param str            the string to work with
-     * 
+     *
      * @return the regular expresion matcher
      */
     public Matcher matcher(CharBuffer str) {
@@ -97,9 +97,9 @@ public class RegExp {
 
     /**
      * Creates a new matcher for the specified string.
-     * 
+     *
      * @param str            the string to work with
-     * 
+     *
      * @return the regular expresion matcher
      */
     public Matcher matcher(String str) {
@@ -108,9 +108,9 @@ public class RegExp {
 
     /**
      * Creates a new matcher for the specified string.
-     * 
+     *
      * @param str            the string to work with
-     * 
+     *
      * @return the regular expresion matcher
      */
     public Matcher matcher(StringBuffer str) {
@@ -119,12 +119,12 @@ public class RegExp {
 
     /**
      * Returns a string representation of the regular expression.
-     * 
+     *
      * @return a string representation of the regular expression
      */
     public String toString() {
         StringWriter  str;
-        
+
         str = new StringWriter();
         str.write("  Regexp Pattern: " + pattern + "\n");
         str.write("  Regexp Compiled:\n");
@@ -135,16 +135,16 @@ public class RegExp {
     /**
      * Parses a regular expression. This method handles the Expr
      * production in the grammar (see regexp.grammar).
-     * 
+     *
      * @return the element representing this expression
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseExpr() throws RegExpException {
         Element  first;
         Element  second;
-        
+
         first = parseTerm();
         if (peekChar(0) != '|') {
             return first;
@@ -154,19 +154,19 @@ public class RegExp {
             return new AlternativeElement(first, second);
         }
     }
-    
+
     /**
-     * Parses a regular expression term. This method handles the 
+     * Parses a regular expression term. This method handles the
      * Term production in the grammar (see regexp.grammar).
-     * 
+     *
      * @return the element representing this term
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseTerm() throws RegExpException {
         ArrayList  list = new ArrayList();
-        
+
         list.add(parseFact());
         while (true) {
             switch (peekChar(0)) {
@@ -186,12 +186,12 @@ public class RegExp {
     }
 
     /**
-     * Parses a regular expression factor. This method handles the 
+     * Parses a regular expression factor. This method handles the
      * Fact production in the grammar (see regexp.grammar).
-     * 
+     *
      * @return the element representing this factor
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseFact() throws RegExpException {
@@ -210,12 +210,12 @@ public class RegExp {
     }
 
     /**
-     * Parses a regular expression atom. This method handles the 
+     * Parses a regular expression atom. This method handles the
      * Atom production in the grammar (see regexp.grammar).
-     * 
+     *
      * @return the element representing this atom
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseAtom() throws RegExpException {
@@ -254,14 +254,14 @@ public class RegExp {
     }
 
     /**
-     * Parses a regular expression atom modifier. This method handles 
+     * Parses a regular expression atom modifier. This method handles
      * the AtomModifier production in the grammar (see regexp.grammar).
      *
      * @param elem           the element to modify
-     *  
-     * @return the modified element 
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @return the modified element
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseAtomModifier(Element elem) throws RegExpException {
@@ -323,12 +323,12 @@ public class RegExp {
     }
 
     /**
-     * Parses a regular expression character set. This method handles 
+     * Parses a regular expression character set. This method handles
      * the contents of the '[...]' construct in a regular expression.
-     * 
+     *
      * @return the element representing this character set
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseCharSet() throws RegExpException {
@@ -337,14 +337,14 @@ public class RegExp {
         boolean              repeat = true;
         char                 start;
         char                 end;
-        
+
         if (peekChar(0) == '^') {
             readChar('^');
             charset = new CharacterSetElement(true);
         } else {
             charset = new CharacterSetElement(false);
         }
-        
+
         while (peekChar(0) > 0 && repeat) {
             start = (char) peekChar(0);
             switch (start) {
@@ -362,7 +362,7 @@ public class RegExp {
             default:
                 readChar(start);
                 if (peekChar(0) == '-'
-                 && peekChar(1) > 0 
+                 && peekChar(1) > 0
                  && peekChar(1) != ']') {
 
                     readChar('-');
@@ -373,17 +373,17 @@ public class RegExp {
                 }
             }
         }
-        
+
         return charset;
     }
 
     /**
-     * Parses a regular expression character. This method handles 
+     * Parses a regular expression character. This method handles
      * a single normal character in a regular expression.
-     * 
+     *
      * @return the element representing this character
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseChar() throws RegExpException {
@@ -402,18 +402,18 @@ public class RegExp {
     }
 
     /**
-     * Parses a regular expression character escape. This method 
+     * Parses a regular expression character escape. This method
      * handles a single character escape in a regular expression.
-     * 
+     *
      * @return the element representing this character escape
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private Element parseEscapeChar() throws RegExpException {
         char    c;
         String  str;
-        
+
         readChar('\\');
         c = readChar();
         switch (c) {
@@ -444,7 +444,7 @@ public class RegExp {
                     pattern);
             }
         case 'x':
-            str = String.valueOf(readChar()) + 
+            str = String.valueOf(readChar()) +
                   String.valueOf(readChar());
             try {
                 c = (char) Integer.parseInt(str, 16);
@@ -456,7 +456,7 @@ public class RegExp {
                     pattern);
             }
         case 'u':
-            str = String.valueOf(readChar()) + 
+            str = String.valueOf(readChar()) +
                   String.valueOf(readChar()) +
                   String.valueOf(readChar()) +
                   String.valueOf(readChar());
@@ -498,7 +498,7 @@ public class RegExp {
                 throw new RegExpException(
                     RegExpException.UNSUPPORTED_ESCAPE_CHARACTER,
                     pos - 2,
-                    pattern);             
+                    pattern);
             }
             return new StringElement(c);
         }
@@ -507,17 +507,17 @@ public class RegExp {
     /**
      * Reads a number from the pattern. If the next character isn't a
      * numeric character, an exception is thrown. This method reads
-     * several consecutive numeric characters. 
-     * 
+     * several consecutive numeric characters.
+     *
      * @return the numeric value read
-     * 
-     * @throws RegExpException if an error was encountered in the 
+     *
+     * @throws RegExpException if an error was encountered in the
      *             pattern string
      */
     private int readNumber() throws RegExpException {
         StringBuffer  buf = new StringBuffer();
         int           c;
-        
+
         c = peekChar(0);
         while ('0' <= c && c <= '9') {
             buf.append(readChar());
@@ -535,18 +535,18 @@ public class RegExp {
     /**
      * Reads the next character in the pattern. If no next character
      * exists, an exception is thrown.
-     * 
-     * @return the character read 
-     * 
-     * @throws RegExpException if no next character was available in  
+     *
+     * @return the character read
+     *
+     * @throws RegExpException if no next character was available in
      *             the pattern string
      */
     private char readChar() throws RegExpException {
         int  c = peekChar(0);
-        
+
         if (c < 0) {
             throw new RegExpException(
-                RegExpException.UNTERMINATED_PATTERN, 
+                RegExpException.UNTERMINATED_PATTERN,
                 pos,
                 pattern);
         } else {
@@ -556,21 +556,21 @@ public class RegExp {
     }
 
     /**
-     * Reads the next character in the pattern. If the character 
+     * Reads the next character in the pattern. If the character
      * wasn't the specified one, an exception is thrown.
-     * 
+     *
      * @param c              the character to read
-     * 
-     * @return the character read 
-     * 
+     *
+     * @return the character read
+     *
      * @throws RegExpException if the character read didn't match the
-     *             specified one, or if no next character was 
+     *             specified one, or if no next character was
      *             available in the pattern string
      */
     private char readChar(char c) throws RegExpException {
         if (c != readChar()) {
             throw new RegExpException(
-                RegExpException.UNEXPECTED_CHARACTER, 
+                RegExpException.UNEXPECTED_CHARACTER,
                 pos - 1,
                 pattern);
         }
@@ -578,12 +578,12 @@ public class RegExp {
     }
 
     /**
-     * Returns a character that has not yet been read from the 
-     * pattern. If the requested position is beyond the end of the 
+     * Returns a character that has not yet been read from the
+     * pattern. If the requested position is beyond the end of the
      * pattern string, -1 is returned.
-     * 
+     *
      * @param count          the preview position, from zero (0)
-     * 
+     *
      * @return the character found, or
      *         -1 if beyond the end of the pattern string
      */
@@ -594,14 +594,14 @@ public class RegExp {
             return -1;
         }
     }
-    
+
     /**
-     * Combines a list of elements. This method takes care to always 
-     * concatenate adjacent string elements into a single string 
-     * element.  
-     * 
+     * Combines a list of elements. This method takes care to always
+     * concatenate adjacent string elements into a single string
+     * element.
+     *
      * @param list           the list with elements
-     * 
+     *
      * @return the combined element
      */
     private Element combineElements(ArrayList list) {
@@ -613,8 +613,8 @@ public class RegExp {
         // Concatenate string elements
         prev = (Element) list.get(0);
         for (i = 1; i < list.size(); i++) {
-            elem = (Element) list.get(i); 
-            if (prev instanceof StringElement 
+            elem = (Element) list.get(i);
+            if (prev instanceof StringElement
              && elem instanceof StringElement) {
 
                 str = ((StringElement) prev).getString() +
@@ -633,6 +633,6 @@ public class RegExp {
             prev = (Element) list.get(i);
             elem = new CombineElement(prev, elem);
         }
-        return elem;  
+        return elem;
     }
 }

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -52,7 +52,7 @@ public class CSharpComment extends CodeElement {
 
     /**
      * The single line documentation comment type. Note that this type
-     * may be used even if the comment spans several lines, as the 
+     * may be used even if the comment spans several lines, as the
      * /// characters will be duplicated for each line.
      */
     public static final int DOCUMENTATION_SINGLE = 1;
@@ -63,8 +63,8 @@ public class CSharpComment extends CodeElement {
     public static final int BLOCK = 2;
 
     /**
-     * The single line comment type. Note that this type may be used 
-     * even if the comment spans several lines, as the // characters 
+     * The single line comment type. Note that this type may be used
+     * even if the comment spans several lines, as the // characters
      * will be duplicated for each line.
      */
     public static final int SINGLELINE = 3;
@@ -108,9 +108,9 @@ public class CSharpComment extends CodeElement {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number
@@ -157,7 +157,7 @@ public class CSharpComment extends CodeElement {
 
     /**
      * Prints a single comment line.
-     * 
+     *
      * @param out            the output stream
      * @param indent         the indentation string
      * @param line           the comment line to print

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -38,7 +38,7 @@ import java.io.PrintWriter;
 
 /**
  * A regular expression element. This is the common base class for all
- * regular expression elements, i.e. the parts of the regular 
+ * regular expression elements, i.e. the parts of the regular
  * expression.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -51,50 +51,50 @@ abstract class Element implements Cloneable {
      * of the same class matching the same strings. Copies of elements
      * are necessary to allow elements to cache intermediate results
      * while matching strings without interfering with other threads.
-     * 
+     *
      * @return a copy of this element
      */
     public abstract Object clone();
 
     /**
-     * Returns the length of a matching string starting at the 
+     * Returns the length of a matching string starting at the
      * specified position. The number of matches to skip can also be
-     * specified, but numbers higher than zero (0) cause a failed 
-     * match for any element that doesn't attempt to combine other 
+     * specified, but numbers higher than zero (0) cause a failed
+     * match for any element that doesn't attempt to combine other
      * elements.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      */
-    public abstract int match(Matcher m, 
-                              CharBuffer str, 
-                              int start, 
+    public abstract int match(Matcher m,
+                              CharBuffer str,
+                              int start,
                               int skip);
-    
+
     /**
      * Prints this element to the specified output stream.
-     * 
+     *
      * @param output         the output stream to use
      * @param indent         the current indentation
      */
     public final void printTo(PrintStream output, String indent) {
         PrintWriter  writer = new PrintWriter(output);
-        
+
         printTo(writer, indent);
         writer.flush();
     }
 
     /**
      * Prints this element to the specified output stream.
-     * 
+     *
      * @param output         the output stream to use
      * @param indent         the current indentation
      */
     public abstract void printTo(PrintWriter output, String indent);
-    
+
 }

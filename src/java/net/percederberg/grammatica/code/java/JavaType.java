@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -40,7 +40,7 @@ import net.percederberg.grammatica.code.CodeElementContainer;
 import net.percederberg.grammatica.code.CodeStyle;
 
 /**
- * An abstract superclass for the Java class and interface code 
+ * An abstract superclass for the Java class and interface code
  * generators.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -81,9 +81,9 @@ abstract class JavaType extends CodeElementContainer {
      * @param extendsType    the class or interface to extend
      * @param implementType  the class or interface to implement
      */
-    protected JavaType(int modifiers, 
-                       String name, 
-                       String extendsType, 
+    protected JavaType(int modifiers,
+                       String name,
+                       String extendsType,
                        String implementType) {
 
         this.modifiers = modifiers;
@@ -105,9 +105,9 @@ abstract class JavaType extends CodeElementContainer {
      * @param extendsType    the class or interface to extend
      * @param implementTypes the classes or interfaces to implement
      */
-    protected JavaType(int modifiers, 
-                       String name, 
-                       String extendsType, 
+    protected JavaType(int modifiers,
+                       String name,
+                       String extendsType,
                        String[] implementTypes) {
 
         this.modifiers = modifiers;
@@ -142,7 +142,7 @@ abstract class JavaType extends CodeElementContainer {
      * @param indent         the indentation level
      * @param type           the type name (i.e. "class" or "interface")
      */
-    protected void print(PrintWriter out, 
+    protected void print(PrintWriter out,
                          CodeStyle style,
                          int indent,
                          String type) {
@@ -189,16 +189,16 @@ abstract class JavaType extends CodeElementContainer {
     }
 
     /**
-     * Prints the lines separating two elements. 
+     * Prints the lines separating two elements.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param prev           the previous element, or null if first
      * @param next           the next element, or null if last
      */
-    protected void printSeparator(PrintWriter out, 
-                                  CodeStyle style, 
-                                  CodeElement prev, 
+    protected void printSeparator(PrintWriter out,
+                                  CodeStyle style,
+                                  CodeElement prev,
                                   CodeElement next) {
 
         if (prev == null || next == null) {
@@ -212,7 +212,7 @@ abstract class JavaType extends CodeElementContainer {
      * Creates a string with the implements declaration.
      *
      * @return a string with the implements declararation, or
-     *         null for no implement declaration 
+     *         null for no implement declaration
      */
     private String createImplDecl() {
         StringBuffer  res = new StringBuffer("implements ");

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -51,7 +51,7 @@ public class JavaInterface extends JavaType {
     public static final int PUBLIC = JavaModifier.PUBLIC;
 
     /**
-     * The protected access modifier constant. May only be used when 
+     * The protected access modifier constant. May only be used when
      * declared inside a class.
      */
     public static final int PROTECTED = JavaModifier.PROTECTED;
@@ -62,13 +62,13 @@ public class JavaInterface extends JavaType {
     public static final int PACKAGE_LOCAL = JavaModifier.PACKAGE_LOCAL;
 
     /**
-     * The private access modifier constant. May only be used when 
+     * The private access modifier constant. May only be used when
      * declared inside a class.
      */
     public static final int PRIVATE = JavaModifier.PRIVATE;
 
     /**
-     * The static modifier constant. May only be used when declared 
+     * The static modifier constant. May only be used when declared
      * inside a class.
      */
     public static final int STATIC = JavaModifier.STATIC;
@@ -89,7 +89,7 @@ public class JavaInterface extends JavaType {
     }
 
     /**
-     * Creates a new interface code generator with the specified 
+     * Creates a new interface code generator with the specified
      * access modifier.
      *
      * @param modifiers      the modifier constant flags
@@ -131,9 +131,9 @@ public class JavaInterface extends JavaType {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number

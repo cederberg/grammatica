@@ -55,7 +55,7 @@ public class CSharpConstructor extends CodeElement {
     /**
      * The protected internal access modifier constant.
      */
-    public static final int PROTECTED_INTERNAL = 
+    public static final int PROTECTED_INTERNAL =
         CSharpModifier.PROTECTED_INTERNAL;
 
     /**
@@ -160,7 +160,7 @@ public class CSharpConstructor extends CodeElement {
 
     /**
      * Adds an initializer call, i.e. a call to another constructor.
-     * 
+     *
      * @param initializer    the initializer call
      */
     public void addInitializer(String initializer) {
@@ -194,9 +194,9 @@ public class CSharpConstructor extends CodeElement {
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower 
+     * Returns a numeric category number for the code element. A lower
      * category number implies that the code element should be placed
-     * before code elements with a higher category number within a 
+     * before code elements with a higher category number within a
      * declaration.
      *
      * @return the category number

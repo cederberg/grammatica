@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -53,49 +53,49 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * The dot ('.') character set. This element matches a single
          * character that is not equal to a newline character.
          */
-        public static CharacterSetElement DOT = 
+        public static CharacterSetElement DOT =
             new CharacterSetElement(false);
 
         /**
          * The digit character set. This element matches a single
          * numeric character.
          */
-        public static CharacterSetElement DIGIT = 
+        public static CharacterSetElement DIGIT =
             new CharacterSetElement(false);
 
         /**
          * The non-digit character set. This element matches a single
          * non-numeric character.
          */
-        public static CharacterSetElement NON_DIGIT = 
+        public static CharacterSetElement NON_DIGIT =
             new CharacterSetElement(true);
 
         /**
          * The whitespace character set. This element matches a single
          * whitespace character.
          */
-        public static CharacterSetElement WHITESPACE = 
+        public static CharacterSetElement WHITESPACE =
             new CharacterSetElement(false);
 
         /**
          * The non-whitespace character set. This element matches a
          * single non-whitespace character.
          */
-        public static CharacterSetElement NON_WHITESPACE = 
+        public static CharacterSetElement NON_WHITESPACE =
             new CharacterSetElement(true);
 
         /**
          * The word character set. This element matches a single word
          * character.
          */
-        public static CharacterSetElement WORD = 
+        public static CharacterSetElement WORD =
             new CharacterSetElement(false);
 
         /**
          * The non-word character set. This element matches a single
          * non-word character.
          */
-        public static CharacterSetElement NON_WORD = 
+        public static CharacterSetElement NON_WORD =
             new CharacterSetElement(true);
 
         /**
@@ -110,9 +110,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         private ArrayList contents = new ArrayList();
 
         /**
-         * Creates a new character set element. If the inverted character 
+         * Creates a new character set element. If the inverted character
          * set flag is set, only characters NOT in the set will match.
-         * 
+         *
          * @param inverted       the inverted character set flag
          */
         public CharacterSetElement(bool inverted) {
@@ -121,7 +121,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Adds a single character to this character set.
-         * 
+         *
          * @param c              the character to add
          */
         public void AddCharacter(char c) {
@@ -130,7 +130,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Adds multiple characters to this character set.
-         * 
+         *
          * @param str            the string with characters to add
          */
         public void AddCharacters(string str) {
@@ -141,7 +141,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Adds multiple characters to this character set.
-         * 
+         *
          * @param elem           the string element with characters to add
          */
         public void AddCharacters(StringElement elem) {
@@ -150,7 +150,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Adds a character range to this character set.
-         * 
+         *
          * @param min            the minimum character value
          * @param max            the maximum character value
          */
@@ -160,7 +160,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Adds a character subset to this character set.
-         * 
+         *
          * @param elem           the character set to add
          */
         public void AddCharacterSet(CharacterSetElement elem) {
@@ -172,7 +172,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * modified after creation. This partially breaks the contract
          * of clone(), but as new characters are not added to the
          * character set after creation, this will work correctly.
-         * 
+         *
          * @return this character set element
          */
         public override object Clone() {
@@ -180,27 +180,27 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Returns the length of a matching string starting at the 
+         * Returns the length of a matching string starting at the
          * specified position. The number of matches to skip can also be
-         * specified, but numbers higher than zero (0) cause a failed 
-         * match for any element that doesn't attempt to combine other 
+         * specified, but numbers higher than zero (0) cause a failed
+         * match for any element that doesn't attempt to combine other
          * elements.
          *
-         * @param m              the matcher being used 
+         * @param m              the matcher being used
          * @param str            the string to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
-         * 
+         *
          * @return the length of the matching string, or
          *         -1 if no match was found
          */
-        public override int Match(Matcher m, 
-                                  string str, 
-                                  int start, 
+        public override int Match(Matcher m,
+                                  string str,
+                                  int start,
                                   int skip) {
 
             char  c;
-            
+
             if (skip != 0) {
                 return -1;
             }
@@ -215,9 +215,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Checks if the specified character matches this character
          * set. This method takes the inverted flag into account.
-         * 
+         *
          * @param c               the character to check
-         * 
+         *
          * @return true if the character matches, or
          *         false otherwise
          */
@@ -234,13 +234,13 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 return InUserSet(c) != inverted;
             }
         }
-        
+
         /**
          * Checks if the specified character is present in the 'dot'
          * set. This method does not consider the inverted flag.
-         * 
+         *
          * @param c               the character to check
-         * 
+         *
          * @return true if the character is present, or
          *         false otherwise
          */
@@ -260,9 +260,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Checks if the specified character is a digit. This method
          * does not consider the inverted flag.
-         * 
+         *
          * @param c               the character to check
-         * 
+         *
          * @return true if the character is a digit, or
          *         false otherwise
          */
@@ -273,9 +273,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Checks if the specified character is a whitespace
          * character. This method does not consider the inverted flag.
-         * 
+         *
          * @param c               the character to check
-         * 
+         *
          * @return true if the character is a whitespace character, or
          *         false otherwise
          */
@@ -296,9 +296,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Checks if the specified character is a word character. This
          * method does not consider the inverted flag.
-         * 
+         *
          * @param c               the character to check
-         * 
+         *
          * @return true if the character is a word character, or
          *         false otherwise
          */
@@ -313,9 +313,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * Checks if the specified character is present in the user-
          * defined set. This method does not consider the inverted
          * flag.
-         * 
+         *
          * @param value           the character to check
-         * 
+         *
          * @return true if the character is present, or
          *         false otherwise
          */
@@ -346,10 +346,10 @@ namespace PerCederberg.Grammatica.Parser.RE {
             }
             return false;
         }
-    
+
         /**
          * Prints this element to the specified output stream.
-         * 
+         *
          * @param output         the output stream to use
          * @param indent         the current indentation
          */
@@ -359,7 +359,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
         /**
          * Returns a string description of this character set.
-         * 
+         *
          * @return a string description of this character set
          */
         public override string ToString() {
@@ -382,7 +382,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 return "\\W";
             }
 
-            // Handle user-defined character sets        
+            // Handle user-defined character sets
             buffer = new StringBuilder();
             if (inverted) {
                 buffer.Append("^[");
@@ -393,29 +393,29 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 buffer.Append(contents[i]);
             }
             buffer.Append("]");
-            
+
             return buffer.ToString();
         }
 
 
         /**
          * A character range class.
-         */    
+         */
         private class Range {
-            
+
             /**
              * The minimum character value.
              */
             private char min;
-            
+
             /**
              * The maximum character value.
              */
             private char max;
-            
+
             /**
              * Creates a new character range.
-             * 
+             *
              * @param min        the minimum character value
              * @param max        the maximum character value
              */
@@ -423,22 +423,22 @@ namespace PerCederberg.Grammatica.Parser.RE {
                 this.min = min;
                 this.max = max;
             }
-            
+
             /**
              * Checks if the specified character is inside the range.
-             * 
+             *
              * @param c          the character to check
-             * 
+             *
              * @return true if the character is in the range, or
              *         false otherwise
              */
             public bool Inside(char c) {
                 return min <= c && c <= max;
             }
-            
+
             /**
              * Returns a string representation of this object.
-             * 
+             *
              * @return a string representation of this object
              */
             public override string ToString() {

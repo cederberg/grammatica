@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.Vector;
 
 /**
- * The abstract base class for all code element containers. The code 
+ * The abstract base class for all code element containers. The code
  * element containers contains other code elements.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -47,14 +47,14 @@ import java.util.Vector;
 public abstract class CodeElementContainer extends CodeElement {
 
     /**
-     * The code element contents. This vector contains the code 
+     * The code element contents. This vector contains the code
      * elements contained inside this element.
      */
     private Vector contents = new Vector();
 
     /**
      * Adds a code element to this container.
-     * 
+     *
      * @param elem           the code element to add
      */
     protected void addElement(CodeElement elem) {
@@ -62,20 +62,20 @@ public abstract class CodeElementContainer extends CodeElement {
             contents.add(elem);
         }
     }
-    
+
     /**
-     * Prints all the contained code elements to the specified output 
-     * stream. The code elements will be sorted by their category 
+     * Prints all the contained code elements to the specified output
+     * stream. The code elements will be sorted by their category
      * number before printing.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param indent         the indentation level
      */
-    protected void printContents(PrintWriter out, 
-                                 CodeStyle style, 
+    protected void printContents(PrintWriter out,
+                                 CodeStyle style,
                                  int indent) {
-                                     
+
         CodeElement  prev = null;
         CodeElement  next;
 
@@ -84,23 +84,23 @@ public abstract class CodeElementContainer extends CodeElement {
             next = (CodeElement) contents.get(i);
             printSeparator(out, style, prev, next);
             next.print(out, style, indent);
-            prev = next; 
+            prev = next;
         }
     }
-    
+
     /**
-     * Prints the lines separating two elements. By default this 
+     * Prints the lines separating two elements. By default this
      * method prints a newline before the first element, and between
-     * elements with different category numbers.  
+     * elements with different category numbers.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param prev           the previous element, or null if first
      * @param next           the next element, or null if last
      */
-    protected void printSeparator(PrintWriter out, 
-                                  CodeStyle style, 
-                                  CodeElement prev, 
+    protected void printSeparator(PrintWriter out,
+                                  CodeStyle style,
+                                  CodeElement prev,
                                   CodeElement next) {
 
         if (prev == null || next == null) {

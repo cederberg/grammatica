@@ -36,15 +36,15 @@ package net.percederberg.grammatica.parser;
 import java.util.ArrayList;
 
 /**
- * A token look-ahead set. This class contains a set of token id 
+ * A token look-ahead set. This class contains a set of token id
  * sequences. All sequences in the set are limited in length, so that
- * no single sequence is longer than a maximum value. This class also 
+ * no single sequence is longer than a maximum value. This class also
  * filters out duplicates. Each token sequence also contains a repeat
- * flag, allowing the look-ahead set to contain information about 
- * possible infinite repetitions of certain sequences. That 
- * information is important when conflicts arise between two 
- * look-ahead sets, as such a conflict cannot be resolved if the 
- * conflicting sequences can be repeated (would cause infinite loop). 
+ * flag, allowing the look-ahead set to contain information about
+ * possible infinite repetitions of certain sequences. That
+ * information is important when conflicts arise between two
+ * look-ahead sets, as such a conflict cannot be resolved if the
+ * conflicting sequences can be repeated (would cause infinite loop).
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.1
@@ -52,12 +52,12 @@ import java.util.ArrayList;
 class LookAheadSet {
 
     /**
-     * The set of token look-ahead sequences. Each sequence in 
+     * The set of token look-ahead sequences. Each sequence in
      * turn is represented by an ArrayList with Integers for the
      * token id:s.
      */
     private ArrayList elements = new ArrayList();
-    
+
     /**
      * The maximum length of any look-ahead sequence.
      */
@@ -66,7 +66,7 @@ class LookAheadSet {
     /**
      * Creates a new look-ahead set with the specified maximum
      * length.
-     * 
+     *
      * @param maxLength      the maximum token sequence length
      */
     public LookAheadSet(int maxLength) {
@@ -74,9 +74,9 @@ class LookAheadSet {
     }
 
     /**
-     * Creates a duplicate look-ahead set, possibly with a different 
-     * maximum length. 
-     * 
+     * Creates a duplicate look-ahead set, possibly with a different
+     * maximum length.
+     *
      * @param maxLength      the maximum token sequence length
      * @param set            the look-ahead set to copy
      */
@@ -87,7 +87,7 @@ class LookAheadSet {
 
     /**
      * Returns the size of this look-ahead set.
-     * 
+     *
      * @return the number of token sequences in the set
      */
     public int size() {
@@ -97,13 +97,13 @@ class LookAheadSet {
     /**
      * Returns the length of the shortest token sequence in this
      * set. This method will return zero (0) if the set is empty.
-     * 
+     *
      * @return the length of the shortest token sequence
      */
     public int getMinLength() {
         Sequence  seq;
         int       min = -1;
-        
+
         for (int i = 0; i < elements.size(); i++) {
             seq = (Sequence) elements.get(i);
             if (min < 0 || seq.length() < min) {
@@ -116,13 +116,13 @@ class LookAheadSet {
     /**
      * Returns the length of the longest token sequence in this
      * set. This method will return zero (0) if the set is empty.
-     * 
+     *
      * @return the length of the longest token sequence
      */
     public int getMaxLength() {
         Sequence  seq;
         int       max = 0;
-        
+
         for (int i = 0; i < elements.size(); i++) {
             seq = (Sequence) elements.get(i);
             if (seq.length() > max) {
@@ -133,9 +133,9 @@ class LookAheadSet {
     }
 
     /**
-     * Returns a list of the initial token id:s in this look-ahead 
-     * set. The list returned will not contain any duplicates. 
-     * 
+     * Returns a list of the initial token id:s in this look-ahead
+     * set. The list returned will not contain any duplicates.
+     *
      * @return a list of the inital token id:s in this look-ahead set
      */
     public int[] getInitialTokens() {
@@ -143,7 +143,7 @@ class LookAheadSet {
         int[]      result;
         Integer    token;
         int        i;
-        
+
         for (i = 0; i < elements.size(); i++) {
             token = ((Sequence) elements.get(i)).getToken(0);
             if (token != null && !list.contains(token)) {
@@ -160,7 +160,7 @@ class LookAheadSet {
     /**
      * Checks if this look-ahead set contains a repetitive token
      * sequence.
-     * 
+     *
      * @return true if at least one token sequence is repetitive, or
      *         false otherwise
      */
@@ -177,11 +177,11 @@ class LookAheadSet {
     }
 
     /**
-     * Checks if the next token(s) in the parser match any token 
+     * Checks if the next token(s) in the parser match any token
      * sequence in this set.
      *
      * @param parser         the parser to check
-     *  
+     *
      * @return true if the next tokens are in the set, or
      *         false otherwise
      */
@@ -196,14 +196,14 @@ class LookAheadSet {
         }
         return false;
     }
-    
+
     /**
-     * Checks if the next token(s) in the parser match any token 
+     * Checks if the next token(s) in the parser match any token
      * sequence in this set.
      *
      * @param parser         the parser to check
      * @param length         the maximum number of tokens to check
-     *  
+     *
      * @return true if the next tokens are in the set, or
      *         false otherwise
      */
@@ -218,15 +218,15 @@ class LookAheadSet {
         }
         return false;
     }
-    
+
     /**
-     * Checks if another look-ahead set has an overlapping token 
+     * Checks if another look-ahead set has an overlapping token
      * sequence. An overlapping token sequence is a token sequence
      * that is identical to another sequence, but for the length. I.e.
-     * one of the two sequences may be longer than the other. 
-     * 
+     * one of the two sequences may be longer than the other.
+     *
      * @param set            the look-ahead set to check
-     * 
+     *
      * @return true if there is some token sequence that overlaps, or
      *         false otherwise
      */
@@ -238,15 +238,15 @@ class LookAheadSet {
         }
         return false;
     }
-    
+
     /**
      * Checks if a token sequence is overlapping. An overlapping token
-     * sequence is a token sequence that is identical to another 
+     * sequence is a token sequence that is identical to another
      * sequence, but for the length. I.e. one of the two sequences may
-     * be longer than the other. 
-     * 
+     * be longer than the other.
+     *
      * @param seq            the token sequence to check
-     * 
+     *
      * @return true if there is some token sequence that overlaps, or
      *         false otherwise
      */
@@ -265,9 +265,9 @@ class LookAheadSet {
     /**
      * Checks if the specified token sequence is present in the
      * set.
-     * 
+     *
      * @param elem           the token sequence to check
-     * 
+     *
      * @return true if the sequence is present in this set, or
      *         false otherwise
      */
@@ -276,13 +276,13 @@ class LookAheadSet {
     }
 
     /**
-     * Checks if some token sequence is present in both this set 
+     * Checks if some token sequence is present in both this set
      * and a specified one.
-     * 
+     *
      * @param set            the look-ahead set to compare with
-     * 
+     *
      * @return true if the look-ahead sets intersect, or
-     *         false otherwise 
+     *         false otherwise
      */
     public boolean intersects(LookAheadSet set) {
         for (int i = 0; i < elements.size(); i++) {
@@ -295,9 +295,9 @@ class LookAheadSet {
 
     /**
      * Finds an identical token sequence if present in the set.
-     * 
+     *
      * @param elem           the token sequence to search for
-     * 
+     *
      * @return an identical the token sequence if found, or
      *         null if not found
      */
@@ -311,11 +311,11 @@ class LookAheadSet {
     }
 
     /**
-     * Adds a token sequence to this set. The sequence will only be 
+     * Adds a token sequence to this set. The sequence will only be
      * added if it is not already in the set. Also, if the sequence is
      * longer than the allowed maximum, a truncated sequence will be
      * added instead.
-     * 
+     *
      * @param seq            the token sequence to add
      */
     private void add(Sequence seq) {
@@ -328,9 +328,9 @@ class LookAheadSet {
     }
 
     /**
-     * Adds a new token sequence with a single token to this set. The 
+     * Adds a new token sequence with a single token to this set. The
      * sequence will only be added if it is not already in the set.
-     * 
+     *
      * @param token          the token to add
      */
     public void add(int token) {
@@ -338,9 +338,9 @@ class LookAheadSet {
     }
 
     /**
-     * Adds all the token sequences from a specified set. Only 
+     * Adds all the token sequences from a specified set. Only
      * sequences not already in this set will be added.
-     * 
+     *
      * @param set            the set to add from
      */
     public void addAll(LookAheadSet set) {
@@ -350,16 +350,16 @@ class LookAheadSet {
     }
 
     /**
-     * Adds an empty token sequence to this set. The sequence will 
-     * only be added if it is not already in the set. 
+     * Adds an empty token sequence to this set. The sequence will
+     * only be added if it is not already in the set.
      */
     public void addEmpty() {
         add(new Sequence());
     }
-    
+
     /**
      * Removes a token sequence from this set.
-     * 
+     *
      * @param seq            the token sequence to remove
      */
     private void remove(Sequence seq) {
@@ -367,9 +367,9 @@ class LookAheadSet {
     }
 
     /**
-     * Removes all the token sequences from a specified set. Only 
+     * Removes all the token sequences from a specified set. Only
      * sequences already in this set will be removed.
-     * 
+     *
      * @param set            the set to remove from
      */
     public void removeAll(LookAheadSet set) {
@@ -380,22 +380,22 @@ class LookAheadSet {
 
     /**
      * Creates a new look-ahead set that is the result of reading the
-     * specified token. The new look-ahead set will contain the 
+     * specified token. The new look-ahead set will contain the
      * rest of all the token sequences that started with the specified
      * token.
-     * 
-     * @param token          the token to read 
-     * 
-     * @return a new look-ahead set containing the remaining tokens 
+     *
+     * @param token          the token to read
+     *
+     * @return a new look-ahead set containing the remaining tokens
      */
     public LookAheadSet createNextSet(int token) {
         LookAheadSet  result = new LookAheadSet(maxLength - 1);
         Sequence      seq;
         Integer       value;
-        
+
         for (int i = 0; i < elements.size(); i++) {
             seq = (Sequence) elements.get(i);
-            value = seq.getToken(0); 
+            value = seq.getToken(0);
             if (value != null && value.intValue() == token) {
                 result.add(seq.subsequence(1));
             }
@@ -408,9 +408,9 @@ class LookAheadSet {
      * this set with another set. The token sequences in the net set
      * will only have the repeat flag set if it was set in both the
      * identical token sequences.
-     * 
+     *
      * @param set            the set to intersect with
-     * 
+     *
      * @return a new look-ahead set containing the intersection
      */
     public LookAheadSet createIntersection(LookAheadSet set) {
@@ -431,21 +431,21 @@ class LookAheadSet {
     }
 
     /**
-     * Creates a new look-ahead set that is the combination of 
-     * this set with another set. The combination is created by 
-     * creating new token sequences that consist of appending all 
-     * elements from the specified set onto all elements in this set. 
+     * Creates a new look-ahead set that is the combination of
+     * this set with another set. The combination is created by
+     * creating new token sequences that consist of appending all
+     * elements from the specified set onto all elements in this set.
      * This is sometimes referred to as the cartesian product.
-     * 
+     *
      * @param set            the set to combine with
-     * 
+     *
      * @return a new look-ahead set containing the combination
      */
     public LookAheadSet createCombination(LookAheadSet set) {
         LookAheadSet  result = new LookAheadSet(maxLength);
         Sequence      first;
         Sequence      second;
-        
+
         // Handle special cases
         if (this.size() <= 0) {
             return set;
@@ -459,7 +459,7 @@ class LookAheadSet {
             if (first.length() >= maxLength) {
                 result.add(first);
             } else if (first.length() <= 0) {
-                result.addAll(set);  
+                result.addAll(set);
             } else {
                 for (int j = 0; j < set.elements.size(); j++) {
                     second = (Sequence) set.elements.get(j);
@@ -474,15 +474,15 @@ class LookAheadSet {
      * Creates a new look-ahead set with overlaps from another. All
      * token sequences in this set that overlaps with the other set
      * will be added to the new look-ahead set.
-     * 
+     *
      * @param set            the look-ahead set to check with
-     * 
+     *
      * @return a new look-ahead set containing the overlaps
      */
     public LookAheadSet createOverlaps(LookAheadSet set) {
         LookAheadSet  result = new LookAheadSet(maxLength);
         Sequence      seq;
-        
+
         for (int i = 0; i < elements.size(); i++) {
             seq = (Sequence) elements.get(i);
             if (set.isOverlap(seq)) {
@@ -496,16 +496,16 @@ class LookAheadSet {
      * Creates a new look-ahead set filter. The filter will contain
      * all sequences from this set, possibly left trimmed by each one
      * of the sequences in the specified set.
-     * 
+     *
      * @param set            the look-ahead set to trim with
-     * 
+     *
      * @return a new look-ahead set filter
      */
     public LookAheadSet createFilter(LookAheadSet set) {
         LookAheadSet  result = new LookAheadSet(maxLength);
         Sequence      first;
         Sequence      second;
-        
+
         // Handle special cases
         if (this.size() <= 0 || set.size() <= 0) {
             return this;
@@ -527,19 +527,19 @@ class LookAheadSet {
     /**
      * Creates a new identical look-ahead set, except for the repeat
      * flag being set in each token sequence.
-     * 
-     * @return a new repetitive look-ahead set 
+     *
+     * @return a new repetitive look-ahead set
      */
     public LookAheadSet createRepetitive() {
         LookAheadSet  result = new LookAheadSet(maxLength);
         Sequence      seq;
-        
+
         for (int i = 0; i < elements.size(); i++) {
             seq = (Sequence) elements.get(i);
             if (seq.isRepetitive()) {
                 result.add(seq);
             } else {
-                result.add(new Sequence(true, seq));  
+                result.add(new Sequence(true, seq));
             }
         }
         return result;
@@ -547,18 +547,18 @@ class LookAheadSet {
 
     /**
      * Returns a string representation of this object.
-     * 
+     *
      * @return a string representation of this object
      */
     public String toString() {
         return toString(null);
     }
-    
+
     /**
      * Returns a string representation of this object.
-     * 
+     *
      * @param tokenizer      the tokenizer containing the tokens
-     * 
+     *
      * @return a string representation of this object
      */
     public String toString(Tokenizer tokenizer) {
@@ -574,8 +574,8 @@ class LookAheadSet {
         buffer.append("\n}");
         return buffer.toString();
     }
-    
-    
+
+
     /**
      * A token sequence. This class contains a list of token ids. It
      * is immutable after creation, meaning that no changes will be
@@ -588,15 +588,15 @@ class LookAheadSet {
 
         /**
          * The repeat flag. If this flag is set, the token sequence
-         * or some part of it may be repeated infinitely. 
+         * or some part of it may be repeated infinitely.
          */
-        private boolean repeat = false;        
+        private boolean repeat = false;
 
         /**
          * The list of token ids in this sequence.
          */
         private ArrayList tokens = null;
-        
+
         /**
          * Creates a new empty token sequence. The repeat flag will be
          * set to false.
@@ -608,7 +608,7 @@ class LookAheadSet {
 
         /**
          * Creates a new token sequence with a single token.
-         * 
+         *
          * @param repeat         the repeat flag value
          * @param token          the token to add
          */
@@ -623,7 +623,7 @@ class LookAheadSet {
          * sequence. Only a limited number of tokens will be copied
          * however. The repeat flag from the original will be kept
          * intact.
-         * 
+         *
          * @param length         the maximum number of tokens to copy
          * @param seq            the sequence to copy
          */
@@ -634,7 +634,7 @@ class LookAheadSet {
                 length = seq.length();
             }
             for (int i = 0; i < length; i++) {
-                tokens.add(seq.tokens.get(i)); 
+                tokens.add(seq.tokens.get(i));
             }
         }
 
@@ -642,7 +642,7 @@ class LookAheadSet {
          * Creates a new token sequence that is a duplicate of another
          * sequence. The new value of the repeat flag will be used
          * however.
-         * 
+         *
          * @param repeat         the new repeat flag value
          * @param seq            the sequence to copy
          */
@@ -653,7 +653,7 @@ class LookAheadSet {
 
         /**
          * Returns the length of the token sequence.
-         * 
+         *
          * @return the number of tokens in the sequence
          */
         public int length() {
@@ -662,9 +662,9 @@ class LookAheadSet {
 
         /**
          * Returns a token at a specified position in the sequence.
-         * 
+         *
          * @param pos            the sequence position
-         * 
+         *
          * @return the token id found, or null
          */
         public Integer getToken(int pos) {
@@ -679,11 +679,11 @@ class LookAheadSet {
          * Checks if this sequence is equal to another object. Only
          * token sequences with the same tokens in the same order will
          * be considered equal. The repeat flag will be disregarded.
-         * 
+         *
          * @param obj            the object to compare with
-         * 
+         *
          * @return true if the objects are equal, or
-         *         false otherwise 
+         *         false otherwise
          */
         public boolean equals(Object obj) {
             if (obj instanceof Sequence) {
@@ -697,9 +697,9 @@ class LookAheadSet {
          * Checks if this token sequence starts with the tokens from
          * another sequence. If the other sequence is longer than this
          * sequence, this method will always return false.
-         * 
+         *
          * @param seq            the token sequence to check
-         * 
+         *
          * @return true if this sequence starts with the other, or
          *         false otherwise
          */
@@ -716,9 +716,9 @@ class LookAheadSet {
         }
 
         /**
-         * Checks if this token sequence is repetitive. A repetitive 
+         * Checks if this token sequence is repetitive. A repetitive
          * token sequence is one with the repeat flag set.
-         * 
+         *
          * @return true if this token sequence is repetitive, or
          *         false otherwise
          */
@@ -729,16 +729,16 @@ class LookAheadSet {
         /**
          * Checks if the next token(s) in the parser matches this
          * token sequence.
-         * 
+         *
          * @param parser         the parser to check
-         * 
+         *
          * @return true if the next tokens are in the sequence, or
          *         false otherwise
          */
         public boolean isNext(Parser parser) {
             Token    token;
             Integer  id;
-            
+
             for (int i = 0; i < tokens.size(); i++) {
                 id = (Integer) tokens.get(i);
                 token = parser.peekToken(i);
@@ -752,17 +752,17 @@ class LookAheadSet {
         /**
          * Checks if the next token(s) in the parser matches this
          * token sequence.
-         * 
+         *
          * @param parser         the parser to check
          * @param length         the maximum number of tokens to check
-         * 
+         *
          * @return true if the next tokens are in the sequence, or
          *         false otherwise
          */
         public boolean isNext(Parser parser, int length) {
             Token    token;
             Integer  id;
-            
+
             if (length > tokens.size()) {
                 length = tokens.size();
             }
@@ -778,18 +778,18 @@ class LookAheadSet {
 
         /**
          * Returns a string representation of this object.
-         * 
+         *
          * @return a string representation of this object
          */
         public String toString() {
             return toString(null);
         }
-        
+
         /**
          * Returns a string representation of this object.
          *
          * @param tokenizer      the tokenizer containing the tokens
-         *  
+         *
          * @return a string representation of this object
          */
         public String toString(Tokenizer tokenizer) {
@@ -818,13 +818,13 @@ class LookAheadSet {
         }
 
         /**
-         * Creates a new token sequence that is the concatenation of 
-         * this sequence and another. A maximum length for the new 
-         * sequence is also specified. 
-         * 
+         * Creates a new token sequence that is the concatenation of
+         * this sequence and another. A maximum length for the new
+         * sequence is also specified.
+         *
          * @param length         the maximum length of the result
          * @param seq            the other sequence
-         * 
+         *
          * @return the concatenated token sequence
          */
         public Sequence concat(int length, Sequence seq) {
@@ -843,18 +843,18 @@ class LookAheadSet {
             }
             return res;
         }
-        
+
         /**
          * Creates a new token sequence that is a subsequence of this
          * one.
-         * 
-         * @param start          the subsequence start position 
-         * 
+         *
+         * @param start          the subsequence start position
+         *
          * @return the new token subsequence
          */
         public Sequence subsequence(int start) {
             Sequence  res = new Sequence(length(), this);
-    
+
             while (start > 0 && res.tokens.size() > 0) {
                 res.tokens.remove(0);
                 start--;

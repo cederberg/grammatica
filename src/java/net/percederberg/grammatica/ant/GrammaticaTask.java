@@ -66,17 +66,17 @@ public class GrammaticaTask extends Task {
     /**
      * The list of processing elements.
      */
-    private Vector processors = new Vector(); 
+    private Vector processors = new Vector();
 
     /**
      * Creates a new Grammatica Ant task.
      */
     public GrammaticaTask() {
     }
-    
+
     /**
      * Sets the grammar file.
-     * 
+     *
      * @param file           the new grammar file
      */
     public void setGrammar(File file) {
@@ -85,7 +85,7 @@ public class GrammaticaTask extends Task {
 
     /**
      * Sets the fail on error flag. This flag defaults to true.
-     * 
+     *
      * @param failOnError    the new fail on error flag value
      */
     public void setFailonerror(boolean failOnError) {
@@ -94,7 +94,7 @@ public class GrammaticaTask extends Task {
 
     /**
      * Adds a new validation inner element.
-     * 
+     *
      * @param elem           the validation element
      */
     public void addValidation(ValidationElement elem) {
@@ -103,7 +103,7 @@ public class GrammaticaTask extends Task {
 
     /**
      * Adds a new C# code generation inner element.
-     * 
+     *
      * @param elem           the C# code generation element
      */
     public void addCSharp(CSharpElement elem) {
@@ -112,25 +112,25 @@ public class GrammaticaTask extends Task {
 
     /**
      * Adds a new Java code generation inner element.
-     * 
+     *
      * @param elem           the Java code generation element
      */
     public void addJava(JavaElement elem) {
         processors.add(elem);
     }
-    
+
     /**
      * Adds a new Visual Basic code generation inner element.
-     * 
+     *
      * @param elem           the Visual Basic code generation element
      */
     public void addVisualBasic(VisualBasicElement elem) {
         processors.add(elem);
     }
-    
+
     /**
      * Executes the task.
-     * 
+     *
      * @throws BuildException if the task execution failed
      */
     public void execute() throws BuildException {
@@ -172,13 +172,13 @@ public class GrammaticaTask extends Task {
             }
         }
     }
-    
+
     /**
      * Handles an error. This will either print the error or throw
      * a build exception, depending of the failOnError flag.
-     * 
-     * @param e              the error exception 
-     * 
+     *
+     * @param e              the error exception
+     *
      * @throws BuildException if the build should fail on errors
      */
     private void handleError(Exception e) throws BuildException {

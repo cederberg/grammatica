@@ -79,7 +79,7 @@ class CSharpAnalyzerFile {
         "         null if no parse tree should be created</returns>\n\n" +
         "<exception cref='ParseException'>if the node analysis\n" +
         "discovered errors</exception>";
-   
+
     /**
      * The child method comment.
      */
@@ -110,12 +110,12 @@ class CSharpAnalyzerFile {
      * The enter method.
      */
     private CSharpMethod enter;
-    
+
     /**
      * The exit method.
      */
     private CSharpMethod exit;
-   
+
     /**
      * The child method.
      */
@@ -123,7 +123,7 @@ class CSharpAnalyzerFile {
 
     /**
      * Creates a new analyzer file.
-     * 
+     *
      * @param gen            the parser generator to use
      */
     public CSharpAnalyzerFile(CSharpParserGenerator gen) {
@@ -153,10 +153,10 @@ class CSharpAnalyzerFile {
                                       "void");
         initializeCode();
     }
-    
+
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         String  str;
 
@@ -178,12 +178,12 @@ class CSharpAnalyzerFile {
 
         // Add type comment
         cls.addComment(new CSharpComment(TYPE_COMMENT));
-        
+
         // Add enter method
         enter.addComment(new CSharpComment(ENTER_COMMENT));
         enter.addCode("switch (node.GetId()) {");
         cls.addMethod(enter);
-        
+
         // Add exit method
         exit.addComment(new CSharpComment(EXIT_COMMENT));
         exit.addCode("switch (node.GetId()) {");
@@ -197,15 +197,15 @@ class CSharpAnalyzerFile {
 
     /**
      * Adds the token analysis methods to this file.
-     * 
+     *
      * @param pattern        the token pattern
-     * @param constants      the constants file              
+     * @param constants      the constants file
      */
-    public void addToken(TokenPattern pattern, 
+    public void addToken(TokenPattern pattern,
                          CSharpConstantsFile constants) {
-        
+
         String  constant = constants.getConstant(pattern.getId());
-        String  name;  
+        String  name;
 
         if (!pattern.isIgnore()) {
             name = gen.getCodeStyle().getMixedCase(pattern.getName(), true);
@@ -218,18 +218,18 @@ class CSharpAnalyzerFile {
 
     /**
      * Adds the production analysis methods to this file.
-     * 
+     *
      * @param pattern        the production pattern
-     * @param constants      the constants file              
+     * @param constants      the constants file
      */
     public void addProduction(ProductionPattern pattern,
                               CSharpConstantsFile constants) {
 
         String   constant = constants.getConstant(pattern.getId());
-        String   name;  
+        String   name;
 
         if (!pattern.isSyntetic()) {
-            name = gen.getCodeStyle().getMixedCase(pattern.getName(), 
+            name = gen.getCodeStyle().getMixedCase(pattern.getName(),
                                                    true);
             addEnterCase(constant, name, "Production");
             addEnterMethod(name, "Production");
@@ -241,8 +241,8 @@ class CSharpAnalyzerFile {
     }
 
     /**
-     * Adds an enter method switch case. 
-     * 
+     * Adds an enter method switch case.
+     *
      * @param constant       the node constant
      * @param name           the node name
      * @param type           the node type
@@ -254,8 +254,8 @@ class CSharpAnalyzerFile {
     }
 
     /**
-     * Adds an exit method switch case. 
-     * 
+     * Adds an exit method switch case.
+     *
      * @param constant       the node constant
      * @param name           the node name
      * @param type           the node type
@@ -266,8 +266,8 @@ class CSharpAnalyzerFile {
     }
 
     /**
-     * Adds a child method switch case. 
-     * 
+     * Adds a child method switch case.
+     *
      * @param constant       the node constant
      * @param name           the node name
      */
@@ -279,7 +279,7 @@ class CSharpAnalyzerFile {
 
     /**
      * Adds an enter node method to this file.
-     * 
+     *
      * @param name           the node name
      * @param type           the node type
      */
@@ -296,7 +296,7 @@ class CSharpAnalyzerFile {
 
     /**
      * Adds an exit node method to this file.
-     * 
+     *
      * @param name           the node name
      * @param type           the node type
      */
@@ -314,7 +314,7 @@ class CSharpAnalyzerFile {
 
     /**
      * Adds an add child method to this file.
-     * 
+     *
      * @param name           the node name
      */
     private void addChildMethod(String name) {
@@ -331,9 +331,9 @@ class CSharpAnalyzerFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         enter.addCode("}");

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 /**
  * A production node. This class represents a grammar production (i.e.
- * a list of child nodes) in a parse tree. The productions are created 
+ * a list of child nodes) in a parse tree. The productions are created
  * by a parser, that adds children a according to a set of production
  * patterns (i.e. grammar rules).
  *
@@ -58,7 +58,7 @@ public class Production extends Node {
 
     /**
      * Creates a new production node.
-     * 
+     *
      * @param pattern        the production pattern
      */
     public Production(ProductionPattern pattern) {
@@ -69,7 +69,7 @@ public class Production extends Node {
     /**
      * Checks if this node is hidden, i.e. if it should not be visible
      * outside the parser.
-     * 
+     *
      * @return true if the node should be hidden, or
      *         false otherwise
      */
@@ -79,7 +79,7 @@ public class Production extends Node {
 
     /**
      * Returns the production pattern for this production.
-     * 
+     *
      * @return the production pattern
      */
     public ProductionPattern getPattern() {
@@ -87,19 +87,19 @@ public class Production extends Node {
     }
 
     /**
-     * Returns the production (pattern) id. This value is set as a 
-     * unique identifier when creating the production pattern to 
+     * Returns the production (pattern) id. This value is set as a
+     * unique identifier when creating the production pattern to
      * simplify later identification.
-     * 
+     *
      * @return the production id
      */
     public int getId() {
-        return pattern.getId();    
+        return pattern.getId();
     }
-    
+
     /**
      * Returns the production node name.
-     * 
+     *
      * @return the production node name
      */
     public String getName() {
@@ -108,7 +108,7 @@ public class Production extends Node {
 
     /**
      * Returns the number of child nodes.
-     * 
+     *
      * @return the number of child nodes
      */
     public int getChildCount() {
@@ -117,24 +117,24 @@ public class Production extends Node {
 
     /**
      * Returns the child node with the specified index.
-     * 
+     *
      * @param index          the child index, 0 <= index < count
-     * 
-     * @return the child node found, or 
+     *
+     * @return the child node found, or
      *         null if index out of bounds
      */
     public Node getChildAt(int index) {
         if (index < 0 || index >= children.size()) {
-            return null; 
+            return null;
         } else {
             return (Node) children.get(index);
         }
     }
-    
+
     /**
      * Adds a child node. The node will be added last in the list of
      * children.
-     * 
+     *
      * @param child          the child node to add
      */
     public void addChild(Node child) {
@@ -146,7 +146,7 @@ public class Production extends Node {
 
     /**
      * Returns a string representation of this production.
-     * 
+     *
      * @return a string representation of this production
      */
     public String toString() {
@@ -156,7 +156,7 @@ public class Production extends Node {
         buffer.append('(');
         buffer.append(pattern.getId());
         buffer.append(')');
-        
-        return buffer.toString();        
+
+        return buffer.toString();
     }
 }

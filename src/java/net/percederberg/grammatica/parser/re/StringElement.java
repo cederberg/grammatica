@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -48,10 +48,10 @@ class StringElement extends Element {
      * The string to match with.
      */
     private String value = null;
-    
+
     /**
      * Creates a new string element.
-     * 
+     *
      * @param c              the character to match with
      */
     public StringElement(char c) {
@@ -60,7 +60,7 @@ class StringElement extends Element {
 
     /**
      * Creates a new string element.
-     * 
+     *
      * @param str            the string to match with
      */
     public StringElement(String str) {
@@ -69,7 +69,7 @@ class StringElement extends Element {
 
     /**
      * Returns the string to be matched.
-     * 
+     *
      * @return the string to be matched
      */
     public String getString() {
@@ -77,8 +77,8 @@ class StringElement extends Element {
     }
 
     /**
-     * Returns this element as it is immutable. 
-     * 
+     * Returns this element as it is immutable.
+     *
      * @return this string element
      */
     public Object clone() {
@@ -86,17 +86,17 @@ class StringElement extends Element {
     }
 
     /**
-     * Returns the length of a matching string starting at the 
+     * Returns the length of a matching string starting at the
      * specified position. The number of matches to skip can also be
-     * specified, but numbers higher than zero (0) cause a failed 
-     * match for any element that doesn't attempt to combine other 
+     * specified, but numbers higher than zero (0) cause a failed
+     * match for any element that doesn't attempt to combine other
      * elements.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      */
@@ -118,7 +118,7 @@ class StringElement extends Element {
 
     /**
      * Prints this element to the specified output stream.
-     * 
+     *
      * @param output         the output stream to use
      * @param indent         the current indentation
      */

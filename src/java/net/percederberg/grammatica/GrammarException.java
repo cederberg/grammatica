@@ -34,7 +34,7 @@
 package net.percederberg.grammatica;
 
 /**
- * A grammar validation exception. This exception is used for 
+ * A grammar validation exception. This exception is used for
  * signalling an error in the grammar file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
@@ -46,43 +46,43 @@ public class GrammarException extends Exception {
      * The grammar file name.
      */
     private String file;
-    
+
     /**
      * The detailed error message.
      */
     private String message;
-    
+
     /**
-     * The first error line, or -1 for unknown. 
+     * The first error line, or -1 for unknown.
      */
     private int startLine;
-    
+
     /**
-     * The last error line, or -1 for unknown. 
+     * The last error line, or -1 for unknown.
      */
     private int endLine;
 
     /**
      * Creates a new grammar exception.
-     * 
+     *
      * @param file           the grammar file name
      * @param message        the detailed error message
      */
     public GrammarException(String file, String message) {
         this(file, message, -1, -1);
     }
-    
+
     /**
      * Creates a new grammar exception.
-     * 
+     *
      * @param file           the grammar file name
      * @param message        the detailed error message
      * @param startLine      the starting line number, or -1 for unknown
      * @param endLine        the ending line number, or -1 for unknown
      */
-    public GrammarException(String file, 
-                            String message, 
-                            int startLine, 
+    public GrammarException(String file,
+                            String message,
+                            int startLine,
                             int endLine) {
 
         this.file = file;
@@ -90,10 +90,10 @@ public class GrammarException extends Exception {
         this.startLine = startLine;
         this.endLine = endLine;
     }
-    
+
     /**
      * Returns the grammar file name.
-     * 
+     *
      * @return the grammar file name
      */
     public String getFile() {
@@ -102,29 +102,29 @@ public class GrammarException extends Exception {
 
     /**
      * Returns the start line number for the error.
-     * 
-     * @return the starting line number, or 
+     *
+     * @return the starting line number, or
      *         -1 if unknown
      */
     public int getStartLine() {
         return startLine;
     }
-    
+
     /**
      * Returns the end line number for the error.
-     * 
-     * @return the ending line number, or 
+     *
+     * @return the ending line number, or
      *         -1 if unknown
      */
     public int getEndLine() {
         return endLine;
     }
-    
+
     /**
-     * Returns the detailed error message. This message will contain 
-     * the same string as getErrorMessage(), but with line number 
+     * Returns the detailed error message. This message will contain
+     * the same string as getErrorMessage(), but with line number
      * information appended.
-     * 
+     *
      * @return the detailed error message
      */
     public String getMessage() {
@@ -148,10 +148,10 @@ public class GrammarException extends Exception {
 
         return buffer.toString();
     }
-    
+
     /**
      * Returns the error message.
-     * 
+     *
      * @return the error message.
      */
     public String getErrorMessage() {

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -58,7 +58,7 @@ public class CSharpParserGenerator extends ParserGenerator {
      * The namespace to use.
      */
     private String namespace = null;
-    
+
     /**
      * The public class and interface access flag.
      */
@@ -66,7 +66,7 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Creates a new parser generator.
-     * 
+     *
      * @param grammar        the grammar to use
      */
     public CSharpParserGenerator(Grammar grammar) {
@@ -99,7 +99,7 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Returns the namespace used for the classes.
-     * 
+     *
      * @return the fully qualified namespace, or
      *         null for none
      */
@@ -109,7 +109,7 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Sets the namespace to use for the classes.
-     * 
+     *
      * @param namespace      the fully qualified namespace
      */
     public void setNamespace(String namespace) {
@@ -118,7 +118,7 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Returns the class name prefix.
-     * 
+     *
      * @return the class name prefix
      */
     public String getBaseName() {
@@ -127,7 +127,7 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Sets the class name prefix.
-     * 
+     *
      * @param name           the class name prefix
      */
     public void setBaseName(String name) {
@@ -136,17 +136,17 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Returns the public access flag.
-     * 
+     *
      * @return true if the classes should have public access, or
-     *         false otherwise 
+     *         false otherwise
      */
     public boolean getPublicAccess() {
         return publicAccess;
     }
-    
+
     /**
      * Sets the public access flag.
-     * 
+     *
      * @param flag           the new public access flag value
      */
     public void setPublicAccess(boolean flag) {
@@ -155,16 +155,16 @@ public class CSharpParserGenerator extends ParserGenerator {
 
     /**
      * Returns the code style to use.
-     * 
+     *
      * @return the code style to use
      */
     public CodeStyle getCodeStyle() {
         return CodeStyle.CSHARP;
     }
-    
+
     /**
      * Writes the source code files.
-     * 
+     *
      * @throws IOException if the files couldn't be written correctly
      */
     public void write() throws IOException {
@@ -176,7 +176,7 @@ public class CSharpParserGenerator extends ParserGenerator {
         TokenPattern         token;
         ProductionPattern    production;
         int                  i;
-        
+
         // Create token declarations
         for (i = 0; i < grammar.getTokenPatternCount(); i++) {
             token = grammar.getTokenPattern(i);

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -70,8 +70,8 @@ abstract class CSharpType extends CodeElementContainer {
     /**
      * Creates a new type code generator with the specified access
      * modifier that extends a specified type. If the extend type
-     * null or "" is specified, no extends declaration will be 
-     * printed. 
+     * null or "" is specified, no extends declaration will be
+     * printed.
      *
      * @param modifiers      the modifier flag constants
      * @param name           the type name
@@ -99,7 +99,7 @@ abstract class CSharpType extends CodeElementContainer {
     protected CSharpType(int modifiers, String name, String[] extendTypes) {
         this.modifiers = modifiers;
         this.name = name;
-        this.extendTypes = extendTypes; 
+        this.extendTypes = extendTypes;
     }
 
     /**
@@ -112,7 +112,7 @@ abstract class CSharpType extends CodeElementContainer {
     }
 
     /**
-     * Sets the type comment. This method will remove any previous 
+     * Sets the type comment. This method will remove any previous
      * type comment.
      *
      * @param comment        the new type comment
@@ -129,7 +129,7 @@ abstract class CSharpType extends CodeElementContainer {
      * @param indent         the indentation level
      * @param type           the type name
      */
-    protected void print(PrintWriter out, 
+    protected void print(PrintWriter out,
                          CodeStyle style,
                          int indent,
                          String type) {
@@ -167,16 +167,16 @@ abstract class CSharpType extends CodeElementContainer {
     }
 
     /**
-     * Prints the lines separating two elements. 
+     * Prints the lines separating two elements.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param prev           the previous element, or null if first
      * @param next           the next element, or null if last
      */
-    protected void printSeparator(PrintWriter out, 
-                                  CodeStyle style, 
-                                  CodeElement prev, 
+    protected void printSeparator(PrintWriter out,
+                                  CodeStyle style,
+                                  CodeElement prev,
                                   CodeElement next) {
 
         if (prev == null || next == null) {

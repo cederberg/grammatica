@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -34,10 +34,10 @@
 package net.percederberg.grammatica.parser;
 
 /**
- * A token pattern. This class contains the definition of a token 
+ * A token pattern. This class contains the definition of a token
  * (i.e. it's pattern), and allows testing a string against this
  * pattern. A token pattern is uniquely identified by an integer id,
- * that must be provided upon creation. 
+ * that must be provided upon creation.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.1
@@ -55,7 +55,7 @@ public class TokenPattern {
      * for tokens that match a regular expression.
      */
     public static final int REGEXP_TYPE = 2;
-    
+
     /**
      * The token pattern identity.
      */
@@ -129,21 +129,21 @@ public class TokenPattern {
     }
 
     /**
-     * Checks if the pattern corresponds to an error token. If this 
-     * is true, it means that an error should be reported if a 
+     * Checks if the pattern corresponds to an error token. If this
+     * is true, it means that an error should be reported if a
      * matching token is found.
-     * 
+     *
      * @return true if the pattern maps to an error token, or
      *         false otherwise
      */
     public boolean isError() {
         return error;
     }
-    
+
     /**
-     * Checks if the pattern corresponds to an ignored token. If this 
+     * Checks if the pattern corresponds to an ignored token. If this
      * is true, it means that the token should be ignored if found.
-     * 
+     *
      * @return true if the pattern maps to an ignored token, or
      *         false otherwise
      */
@@ -153,7 +153,7 @@ public class TokenPattern {
 
     /**
      * Returns the unique token pattern identity value.
-     * 
+     *
      * @return the token pattern id
      */
     public int getId() {
@@ -162,7 +162,7 @@ public class TokenPattern {
 
     /**
      * Returns the token pattern name.
-     * 
+     *
      * @return the token pattern name
      */
     public String getName() {
@@ -171,19 +171,19 @@ public class TokenPattern {
 
     /**
      * Returns the token pattern type.
-     * 
+     *
      * @return the token pattern type
-     * 
+     *
      * @see #STRING_TYPE
      * @see #REGEXP_TYPE
      */
     public int getType() {
         return type;
     }
-    
+
     /**
      * Returns te token pattern.
-     * 
+     *
      * @return the token pattern
      */
     public String getPattern() {
@@ -193,7 +193,7 @@ public class TokenPattern {
     /**
      * Returns the token error message if the pattern corresponds to
      * an error token.
-     *  
+     *
      * @return the token error message
      */
     public String getErrorMessage() {
@@ -203,7 +203,7 @@ public class TokenPattern {
     /**
      * Returns the token ignore message if the pattern corresponds to
      * an ignored token.
-     *  
+     *
      * @return the token ignore message
      */
     public String getIgnoreMessage() {
@@ -283,7 +283,7 @@ public class TokenPattern {
 
         return buffer.toString();
     }
-    
+
     /**
      * Returns a short string representation of this object.
      *

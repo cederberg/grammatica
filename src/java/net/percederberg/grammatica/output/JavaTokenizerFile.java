@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -64,7 +64,7 @@ class JavaTokenizerFile {
     private static final String CONSTRUCTOR_COMMENT =
         "Creates a new tokenizer for the specified input stream.\n\n" +
         "@param input          the input stream to read\n\n" +
-        "@throws ParserCreationException if the tokenizer couldn't be\n" + 
+        "@throws ParserCreationException if the tokenizer couldn't be\n" +
         "            initialized correctly";
 
     /**
@@ -72,7 +72,7 @@ class JavaTokenizerFile {
      */
     private static final String INIT_METHOD_COMMENT =
         "Initializes the tokenizer by creating all the token patterns.\n\n" +
-        "@throws ParserCreationException if the tokenizer couldn't be\n" + 
+        "@throws ParserCreationException if the tokenizer couldn't be\n" +
         "            initialized correctly";
 
     /**
@@ -84,20 +84,20 @@ class JavaTokenizerFile {
      * The Java file to write.
      */
     private JavaFile file;
-    
+
     /**
      * The Java class to write.
      */
     private JavaClass cls;
-    
+
     /**
      * The Java class initializer method.
      */
     private JavaMethod initMethod;
-    
+
     /**
      * Creates a new tokenizer file.
-     * 
+     *
      * @param gen            the parser generator to use
      */
     public JavaTokenizerFile(JavaParserGenerator gen) {
@@ -110,8 +110,8 @@ class JavaTokenizerFile {
         } else {
             modifiers = JavaClass.PACKAGE_LOCAL;
         }
-        this.cls = new JavaClass(modifiers, 
-                                 gen.getBaseName() + "Tokenizer", 
+        this.cls = new JavaClass(modifiers,
+                                 gen.getBaseName() + "Tokenizer",
                                  "Tokenizer");
         this.initMethod = new JavaMethod(JavaMethod.PRIVATE,
                                          "createPatterns",
@@ -122,18 +122,18 @@ class JavaTokenizerFile {
 
     /**
      * Initializes the source code objects.
-     */    
+     */
     private void initializeCode() {
         JavaConstructor  constr;
         String           str;
 
         // Add imports
         file.addImport(new JavaImport("java.io", "Reader"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ParserCreationException"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "TokenPattern"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser", 
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Tokenizer"));
 
         // Add class
@@ -143,7 +143,7 @@ class JavaTokenizerFile {
             str += "\n\n" + gen.getClassComment();
         }
         cls.addComment(new JavaComment(str));
-        
+
         // Add file comment
         str = file.toString() + "\n\n" + gen.getFileComment();
         file.addComment(new JavaComment(JavaComment.BLOCK, str));
@@ -155,31 +155,31 @@ class JavaTokenizerFile {
         constr.addThrows("ParserCreationException");
         constr.addCode("super(input);");
         constr.addCode("createPatterns();");
-        
+
         // Add init method
         cls.addMethod(initMethod);
         initMethod.addComment(new JavaComment(INIT_METHOD_COMMENT));
         initMethod.addThrows("ParserCreationException");
         initMethod.addCode("TokenPattern  pattern;");
     }
-    
+
     /**
      * Adds a token pattern definition to this file.
-     * 
+     *
      * @param pattern        the token pattern
      * @param constants      the constants file generator
      */
     public void addToken(TokenPattern pattern, JavaConstantsFile constants) {
         StringBuffer  code = new StringBuffer();
         String        str;
-        
+
         // Create new pattern
         code.append("pattern = new TokenPattern(");
         code.append(constants.getConstant(pattern.getId()));
         code.append(",\n");
         code.append("                           \"");
         code.append(pattern.getName());
-        code.append("\",\n"); 
+        code.append("\",\n");
         code.append("                           TokenPattern.");
         switch (pattern.getType()) {
         case TokenPattern.STRING_TYPE:
@@ -189,7 +189,7 @@ class JavaTokenizerFile {
             code.append("REGEXP_TYPE");
             break;
         }
-        code.append(",\n"); 
+        code.append(",\n");
         code.append("                           ");
         str = pattern.getPattern();
         code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
@@ -202,7 +202,7 @@ class JavaTokenizerFile {
                 str = pattern.getErrorMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
-            code.append(");\n");            
+            code.append(");\n");
         }
         if (pattern.isIgnore()) {
             code.append("pattern.setIgnore(");
@@ -210,7 +210,7 @@ class JavaTokenizerFile {
                 str = pattern.getIgnoreMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
-            code.append(");\n");            
+            code.append(");\n");
         }
 
         // Add pattern to tokenizer
@@ -222,9 +222,9 @@ class JavaTokenizerFile {
     /**
      * Creates source code performing a call to the constructor for
      * the tokenizer.
-     * 
+     *
      * @param param          the input parameters
-     * 
+     *
      * @return the source code for the call
      */
     protected String getConstructorCall(String param) {
@@ -233,9 +233,9 @@ class JavaTokenizerFile {
 
     /**
      * Writes the file source code.
-     * 
-     * @throws IOException if the output file couldn't be created 
-     *             correctly 
+     *
+     * @throws IOException if the output file couldn't be created
+     *             correctly
      */
     public void writeCode() throws IOException {
         file.writeCode(gen.getCodeStyle());

@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -37,7 +37,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
- * A regular expression character set element. This element matches a 
+ * A regular expression character set element. This element matches a
  * single character inside (or outside) a character set. The character
  * set is user defined and may contain ranges of characters. The set
  * may also be inverted, meaning that only characters not inside the
@@ -49,52 +49,52 @@ import java.util.ArrayList;
 class CharacterSetElement extends Element {
 
     /**
-     * The dot ('.') character set. This element matches a single 
-     * character that is not equal to a newline character. 
+     * The dot ('.') character set. This element matches a single
+     * character that is not equal to a newline character.
      */
-    public static final CharacterSetElement DOT = 
+    public static final CharacterSetElement DOT =
         new CharacterSetElement(false);
 
     /**
-     * The digit character set. This element matches a single 
-     * numeric character. 
+     * The digit character set. This element matches a single
+     * numeric character.
      */
-    public static final CharacterSetElement DIGIT = 
+    public static final CharacterSetElement DIGIT =
         new CharacterSetElement(false);
 
     /**
-     * The non-digit character set. This element matches a single 
-     * non-numeric character. 
+     * The non-digit character set. This element matches a single
+     * non-numeric character.
      */
-    public static final CharacterSetElement NON_DIGIT = 
+    public static final CharacterSetElement NON_DIGIT =
         new CharacterSetElement(true);
 
     /**
-     * The whitespace character set. This element matches a single 
-     * whitespace character. 
+     * The whitespace character set. This element matches a single
+     * whitespace character.
      */
-    public static final CharacterSetElement WHITESPACE = 
+    public static final CharacterSetElement WHITESPACE =
         new CharacterSetElement(false);
 
     /**
-     * The non-whitespace character set. This element matches a single 
-     * non-whitespace character. 
+     * The non-whitespace character set. This element matches a single
+     * non-whitespace character.
      */
-    public static final CharacterSetElement NON_WHITESPACE = 
+    public static final CharacterSetElement NON_WHITESPACE =
         new CharacterSetElement(true);
 
     /**
      * The word character set. This element matches a single word
-     * character. 
+     * character.
      */
-    public static final CharacterSetElement WORD = 
+    public static final CharacterSetElement WORD =
         new CharacterSetElement(false);
 
     /**
-     * The non-word character set. This element matches a single 
-     * non-word character. 
+     * The non-word character set. This element matches a single
+     * non-word character.
      */
-    public static final CharacterSetElement NON_WORD = 
+    public static final CharacterSetElement NON_WORD =
         new CharacterSetElement(true);
 
     /**
@@ -109,9 +109,9 @@ class CharacterSetElement extends Element {
     private ArrayList contents = new ArrayList();
 
     /**
-     * Creates a new character set element. If the inverted character 
+     * Creates a new character set element. If the inverted character
      * set flag is set, only characters NOT in the set will match.
-     * 
+     *
      * @param inverted       the inverted character set flag
      */
     public CharacterSetElement(boolean inverted) {
@@ -120,7 +120,7 @@ class CharacterSetElement extends Element {
 
     /**
      * Adds a single character to this character set.
-     * 
+     *
      * @param c              the character to add
      */
     public void addCharacter(char c) {
@@ -129,7 +129,7 @@ class CharacterSetElement extends Element {
 
     /**
      * Adds multiple characters to this character set.
-     * 
+     *
      * @param str            the string with characters to add
      */
     public void addCharacters(String str) {
@@ -140,7 +140,7 @@ class CharacterSetElement extends Element {
 
     /**
      * Adds multiple characters to this character set.
-     * 
+     *
      * @param elem           the string element with characters to add
      */
     public void addCharacters(StringElement elem) {
@@ -149,7 +149,7 @@ class CharacterSetElement extends Element {
 
     /**
      * Adds a character range to this character set.
-     * 
+     *
      * @param min            the minimum character value
      * @param max            the maximum character value
      */
@@ -159,7 +159,7 @@ class CharacterSetElement extends Element {
 
     /**
      * Adds a character subset to this character set.
-     * 
+     *
      * @param elem           the character set to add
      */
     public void addCharacterSet(CharacterSetElement elem) {
@@ -170,8 +170,8 @@ class CharacterSetElement extends Element {
      * Returns this element as the character set shouldn't be modified
      * after creation. This partially breaks the contract of clone(),
      * but as new characters are not added to the character set after
-     * creation, this will work correctly. 
-     * 
+     * creation, this will work correctly.
+     *
      * @return this character set element
      */
     public Object clone() {
@@ -179,17 +179,17 @@ class CharacterSetElement extends Element {
     }
 
     /**
-     * Returns the length of a matching string starting at the 
+     * Returns the length of a matching string starting at the
      * specified position. The number of matches to skip can also be
-     * specified, but numbers higher than zero (0) cause a failed 
-     * match for any element that doesn't attempt to combine other 
+     * specified, but numbers higher than zero (0) cause a failed
+     * match for any element that doesn't attempt to combine other
      * elements.
      *
-     * @param m              the matcher being used 
+     * @param m              the matcher being used
      * @param str            the string to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
-     * 
+     *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      */
@@ -210,9 +210,9 @@ class CharacterSetElement extends Element {
     /**
      * Checks if the specified character matches this character set.
      * This method takes the inverted flag into account.
-     * 
+     *
      * @param value          the character to check
-     * 
+     *
      * @return true if the character matches, or
      *         false otherwise
      */
@@ -231,11 +231,11 @@ class CharacterSetElement extends Element {
     }
 
     /**
-     * Checks if the specified character is present in the 'dot'  set. 
+     * Checks if the specified character is present in the 'dot'  set.
      * This method does not consider the inverted flag.
-     * 
+     *
      * @param value          the character to check
-     * 
+     *
      * @return true if the character is present, or
      *         false otherwise
      */
@@ -253,11 +253,11 @@ class CharacterSetElement extends Element {
     }
 
     /**
-     * Checks if the specified character is a digit. This method does 
+     * Checks if the specified character is a digit. This method does
      * not consider the inverted flag.
-     * 
+     *
      * @param value          the character to check
-     * 
+     *
      * @return true if the character is a digit, or
      *         false otherwise
      */
@@ -268,9 +268,9 @@ class CharacterSetElement extends Element {
     /**
      * Checks if the specified character is a whitespace character.
      * This method does not consider the inverted flag.
-     * 
+     *
      * @param value          the character to check
-     * 
+     *
      * @return true if the character is a whitespace character, or
      *         false otherwise
      */
@@ -289,11 +289,11 @@ class CharacterSetElement extends Element {
     }
 
     /**
-     * Checks if the specified character is a word character. This 
+     * Checks if the specified character is a word character. This
      * method does not consider the inverted flag.
-     * 
+     *
      * @param value          the character to check
-     * 
+     *
      * @return true if the character is a word character, or
      *         false otherwise
      */
@@ -307,9 +307,9 @@ class CharacterSetElement extends Element {
     /**
      * Checks if the specified character is present in the user-
      * defined set. This method does not consider the inverted flag.
-     * 
+     *
      * @param value          the character to check
-     * 
+     *
      * @return true if the character is present, or
      *         false otherwise
      */
@@ -340,10 +340,10 @@ class CharacterSetElement extends Element {
         }
         return false;
     }
-    
+
     /**
      * Prints this element to the specified output stream.
-     * 
+     *
      * @param output         the output stream to use
      * @param indent         the current indentation
      */
@@ -353,7 +353,7 @@ class CharacterSetElement extends Element {
 
     /**
      * Returns a string description of this character set.
-     * 
+     *
      * @return a string description of this character set
      */
     public String toString() {
@@ -376,7 +376,7 @@ class CharacterSetElement extends Element {
             return "\\W";
         }
 
-        // Handle user-defined character sets        
+        // Handle user-defined character sets
         buffer = new StringBuffer();
         if (inverted) {
             buffer.append("^[");
@@ -394,7 +394,7 @@ class CharacterSetElement extends Element {
 
     /**
      * A character range class.
-     */    
+     */
     private class Range {
 
         /**
@@ -409,7 +409,7 @@ class CharacterSetElement extends Element {
 
         /**
          * Creates a new character range.
-         * 
+         *
          * @param min        the minimum character value
          * @param max        the maximum character value
          */
@@ -417,22 +417,22 @@ class CharacterSetElement extends Element {
             this.min = min;
             this.max = max;
         }
-        
+
         /**
          * Checks if the specified character is inside the range.
-         * 
+         *
          * @param c          the character to check
-         * 
+         *
          * @return true if the character is in the range, or
          *         false otherwise
          */
         public boolean inside(char c) {
             return c >= min && c <= max;
         }
-        
+
         /**
          * Returns a string representation of this object.
-         * 
+         *
          * @return a string representation of this object
          */
         public String toString() {

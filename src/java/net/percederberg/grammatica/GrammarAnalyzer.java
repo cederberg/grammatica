@@ -1,23 +1,23 @@
 /*
  * GrammarAnalyzer.java
- * 
+ *
  * THIS FILE HAS BEEN GENERATED AUTOMATICALLY. DO NOT EDIT!
- * 
+ *
  * This work is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
- * 
+ *
  * This work is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
- * 
+ *
  * As a special exception, the copyright holders of this library give
  * you permission to link this library with independent modules to
  * produce an executable, regardless of the license terms of these
@@ -29,7 +29,7 @@
  * library, you may extend this exception to your version of the
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
- * 
+ *
  * Copyright (c) 2003 Per Cederberg. All rights reserved.
  */
 
@@ -43,7 +43,7 @@ import net.percederberg.grammatica.parser.Token;
 
 /**
  * A class providing callback methods for the parser.
- * 
+ *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.2
  */
@@ -51,9 +51,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enter(Node node) throws ParseException {
@@ -159,12 +159,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exit(Node node) throws ParseException {
@@ -239,10 +239,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void child(Production node, Node child)
@@ -287,9 +287,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterHeader(Token node) throws ParseException {
@@ -297,12 +297,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitHeader(Token node) throws ParseException {
@@ -311,9 +311,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTokens(Token node) throws ParseException {
@@ -321,12 +321,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTokens(Token node) throws ParseException {
@@ -335,9 +335,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterProductions(Token node) throws ParseException {
@@ -345,12 +345,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitProductions(Token node) throws ParseException {
@@ -359,9 +359,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterIgnore(Token node) throws ParseException {
@@ -369,12 +369,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitIgnore(Token node) throws ParseException {
@@ -383,9 +383,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterError(Token node) throws ParseException {
@@ -393,12 +393,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitError(Token node) throws ParseException {
@@ -407,9 +407,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterUnterminatedDirective(Token node)
@@ -418,12 +418,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitUnterminatedDirective(Token node)
@@ -434,9 +434,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterEquals(Token node) throws ParseException {
@@ -444,12 +444,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitEquals(Token node) throws ParseException {
@@ -458,9 +458,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftParen(Token node) throws ParseException {
@@ -468,12 +468,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitLeftParen(Token node) throws ParseException {
@@ -482,9 +482,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightParen(Token node) throws ParseException {
@@ -492,12 +492,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitRightParen(Token node) throws ParseException {
@@ -506,9 +506,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftBrace(Token node) throws ParseException {
@@ -516,12 +516,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitLeftBrace(Token node) throws ParseException {
@@ -530,9 +530,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightBrace(Token node) throws ParseException {
@@ -540,12 +540,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitRightBrace(Token node) throws ParseException {
@@ -554,9 +554,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftBracket(Token node) throws ParseException {
@@ -564,12 +564,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitLeftBracket(Token node) throws ParseException {
@@ -578,9 +578,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightBracket(Token node) throws ParseException {
@@ -588,12 +588,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitRightBracket(Token node) throws ParseException {
@@ -602,9 +602,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterQuestionMark(Token node) throws ParseException {
@@ -612,12 +612,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitQuestionMark(Token node) throws ParseException {
@@ -626,9 +626,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterPlusSign(Token node) throws ParseException {
@@ -636,12 +636,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitPlusSign(Token node) throws ParseException {
@@ -650,9 +650,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterAsterisk(Token node) throws ParseException {
@@ -660,12 +660,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitAsterisk(Token node) throws ParseException {
@@ -674,9 +674,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterVerticalBar(Token node) throws ParseException {
@@ -684,12 +684,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitVerticalBar(Token node) throws ParseException {
@@ -698,9 +698,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterSemicolon(Token node) throws ParseException {
@@ -708,12 +708,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitSemicolon(Token node) throws ParseException {
@@ -722,9 +722,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterIdentifier(Token node) throws ParseException {
@@ -732,12 +732,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitIdentifier(Token node) throws ParseException {
@@ -746,9 +746,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterQuotedString(Token node) throws ParseException {
@@ -756,12 +756,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitQuotedString(Token node) throws ParseException {
@@ -770,9 +770,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRegexp(Token node) throws ParseException {
@@ -780,12 +780,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitRegexp(Token node) throws ParseException {
@@ -794,9 +794,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterGrammar(Production node) throws ParseException {
@@ -804,12 +804,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitGrammar(Production node) throws ParseException {
@@ -818,10 +818,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childGrammar(Production node, Node child)
@@ -832,9 +832,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterHeaderPart(Production node)
@@ -843,12 +843,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitHeaderPart(Production node)
@@ -859,10 +859,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childHeaderPart(Production node, Node child)
@@ -873,9 +873,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterHeaderDeclaration(Production node)
@@ -884,12 +884,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitHeaderDeclaration(Production node)
@@ -900,10 +900,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childHeaderDeclaration(Production node, Node child)
@@ -914,9 +914,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTokenPart(Production node)
@@ -925,12 +925,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTokenPart(Production node)
@@ -941,10 +941,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childTokenPart(Production node, Node child)
@@ -955,9 +955,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTokenDeclaration(Production node)
@@ -966,12 +966,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTokenDeclaration(Production node)
@@ -982,10 +982,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childTokenDeclaration(Production node, Node child)
@@ -996,9 +996,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTokenValue(Production node)
@@ -1007,12 +1007,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTokenValue(Production node)
@@ -1023,10 +1023,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childTokenValue(Production node, Node child)
@@ -1037,9 +1037,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTokenHandling(Production node)
@@ -1048,12 +1048,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTokenHandling(Production node)
@@ -1064,10 +1064,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childTokenHandling(Production node, Node child)
@@ -1078,9 +1078,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterProductionPart(Production node)
@@ -1089,12 +1089,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitProductionPart(Production node)
@@ -1105,10 +1105,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childProductionPart(Production node, Node child)
@@ -1119,9 +1119,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterProductionDeclaration(Production node)
@@ -1130,12 +1130,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitProductionDeclaration(Production node)
@@ -1146,10 +1146,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childProductionDeclaration(Production node, Node child)
@@ -1160,9 +1160,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterProduction(Production node)
@@ -1171,12 +1171,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitProduction(Production node)
@@ -1187,10 +1187,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childProduction(Production node, Node child)
@@ -1201,9 +1201,9 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterProductionAtom(Production node)
@@ -1212,12 +1212,12 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitProductionAtom(Production node)
@@ -1228,10 +1228,10 @@ abstract class GrammarAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childProductionAtom(Production node, Node child)
