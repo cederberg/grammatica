@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code;
@@ -40,7 +40,7 @@ package net.percederberg.grammatica.code;
  * generators. 
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class CodeStyle {
 
@@ -53,6 +53,11 @@ public class CodeStyle {
      * The default C# code style.
      */
     public static final CodeStyle CSHARP = new CodeStyle(70, "    ");
+
+    /**
+     * The default Visual Basic code style.
+     */
+    public static final CodeStyle VISUAL_BASIC = new CodeStyle(70, "    ");
 
     /**
      * The right print margin.
@@ -103,18 +108,19 @@ public class CodeStyle {
     /**
      * Creates a string constant from the specified string. This will
      * add " characters to start and the end, and all " character 
-     * inside the string will be escaped. Also, all \ characters will
-     * be escaped.
-     * 
+     * inside the string will be escaped. Also, any occurence of the
+     * escape character itself will be doubled (i.e. "\" becomes "\\").
+     *
      * @param str            the string to convert
-     * 
+     * @param escape         the escape character to use
+     *
      * @return a string constant
      */
-    public String getStringConstant(String str) {
+    public String getStringConstant(String str, char escape) {
         StringBuffer  res = new StringBuffer();
         
         res.append('"');
-        res.append(addStringEscapes(str));
+        res.append(addStringEscapes(str, escape));
         res.append('"');
 
         return res.toString();
@@ -233,21 +239,24 @@ public class CodeStyle {
     }
 
     /**
-     * Adds '\' escapes in front of all '"' and '\' characters in a 
-     * string.
-     * 
+     * Adds escapes in front of all " characters in a string. Any
+     * occurence of the escape character itself will also be escaped.
+     *
      * @param str            the string to convert
+     * @param escape         the escape character to use
      * 
      * @return the converted string
      */
-    public String addStringEscapes(String str) {
+    public String addStringEscapes(String str, char escape) {
         StringBuffer  res = new StringBuffer();
         
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == '"') {
-                res.append("\\\"");
-            } else if (str.charAt(i) == '\\') {
-                res.append("\\\\");
+                res.append(escape);
+                res.append("\"");
+            } else if (str.charAt(i) == escape) {
+                res.append(escape);
+                res.append(escape);
             } else {
                 res.append(str.charAt(i));
             }

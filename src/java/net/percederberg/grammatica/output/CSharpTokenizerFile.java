@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -49,7 +49,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * C# code necessary for creating a tokenizer.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class CSharpTokenizerFile {
 
@@ -193,7 +193,7 @@ class CSharpTokenizerFile {
         code.append(",\n"); 
         code.append("                           ");
         str = pattern.getPattern();
-        code.append(gen.getCodeStyle().getStringConstant(str));
+        code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
         code.append(");\n");
 
         // Add error and ignore messages
@@ -201,7 +201,7 @@ class CSharpTokenizerFile {
             code.append("pattern.SetError(");
             if (pattern.getErrorMessage() != null) {
                 str = pattern.getErrorMessage();
-                code.append(gen.getCodeStyle().getStringConstant(str));
+                code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
             code.append(");\n");            
         }
@@ -209,7 +209,7 @@ class CSharpTokenizerFile {
             code.append("pattern.SetIgnore(");
             if (pattern.getIgnoreMessage() != null) {
                 str = pattern.getIgnoreMessage();
-                code.append(gen.getCodeStyle().getStringConstant(str));
+                code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
             code.append(");\n");            
         }
