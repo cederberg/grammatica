@@ -97,7 +97,7 @@ public class GrammaticaTask extends Task {
      * 
      * @param elem           the validation element
      */
-    public void addValidate(ValidationElement elem) {
+    public void addValidation(ValidationElement elem) {
         processors.add(elem);
     }
 
@@ -146,17 +146,11 @@ public class GrammaticaTask extends Task {
         } catch (FileNotFoundException e) {
             throw new BuildException(e);
         } catch (ParserLogException e) {
-            if (failOnError) {
-                throw new BuildException(e);
-            } else {
-                return;
-            }
+            handleError(e);
+            return;
         } catch (GrammarException e) {
-            if (failOnError) {
-                throw new BuildException(e);
-            } else {
-                return;
-            }
+            handleError(e);
+            return;
         }
 
         // Process grammar file
@@ -164,10 +158,27 @@ public class GrammaticaTask extends Task {
             try {
                 ((ProcessingElement) processors.get(i)).process(grammar);
             } catch (BuildException e) {
-                if (failOnError) {
-                    throw e;
-                }
+                handleError(e);
             }
         }
+    }
+    
+    /**
+     * Handles an error. This will either print the error or throw
+     * a build exception, depending of the failOnError flag.
+     * 
+     * @param e              the error exception 
+     * 
+     * @throws BuildException if the build should fail on errors
+     */
+    private void handleError(Exception e) throws BuildException {
+        if (failOnError) {
+            if (e instanceof BuildException) {
+                throw (BuildException) e;
+            } else {
+                throw new BuildException(e);
+            }
+        }
+        System.err.println("ERROR: " + e.getMessage());
     }
 }
