@@ -31,7 +31,6 @@
  * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
-using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -66,7 +65,7 @@ namespace PerCederberg.Grammatica.Parser {
          * string token patterns. This matcher implements a DFA to
          * provide maximum performance.
          */
-        private StringTokenMatcher stringMatcher = new StringTokenMatcher();
+        private StringTokenMatcher stringMatcher;
 
         /**
          * The list of all regular expression token matchers. These
@@ -136,6 +135,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @since 1.5
          */
         public Tokenizer(TextReader input, bool ignoreCase) {
+            this.stringMatcher = new StringTokenMatcher(ignoreCase);
             this.input = input;
             this.ignoreCase = ignoreCase;
         }
@@ -236,7 +236,7 @@ namespace PerCederberg.Grammatica.Parser {
         public void AddPattern(TokenPattern pattern) {
             switch (pattern.GetPatternType()) {
             case TokenPattern.PatternType.STRING:
-                stringMatcher.AddPattern(pattern, ignoreCase);
+                stringMatcher.AddPattern(pattern);
                 break;
             case TokenPattern.PatternType.REGEXP:
                 try {
@@ -413,7 +413,7 @@ namespace PerCederberg.Grammatica.Parser {
             string              str = buffer.ToString();
 
             // Check string matches
-            if (stringMatcher.MatchFrom(str, position, ignoreCase)) {
+            if (stringMatcher.MatchFrom(str, position)) {
                 bestMatch = stringMatcher;
                 bestLength = bestMatch.GetMatchedLength();
             }
@@ -619,7 +619,7 @@ namespace PerCederberg.Grammatica.Parser {
      * internally uses a DFA for maximum performance. It also
      * maintains the state of the last match.
      */
-    internal class StringTokenMatcher : TokenMatcher {
+    internal class StringTokenMatcher : TokenMatcher, StringMatcher {
 
         /**
          * The list of string token patterns.
@@ -642,9 +642,17 @@ namespace PerCederberg.Grammatica.Parser {
         private bool endOfString = false;
 
         /**
-         * Creates a new string token matcher.
+         * The ignore character case flag.
          */
-        public StringTokenMatcher() {
+        private bool ignoreCase = false;
+
+        /**
+         * Creates a new string token matcher.
+         *
+         * @param ignoreCase      the character case ignore flag
+         */
+        public StringTokenMatcher(bool ignoreCase) {
+            this.ignoreCase = ignoreCase;
         }
 
         /**
@@ -678,6 +686,16 @@ namespace PerCederberg.Grammatica.Parser {
             } else {
                 return match.GetPattern().Length;
             }
+        }
+
+        /**
+         * Checks if this matcher compares in case-insensitive mode.
+         *
+         * @return true if the matching is case-insensitive, or
+         *         false otherwise
+         */
+        public bool IsCaseInsensitive() {
+            return ignoreCase;
         }
 
         /**
@@ -723,11 +741,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Adds a string token pattern to this matcher.
          *
          * @param pattern        the pattern to add
-         * @param ignoreCase     the character case ignore flag
          */
-        public void AddPattern(TokenPattern pattern, bool ignoreCase) {
+        public void AddPattern(TokenPattern pattern) {
             patterns.Add(pattern);
-            start.AddMatch(pattern.GetPattern(), ignoreCase, pattern);
+            start.AddMatch(this, pattern.GetPattern(), pattern);
         }
 
         /**
@@ -737,14 +754,13 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @param str            the string to match
          * @param pos            the starting position
-         * @param ignoreCase     the character case ignore flag
          *
          * @return true if a match was found, or
          *         false otherwise
          */
-        public bool MatchFrom(string str, int pos, bool ignoreCase) {
+        public bool MatchFrom(string str, int pos) {
             Reset();
-            match = (TokenPattern) start.MatchFrom(this, str, pos, ignoreCase);
+            match = (TokenPattern) start.MatchFrom(this, str, pos);
             return match != null;
         }
 
@@ -762,182 +778,6 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append("\n\n");
             }
             return buffer.ToString();
-        }
-    }
-
-
-    /**
-     * A deterministic finite automaton. This is a simple automaton
-     * for character sequences. It cannot handle character set state
-     * transitions, but only supports single character transitions.
-     */
-    internal class Automaton {
-
-        /**
-         * The state value.
-         */
-        private object value = null;
-
-        /**
-         * The automaton state transition tree. Each transition from
-         * this state to another state is added to this tree with the
-         * corresponding character.
-         */
-        private AutomatonTree tree = new AutomatonTree();
-
-        /**
-         * Creates a new empty automaton.
-         */
-        public Automaton() {
-        }
-
-        /**
-         * Adds a string match to this automaton. New states and
-         * transitions will be added to extend this automaton to
-         * support the specified string. If the lower-case flag is
-         * set, the string will be converted to lower-case before
-         * being added.
-         *
-         * @param str            the string to match
-         * @param lowerCase      the lower-case conversion flag
-         * @param value          the match value
-         */
-        public void AddMatch(string str, bool lowerCase, object value) {
-            Automaton  state;
-
-            if (str.Equals("")) {
-                this.value = value;
-            } else {
-                state = tree.Find(str[0], lowerCase);
-                if (state == null) {
-                    state = new Automaton();
-                    state.AddMatch(str.Substring(1), lowerCase, value);
-                    tree.Add(str[0], lowerCase, state);
-                } else {
-                    state.AddMatch(str.Substring(1), lowerCase, value);
-                }
-            }
-        }
-
-        /**
-         * Checks if the automaton matches the tokenizer buffer from
-         * the specified position. This method will set the end of
-         * buffer flag in the specified token matcher if the end of
-         * buffer is reached. The comparison can be done either with
-         * only lower-case characters, or in a case-sensitive manner.
-         *
-         * @param m              the string token matcher
-         * @param str            the string to match
-         * @param pos            the starting position
-         * @param lowerCase      the lower-case comparison flag
-         *
-         * @return the match value, or
-         *         null if no match is found
-         */
-        public object MatchFrom(StringTokenMatcher m,
-                                string str,
-                                int pos,
-                                bool lowerCase) {
-
-            object     result = null;
-            Automaton  state;
-
-            if (pos >= str.Length) {
-                m.SetReadEndOfString();
-            } else if (tree != null) {
-                state = tree.Find(str[pos], lowerCase);
-                if (state != null) {
-                    result = state.MatchFrom(m, str, pos + 1, lowerCase);
-                }
-            }
-            return (result == null) ? value : result;
-        }
-    }
-
-
-    /**
-     * An automaton state transition tree. This class contains a
-     * binary search tree for the automaton transitions from one
-     * state to another. All transitions are linked to a single
-     * character.
-     */
-    internal class AutomatonTree {
-
-        /**
-         * The transition character. If this value is set to the zero
-         * ('\0') character, this tree is empty.
-         */
-        private char value = '\0';
-
-        /**
-         * The transition state.
-         */
-        private Automaton state = null;
-
-        /**
-         * The left subtree.
-         */
-        private AutomatonTree left = null;
-
-        /**
-         * The right subtree.
-         */
-        private AutomatonTree right = null;
-
-        /**
-         * Creates a new empty automaton transition tree.
-         */
-        public AutomatonTree() {
-        }
-
-        /**
-         * Finds an automaton state from the specified transition
-         * character. This method searches this transition tree for a
-         * matching transition. The comparison can be done either with
-         * only lower-case characters, or in a case-sensitive manner.
-         *
-         * @param c              the character to search for
-         * @param lowerCase      the lower-case comparison flag
-         *
-         * @return the automaton state found, or
-         *         null if no transition exists
-         */
-        public Automaton Find(char c, bool lowerCase) {
-            if (lowerCase) {
-                c = Char.ToLower(c);
-            }
-            if (value == '\0' || value == c) {
-                return state;
-            } else if (value > c) {
-                return left.Find(c, false);
-            } else {
-                return right.Find(c, false);
-            }
-        }
-
-        /**
-         * Adds a transition to this tree. If the lower-case flag is
-         * set, the character will be converted to lower-case before
-         * being added.
-         *
-         * @param c              the character to transition for
-         * @param lowerCase      the lower-case conversion flag
-         * @param state          the state to transition to
-         */
-        public void Add(char c, bool lowerCase, Automaton state) {
-            if (lowerCase) {
-                c = Char.ToLower(c);
-            }
-            if (value == '\0') {
-                this.value = c;
-                this.state = state;
-                this.left = new AutomatonTree();
-                this.right = new AutomatonTree();
-            } else if (value > c) {
-                left.Add(c, false, state);
-            } else {
-                right.Add(c, false, state);
-            }
         }
     }
 }

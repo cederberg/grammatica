@@ -623,7 +623,8 @@ public class Tokenizer {
      * internally uses a DFA for maximum performance. It also
      * maintains the state of the last match.
      */
-    private class StringTokenMatcher extends TokenMatcher {
+    private class StringTokenMatcher extends TokenMatcher
+        implements StringMatcher {
 
         /**
          * The list of string token patterns.
@@ -685,6 +686,16 @@ public class Tokenizer {
         }
 
         /**
+         * Checks if this matcher compares in case-insensitive mode.
+         *
+         * @return true if the matching is case-insensitive, or
+         *         false otherwise
+         */
+        public boolean isCaseInsensitive() {
+            return ignoreCase;
+        }
+
+        /**
          * Checks if the end of string was encountered during the last
          * match.
          *
@@ -730,7 +741,7 @@ public class Tokenizer {
          */
         public void addPattern(TokenPattern pattern) {
             patterns.add(pattern);
-            start.addMatch(pattern.getPattern(), ignoreCase, pattern);
+            start.addMatch(this, pattern.getPattern(), pattern);
         }
 
         /**
@@ -745,7 +756,7 @@ public class Tokenizer {
          */
         public boolean matchFrom(int pos) {
             reset();
-            match = (TokenPattern) start.matchFrom(this, pos, ignoreCase);
+            match = (TokenPattern) start.matchFrom(this, buffer, pos);
             return match != null;
         }
 
@@ -763,180 +774,6 @@ public class Tokenizer {
                 buffer.append("\n\n");
             }
             return buffer.toString();
-        }
-    }
-
-
-    /**
-     * A deterministic finite automaton. This is a simple automaton
-     * for character sequences. It cannot handle character set state
-     * transitions, but only supports single character transitions.
-     */
-    private class Automaton {
-
-        /**
-         * The state value.
-         */
-        private Object value = null;
-
-        /**
-         * The automaton state transition tree. Each transition from
-         * this state to another state is added to this tree with the
-         * corresponding character.
-         */
-        private AutomatonTree tree = new AutomatonTree();
-
-        /**
-         * Creates a new empty automaton.
-         */
-        public Automaton() {
-        }
-
-        /**
-         * Adds a string match to this automaton. New states and
-         * transitions will be added to extend this automaton to
-         * support the specified string. If the lower-case flag is
-         * set, the string will be converted to lower-case before
-         * being added.
-         *
-         * @param str            the string to match
-         * @param lowerCase      the lower-case conversion flag
-         * @param value          the match value
-         */
-        public void addMatch(String str, boolean lowerCase, Object value) {
-            Automaton  state;
-
-            if (str.equals("")) {
-                this.value = value;
-            } else {
-                state = tree.find(str.charAt(0), lowerCase);
-                if (state == null) {
-                    state = new Automaton();
-                    state.addMatch(str.substring(1), lowerCase, value);
-                    tree.add(str.charAt(0), lowerCase, state);
-                } else {
-                    state.addMatch(str.substring(1), lowerCase, value);
-                }
-            }
-        }
-
-        /**
-         * Checks if the automaton matches the tokenizer buffer from
-         * the specified position. This method will set the end of
-         * buffer flag in the specified token matcher if the end of
-         * buffer is reached. The comparison can be done either with
-         * only lower-case characters, or in a case-sensitive manner.
-         *
-         * @param m              the string token matcher
-         * @param pos            the starting position
-         * @param lowerCase      the lower-case comparison flag
-         *
-         * @return the match value, or
-         *         null if no match is found
-         */
-        public Object matchFrom(StringTokenMatcher m,
-                                int pos,
-                                boolean lowerCase) {
-
-            Object     result = null;
-            Automaton  state;
-
-            if (pos >= buffer.length()) {
-                m.setReadEndOfString();
-            } else if (tree != null) {
-                state = tree.find(buffer.charAt(pos), lowerCase);
-                if (state != null) {
-                    result = state.matchFrom(m, pos + 1, lowerCase);
-                }
-            }
-            return (result == null) ? value : result;
-        }
-    }
-
-
-    /**
-     * An automaton state transition tree. This class contains a
-     * binary search tree for the automaton transitions from one
-     * state to another. All transitions are linked to a single
-     * character.
-     */
-    private class AutomatonTree {
-
-        /**
-         * The transition character. If this value is set to the zero
-         * ('\0') character, this tree is empty.
-         */
-        private char value = '\0';
-
-        /**
-         * The transition state.
-         */
-        private Automaton state = null;
-
-        /**
-         * The left subtree.
-         */
-        private AutomatonTree left = null;
-
-        /**
-         * The right subtree.
-         */
-        private AutomatonTree right = null;
-
-        /**
-         * Creates a new empty automaton transition tree.
-         */
-        public AutomatonTree() {
-        }
-
-        /**
-         * Finds an automaton state from the specified transition
-         * character. This method searches this transition tree for a
-         * matching transition. The comparison can be done either with
-         * only lower-case characters, or in a case-sensitive manner.
-         *
-         * @param c              the character to search for
-         * @param lowerCase      the lower-case comparison flag
-         *
-         * @return the automaton state found, or
-         *         null if no transition exists
-         */
-        public Automaton find(char c, boolean lowerCase) {
-            if (lowerCase) {
-                c = Character.toLowerCase(c);
-            }
-            if (value == '\0' || value == c) {
-                return state;
-            } else if (value > c) {
-                return left.find(c, false);
-            } else {
-                return right.find(c, false);
-            }
-        }
-
-        /**
-         * Adds a transition to this tree. If the lower-case flag is
-         * set, the character will be converted to lower-case before
-         * being added.
-         *
-         * @param c              the character to transition for
-         * @param lowerCase      the lower-case conversion flag
-         * @param state          the state to transition to
-         */
-        public void add(char c, boolean lowerCase, Automaton state) {
-            if (lowerCase) {
-                c = Character.toLowerCase(c);
-            }
-            if (value == '\0') {
-                this.value = c;
-                this.state = state;
-                this.left = new AutomatonTree();
-                this.right = new AutomatonTree();
-            } else if (value > c) {
-                left.add(c, false, state);
-            } else {
-                right.add(c, false, state);
-            }
         }
     }
 }
