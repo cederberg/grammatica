@@ -286,7 +286,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
             case '\n':
             case '\f':
             case '\r':
-            case 11:
+            case (char) 11:
                 return true;
             default:
                 return false;
