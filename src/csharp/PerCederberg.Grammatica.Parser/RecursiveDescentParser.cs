@@ -48,12 +48,6 @@ namespace PerCederberg.Grammatica.Parser {
     public class RecursiveDescentParser : Parser {
 
         /**
-         * The map of pattern look-ahead sets. The map is indexed by
-         * the production pattern object.
-         */
-        private Hashtable lookAheads = new Hashtable();
-
-        /**
          * Creates a new parser.
          * 
          * @param tokenizer      the tokenizer to use

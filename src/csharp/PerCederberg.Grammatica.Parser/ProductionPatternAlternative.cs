@@ -281,8 +281,6 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         public override bool Equals(object obj) {
-            ProductionPatternAlternative  alt;
-            
             if (obj is ProductionPatternAlternative) {
                 return Equals((ProductionPatternAlternative) obj);
             } else {

@@ -49,12 +49,6 @@ import java.util.Iterator;
 public class RecursiveDescentParser extends Parser {
 
     /**
-     * The map of pattern look-ahead sets. The map is indexed by the
-     * production pattern object. 
-     */
-    private HashMap lookAheads = new HashMap();
-
-    /**
      * Creates a new parser.
      * 
      * @param tokenizer      the tokenizer to use

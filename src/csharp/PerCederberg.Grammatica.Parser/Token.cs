@@ -130,9 +130,10 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the token image (i.e. the characters).
-         * 
-         * @return the token characters
+         * Returns the token image. The token image consists of the
+         * input characters matched to form this token.
+         *
+         * @return the token image
          */
         public string GetImage() {
             return image;
