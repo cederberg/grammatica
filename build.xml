@@ -40,6 +40,9 @@
             value="${basedir}" />
 
   <path id="project.class.path">
+    <fileset dir="${build.dir}/lib">
+      <include name="**/*.jar"/>
+    </fileset>
   </path>
 
   <target name="init">
@@ -88,7 +91,8 @@
     <delete quiet="true">
       <fileset dir="${build.dir}/bin" />
       <fileset dir="${build.dir}/classes" />
-      <fileset dir="${build.dir}/lib" />
+      <fileset dir="${build.dir}/lib" 
+               includes="grammatica*" />
     </delete>
     <mkdir dir="${build.dir}/bin" />
     <mkdir dir="${build.dir}/classes" />
@@ -274,7 +278,7 @@
                   prefix="grammatica-${build.version}">
         <include name="*.txt" />
         <include name="*.xml" />
-        <include name="lib/**" />
+        <include name="lib/grammatica*" />
         <include name="src/**" />
         <include name="test/**" />
         <include name="doc/**" />
