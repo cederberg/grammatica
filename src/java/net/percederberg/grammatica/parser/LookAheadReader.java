@@ -301,15 +301,15 @@ public class LookAheadReader extends Reader {
      * Reads characters from the input stream and appends them to the
      * input buffer. This method is safe to call even though the end
      * of file has been reached. As a side effect, this method may
-     * also remove
+     * also remove characters at the beginning of the buffer. It will
+     * also enlarge the buffer if needed.
      *
      * @throws ParseException if an error was encountered while
      *             reading the input stream
      */
     private void readAhead(int offset) throws IOException {
-        char  newbuf[];
-        int   size;
-        int   readSize;
+        int  size;
+        int  readSize;
 
         // Check for end of stream or already read characters
         if (input == null || pos + offset < length) {
