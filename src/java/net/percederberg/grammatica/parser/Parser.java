@@ -42,7 +42,7 @@ import java.util.HashMap;
  * interface, as well as token handling.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.1
+ * @version  1.4
  */
 public abstract class Parser {
 
@@ -117,6 +117,28 @@ public abstract class Parser {
         } else {
             this.analyzer = analyzer;
         }
+    }
+
+    /**
+     * Returns the tokenizer in use by this parser.
+     * 
+     * @return the tokenizer in use by this parser
+     * 
+     * @since 1.4
+     */
+    public Tokenizer getTokenizer() {
+        return tokenizer;
+    }
+    
+    /**
+     * Returns the analyzer in use by this parser.
+     * 
+     * @return the analyzer in use by this parser
+     * 
+     * @since 1.4
+     */
+    public Analyzer getAnalyzer() {
+        return analyzer;
     }
 
     /**

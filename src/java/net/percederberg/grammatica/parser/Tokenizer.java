@@ -50,10 +50,15 @@ import net.percederberg.grammatica.parser.re.RegExpException;
  * don't match any of the token patterns, a parse exception is thrown. 
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.2
+ * @version  1.4
  */
 public class Tokenizer {
-    
+
+    /**
+     * The token list feature flag.
+     */
+    private boolean useTokenList = false;
+
     /**
      * The string token matcher. This token matcher is used for all
      * string token patterns. This matcher implements a DFA to 
@@ -104,6 +109,11 @@ public class Tokenizer {
     private boolean endOfBuffer = false;
 
     /**
+     * The previous token in the token list.
+     */
+    private Token previousToken = null; 
+
+    /**
      * Creates a new tokenizer for the specified input stream.
      * 
      * @param input          the input stream to read
@@ -112,6 +122,43 @@ public class Tokenizer {
         this.input = input;
     }
     
+    /**
+     * Checks if the token list feature is used. The token list 
+     * feature makes all tokens (including ignored tokens) link to 
+     * each other in a linked list. By default the token list feature 
+     * is not used.
+     *
+     * @return true if the token list feature is used, or 
+     *         false otherwise
+     *
+     * @see #setUseTokenList
+     * @see Token#getPreviousToken
+     * @see Token#getNextToken
+     *
+     * @since 1.4
+     */
+    public boolean getUseTokenList() {
+        return useTokenList;
+    }
+
+    /**
+     * Sets the token list feature flag. The token list feature makes
+     * all tokens (including ignored tokens) link to each other in a 
+     * linked list when active. By default the token list feature is
+     * not used.
+     *
+     * @param useTokenList   the token list feature flag
+     *
+     * @see #getUseTokenList
+     * @see Token#getPreviousToken
+     * @see Token#getNextToken
+     *
+     * @since 1.4
+     */
+    public void setUseTokenList(boolean useTokenList) {
+        this.useTokenList = useTokenList;
+    }
+
     /**
      * Returns a description of the token pattern with the specified 
      * id.
@@ -213,6 +260,10 @@ public class Tokenizer {
         
         do {
             token = nextToken();
+            if (useTokenList && token != null) {
+                token.setPreviousToken(previousToken);
+                previousToken = token;
+            }
             if (token == null) {
                 return null;
             } else if (token.getPattern().isError()) {

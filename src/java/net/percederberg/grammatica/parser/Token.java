@@ -40,7 +40,7 @@ package net.percederberg.grammatica.parser;
  * token patterns.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.1
+ * @version  1.4
  */
 public class Token extends Node {
     
@@ -75,6 +75,16 @@ public class Token extends Node {
      */    
     private int endColumn;
     
+    /**
+     * The previous token in the list of tokens.
+     */
+    private Token previous = null;
+    
+    /**
+     * The next token in the list of tokens. 
+     */
+    private Token next = null;
+
     /**
      * Creates a new token.
      * 
@@ -169,6 +179,84 @@ public class Token extends Node {
      */
     TokenPattern getPattern() {
         return pattern;
+    }
+
+    /**
+     * Returns the previuos token. The previous token may be a token
+     * that has been ignored in the parsing. Note that if the token
+     * list feature hasn't been used in the tokenizer, this method 
+     * will always return null. By default the token list feature is
+     * not used.
+     *  
+     * @return the previous token, or
+     *         null if no such token is available
+     * 
+     * @see #getNextToken
+     * @see Tokenizer#getUseTokenList
+     * @see Tokenizer#setUseTokenList
+     * 
+     * @since 1.4
+     */
+    public Token getPreviousToken() {
+        return previous;
+    }
+    
+    /**
+     * Sets the previous token in the token list. This method will 
+     * also modify the token specified to have this token as it's 
+     * next token. 
+     * 
+     * @param previous       the previous token, or null for none 
+     * 
+     * @since 1.4
+     */
+    void setPreviousToken(Token previous) {
+        if (this.previous != null) {
+            this.previous.next = null;
+        }
+        this.previous = previous;
+        if (previous != null) {
+            previous.next = this;
+        }
+    }
+
+    /**
+     * Returns the next token. The next token may be a token that has 
+     * been ignored in the parsing. Note that if the token list 
+     * feature hasn't been used in the tokenizer, this method will 
+     * always return null. By default the token list feature is not 
+     * used.
+     *  
+     * @return the next token, or
+     *         null if no such token is available
+     * 
+     * @see #getPreviousToken
+     * @see Tokenizer#getUseTokenList
+     * @see Tokenizer#setUseTokenList
+     * 
+     * @since 1.4
+     */
+    public Token getNextToken() {
+        return next;
+    }
+
+    /**
+     * Sets the next token in the token list. This method will also 
+     * modify the token specified to have this token as it's 
+     * previous token. 
+     * 
+     * @param next           the next token, or null for none 
+     * 
+     * @since 1.4
+     */
+    void setNextToken(Token next) {
+        if (this.next != null) {
+            this.next.previous = null;
+        }
+        this.next = next;
+        if (next != null) {
+            next.previous = this;
+        }
     }
 
     /**
