@@ -220,7 +220,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
         }
 
         /**
-         * Returns the length of the shortest possible matchine string
+         * Returns the length of the shortest possible matching string
          * starting at the specified position. The number of matches to
          * skip can also be specified.
          *
