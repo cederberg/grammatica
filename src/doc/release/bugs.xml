@@ -43,14 +43,6 @@
 
     <list>
       <item>
-        <title>General: No Ant and NAnt tasks available</title>
-        <text>Apache Ant and NAnt tasks should be created for 
-        simplifying the usage. These tasks should only support 
-        the code generation, but ought to handle both languages. 
-        (Bug #3620)</text>
-      </item>
-
-      <item>
         <title>Grammar: Add support for modular grammars</title>
         <text>By allowing one grammar to reference another, it 
         would be possible to create more complex modular parsers.
@@ -104,13 +96,6 @@
         that are considered for a match. This is highly useful in 
         some grammars, where the token syntax isn't easily 
         represented with regular expressions. (Bug #3604)</text>
-      </item>
-
-      <item>
-        <title>Tokenizer: Add support for "hidden" tokens</title>
-        <text>This feature could be used to parse source code while 
-        maintaining the whitespace tokens accessible in some way, 
-        very useful for writing a code style checker. (Bug #3605)</text>
       </item>
 
       <item>

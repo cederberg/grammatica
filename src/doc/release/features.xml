@@ -76,6 +76,12 @@
         source code. This can be used for easier debugging of 
         grammars, or for creating parsers interactively.</text>
       </item>
+
+      <item>
+        <title>Integration with Apache Ant</title>
+        <text>Apache Ant tasks are available, integrating Grammatica 
+        with the standard build tool for Java developers.</text>
+      </item>
     </list>
 
 

@@ -16,6 +16,17 @@
       </item>
 
       <item>
+        <title>Added support for retrieving all tokens</title>
+        <text>The <code>Tokenizer</code> class now supports enabling 
+        a <code>useTokenList</code> feature, that will link all 
+        tokens in a double-linked list. This can be used to access
+        whitespace and comment tokens, although otherwise ignored by 
+        the parser. By default this feature is off, to avoid potetial
+        garbage collection problems when parsing large files. 
+        (Bug #3605)</text>
+      </item>
+
+      <item>
         <title>Removed API documentation for unsupported API</title>
         <text>Java API documentation for the unsupported API:s in 
         Grammatica is no longer created or distributed. 
