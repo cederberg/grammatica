@@ -60,7 +60,7 @@ class ArithmeticTokenizer extends Tokenizer {
     public ArithmeticTokenizer(Reader input)
         throws ParserCreationException {
 
-        super(input);
+        super(input, false);
         createPatterns();
     }
 

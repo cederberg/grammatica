@@ -158,7 +158,9 @@ class VisualBasicTokenizerFile {
         constr = new VisualBasicConstructor("ByVal input As TextReader");
         cls.addConstructor(constr);
         constr.addComment(new VisualBasicComment(CONSTRUCTOR_COMMENT));
-        constr.addCode("MyBase.New(input)");
+        constr.addCode("MyBase.New(input, " +
+                       getBoolean(!gen.getGrammar().getCaseSensitive()) +
+                       ")");
         constr.addCode("CreatePatterns()");
 
         // Add init method
@@ -232,6 +234,17 @@ class VisualBasicTokenizerFile {
      */
     protected String getConstructorCall(String param) {
         return "New " + gen.getBaseName() + "Tokenizer(" + param + ")";
+    }
+
+    /**
+     * Returns the source code representation of a boolean value.
+     *
+     * @param value           the boolean value
+     *
+     * @return the source code for the boolean constant
+     */
+    private String getBoolean(boolean value) {
+        return value ? "True" : "False";
     }
 
     /**

@@ -153,7 +153,9 @@ class JavaTokenizerFile {
         cls.addConstructor(constr);
         constr.addComment(new JavaComment(CONSTRUCTOR_COMMENT));
         constr.addThrows("ParserCreationException");
-        constr.addCode("super(input);");
+        constr.addCode("super(input, " +
+                       !gen.getGrammar().getCaseSensitive() +
+                       ");");
         constr.addCode("createPatterns();");
 
         // Add init method

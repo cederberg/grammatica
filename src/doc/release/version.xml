@@ -16,6 +16,15 @@
       </item>
 
       <item>
+        <title>Added support for case-insensitive parsing</title>
+        <text>A <code>CASESENSITIVE</code> grammar declaration has
+        been added to make it possible to parse in case-insensitive
+        mode. By default all parsing is case-sensitive. Thanks to
+        Adrian Moore for providing a partial implementation.
+        <ref bug=""/></text>
+      </item>
+
+      <item>
         <title>Fixed possible divide by zero in profiling</title>
         <text>When profiling grammars with small input files, the time
         measured could previously be zero (0). This caused a division

@@ -64,6 +64,13 @@ public class Grammar extends Object {
     public static final String AUTHOR_DECLARATION = "AUTHOR";
 
     /**
+     * The case-sensitive grammar declaration constant.
+     *
+     * @since 1.5
+     */
+    public static final String CASE_SENSITIVE_DECLARATION = "CASESENSITIVE";
+
+    /**
      * The copyright grammar declaration constant.
      */
     public static final String COPYRIGHT_DECLARATION = "COPYRIGHT";
@@ -222,7 +229,7 @@ public class Grammar extends Object {
         Tokenizer  tokenizer;
 
         try {
-            tokenizer = new Tokenizer(in);
+            tokenizer = new Tokenizer(in, !getCaseSensitive());
             for (int i = 0; i < tokens.size(); i++) {
                 tokenizer.addPattern((TokenPattern) tokens.get(i));
             }
@@ -313,6 +320,27 @@ public class Grammar extends Object {
      */
     public String getDeclaration(String name) {
         return (String) declarations.get(name);
+    }
+
+    /**
+     * Checks if the grammar tokenizer is case-sensitive. Unless an
+     * explicit case-sensitive declaration in the grammar says
+     * otherwise, a grammar is assumed to be case-sensitive.
+     *
+     * @return true if the grammar is case-sensitive (the default), or
+     *         false otherwise
+     *
+     * @since 1.5
+     */
+    public boolean getCaseSensitive() {
+        String  str = getDeclaration(CASE_SENSITIVE_DECLARATION);
+
+        if (str == null) {
+            return true;
+        } else {
+            return !str.equalsIgnoreCase("no")
+                && !str.equalsIgnoreCase("false");
+        }
     }
 
     /**

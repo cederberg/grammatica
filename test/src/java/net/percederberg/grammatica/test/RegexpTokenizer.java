@@ -60,7 +60,7 @@ class RegexpTokenizer extends Tokenizer {
     public RegexpTokenizer(Reader input)
         throws ParserCreationException {
 
-        super(input);
+        super(input, false);
         createPatterns();
     }
 

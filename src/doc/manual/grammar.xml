@@ -65,6 +65,13 @@ GRAMMARTYPE = "LL"
       </item>
 
       <item>
+        <title>CASESENSITIVE</title>
+        <text>The case-sensitive grammar flag. When set to "no" or
+        "false" Grammatica generates a case-insensitive parser,
+        otherwise (by default) the parsers are case-sensitive.</text>
+      </item>
+
+      <item>
         <title>COPYRIGHT</title>
         <text>The grammar copyright statement. Used by Grammatica for
         the file comments of generated files.</text>

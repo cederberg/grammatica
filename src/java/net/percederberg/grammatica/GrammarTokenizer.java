@@ -60,7 +60,7 @@ class GrammarTokenizer extends Tokenizer {
     public GrammarTokenizer(Reader input)
         throws ParserCreationException {
 
-        super(input);
+        super(input, false);
         createPatterns();
     }
 

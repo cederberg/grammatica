@@ -54,7 +54,7 @@ namespace PerCederberg.Grammatica.Test {
          * couldn't be initialized correctly</exception>
          */
         public ArithmeticTokenizer(TextReader input)
-            : base(input) {
+            : base(input, false) {
 
             CreatePatterns();
         }

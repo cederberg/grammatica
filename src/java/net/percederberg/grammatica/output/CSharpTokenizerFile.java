@@ -153,7 +153,9 @@ class CSharpTokenizerFile {
         constr = new CSharpConstructor("TextReader input");
         cls.addConstructor(constr);
         constr.addComment(new CSharpComment(CONSTRUCTOR_COMMENT));
-        constr.addInitializer("base(input)");
+        constr.addInitializer("base(input, " +
+                              !gen.getGrammar().getCaseSensitive() +
+                              ")");
         constr.addCode("CreatePatterns();");
 
         // Add init method
