@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code.csharp;
@@ -45,7 +45,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * A class generating a C# source code file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class CSharpFile extends CodeElementContainer {
 
@@ -141,6 +141,7 @@ public class CSharpFile extends CodeElementContainer {
     public void writeCode(CodeStyle style) throws IOException {
         PrintWriter  out;
 
+        createFile(file);
         out = new PrintWriter(new FileWriter(file));
         print(out, style, 0);
         out.close();

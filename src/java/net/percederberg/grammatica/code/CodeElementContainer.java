@@ -28,11 +28,13 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Vector;
@@ -42,7 +44,7 @@ import java.util.Vector;
  * element containers contains other code elements.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public abstract class CodeElementContainer extends CodeElement {
 
@@ -107,6 +109,29 @@ public abstract class CodeElementContainer extends CodeElement {
             // Do nothing
         } else if (prev.category() != next.category()) {
             out.println();
+        }
+    }
+
+    /**
+     * Creates a file and the parent directories if they didn't exist.
+     *
+     * @param file            the file to create
+     *
+     * @throws IOException if the file couldn't be created properly
+     */
+    protected void createFile(File file) throws IOException {
+        File dir = file.getParentFile();
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new IOException("couldn't create " + file + ": " +
+                                      e.getMessage());
+            }
         }
     }
 }

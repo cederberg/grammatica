@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code.java;
@@ -46,7 +46,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * A class generating a Java code file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class JavaFile extends CodeElementContainer {
 
@@ -166,9 +166,11 @@ public class JavaFile extends CodeElementContainer {
      * @throws IOException if the file could not be written properly
      */
     public void writeCode(CodeStyle style) throws IOException {
+        File         file = new File(dir, toString());
         PrintWriter  out;
 
-        out = new PrintWriter(new FileWriter(createFile()));
+        createFile(file);
+        out = new PrintWriter(new FileWriter(file));
         print(out, style, 0);
         out.close();
     }
@@ -182,31 +184,5 @@ public class JavaFile extends CodeElementContainer {
      */
     public void print(PrintWriter out, CodeStyle style, int indent) {
         printContents(out, style, indent);
-    }
-
-    /**
-     * Creates the file and the directories if they didn't exist.
-     * 
-     * @return the file created
-     *
-     * @throws IOException if the file could not be created properly
-     */
-    private File createFile() throws IOException {
-        File  file;
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        file = new File(dir, toString());
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new IOException("couldn't create " + file + ": " +
-                                      e.getMessage());
-            }
-        }
-
-        return file;
     }
 }

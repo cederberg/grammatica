@@ -53,11 +53,6 @@ import net.percederberg.grammatica.code.CodeStyle;
 public class VisualBasicFile extends CodeElementContainer {
 
     /**
-     * The directory to write to.
-     */
-    private File dir;
-	
-    /**
      * The file to write to.
      */
     private File file;
@@ -69,7 +64,6 @@ public class VisualBasicFile extends CodeElementContainer {
      * @param basename       the base file name (without extension)
      */
     public VisualBasicFile(File basedir, String basename) {
-        this.dir = basedir;
         this.file = new File(basedir, basename + ".vb");
     }
 
@@ -140,31 +134,6 @@ public class VisualBasicFile extends CodeElementContainer {
     }
 
     /**
-     * Creates the file and the directories if they didn't exist.
-     *
-     * @return the file created
-     *
-     * @throws IOException if the file could not be created properly
-     */
-    private File createFile() throws IOException {
-        File  file;
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        file = new File(dir, toString());
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new IOException("couldn't create " + file + ": " +
-                                      e.getMessage());
-            }
-        }
-        return file;
-    }
-
-    /**
      * Writes the source code for this file. Any previous file with
      * this name will be overwritten.
      *
@@ -175,7 +144,8 @@ public class VisualBasicFile extends CodeElementContainer {
     public void writeCode(CodeStyle style) throws IOException {
         PrintWriter  out;
 
-        out = new PrintWriter(new FileWriter(createFile()));
+        createFile(file);
+        out = new PrintWriter(new FileWriter(file));
         print(out, style, 0);
         out.close();
     }
