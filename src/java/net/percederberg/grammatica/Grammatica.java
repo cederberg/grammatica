@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import net.percederberg.grammatica.output.CSharpParserGenerator;
 import net.percederberg.grammatica.output.JavaParserGenerator;
@@ -475,7 +474,7 @@ public class Grammatica extends Object {
         
         try {
             tokenizer = grammar.createTokenizer(new FileReader(file));
-            analyzer = new TreePrinter(new PrintWriter(System.out));
+            analyzer = new TreePrinter(System.out);
             parser = grammar.createParser(tokenizer, analyzer);
             System.out.println("Parse tree from " + file + ":");
             parser.parse();
@@ -634,64 +633,6 @@ public class Grammatica extends Object {
         } catch (IOException e) {
             printError(e);
             System.exit(1);
-        }
-    }
-    
-    
-    /**
-     * A parse tree printer. This class prints the parse tree while
-     * it is being parsed. 
-     */
-    private static class TreePrinter extends Analyzer {
-
-        /**
-         * The current indentation level.
-         */
-        private int indentation = 0; 
-
-        /**
-         * The output stream to use.
-         */
-        private PrintWriter output;
-
-        /**
-         * Creates a new parse tree printer.
-         * 
-         * @param output         the output stream to use
-         */
-        public TreePrinter(PrintWriter output) {
-            this.output = output;
-        }
-
-        /**
-         * Called when entering a parse tree node. By default this method
-         * does nothing. A subclass can override this method to handle 
-         * each node separately.  
-         * 
-         * @param node           the node being entered
-         */
-        protected void enter(Node node) {
-            for (int i = 0; i < indentation; i++) {
-                output.print("  ");
-            }
-            output.println(node.toString());
-            output.flush();
-            indentation++;
-        }
-    
-        /**
-         * Called when exiting a parse tree node. By default this method
-         * returns the node. A subclass can override this method to handle 
-         * each node separately. If no parse tree should be created, this 
-         * method should return null.
-         * 
-         * @param node           the node being exited
-         * 
-         * @return the node to add to the parse tree
-         */
-        protected Node exit(Node node) {
-            indentation--;
-            return null;
         }
     }
 }
