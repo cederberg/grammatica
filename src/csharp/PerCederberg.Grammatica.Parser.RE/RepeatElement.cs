@@ -52,17 +52,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          */
         public enum RepeatType {
 
-            /*
+            /**
              * The greedy repeat type constant.
              */
             GREEDY = 1,
 
-            /*
+            /**
              * The reluctant repeat type constant.
              */
             RELUCTANT = 2,
 
-            /*
+            /**
              * The possesive repeat type constant.
              */
             POSSESSIVE = 3
