@@ -14,12 +14,20 @@
         See the reference manual for details on how to use it. 
         (Bug #3620)</text>
       </item>
-      
+
       <item>
         <title>Removed API documentation for unsupported API</title>
         <text>Java API documentation for the unsupported API:s in 
         Grammatica is no longer created or distributed. 
         (Bug #4969)</text>
+      </item>
+
+      <item>
+        <title>Corrected a null pointer error in <code>--profile</code></title>
+        <text>When using <code>--profile</code> a null pointer 
+        exception was thrown during the parsing of the file. This
+        was due to the analyzer being set to null, something that has
+        now been made impossible. (Bug #4967)</text>
       </item>
     </list>
 
