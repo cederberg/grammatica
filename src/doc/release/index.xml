@@ -7,11 +7,11 @@
 
     <h1>Introduction</h1>
 
-    <p>Grammatica is a parser generator for C# and Java. It reads a
-    grammar file and creates source code for a parser. The grammar
-    file format describes the language in EBNF, with tokens described
-    as regular expressions. More detailed information is available in
-    the <ref file="features.xml">feature list</ref>.</p>
+    <p>Grammatica is a parser generator for C#, Java and Visual Basic.
+    It reads a grammar file and creates source code for a parser. The
+    grammar file format describes the language in EBNF, with tokens
+    described as regular expressions. More detailed information is
+    available in the <ref file="features.xml">feature list</ref>.</p>
   
     <p>See the <ref url="http://www.nongnu.org/grammatica">Grammatica
     web site</ref> for the latest version available.</p>

@@ -17,9 +17,9 @@
       <content>
         <pre># java -jar grammatica-<param name="version"/>.jar
 
-Generates source code for a C# or Java parser from a grammar
-file. This program comes with ABSOLUTELY NO WARRANTY; for
-details see the LICENSE.txt file.
+Generates source code for a C#, Java or Visual Basic parser from
+a grammar file. This program comes with ABSOLUTELY NO WARRANTY;
+for details see the LICENSE.txt file.
  
 Syntax: Grammatica &lt;grammarfile&gt; &lt;action&gt; [&lt;options&gt;]
  
@@ -67,6 +67,17 @@ Java Output Options:
       Sets public access for all Java types. By default type
       access is package local.
  
+Visual Basic Output Options:
+  --vbnamespace &lt;package&gt;
+      Sets the namespace to use in generated source code files.
+      By default no namespace declaration is included.
+  --vbclassname &lt;name&gt;
+      Sets the class name prefix to use in generated source code
+      files. By default the grammar file name is used.
+  --vbpublic
+      Sets public access for all types generated. By default type
+      access is internal.
+ 
 Error: Missing grammar file and/or action</pre>
       </content>
     </figure>
@@ -75,8 +86,8 @@ Error: Missing grammar file and/or action</pre>
     first argument should always be the grammar file. The second
     argument should always be one of the available actions, with the
     additional file or directory parameter. The specific output
-    options for C# and Java are all optional, choosing default values
-    if not specified.</p>
+    options the code generators are all optional, choosing default
+    values if not specified.</p>
 
     <p>Grammatica can be used for parsing and tokenizing files, even
     though no parser has been generated. This feature can be very

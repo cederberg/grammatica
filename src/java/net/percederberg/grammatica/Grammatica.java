@@ -65,9 +65,9 @@ public class Grammatica extends Object {
      * The command-line help output.
      */
     private static final String COMMAND_HELP =
-        "Generates source code for a C# or Java parser from a grammar\n" +
-        "file. This program comes with ABSOLUTELY NO WARRANTY; for\n" +
-        "details see the LICENSE.txt file.\n" +
+        "Generates source code for a C#, Java or Visual Basic parser from\n" +
+        "a grammar file. This program comes with ABSOLUTELY NO WARRANTY;\n" +
+        "for details see the LICENSE.txt file.\n" +
         "\n" +
         "Syntax: Grammatica <grammarfile> <action> [<options>]\n" +
         "\n" +
