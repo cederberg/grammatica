@@ -31,6 +31,8 @@
  * Copyright (c) 2003 Per Cederberg. All rights reserved.
  */
 
+using System.Collections;
+
 namespace PerCederberg.Grammatica.Parser {
 
     /**
@@ -352,6 +354,28 @@ namespace PerCederberg.Grammatica.Parser {
                     node.GetStartLine(),
                     node.GetStartColumn());
             }
+        }
+
+        /**
+         * Returns all the node values for all child nodes.
+         *
+         * @param node           the parse tree node
+         *
+         * @return a list with all the child node values
+         */
+        protected ArrayList GetChildValues(Node node) {
+            ArrayList  result = new ArrayList();
+            Node       child;
+            ArrayList  values;
+                                                                                
+            for (int i = 0; i < node.GetChildCount(); i++) {
+                child = node.GetChildAt(i);
+                values = child.GetAllValues();
+                if (values != null) {
+                    result.AddRange(values);
+                }
+            }
+            return result;
         }
     }
 }

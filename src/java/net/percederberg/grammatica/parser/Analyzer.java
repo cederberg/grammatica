@@ -33,6 +33,8 @@
 
 package net.percederberg.grammatica.parser;
 
+import java.util.ArrayList;
+
 /**
  * A parse tree analyzer. This class provides callback methods that 
  * may be used either during parsing, or for a parse tree traversal.
@@ -358,5 +360,27 @@ public class Analyzer {
                 node.getStartLine(),
                 node.getStartColumn());
         }
+    }
+    
+    /**
+     * Returns all the node values for all child nodes.
+     *
+     * @param node           the parse tree node
+     *
+     * @return a list with all the child node values
+     */
+    protected ArrayList getChildValues(Node node) {
+        ArrayList  result = new ArrayList();
+        Node       child;
+        ArrayList  values;
+                                                                                
+        for (int i = 0; i < node.getChildCount(); i++) {
+            child = node.getChildAt(i);
+            values = child.getAllValues();
+            if (values != null) {
+                result.addAll(values);
+            }
+        }
+        return result;
     }
 }
