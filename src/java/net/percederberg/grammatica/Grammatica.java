@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica;
@@ -41,6 +41,7 @@ import java.io.IOException;
 
 import net.percederberg.grammatica.output.CSharpParserGenerator;
 import net.percederberg.grammatica.output.JavaParserGenerator;
+import net.percederberg.grammatica.output.VisualBasicParserGenerator;
 import net.percederberg.grammatica.parser.Analyzer;
 import net.percederberg.grammatica.parser.Node;
 import net.percederberg.grammatica.parser.ParseException;
@@ -56,7 +57,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * for information on usage and command-line parameters.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.2
+ * @version  1.5
  */
 public class Grammatica extends Object {
 
@@ -91,6 +92,10 @@ public class Grammatica extends Object {
         "      Creates a Java parser for the grammar (in source code).\n" +
         "      The specified directory will be used as the base output\n" +
         "      directory for the source code files.\n" +
+        "  --vboutput <dir>\n" +
+        "      Creates a Visual Basic (.NET) parser for the grammar (in\n" +
+        "      source code). The specified directory will be used as\n" +
+        "      output directory for the source code files.\n" +
         "\n" +
         "C# Output Options:\n" +
         "  --csnamespace <package>\n" +
@@ -112,7 +117,18 @@ public class Grammatica extends Object {
         "      code files. By default the grammar file name is used.\n" +
         "  --javapublic\n" +
         "      Sets public access for all Java types. By default type\n" +
-        "      access is package local.";
+        "      access is package local.\n" +
+        "\n" +
+        "Visual Basic Output Options:\n" +
+        "  --vbnamespace <package>\n" +
+        "      Sets the namespace to use in generated source code files.\n" +
+        "      By default no namespace declaration is included.\n" +
+        "  --vbclassname <name>\n" +
+        "      Sets the class name prefix to use in generated source code\n" +
+        "      files. By default the grammar file name is used.\n" +
+        "  --vbpublic\n" +
+        "      Sets public access for all types generated. By default type\n" +
+        "      access is friend.";
 
     /**
      * The internal error message.
@@ -177,6 +193,8 @@ public class Grammatica extends Object {
                 writeJavaCode(args, grammar);
             } else if (args[1].equals("--csoutput")) {
                 writeCSharpCode(args, grammar);
+            } else if (args[1].equals("--vboutput")) {
+                writeVisualBasicCode(args, grammar);
             } else {
                 printHelp("unrecognized option: " + args[1]);
                 System.exit(1);
@@ -628,6 +646,44 @@ public class Grammatica extends Object {
         // Write parser source code
         try {
             System.out.println("Writing C# parser source code...");
+            gen.write();
+            System.out.println("Done.");
+        } catch (IOException e) {
+            printError(e);
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Parses the command-line arguments and generates the Visual
+     * Basic source code for a parser.
+     * 
+     * @param args           the command-line arguments
+     * @param grammar        the grammar to use
+     */
+    private static void writeVisualBasicCode(String[] args, Grammar grammar) {
+        VisualBasicParserGenerator gen;
+
+        // Read command-line arguments
+        gen = new VisualBasicParserGenerator(grammar);
+        for (int i = 1; i < args.length; i++) {
+            if (args[i].equals("--vboutput")) {
+                gen.setBaseDir(new File(args[++i]));
+            } else if (args[i].equals("--vbnamespace")) {
+                gen.setNamespace(args[++i]);
+            } else if (args[i].equals("--vbclassname")) {
+                gen.setBaseName(args[++i]);
+            } else if (args[i].equals("--vbpublic")) {
+                gen.setPublicAccess(true);
+            } else {
+                printHelp("unrecognized option: " + args[i]);
+                System.exit(1);
+            }
+        }
+
+        // Write parser source code
+        try {
+            System.out.println("Writing Visual Basic parser source code...");
             gen.write();
             System.out.println("Done.");
         } catch (IOException e) {

@@ -1,0 +1,217 @@
+/*
+ * VisualBasicParserGenerator.java
+ *
+ * This work is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 2 of the License,
+ * or (at your option) any later version.
+ *
+ * This work is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ *
+ * As a special exception, the copyright holders of this library give
+ * you permission to link this library with independent modules to
+ * produce an executable, regardless of the license terms of these
+ * independent modules, and to copy and distribute the resulting
+ * executable under terms of your choice, provided that you also meet,
+ * for each linked independent module, the terms and conditions of the
+ * license of that module. An independent module is a module which is
+ * not derived from or based on this library. If you modify this
+ * library, you may extend this exception to your version of the
+ * library, but you are not obligated to do so. If you do not wish to
+ * do so, delete this exception statement from your version.
+ *
+ * Copyright (c) 2004 Adrian Moore. All rights reserved.
+ * Copyright (c) 2004 Per Cederberg. All rights reserved.
+ */
+
+package net.percederberg.grammatica.output;
+
+import java.io.IOException;
+
+import net.percederberg.grammatica.Grammar;
+import net.percederberg.grammatica.code.CodeStyle;
+import net.percederberg.grammatica.parser.ProductionPattern;
+import net.percederberg.grammatica.parser.TokenPattern;
+
+/**
+ * A Visual Basic parser generator. This class generates the source
+ * code files needed for a Visual Basic (.NET) parser.
+ *
+ * @author   Adrian Moore, <adrianrob at hotmail dot com>
+ * @author   Per Cederberg, <per at percederberg dot net>
+ * @version  1.5
+ * @since    1.5
+ */
+public class VisualBasicParserGenerator extends ParserGenerator {
+
+    /**
+     * The class name prefix.
+     */
+    private String baseName = null;
+
+    /**
+     * The namespace to use.
+     */
+    private String namespace = null;
+
+    /**
+     * The public class and interface access flag.
+     */
+    private boolean publicAccess = false;
+
+    /**
+     * Creates a new parser generator.
+     *
+     * @param grammar        the grammar to use
+     */
+    public VisualBasicParserGenerator(Grammar grammar) {
+        super(grammar);
+        initialize();
+    }
+
+    /**
+     * Initializes various instance variables.
+     */
+    private void initialize() {
+        String        str;
+
+        // Set base name
+        str = getGrammar().getFileName();
+        if (str.indexOf('/') >= 0) {
+            str = str.substring(str.lastIndexOf('/') + 1);
+        }
+        if (str.indexOf('\\') >= 0) {
+            str = str.substring(str.lastIndexOf('\\') + 1);
+        }
+        if (str.indexOf('.') > 0) {
+            str = str.substring(0, str.indexOf('.'));
+        }
+        if (Character.isLowerCase(str.charAt(0))) {
+            str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
+        }
+        baseName = str;
+    }
+
+    /**
+     * Returns the namespace used for the classes.
+     *
+     * @return the fully qualified namespace, or
+     *         null for none
+     */
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /**
+     * Sets the namespace to use for the classes.
+     *
+     * @param namespace      the fully qualified namespace
+     */
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    /**
+     * Returns the class name prefix.
+     *
+     * @return the class name prefix
+     */
+    public String getBaseName() {
+        return baseName;
+    }
+
+    /**
+     * Sets the class name prefix.
+     *
+     * @param name           the class name prefix
+     */
+    public void setBaseName(String name) {
+        this.baseName = name;
+    }
+
+    /**
+     * Returns the public access flag.
+     *
+     * @return true if the classes should have public access, or
+     *         false otherwise
+     */
+    public boolean getPublicAccess() {
+        return publicAccess;
+    }
+
+    /**
+     * Sets the public access flag.
+     *
+     * @param flag           the new public access flag value
+     */
+    public void setPublicAccess(boolean flag) {
+        publicAccess = flag;
+    }
+
+    /**
+     * Returns the code style to use.
+     *
+     * @return the code style to use
+     */
+    public CodeStyle getCodeStyle() {
+        return CodeStyle.VISUAL_BASIC;
+    }
+
+    /**
+     * Writes the source code files.
+     *
+     * @throws IOException if the files couldn't be written correctly
+     */
+    public void write() throws IOException {
+        Grammar                   grammar = getGrammar();
+        VisualBasicConstantsFile  constants;
+        VisualBasicTokenizerFile  tokenizer;
+        VisualBasicParserFile     parser;
+        VisualBasicAnalyzerFile   analyzer;
+        TokenPattern              token;
+        ProductionPattern         production;
+        int                       i;
+
+        // Create output files
+        constants = new VisualBasicConstantsFile(this);
+        tokenizer = new VisualBasicTokenizerFile(this);
+        parser = new VisualBasicParserFile(this, tokenizer);
+        analyzer = new VisualBasicAnalyzerFile(this);
+
+        // Create token declarations
+        for (i = 0; i < grammar.getTokenPatternCount(); i++) {
+            token = grammar.getTokenPattern(i);
+            constants.addToken(token);
+            tokenizer.addToken(token, constants);
+            analyzer.addToken(token, constants);
+        }
+
+        // Create production constants
+        for (i = 0; i < grammar.getProductionPatternCount(); i++) {
+            production = grammar.getProductionPattern(i);
+            constants.addProduction(production);
+            parser.addProductionConstant(production);
+            analyzer.addProduction(production, constants);
+        }
+
+        // Create production declarations
+        for (i = 0; i < grammar.getProductionPatternCount(); i++) {
+            production = grammar.getProductionPattern(i);
+            parser.addProduction(production, constants);
+        }
+
+        // Write source code files
+        constants.writeCode();
+        tokenizer.writeCode();
+        parser.writeCode();
+        analyzer.writeCode();
+    }
+}
