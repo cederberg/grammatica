@@ -43,14 +43,14 @@ namespace PerCederberg.Grammatica.Test {
      * @version  1.0
      */
     public class TestArithmeticParser : ParserTestCase {
-    
+
         /**
          * The valid input string.
          */
         private const string VALID_INPUT =
             "1 + 2*a\n" +
             " + 345";
-            
+
         /**
          * The parse tree for the valid input string.
          */
@@ -80,29 +80,29 @@ namespace PerCederberg.Grammatica.Test {
             "            Factor(2005)\n" +
             "              Atom(2006)\n" +
             "                NUMBER(1007): \"345\", line: 2, col: 4\n";
-            
+
         /**
          * The unexpected EOF input string.
          */
         private const string UNEXPECTED_EOF_INPUT = "1 *\t \n";
-    
+
         /**
          * The unexpected character input string.
          */
         private const string UNEXPECTED_CHAR_INPUT = "1\n # 4";
-    
+
         /**
          * The unexpected token input string.
          */
         private const string UNEXPECTED_TOKEN_INPUT = "1 + 2 3";
-    
+
         /**
          * Tests parsing a valid input string.
          */
         public void TestValidInput() {
             Parse(CreateParser(VALID_INPUT), VALID_OUTPUT);
         }
-    
+
         /**
          * Tests parsing with an unexpected EOF error.
          */
@@ -112,7 +112,7 @@ namespace PerCederberg.Grammatica.Test {
                       2,
                       1);
         }
-        
+
         /**
          * Tests parsing with an unexpected character error.
          */
@@ -122,7 +122,7 @@ namespace PerCederberg.Grammatica.Test {
                       2,
                       2);
         }
-        
+
         /**
          * Tests parsing with an unexpected token error.
          */
@@ -132,17 +132,17 @@ namespace PerCederberg.Grammatica.Test {
                       1,
                       7);
         }
-        
+
         /**
          * Creates a new parser.
-         * 
+         *
          * @param input          the input to parse
-         * 
-         * @return the parser created 
+         *
+         * @return the parser created
          */
         private Parser CreateParser(string input) {
             Parser  parser = null;
-    
+
             try {
                 parser = new ArithmeticParser(new StringReader(input));
                 parser.Prepare();

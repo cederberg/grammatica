@@ -69,12 +69,12 @@ namespace PerCederberg.Grammatica.Test {
         public void TestValidExpression() {
             Calculate(VALID_INPUT, 350);
         }
-    
+
         /**
-         * Calculates an expression and checks the result. If the 
-         * calculation failed or if the result didn't match the specified 
-         * one, a test failure will be reported. 
-         * 
+         * Calculates an expression and checks the result. If the
+         * calculation failed or if the result didn't match the specified
+         * one, a test failure will be reported.
+         *
          * @param expr           the expression to use
          * @param result         the result to expect
          */
@@ -97,7 +97,7 @@ namespace PerCederberg.Grammatica.Test {
         protected void Fail(string message) {
             throw new Exception(message);
         }
-        
+
         /**
          * Checks that two values are identical. If the values are not
          * identical, a test failure will be reported.
@@ -106,8 +106,8 @@ namespace PerCederberg.Grammatica.Test {
          * @param expected       the expected value
          * @param result         the obtained value
          */
-        protected void AssertEquals(string label, 
-                                    int expected, 
+        protected void AssertEquals(string label,
+                                    int expected,
                                     int result) {
 
             if (expected != result) {

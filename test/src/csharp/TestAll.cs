@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -70,7 +70,7 @@ public class TestAll {
             Environment.Exit(failures);
         }
     }
-    
+
     /**
      * Runs all the test methods in an object. The test methods are
      * found by reflection, and have names starting with "Test".
@@ -84,10 +84,10 @@ public class TestAll {
         BindingFlags  flags;
         MethodInfo[]  methods;
         int           failures = 0;
-        
+
         Console.WriteLine("Running tests in " + type.Name +" class...");
         flags = BindingFlags.DeclaredOnly
-              | BindingFlags.Public 
+              | BindingFlags.Public
               | BindingFlags.Instance;
         methods = type.GetMethods(flags);
         for (int i = 0; i < methods.Length; i++) {
@@ -95,12 +95,12 @@ public class TestAll {
                 failures += RunTest(obj, methods[i].Name);
             }
         }
-        Console.WriteLine("Tests: " + methods.Length + 
+        Console.WriteLine("Tests: " + methods.Length +
                           "  Failures: " + failures);
         Console.WriteLine();
         return failures;
     }
-    
+
     /**
      * Runs a single test methods in an object. The test method is
      * executed via reflection.
@@ -114,9 +114,9 @@ public class TestAll {
     private static int RunTest(object obj, string method) {
         Type          type = obj.GetType();
         BindingFlags  flags;
-        
-        flags = BindingFlags.Public 
-              | BindingFlags.Instance 
+
+        flags = BindingFlags.Public
+              | BindingFlags.Instance
               | BindingFlags.InvokeMethod;
         try {
             Console.Write("Testing " + method + "... ");

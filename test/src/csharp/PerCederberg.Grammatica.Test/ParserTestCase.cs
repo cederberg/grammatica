@@ -45,12 +45,12 @@ namespace PerCederberg.Grammatica.Test {
      * @version  1.0
      */
     public abstract class ParserTestCase {
-    
+
         /**
          * Parses with the parser and checks the output. If the parsing
          * failed or if the tree didn't match the specified output, a test
-         * failure will be reported. 
-         * 
+         * failure will be reported.
+         *
          * @param parser         the parser to use
          * @param output         the expected parse tree
          */
@@ -63,56 +63,56 @@ namespace PerCederberg.Grammatica.Test {
                 Fail(e.GetError(0).GetMessage());
             }
         }
-        
+
         /**
-         * Parses with the parser and checks the parse error. If the 
-         * parsing succeeded or if the parse exception didn't match the 
-         * specified values, a test failure will be reported. 
-         * 
+         * Parses with the parser and checks the parse error. If the
+         * parsing succeeded or if the parse exception didn't match the
+         * specified values, a test failure will be reported.
+         *
          * @param parser         the parser to use
          * @param type           the parse error type
          * @param line           the line number
          * @param column         the column number
          */
-        protected void FailParse(Parser parser, 
-                                 ParseException.ErrorType type, 
-                                 int line, 
+        protected void FailParse(Parser parser,
+                                 ParseException.ErrorType type,
+                                 int line,
                                  int column) {
-    
+
             try {
                 parser.Parse();
                 Fail("parsing succeeded");
             } catch (ParserCreationException e) {
                 Fail(e.Message);
             } catch (ParserLogException e) {
-                ParseException  p = e.GetError(0);  
-            
+                ParseException  p = e.GetError(0);
+
                 AssertEquals("error count", 1, e.GetErrorCount());
                 AssertEquals("error type", type, p.GetErrorType());
                 AssertEquals("line number", line, p.GetLine());
                 AssertEquals("column number", column, p.GetColumn());
             }
         }
-    
+
         /**
-         * Validates that a parse tree is identical to a string 
-         * representation. If the two representations mismatch, a test 
+         * Validates that a parse tree is identical to a string
+         * representation. If the two representations mismatch, a test
          * failure will be reported.
-         * 
+         *
          * @param root           the parse tree root node
          * @param str            the string representation
          */
         private void ValidateTree(Node root, string str) {
             StringWriter output = new StringWriter();
-            
+
             root.PrintTo(output);
             ValidateLines(str, output.ToString());
         }
-        
+
         /**
-         * Validates that two strings are identical. If the two strings 
+         * Validates that two strings are identical. If the two strings
          * mismatch, a test failure will be reported.
-         * 
+         *
          * @param expected       the expected result
          * @param result         the result obtained
          */
@@ -148,7 +148,7 @@ namespace PerCederberg.Grammatica.Test {
          * Validates that two strings are identical. If the two strings
          * mismatch, a test failure will be reported.
          *
-         * @param line           the line number to report 
+         * @param line           the line number to report
          * @param expected       the expected result
          * @param result         the result obtained
          */
@@ -166,7 +166,7 @@ namespace PerCederberg.Grammatica.Test {
         protected void Fail(string message) {
             throw new Exception(message);
         }
-        
+
         /**
          * Checks that two values are identical. If the values are not
          * identical, a test failure will be reported.
@@ -175,8 +175,8 @@ namespace PerCederberg.Grammatica.Test {
          * @param expected       the expected value
          * @param result         the obtained value
          */
-        protected void AssertEquals(string label, 
-                                    object expected, 
+        protected void AssertEquals(string label,
+                                    object expected,
                                     object result) {
 
             if (!expected.Equals(result)) {

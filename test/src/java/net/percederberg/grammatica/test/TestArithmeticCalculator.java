@@ -59,7 +59,7 @@ public class TestArithmeticCalculator extends TestCase {
 
     /**
      * Creates a new test case.
-     * 
+     *
      * @param name           the test case name
      */
     public TestArithmeticCalculator(String name) {
@@ -73,12 +73,12 @@ public class TestArithmeticCalculator extends TestCase {
     public void testValidExpression() {
         calculate(VALID_INPUT, 350);
     }
-    
+
     /**
-     * Calculates an expression and checks the result. If the 
-     * calculation failed or if the result didn't match the specified 
-     * one, a test failure will be reported. 
-     * 
+     * Calculates an expression and checks the result. If the
+     * calculation failed or if the result didn't match the specified
+     * one, a test failure will be reported.
+     *
      * @param expr           the expression to use
      * @param result         the result to expect
      */

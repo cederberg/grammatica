@@ -49,7 +49,7 @@ namespace PerCederberg.Grammatica.Test {
          */
         private const string VALID_INPUT =
             "[a-z.]+(a|b).?";
-            
+
         /**
          * The parse tree for the valid input string.
          */
@@ -91,29 +91,29 @@ namespace PerCederberg.Grammatica.Test {
             "        DOT(1011): \".\", line: 1, col: 13\n" +
             "      AtomModifier(2005)\n" +
             "        QUESTION(1007): \"?\", line: 1, col: 14\n";
-            
+
         /**
          * The unexpected EOF input string.
          */
         private const string UNEXPECTED_EOF_INPUT = "(abc";
-    
+
         /**
          * The unexpected character input string.
          */
         private const string UNEXPECTED_CHAR_INPUT = "a\nb";
-    
+
         /**
          * The unexpected token input string.
          */
         private const string UNEXPECTED_TOKEN_INPUT = "abc)";
-    
+
         /**
          * Tests parsing a valid input string.
          */
         public void TestValidInput() {
             Parse(CreateParser(VALID_INPUT), VALID_OUTPUT);
         }
-    
+
         /**
          * Tests parsing with an unexpected EOF error.
          */
@@ -123,7 +123,7 @@ namespace PerCederberg.Grammatica.Test {
                       1,
                       5);
         }
-        
+
         /**
          * Tests parsing with an unexpected character error.
          */
@@ -133,7 +133,7 @@ namespace PerCederberg.Grammatica.Test {
                       1,
                       2);
         }
-        
+
         /**
          * Tests parsing with an unexpected token error.
          */
@@ -143,17 +143,17 @@ namespace PerCederberg.Grammatica.Test {
                       1,
                       4);
         }
-        
+
         /**
          * Creates a new parser.
-         * 
+         *
          * @param input          the input to parse
-         * 
-         * @return the parser created 
+         *
+         * @return the parser created
          */
         private Parser CreateParser(string input) {
             Parser  parser = null;
-    
+
             try {
                 parser = new RegexpParser(new StringReader(input));
                 parser.Prepare();

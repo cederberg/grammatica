@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -53,12 +53,12 @@ public class TestRegExp extends TestCase {
      * A set of normal characters from ISO-8859-1 .
      */
     private static final String LATIN_1_CHARACTERS =
-        "ÁÀÄÂÅÉÈËÊÍÌÏÎÓÒÖÔÕÚÙÜÛİáàäâãéèëêíìïîóòöôõúùüûıÿ"; 
-    
+        "ÁÀÄÂÅÉÈËÊÍÌÏÎÓÒÖÔÕÚÙÜÛİáàäâãéèëêíìïîóòöôõúùüûıÿ";
+
     /**
      * A set of symbol characters from ISO-8859-1 .
      */
-    private static final String LATIN_1_SYMBOLS = 
+    private static final String LATIN_1_SYMBOLS =
         "§!#¤%&/=`'½@£~-_,:;©Ş®ªß«»µ¡¿²³¼¢";
 
     /**
@@ -75,7 +75,7 @@ public class TestRegExp extends TestCase {
 
     /**
      * Creates a new test case.
-     * 
+     *
      * @param name           the test case name
      */
     public TestRegExp(String name) {
@@ -107,7 +107,7 @@ public class TestRegExp extends TestCase {
         matchRegExp(DIGITS, DIGITS);
         matchRegExp(WHITESPACE, WHITESPACE);
     }
-    
+
     /**
      * Tests matching of special characters.
      */
@@ -152,7 +152,7 @@ public class TestRegExp extends TestCase {
         matchRegExp("\\W+", WHITESPACE);
         matchRegExp("\\W+", LATIN_1_CHARACTERS);
     }
-    
+
     /**
      * Tests matching of symbol escape sequences.
      */
@@ -177,7 +177,7 @@ public class TestRegExp extends TestCase {
         matchRegExp("\\%", "%");
         matchRegExp("\\&", "&");
     }
-     
+
     /**
      * Tests matching of control escape sequences.
      */
@@ -303,7 +303,7 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Tests matching of various greedy quantifiers. 
+     * Tests matching of various greedy quantifiers.
      */
     public void testGreedyQuantifiers() {
         matchRegExp("a?", "");
@@ -326,9 +326,9 @@ public class TestRegExp extends TestCase {
         matchRegExp("a{2,3}", "aaa");
         matchRegExp("a{2,3}", "aaaa", "aaa");
     }
-    
+
     /**
-     * Tests matching of various reluctant quantifiers. 
+     * Tests matching of various reluctant quantifiers.
      */
     public void testReluctantQuantifiers() {
         matchRegExp("a??", "");
@@ -352,7 +352,7 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Tests matching of various possessive quantifiers. 
+     * Tests matching of various possessive quantifiers.
      */
     public void testPossessiveQuantifiers() {
         matchRegExp("a?+", "");
@@ -374,7 +374,7 @@ public class TestRegExp extends TestCase {
         matchRegExp("a{2,3}+", "aaa");
         matchRegExp("a{2,3}+", "aaaa", "aaa");
     }
-    
+
     /**
      * Tests the backtracking over the quantifier matches.
      */
@@ -409,7 +409,7 @@ public class TestRegExp extends TestCase {
     public void testQuantifierStackOverflow() {
         StringBuffer  buffer = new StringBuffer();
         String        str;
-        
+
         for (int i = 0; i < 4096; i++) {
             buffer.append("a");
         }
@@ -423,26 +423,26 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Tests the quantifier backtracking state memory. This tests 
+     * Tests the quantifier backtracking state memory. This tests
      * changes the character buffer used by the matcher object and
      * tests if the quantifier state is properly reset. (Bug #3653)
      */
     public void testCharBufferAppend() {
         Matcher     m;
         CharBuffer  buffer;
-        
+
         buffer = new CharBuffer();
         m = createRegExp("a*aa").matcher(buffer);
         buffer.append("a");
         if (m.matchFromBeginning()) {
-            fail("found invalid match '" + m.toString() + 
+            fail("found invalid match '" + m.toString() +
                  "' to regexp 'a*aa' in input '" + buffer + "'");
         }
         buffer.append("aaa");
         if (!m.matchFromBeginning()) {
             fail("couldn't match '" + buffer + "' to regexp 'a*aa'");
         } else if (!buffer.toString().equals(m.toString())) {
-            fail("incorrect match for 'a*aa', found: '" + 
+            fail("incorrect match for 'a*aa', found: '" +
                  m.toString() + "', expected: '" + buffer + "'");
         }
 
@@ -450,20 +450,20 @@ public class TestRegExp extends TestCase {
         m = createRegExp("a*?b").matcher(buffer);
         buffer.append("aaa");
         if (m.matchFromBeginning()) {
-            fail("found invalid match '" + m.toString() + 
+            fail("found invalid match '" + m.toString() +
                  "' to regexp 'a*?b' in input '" + buffer + "'");
         }
         buffer.append("aab");
         if (!m.matchFromBeginning()) {
             fail("couldn't match '" + buffer + "' to regexp 'a*?b'");
         } else if (!buffer.toString().equals(m.toString())) {
-            fail("incorrect match for 'a*?b', found: '" + 
+            fail("incorrect match for 'a*?b', found: '" +
                  m.toString() + "', expected: '" + buffer + "'");
         }
     }
 
     /**
-     * Tests matching of various logical operators. 
+     * Tests matching of various logical operators.
      */
     public void testLogicalOperators() {
         matchRegExp("a|ab|b", "a");
@@ -474,7 +474,7 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Tests the regular expression operator associativity. 
+     * Tests the regular expression operator associativity.
      */
     public void testAssociativity() {
         matchRegExp("ab?c", "ac");
@@ -489,7 +489,7 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Tests matching of various complex expressions. 
+     * Tests matching of various complex expressions.
      */
     public void testComplex() {
         matchRegExp("a*-", "aa-");
@@ -503,9 +503,9 @@ public class TestRegExp extends TestCase {
     /**
      * Creates a new regular expression. If the expression couldn't be
      * parsed correctly, a test failure will be reported.
-     * 
+     *
      * @param pattern        the pattern to use
-     * 
+     *
      * @return the newly created regular expression
      */
     private RegExp createRegExp(String pattern) {
@@ -519,10 +519,10 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Checks that a specified regular expression pattern is 
+     * Checks that a specified regular expression pattern is
      * erroneous. If the regular expression class doesn't detect the
      * error, a test failure will be reported.
-     * 
+     *
      * @param pattern        the pattern to check
      */
     private void failCreateRegExp(String pattern) {
@@ -534,26 +534,26 @@ public class TestRegExp extends TestCase {
             // Failure was expected
         }
     }
-    
+
     /**
      * Checks that a specified regular expression matches an input
      * string. The whole input string must be matched by the regular
-     * expression. This method will report a failure if the regular 
+     * expression. This method will report a failure if the regular
      * expression couldn't be created or if the match wasn't exact.
-     * 
+     *
      * @param pattern        the regular expression to check
      * @param input          the input and match string
      */
     private void matchRegExp(String pattern, String input) {
         matchRegExp(pattern, input, input);
     }
-    
+
     /**
      * Checks that a specified regular expression matches an input
      * string. The exact match is compared to a specified match. This
      * method will report a failure if the regular expression couldn't
      * be created or if the match wasn't exact.
-     * 
+     *
      * @param pattern        the regular expression to check
      * @param input          the input string
      * @param match          the match string
@@ -561,31 +561,31 @@ public class TestRegExp extends TestCase {
     private void matchRegExp(String pattern, String input, String match) {
         RegExp   r = createRegExp(pattern);
         Matcher  m = r.matcher(input);
-        
+
         if (!m.matchFromBeginning()) {
-            fail("couldn't match '" + input + "' to regexp '" + 
+            fail("couldn't match '" + input + "' to regexp '" +
                  pattern + "'");
         } else if (!match.equals(m.toString())) {
-            fail("incorrect match for '" + pattern + "', found: '" + 
+            fail("incorrect match for '" + pattern + "', found: '" +
                  m.toString() + "', expected: '" + match + "'");
         }
     }
-    
+
     /**
      * Checks that a specified regular expression does not match the
-     * input string. This method will report a failure if the regular 
+     * input string. This method will report a failure if the regular
      * expression couldn't be created or if a match was found.
-     * 
+     *
      * @param pattern        the regular expression to check
      * @param input          the input and match string
      */
     private void failMatchRegExp(String pattern, String input) {
         RegExp   r = createRegExp(pattern);
         Matcher  m = r.matcher(input);
-        
+
         if (m.matchFromBeginning()) {
-            fail("found invalid match '" + m.toString() + 
-                 "' to regexp '" + pattern + "' in input '" + 
+            fail("found invalid match '" + m.toString() +
+                 "' to regexp '" + pattern + "' in input '" +
                  input + "'");
         }
     }

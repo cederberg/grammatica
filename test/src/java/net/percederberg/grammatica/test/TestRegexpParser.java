@@ -52,7 +52,7 @@ public class TestRegexpParser extends ParserTestCase {
      */
     private static final String VALID_INPUT =
         "[a-z.]+(a|b).?";
-        
+
     /**
      * The parse tree for the valid input string.
      */
@@ -94,7 +94,7 @@ public class TestRegexpParser extends ParserTestCase {
         "        DOT(1011): \".\", line: 1, col: 13\n" +
         "      AtomModifier(2005)\n" +
         "        QUESTION(1007): \"?\", line: 1, col: 14\n";
-        
+
     /**
      * The unexpected EOF input string.
      */
@@ -112,13 +112,13 @@ public class TestRegexpParser extends ParserTestCase {
 
     /**
      * Creates a new test case.
-     * 
+     *
      * @param name           the test case name
      */
     public TestRegexpParser(String name) {
         super(name);
     }
-     
+
     /**
      * Tests parsing a valid input string.
      */
@@ -135,7 +135,7 @@ public class TestRegexpParser extends ParserTestCase {
                   1,
                   5);
     }
-    
+
     /**
      * Tests parsing with an unexpected character error.
      */
@@ -145,7 +145,7 @@ public class TestRegexpParser extends ParserTestCase {
                   1,
                   2);
     }
-    
+
     /**
      * Tests parsing with an unexpected token error.
      */
@@ -155,13 +155,13 @@ public class TestRegexpParser extends ParserTestCase {
                   1,
                   4);
     }
-    
+
     /**
      * Creates a new parser.
-     * 
+     *
      * @param input          the input to parse
-     * 
-     * @return the parser created 
+     *
+     * @return the parser created
      */
     private Parser createParser(String input) {
         Parser  parser = null;

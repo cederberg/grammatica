@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -75,7 +75,7 @@ public class TestRecursiveDescentParser {
     /**
      * The production pattern variable used in all tests.
      */
-    private ProductionPattern pattern; 
+    private ProductionPattern pattern;
 
     /**
      * The production pattern alternative variable used in all tests.
@@ -91,7 +91,7 @@ public class TestRecursiveDescentParser {
         AddAlternative(pattern, alt);
         FailAddPattern(CreateParser(), pattern);
     }
-    
+
     /**
      * Tests adding a possible empty pattern to the parser.
      */
@@ -105,7 +105,7 @@ public class TestRecursiveDescentParser {
         AddAlternative(pattern, alt);
         FailAddPattern(CreateParser(), pattern);
     }
-    
+
     /**
      * Tests adding a left-recursive pattern to the parser.
      */
@@ -204,7 +204,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests a complex grammar loop with optional parts and 
+     * Tests a complex grammar loop with optional parts and
      * alternatives.
      */
     public void TestComplexGrammarLoop() {
@@ -235,7 +235,7 @@ public class TestRecursiveDescentParser {
 
         FailPrepareParser(parser);
     }
-    
+
     /**
      * Tests an unresolvable conflict between two productions.
      */
@@ -257,7 +257,7 @@ public class TestRecursiveDescentParser {
         alt.AddToken(T2, 1, 1);
         AddAlternative(pattern, alt);
         AddPattern(parser, pattern);
-        
+
         pattern = new ProductionPattern(P3, "P3");
         alt = new ProductionPatternAlternative();
         alt.AddToken(T1, 1, 1);
@@ -269,7 +269,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests an unresolvable conflict between two production 
+     * Tests an unresolvable conflict between two production
      * alternatives.
      */
     public void TestAlternativeConflict() {
@@ -290,7 +290,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests an unresolvable token conflict inside a production 
+     * Tests an unresolvable token conflict inside a production
      * alternative.
      */
     public void TestElementTokenConflict() {
@@ -307,7 +307,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests an unresolvable production conflict inside a production 
+     * Tests an unresolvable production conflict inside a production
      * alternative.
      */
     public void TestElementProductionConflict() {
@@ -384,7 +384,7 @@ public class TestRecursiveDescentParser {
         alt.AddToken(T2, 1, 1);
         AddAlternative(pattern, alt);
         AddPattern(parser, pattern);
-        
+
         pattern = new ProductionPattern(P3, "P3");
         alt = new ProductionPatternAlternative();
         alt.AddToken(T1, 1, -1);
@@ -396,7 +396,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests a resolvable conflict between two production 
+     * Tests a resolvable conflict between two production
      * alternatives.
      */
     public void TestResolvableAlternativeConflict() {
@@ -418,7 +418,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests a resolvable token conflict inside a production 
+     * Tests a resolvable token conflict inside a production
      * alternative.
      */
     public void TestResolvableElementTokenConflict() {
@@ -436,7 +436,7 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Tests a resolvable production conflict inside a production 
+     * Tests a resolvable production conflict inside a production
      * alternative.
      */
     public void TestResolvableElementProductionConflict() {
@@ -485,7 +485,7 @@ public class TestRecursiveDescentParser {
 
     /**
      * Creates a new parser.
-     * 
+     *
      * @return a new parser
      */
     private Parser CreateParser() {
@@ -494,7 +494,7 @@ public class TestRecursiveDescentParser {
 
     /**
      * Prepares the parser and reports a test failure if it failed.
-     * 
+     *
      * @param parser         the parser to prepare
      */
     private void PrepareParser(Parser parser) {
@@ -507,7 +507,7 @@ public class TestRecursiveDescentParser {
 
     /**
      * Prepares the parser and reports a test failure if it succeeded.
-     * 
+     *
      * @param parser         the parser to prepare
      */
     private void FailPrepareParser(Parser parser) {
@@ -520,9 +520,9 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Adds a production pattern to a parser and reports a test 
+     * Adds a production pattern to a parser and reports a test
      * failure if it failed.
-     * 
+     *
      * @param parser         the parser to add a pattern to
      * @param pattern        the production pattern to add
      */
@@ -536,9 +536,9 @@ public class TestRecursiveDescentParser {
     }
 
     /**
-     * Adds a production pattern to a parser and reports a test 
+     * Adds a production pattern to a parser and reports a test
      * failure if it succeeded.
-     * 
+     *
      * @param parser         the parser to add a pattern to
      * @param pattern        the production pattern to add
      */
@@ -554,7 +554,7 @@ public class TestRecursiveDescentParser {
     /**
      * Adds a pattern alternative. This method reports a test failure
      * if an exception was thrown.
-     * 
+     *
      * @param pattern        the production pattern
      * @param alt            the pattern alternative to add
      */
@@ -564,7 +564,7 @@ public class TestRecursiveDescentParser {
         try {
             pattern.AddAlternative(alt);
         } catch (ParserCreationException e) {
-            Fail("couldn't add alternative to " + pattern.GetName() + 
+            Fail("couldn't add alternative to " + pattern.GetName() +
                  ": " + e.Message);
         }
     }

@@ -54,13 +54,13 @@ namespace PerCederberg.Grammatica.Test {
         /**
          * Creates a new arithmetic calculator.
          */
-        public ArithmeticCalculator() 
+        public ArithmeticCalculator()
         	: this(new Hashtable()) {
         }
 
         /**
          * Creates a new arithmetic calculator.
-         * 
+         *
          * @param variables      the variable bindings to use
          */
         public ArithmeticCalculator(Hashtable variables) {
@@ -69,17 +69,17 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Calculates the numeric value of an expression.
-         * 
+         *
          * @param expression     the expression to calculate
-         * 
+         *
          * @return the numeric value of the expression
-         * 
+         *
          * @throws Exception if the expression contained an error
          */
         public int Calculate(string expression) {
             ArithmeticParser  parser;
             Node              node;
- 
+
             parser = new ArithmeticParser(new StringReader(expression), this);
             parser.Prepare();
             node = parser.Parse();
@@ -88,9 +88,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the addition operator as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitAdd(Token node) {
@@ -100,9 +100,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the subtraction operator as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitSub(Token node) {
@@ -112,9 +112,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the multiplication operator as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitMul(Token node) {
@@ -124,9 +124,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the division operator as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitDiv(Token node) {
@@ -136,9 +136,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the number as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitNumber(Token node) {
@@ -148,9 +148,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the identifier value as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitIdentifier(Token node) {
@@ -160,9 +160,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the expression result as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitExpression(Production node) {
@@ -171,7 +171,7 @@ namespace PerCederberg.Grammatica.Test {
             int        value2;
             string     op;
             int        result;
-        
+
             if (values.Count == 1) {
                 result = (int) values[0];
             } else {
@@ -186,9 +186,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the child values as node values.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitExpressionRest(Production node) {
@@ -198,9 +198,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the term result as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitTerm(Production node) {
@@ -209,7 +209,7 @@ namespace PerCederberg.Grammatica.Test {
             int        value2;
             string     op;
             int        result;
-        
+
             if (values.Count == 1) {
                 result = (int) values[0];
             } else {
@@ -224,9 +224,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the child values as node values.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitTermRest(Production node) {
@@ -236,16 +236,16 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the factor value as a node value.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
-         * 
+         *
          * @throws ParseException if the node analysis discovered errors
          */
         public override Node ExitFactor(Production node) {
             int  result;
-        
+
             if (node.GetChildCount() == 1) {
                 result = GetIntValue(GetChildAt(node, 0), 0);
             } else {
@@ -257,9 +257,9 @@ namespace PerCederberg.Grammatica.Test {
 
         /**
          * Adds the child values as node values.
-         * 
+         *
          * @param node           the node being exited
-         * 
+         *
          * @return the node to add to the parse tree
          */
         public override Node ExitAtom(Production node) {
@@ -268,14 +268,14 @@ namespace PerCederberg.Grammatica.Test {
         }
 
         /**
-         * Performs a numerical operation. 
-         * 
+         * Performs a numerical operation.
+         *
          * @param op             the operator to use
          * @param value1         the first value
          * @param value2         the second value
-         * 
+         *
          * @return the result of performing the operation
-         * 
+         *
          * @throws Exception if the operator was unknown
          */
         private int Operate(string op, int value1, int value2) {

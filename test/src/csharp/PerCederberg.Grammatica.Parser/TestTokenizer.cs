@@ -57,7 +57,7 @@ public class TestTokenizer {
      * The number token identifier.
      */
     private const int NUMBER = 2;
-    
+
     /**
      * The whitespace token identifier.
      */
@@ -74,7 +74,7 @@ public class TestTokenizer {
     public void TestInvalidPattern() {
         Tokenizer     tokenizer = CreateTokenizer("");
         TokenPattern  pattern;
-        
+
         pattern = new TokenPattern(NUMBER,
                                    "NUMBER",
                                    TokenPattern.PatternType.REGEXP + 13,
@@ -92,7 +92,7 @@ public class TestTokenizer {
      */
     public void TestEmptyInput() {
         Tokenizer  tokenizer = CreateDefaultTokenizer("");
-         
+
         ReadToken(tokenizer, EOF);
     }
 
@@ -101,7 +101,7 @@ public class TestTokenizer {
      */
     public void TestIgnoreTokens() {
         Tokenizer  tokenizer = CreateDefaultTokenizer(" 12 keyword 0 ");
-         
+
         ReadToken(tokenizer, NUMBER);
         ReadToken(tokenizer, KEYWORD);
         ReadToken(tokenizer, NUMBER);
@@ -113,7 +113,7 @@ public class TestTokenizer {
      */
     public void TestErrorTokens() {
         Tokenizer  tokenizer = CreateDefaultTokenizer("12 error1  ");
-         
+
         ReadToken(tokenizer, NUMBER);
         FailReadToken(tokenizer);
         ReadToken(tokenizer, NUMBER);
@@ -125,7 +125,7 @@ public class TestTokenizer {
      */
     public void TestParseError() {
         Tokenizer  tokenizer = CreateDefaultTokenizer("12 (keyword)");
-        
+
         ReadToken(tokenizer, NUMBER);
         FailReadToken(tokenizer);
         ReadToken(tokenizer, KEYWORD);
@@ -139,9 +139,9 @@ public class TestTokenizer {
     public void TestTokenList() {
         Tokenizer  tokenizer = CreateDefaultTokenizer("12 keyword 0");
         Token      token;
-        
-        AssertEquals("default token list setting", 
-                     false, 
+
+        AssertEquals("default token list setting",
+                     false,
                      tokenizer.GetUseTokenList());
         tokenizer.SetUseTokenList(true);
         token = ReadToken(tokenizer, NUMBER);
@@ -170,57 +170,57 @@ public class TestTokenizer {
 
     /**
      * Creates a new tokenizer.
-     * 
+     *
      * @param input          the input string
-     * 
+     *
      * @return a new tokenizer
      */
     private Tokenizer CreateTokenizer(string input) {
         return new Tokenizer(new StringReader(input));
     }
-    
+
     /**
-     * Creates a new default tokenizer that recognizes a trivial 
+     * Creates a new default tokenizer that recognizes a trivial
      * language.
-     * 
+     *
      * @param input          the input string
-     * 
+     *
      * @return a new tokenizer
      */
     private Tokenizer CreateDefaultTokenizer(string input) {
         Tokenizer     tokenizer = CreateTokenizer(input);
         TokenPattern  pattern;
-        
-        pattern = new TokenPattern(KEYWORD, 
-                                   "KEYWORD", 
-                                   TokenPattern.PatternType.STRING, 
+
+        pattern = new TokenPattern(KEYWORD,
+                                   "KEYWORD",
+                                   TokenPattern.PatternType.STRING,
                                    "keyword");
         AddPattern(tokenizer, pattern);
-        pattern = new TokenPattern(NUMBER, 
-                                   "NUMBER", 
-                                   TokenPattern.PatternType.REGEXP, 
+        pattern = new TokenPattern(NUMBER,
+                                   "NUMBER",
+                                   TokenPattern.PatternType.REGEXP,
                                    "[0-9]+");
         AddPattern(tokenizer, pattern);
-        pattern = new TokenPattern(WHITESPACE, 
-                                   "WHITESPACE", 
+        pattern = new TokenPattern(WHITESPACE,
+                                   "WHITESPACE",
                                    TokenPattern.PatternType.REGEXP,
                                    "[ \t\n]+");
         pattern.SetIgnore();
         AddPattern(tokenizer, pattern);
-        pattern = new TokenPattern(ERROR, 
-                                   "ERROR", 
-                                   TokenPattern.PatternType.STRING, 
+        pattern = new TokenPattern(ERROR,
+                                   "ERROR",
+                                   TokenPattern.PatternType.STRING,
                                    "error");
         pattern.SetError();
         AddPattern(tokenizer, pattern);
-        
+
         return tokenizer;
     }
-    
+
     /**
-     * Adds a pattern to the tokenizer and reports a test failure if 
+     * Adds a pattern to the tokenizer and reports a test failure if
      * it failed.
-     * 
+     *
      * @param tokenizer      the tokenizer
      * @param pattern        the pattern to add
      */
@@ -234,9 +234,9 @@ public class TestTokenizer {
     }
 
     /**
-     * Adds a pattern to the tokenizer and reports a test failure if 
+     * Adds a pattern to the tokenizer and reports a test failure if
      * it failed.
-     * 
+     *
      * @param tokenizer      the tokenizer
      * @param pattern        the pattern to add
      */
@@ -248,13 +248,13 @@ public class TestTokenizer {
             // Failure was expected
         }
     }
-    
+
     /**
      * Reads the next token. This method reports a test failure if a
      * token couldn't be read.
-     * 
+     *
      * @param tokenizer      the tokenizer to use
-     * 
+     *
      * @return the token read
      */
     private Token ReadToken(Tokenizer tokenizer) {
@@ -265,19 +265,19 @@ public class TestTokenizer {
             return null; // Unreachable
         }
     }
-    
+
     /**
      * Reads the next token and checks it's id. This method reports a
      * test failure if the right token couldn't be read.
-     * 
+     *
      * @param tokenizer      the tokenizer to use
      * @param id             the expected token id
-     * 
+     *
      * @return the token read
      */
     private Token ReadToken(Tokenizer tokenizer, int id) {
         Token  token = ReadToken(tokenizer);
-        
+
         if (id == EOF) {
             if (token != null) {
                 Fail("expected end of file, found " + token);
@@ -291,11 +291,11 @@ public class TestTokenizer {
         }
         return token;
     }
-    
+
     /**
-     * Fails to read the next token. This method reports a test 
+     * Fails to read the next token. This method reports a test
      * failure if a token could be read.
-     * 
+     *
      * @param tokenizer      the tokenizer to use
      */
     private void FailReadToken(Tokenizer tokenizer) {
@@ -317,7 +317,7 @@ public class TestTokenizer {
     private void Fail(string message) {
         throw new Exception(message);
     }
-    
+
     /**
      * Throws a test fail exception if the values aren't equal.
      *

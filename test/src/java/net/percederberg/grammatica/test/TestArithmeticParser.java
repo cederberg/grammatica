@@ -53,7 +53,7 @@ public class TestArithmeticParser extends ParserTestCase {
     private static final String VALID_INPUT =
         "1 + 2*a\n" +
         " + 345";
-        
+
     /**
      * The parse tree for the valid input string.
      */
@@ -83,7 +83,7 @@ public class TestArithmeticParser extends ParserTestCase {
         "            Factor(2005)\n" +
         "              Atom(2006)\n" +
         "                NUMBER(1007): \"345\", line: 2, col: 4\n";
-        
+
     /**
      * The unexpected EOF input string.
      */
@@ -101,13 +101,13 @@ public class TestArithmeticParser extends ParserTestCase {
 
     /**
      * Creates a new test case.
-     * 
+     *
      * @param name           the test case name
      */
     public TestArithmeticParser(String name) {
         super(name);
     }
-     
+
     /**
      * Tests parsing a valid input string.
      */
@@ -124,7 +124,7 @@ public class TestArithmeticParser extends ParserTestCase {
                   2,
                   1);
     }
-    
+
     /**
      * Tests parsing with an unexpected character error.
      */
@@ -134,7 +134,7 @@ public class TestArithmeticParser extends ParserTestCase {
                   2,
                   2);
     }
-    
+
     /**
      * Tests parsing with an unexpected token error.
      */
@@ -144,13 +144,13 @@ public class TestArithmeticParser extends ParserTestCase {
                   1,
                   7);
     }
-    
+
     /**
      * Creates a new parser.
-     * 
+     *
      * @param input          the input to parse
-     * 
-     * @return the parser created 
+     *
+     * @return the parser created
      */
     private Parser createParser(String input) {
         Parser  parser = null;

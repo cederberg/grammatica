@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -36,7 +36,7 @@ package net.percederberg.grammatica.parser.re;
 import java.io.FileReader;
 
 /**
- * A test program for the RegExp class. 
+ * A test program for the RegExp class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.0
@@ -59,7 +59,7 @@ public class DebugRegExp {
             System.err.println("Syntax: DebugRegExp <regexpfile>");
             System.exit(1);
         }
-        
+
         // Read file contents
         try {
             in = new FileReader(args[0]);
@@ -69,7 +69,7 @@ public class DebugRegExp {
             e.printStackTrace();
             System.exit(1);
         }
-            
+
         // Create regular expression
         try {
             System.out.println(new RegExp(str));

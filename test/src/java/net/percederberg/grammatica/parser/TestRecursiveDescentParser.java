@@ -76,7 +76,7 @@ public class TestRecursiveDescentParser extends TestCase {
     /**
      * The production pattern variable used in all tests.
      */
-    private ProductionPattern pattern; 
+    private ProductionPattern pattern;
 
     /**
      * The production pattern alternative variable used in all tests.
@@ -92,7 +92,7 @@ public class TestRecursiveDescentParser extends TestCase {
         addAlternative(pattern, alt);
         failAddPattern(createParser(), pattern);
     }
-    
+
     /**
      * Tests adding a possible empty pattern to the parser.
      */
@@ -106,7 +106,7 @@ public class TestRecursiveDescentParser extends TestCase {
         addAlternative(pattern, alt);
         failAddPattern(createParser(), pattern);
     }
-    
+
     /**
      * Tests adding a left-recursive pattern to the parser.
      */
@@ -205,7 +205,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests a complex grammar loop with optional parts and 
+     * Tests a complex grammar loop with optional parts and
      * alternatives.
      */
     public void testComplexGrammarLoop() {
@@ -236,7 +236,7 @@ public class TestRecursiveDescentParser extends TestCase {
 
         failPrepareParser(parser);
     }
-    
+
     /**
      * Tests an unresolvable conflict between two productions.
      */
@@ -258,7 +258,7 @@ public class TestRecursiveDescentParser extends TestCase {
         alt.addToken(T2, 1, 1);
         addAlternative(pattern, alt);
         addPattern(parser, pattern);
-        
+
         pattern = new ProductionPattern(P3, "P3");
         alt = new ProductionPatternAlternative();
         alt.addToken(T1, 1, 1);
@@ -270,7 +270,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests an unresolvable conflict between two production 
+     * Tests an unresolvable conflict between two production
      * alternatives.
      */
     public void testAlternativeConflict() {
@@ -291,7 +291,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests an unresolvable token conflict inside a production 
+     * Tests an unresolvable token conflict inside a production
      * alternative.
      */
     public void testElementTokenConflict() {
@@ -308,7 +308,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests an unresolvable production conflict inside a production 
+     * Tests an unresolvable production conflict inside a production
      * alternative.
      */
     public void testElementProductionConflict() {
@@ -385,7 +385,7 @@ public class TestRecursiveDescentParser extends TestCase {
         alt.addToken(T2, 1, 1);
         addAlternative(pattern, alt);
         addPattern(parser, pattern);
-        
+
         pattern = new ProductionPattern(P3, "P3");
         alt = new ProductionPatternAlternative();
         alt.addToken(T1, 1, -1);
@@ -397,7 +397,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests a resolvable conflict between two production 
+     * Tests a resolvable conflict between two production
      * alternatives.
      */
     public void testResolvableAlternativeConflict() {
@@ -419,7 +419,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests a resolvable token conflict inside a production 
+     * Tests a resolvable token conflict inside a production
      * alternative.
      */
     public void testResolvableElementTokenConflict() {
@@ -437,7 +437,7 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Tests a resolvable production conflict inside a production 
+     * Tests a resolvable production conflict inside a production
      * alternative.
      */
     public void testResolvableElementProductionConflict() {
@@ -486,7 +486,7 @@ public class TestRecursiveDescentParser extends TestCase {
 
     /**
      * Creates a new parser.
-     * 
+     *
      * @return a new parser
      */
     private Parser createParser() {
@@ -495,7 +495,7 @@ public class TestRecursiveDescentParser extends TestCase {
 
     /**
      * Prepares the parser and reports a test failure if it failed.
-     * 
+     *
      * @param parser         the parser to prepare
      */
     private void prepareParser(Parser parser) {
@@ -508,7 +508,7 @@ public class TestRecursiveDescentParser extends TestCase {
 
     /**
      * Prepares the parser and reports a test failure if it succeeded.
-     * 
+     *
      * @param parser         the parser to prepare
      */
     private void failPrepareParser(Parser parser) {
@@ -521,9 +521,9 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Adds a production pattern to a parser and reports a test 
+     * Adds a production pattern to a parser and reports a test
      * failure if it failed.
-     * 
+     *
      * @param parser         the parser to add a pattern to
      * @param pattern        the production pattern to add
      */
@@ -537,9 +537,9 @@ public class TestRecursiveDescentParser extends TestCase {
     }
 
     /**
-     * Adds a production pattern to a parser and reports a test 
+     * Adds a production pattern to a parser and reports a test
      * failure if it succeeded.
-     * 
+     *
      * @param parser         the parser to add a pattern to
      * @param pattern        the production pattern to add
      */
@@ -555,7 +555,7 @@ public class TestRecursiveDescentParser extends TestCase {
     /**
      * Adds a pattern alternative. This method reports a test failure
      * if an exception was thrown.
-     * 
+     *
      * @param pattern        the production pattern
      * @param alt            the pattern alternative to add
      */
@@ -565,7 +565,7 @@ public class TestRecursiveDescentParser extends TestCase {
         try {
             pattern.addAlternative(alt);
         } catch (ParserCreationException e) {
-            fail("couldn't add alternative to " + pattern.getName() + 
+            fail("couldn't add alternative to " + pattern.getName() +
                  ": " + e.getMessage());
         }
     }

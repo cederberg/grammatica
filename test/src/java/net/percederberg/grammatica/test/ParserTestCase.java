@@ -54,7 +54,7 @@ abstract class ParserTestCase extends TestCase {
 
     /**
      * Creates a new test case.
-     * 
+     *
      * @param name           the test case name
      */
     public ParserTestCase(String name) {
@@ -64,8 +64,8 @@ abstract class ParserTestCase extends TestCase {
     /**
      * Parses with the parser and checks the output. If the parsing
      * failed or if the tree didn't match the specified output, a test
-     * failure will be reported. 
-     * 
+     * failure will be reported.
+     *
      * @param parser         the parser to use
      * @param output         the expected parse tree
      */
@@ -78,20 +78,20 @@ abstract class ParserTestCase extends TestCase {
             fail(e.getError(0).getMessage());
         }
     }
-    
+
     /**
-     * Parses with the parser and checks the parse error. If the 
-     * parsing succeeded or if the parse exception didn't match the 
-     * specified values, a test failure will be reported. 
-     * 
+     * Parses with the parser and checks the parse error. If the
+     * parsing succeeded or if the parse exception didn't match the
+     * specified values, a test failure will be reported.
+     *
      * @param parser         the parser to use
      * @param type           the parse error type
      * @param line           the line number
      * @param column         the column number
      */
-    protected void failParse(Parser parser, 
-                             int type, 
-                             int line, 
+    protected void failParse(Parser parser,
+                             int type,
+                             int line,
                              int column) {
 
         try {
@@ -100,8 +100,8 @@ abstract class ParserTestCase extends TestCase {
         } catch (ParserCreationException e) {
             fail(e.getMessage());
         } catch (ParserLogException e) {
-            ParseException  p = e.getError(0);  
-            
+            ParseException  p = e.getError(0);
+
             assertEquals("error count", 1, e.getErrorCount());
             assertEquals("error type", type, p.getErrorType());
             assertEquals("line number", line, p.getLine());
@@ -110,24 +110,24 @@ abstract class ParserTestCase extends TestCase {
     }
 
     /**
-     * Validates that a parse tree is identical to a string 
-     * representation. If the two representations mismatch, a test 
+     * Validates that a parse tree is identical to a string
+     * representation. If the two representations mismatch, a test
      * failure will be reported.
-     * 
+     *
      * @param root           the parse tree root node
      * @param str            the string representation
      */
     private void validateTree(Node root, String str) {
         StringWriter output = new StringWriter();
-        
+
         root.printTo(new PrintWriter(output));
         validateLines(str, output.toString());
     }
-    
+
     /**
-     * Validates that two strings are identical. If the two strings 
+     * Validates that two strings are identical. If the two strings
      * mismatch, a test failure will be reported.
-     * 
+     *
      * @param expected       the expected result
      * @param result         the result obtained
      */
@@ -158,12 +158,12 @@ abstract class ParserTestCase extends TestCase {
             line++;
         }
     }
-    
+
     /**
-     * Validates that two strings are identical. If the two strings 
+     * Validates that two strings are identical. If the two strings
      * mismatch, a test failure will be reported.
      *
-     * @param line           the line number to report 
+     * @param line           the line number to report
      * @param expected       the expected result
      * @param result         the result obtained
      */

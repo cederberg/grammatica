@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -35,7 +35,7 @@
 
 GRAMMARTYPE = "LL"
 
-DESCRIPTION = "A test grammar for error recovery in the first pass 
+DESCRIPTION = "A test grammar for error recovery in the first pass
                analyzer."
 
 AUTHOR      = "Per Cederberg, <per at percederberg dot net>"
@@ -66,7 +66,7 @@ ExpressionRest = "+" Expression
                | "-" Expression ;
 
 Term = Factor [TermRest] ;
-     
+
 // ERROR: analyzer error: line 70 column 1
 LeftParen = IDENTIFIER ;
 

@@ -1,23 +1,23 @@
 /*
  * ArithmeticAnalyzer.java
- * 
+ *
  * THIS FILE HAS BEEN GENERATED AUTOMATICALLY. DO NOT EDIT!
- * 
+ *
  * This work is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
- * 
+ *
  * This work is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
- * 
+ *
  * As a special exception, the copyright holders of this library give
  * you permission to link this library with independent modules to
  * produce an executable, regardless of the license terms of these
@@ -29,7 +29,7 @@
  * library, you may extend this exception to your version of the
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
- * 
+ *
  * Copyright (c) 2003 Per Cederberg. All rights reserved.
  */
 
@@ -43,7 +43,7 @@ import net.percederberg.grammatica.parser.Token;
 
 /**
  * A class providing callback methods for the parser.
- * 
+ *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.0
  */
@@ -51,9 +51,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enter(Node node) throws ParseException {
@@ -105,12 +105,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exit(Node node) throws ParseException {
@@ -149,10 +149,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void child(Production node, Node child)
@@ -182,9 +182,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterAdd(Token node) throws ParseException {
@@ -192,12 +192,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitAdd(Token node) throws ParseException {
@@ -206,9 +206,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterSub(Token node) throws ParseException {
@@ -216,12 +216,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitSub(Token node) throws ParseException {
@@ -230,9 +230,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterMul(Token node) throws ParseException {
@@ -240,12 +240,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitMul(Token node) throws ParseException {
@@ -254,9 +254,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterDiv(Token node) throws ParseException {
@@ -264,12 +264,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitDiv(Token node) throws ParseException {
@@ -278,9 +278,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftParen(Token node) throws ParseException {
@@ -288,12 +288,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitLeftParen(Token node) throws ParseException {
@@ -302,9 +302,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightParen(Token node) throws ParseException {
@@ -312,12 +312,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitRightParen(Token node) throws ParseException {
@@ -326,9 +326,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterNumber(Token node) throws ParseException {
@@ -336,12 +336,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitNumber(Token node) throws ParseException {
@@ -350,9 +350,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterIdentifier(Token node) throws ParseException {
@@ -360,12 +360,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitIdentifier(Token node) throws ParseException {
@@ -374,9 +374,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterExpression(Production node)
@@ -385,12 +385,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitExpression(Production node)
@@ -401,10 +401,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childExpression(Production node, Node child)
@@ -415,9 +415,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterExpressionRest(Production node)
@@ -426,12 +426,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitExpressionRest(Production node)
@@ -442,10 +442,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childExpressionRest(Production node, Node child)
@@ -456,9 +456,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTerm(Production node) throws ParseException {
@@ -466,12 +466,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTerm(Production node) throws ParseException {
@@ -480,10 +480,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childTerm(Production node, Node child)
@@ -494,9 +494,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTermRest(Production node)
@@ -505,12 +505,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitTermRest(Production node) throws ParseException {
@@ -519,10 +519,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childTermRest(Production node, Node child)
@@ -533,9 +533,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterFactor(Production node) throws ParseException {
@@ -543,12 +543,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitFactor(Production node) throws ParseException {
@@ -557,10 +557,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childFactor(Production node, Node child)
@@ -571,9 +571,9 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when entering a parse tree node.
-     * 
+     *
      * @param node           the node being entered
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterAtom(Production node) throws ParseException {
@@ -581,12 +581,12 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when exiting a parse tree node.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree, or
      *         null if no parse tree should be created
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitAtom(Production node) throws ParseException {
@@ -595,10 +595,10 @@ abstract class ArithmeticAnalyzer extends Analyzer {
 
     /**
      * Called when adding a child to a parse tree node.
-     * 
+     *
      * @param node           the parent node
      * @param child          the child node, or null
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childAtom(Production node, Node child)

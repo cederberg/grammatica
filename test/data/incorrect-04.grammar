@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -35,7 +35,7 @@
 
 GRAMMARTYPE = "LL"
 
-DESCRIPTION = "A test grammar for error recovery in the second pass 
+DESCRIPTION = "A test grammar for error recovery in the second pass
                analyzer."
 
 AUTHOR      = "Per Cederberg, <per at percederberg dot net>"
@@ -66,15 +66,15 @@ ExpressionRest = "+" Expression
 
 // ERROR: analyzer error: line 68 column 15
 Term = Factor "++" [TermRest] ;
-     
+
 TermRest = "*" Term
          | "/" Term ;
 
 // ERROR: analyzer error: line 74 column 1
 Factor = Atom
-       | "(" Expression ")" 
+       | "(" Expression ")"
        | Atom ;
-       
+
 // ERROR: analyzer error: line 79 column 16
 Atom = NUMBER ("+" | "+")
      | IDENTIFIER ;

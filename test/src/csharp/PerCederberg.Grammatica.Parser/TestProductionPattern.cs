@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -85,7 +85,7 @@ public class TestProductionPattern {
         AddAlternative(pattern, alt);
         AssertTrue(pattern.IsLeftRecursive());
     }
-    
+
     /**
      * Tests the pattern right-recursive detection.
      */
@@ -99,7 +99,7 @@ public class TestProductionPattern {
         AddAlternative(pattern, alt);
         AssertTrue(pattern.IsRightRecursive());
     }
-    
+
     /**
      * Tests the pattern empty matching detection.
      */
@@ -114,7 +114,7 @@ public class TestProductionPattern {
     }
 
     /**
-     * Tests adding a single pattern alternative twice. 
+     * Tests adding a single pattern alternative twice.
      */
     public void TestDuplicateAlternative() {
         pattern = new ProductionPattern(P1, "P1");
@@ -125,7 +125,7 @@ public class TestProductionPattern {
     }
 
     /**
-     * Tests adding a duplicate pattern alternative. 
+     * Tests adding a duplicate pattern alternative.
      */
     public void TestIdenticalAlternative() {
         pattern = new ProductionPattern(P1, "P1");
@@ -136,11 +136,11 @@ public class TestProductionPattern {
         alt.AddToken(T1, 1, 1);
         FailAddAlternative(pattern, alt);
     }
-    
+
     /**
      * Adds a pattern alternative. This method reports a test failure
      * if an exception was thrown.
-     * 
+     *
      * @param pattern        the production pattern
      * @param alt            the pattern alternative to add
      */
@@ -150,7 +150,7 @@ public class TestProductionPattern {
         try {
             pattern.AddAlternative(alt);
         } catch (ParserCreationException e) {
-            Fail("couldn't add alternative to " + pattern.GetName() + 
+            Fail("couldn't add alternative to " + pattern.GetName() +
                  ": " + e.Message);
         }
     }
@@ -158,7 +158,7 @@ public class TestProductionPattern {
     /**
      * Adds a pattern alternative. This method reports a test failure
      * if no exception was thrown.
-     * 
+     *
      * @param pattern        the production pattern
      * @param alt            the pattern alternative to add
      */
@@ -181,7 +181,7 @@ public class TestProductionPattern {
     private void Fail(string message) {
         throw new Exception(message);
     }
-    
+
     /**
      * Throws a test fail exception if the specified value isn't true.
      *

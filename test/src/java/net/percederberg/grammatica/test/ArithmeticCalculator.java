@@ -64,7 +64,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Creates a new arithmetic calculator.
-     * 
+     *
      * @param variables      the variable bindings to use
      */
     public ArithmeticCalculator(HashMap variables) {
@@ -73,17 +73,17 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Calculates the numeric value of an expression.
-     * 
+     *
      * @param expression     the expression to calculate
-     * 
+     *
      * @return the numeric value of the expression
-     * 
+     *
      * @throws Exception if the expression contained an error
      */
     public int calculate(String expression) throws Exception {
         ArithmeticParser  parser;
         Node              node;
- 
+
         parser = new ArithmeticParser(new StringReader(expression), this);
         parser.prepare();
         node = parser.parse();
@@ -92,9 +92,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the addition operator as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitAdd(Token node) {
@@ -104,9 +104,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the subtraction operator as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitSub(Token node) {
@@ -116,9 +116,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the multiplication operator as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitMul(Token node) {
@@ -128,9 +128,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the division operator as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitDiv(Token node) {
@@ -140,9 +140,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the number as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitNumber(Token node) {
@@ -152,9 +152,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the identifier value as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitIdentifier(Token node) {
@@ -164,9 +164,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the expression result as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitExpression(Production node) {
@@ -175,7 +175,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
         Integer    value2;
         String     op;
         int        result;
-        
+
         if (values.size() == 1) {
             result = ((Integer) values.get(0)).intValue();
         } else {
@@ -190,9 +190,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the child values as node values.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitExpressionRest(Production node) {
@@ -202,9 +202,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the term result as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitTerm(Production node) {
@@ -213,7 +213,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
         Integer    value2;
         String     op;
         int        result;
-        
+
         if (values.size() == 1) {
             result = ((Integer) values.get(0)).intValue();
         } else {
@@ -228,9 +228,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the child values as node values.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitTermRest(Production node) {
@@ -240,16 +240,16 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the factor value as a node value.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
-     * 
+     *
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitFactor(Production node) throws ParseException {
         int  result;
-        
+
         if (node.getChildCount() == 1) {
             result = getIntValue(getChildAt(node, 0), 0);
         } else {
@@ -261,9 +261,9 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     /**
      * Adds the child values as node values.
-     * 
+     *
      * @param node           the node being exited
-     * 
+     *
      * @return the node to add to the parse tree
      */
     protected Node exitAtom(Production node) {
@@ -272,18 +272,18 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
     }
 
     /**
-     * Performs a numerical operation. 
-     * 
+     * Performs a numerical operation.
+     *
      * @param op             the operator to use
      * @param value1         the first value
      * @param value2         the second value
-     * 
+     *
      * @return the result of performing the operation
      */
     private int operate(String op, Integer value1, Integer value2) {
         int  i = value1.intValue();
         int  j = value2.intValue();
-        
+
         switch (op.charAt(0)) {
         case '+':
             return i + j;

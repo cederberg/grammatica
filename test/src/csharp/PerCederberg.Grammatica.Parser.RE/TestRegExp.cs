@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -54,12 +54,12 @@ public class TestRegExp {
      * A set of normal characters from ISO-8859-1 .
      */
     private const string LATIN_1_CHARACTERS =
-        "ÁÀÄÂÅÉÈËÊÍÌÏÎÓÒÖÔÕÚÙÜÛİáàäâãéèëêíìïîóòöôõúùüûıÿ"; 
-    
+        "ÁÀÄÂÅÉÈËÊÍÌÏÎÓÒÖÔÕÚÙÜÛİáàäâãéèëêíìïîóòöôõúùüûıÿ";
+
     /**
      * A set of symbol characters from ISO-8859-1 .
      */
-    private const string LATIN_1_SYMBOLS = 
+    private const string LATIN_1_SYMBOLS =
         "§!#¤%&/=`'½@£~-_,:;©Ş®ªß«»µ¡¿²³¼¢";
 
     /**
@@ -104,7 +104,7 @@ public class TestRegExp {
         MatchRegExp(DIGITS, DIGITS);
         MatchRegExp(WHITESPACE, WHITESPACE);
     }
-    
+
     /**
      * Tests matching of special characters.
      */
@@ -149,7 +149,7 @@ public class TestRegExp {
         MatchRegExp("\\W+", WHITESPACE);
         MatchRegExp("\\W+", LATIN_1_CHARACTERS);
     }
-    
+
     /**
      * Tests matching of symbol escape sequences.
      */
@@ -174,7 +174,7 @@ public class TestRegExp {
         MatchRegExp("\\%", "%");
         MatchRegExp("\\&", "&");
     }
-     
+
     /**
      * Tests matching of control escape sequences.
      */
@@ -300,7 +300,7 @@ public class TestRegExp {
     }
 
     /**
-     * Tests matching of various greedy quantifiers. 
+     * Tests matching of various greedy quantifiers.
      */
     public void TestGreedyQuantifiers() {
         MatchRegExp("a?", "");
@@ -323,9 +323,9 @@ public class TestRegExp {
         MatchRegExp("a{2,3}", "aaa");
         MatchRegExp("a{2,3}", "aaaa", "aaa");
     }
-    
+
     /**
-     * Tests matching of various reluctant quantifiers. 
+     * Tests matching of various reluctant quantifiers.
      */
     public void TestReluctantQuantifiers() {
         MatchRegExp("a??", "");
@@ -349,7 +349,7 @@ public class TestRegExp {
     }
 
     /**
-     * Tests matching of various possessive quantifiers. 
+     * Tests matching of various possessive quantifiers.
      */
     public void TestPossessiveQuantifiers() {
         MatchRegExp("a?+", "");
@@ -371,7 +371,7 @@ public class TestRegExp {
         MatchRegExp("a{2,3}+", "aaa");
         MatchRegExp("a{2,3}+", "aaaa", "aaa");
     }
-    
+
     /**
      * Tests the backtracking over the quantifier matches.
      */
@@ -406,7 +406,7 @@ public class TestRegExp {
     public void TestQuantifierStackOverflow() {
         StringBuilder  buffer = new StringBuilder();
         String         str;
-        
+
         for (int i = 0; i < 4096; i++) {
             buffer.Append("a");
         }
@@ -420,7 +420,7 @@ public class TestRegExp {
     }
 
     /**
-     * Tests matching of various logical operators. 
+     * Tests matching of various logical operators.
      */
     public void TestLogicalOperators() {
         MatchRegExp("a|ab|b", "a");
@@ -431,7 +431,7 @@ public class TestRegExp {
     }
 
     /**
-     * Tests the regular expression operator associativity. 
+     * Tests the regular expression operator associativity.
      */
     public void TestAssociativity() {
         MatchRegExp("ab?c", "ac");
@@ -446,7 +446,7 @@ public class TestRegExp {
     }
 
     /**
-     * Tests matching of various complex expressions. 
+     * Tests matching of various complex expressions.
      */
     public void TestComplex() {
         MatchRegExp("a*-", "aa-");
@@ -460,9 +460,9 @@ public class TestRegExp {
     /**
      * Creates a new regular expression. If the expression couldn't be
      * parsed correctly, a test failure will be reported.
-     * 
+     *
      * @param pattern        the pattern to use
-     * 
+     *
      * @return the newly created regular expression
      */
     private RegExp CreateRegExp(string pattern) {
@@ -476,10 +476,10 @@ public class TestRegExp {
     }
 
     /**
-     * Checks that a specified regular expression pattern is 
+     * Checks that a specified regular expression pattern is
      * erroneous. If the regular expression class doesn't detect the
      * error, a test failure will be reported.
-     * 
+     *
      * @param pattern        the pattern to check
      */
     private void FailCreateRegExp(string pattern) {
@@ -491,26 +491,26 @@ public class TestRegExp {
             // Failure was expected
         }
     }
-    
+
     /**
      * Checks that a specified regular expression matches an input
      * string. The whole input string must be matched by the regular
-     * expression. This method will report a failure if the regular 
+     * expression. This method will report a failure if the regular
      * expression couldn't be created or if the match wasn't exact.
-     * 
+     *
      * @param pattern        the regular expression to check
      * @param input          the input and match string
      */
     private void MatchRegExp(string pattern, string input) {
         MatchRegExp(pattern, input, input);
     }
-    
+
     /**
      * Checks that a specified regular expression matches an input
      * string. The exact match is compared to a specified match. This
      * method will report a failure if the regular expression couldn't
      * be created or if the match wasn't exact.
-     * 
+     *
      * @param pattern        the regular expression to check
      * @param input          the input string
      * @param match          the match string
@@ -520,29 +520,29 @@ public class TestRegExp {
         Matcher  m = r.Matcher(input);
 
         if (!m.MatchFromBeginning()) {
-            Fail("couldn't match '" + input + "' to regexp '" + 
+            Fail("couldn't match '" + input + "' to regexp '" +
                  pattern + "'");
         } else if (!match.Equals(m.ToString())) {
-            Fail("incorrect match for '" + pattern + "', found: '" + 
+            Fail("incorrect match for '" + pattern + "', found: '" +
                  m.ToString() + "', expected: '" + match + "'");
         }
     }
-    
+
     /**
      * Checks that a specified regular expression does not match the
-     * input string. This method will report a failure if the regular 
+     * input string. This method will report a failure if the regular
      * expression couldn't be created or if a match was found.
-     * 
+     *
      * @param pattern        the regular expression to check
      * @param input          the input and match string
      */
     private void FailMatchRegExp(string pattern, string input) {
         RegExp   r = CreateRegExp(pattern);
         Matcher  m = r.Matcher(input);
-        
+
         if (m.MatchFromBeginning()) {
-            Fail("found invalid match '" + m.ToString() + 
-                 "' to regexp '" + pattern + "' in input '" + 
+            Fail("found invalid match '" + m.ToString() +
+                 "' to regexp '" + pattern + "' in input '" +
                  input + "'");
         }
     }

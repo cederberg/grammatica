@@ -86,7 +86,7 @@ public class TestProductionPattern extends TestCase {
         addAlternative(pattern, alt);
         assertTrue(pattern.isLeftRecursive());
     }
-    
+
     /**
      * Tests the pattern right-recursive detection.
      */
@@ -100,7 +100,7 @@ public class TestProductionPattern extends TestCase {
         addAlternative(pattern, alt);
         assertTrue(pattern.isRightRecursive());
     }
-    
+
     /**
      * Tests the pattern empty matching detection.
      */
@@ -115,7 +115,7 @@ public class TestProductionPattern extends TestCase {
     }
 
     /**
-     * Tests adding a single pattern alternative twice. 
+     * Tests adding a single pattern alternative twice.
      */
     public void testDuplicateAlternative() {
         pattern = new ProductionPattern(P1, "P1");
@@ -126,7 +126,7 @@ public class TestProductionPattern extends TestCase {
     }
 
     /**
-     * Tests adding a duplicate pattern alternative. 
+     * Tests adding a duplicate pattern alternative.
      */
     public void testIdenticalAlternative() {
         pattern = new ProductionPattern(P1, "P1");
@@ -137,11 +137,11 @@ public class TestProductionPattern extends TestCase {
         alt.addToken(T1, 1, 1);
         failAddAlternative(pattern, alt);
     }
-    
+
     /**
      * Adds a pattern alternative. This method reports a test failure
      * if an exception was thrown.
-     * 
+     *
      * @param pattern        the production pattern
      * @param alt            the pattern alternative to add
      */
@@ -151,7 +151,7 @@ public class TestProductionPattern extends TestCase {
         try {
             pattern.addAlternative(alt);
         } catch (ParserCreationException e) {
-            fail("couldn't add alternative to " + pattern.getName() + 
+            fail("couldn't add alternative to " + pattern.getName() +
                  ": " + e.getMessage());
         }
     }
@@ -159,7 +159,7 @@ public class TestProductionPattern extends TestCase {
     /**
      * Adds a pattern alternative. This method reports a test failure
      * if no exception was thrown.
-     * 
+     *
      * @param pattern        the production pattern
      * @param alt            the pattern alternative to add
      */
