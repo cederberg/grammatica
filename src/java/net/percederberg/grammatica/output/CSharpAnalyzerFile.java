@@ -137,16 +137,17 @@ class CSharpAnalyzerFile {
             modifiers = CSharpClass.INTERNAL + CSharpClass.ABSTRACT;
         }
         this.cls = new CSharpClass(modifiers, name, "Analyzer");
-        this.enter = new CSharpMethod(CSharpMethod.PUBLIC,
-                                      "enter",
+        modifiers = CSharpMethod.PUBLIC + CSharpMethod.OVERRIDE;
+        this.enter = new CSharpMethod(modifiers,
+                                      "Enter",
                                       "Node node",
                                       "void");
-        this.exit = new CSharpMethod(CSharpMethod.PUBLIC,
-                                     "exit",
+        this.exit = new CSharpMethod(modifiers,
+                                     "Exit",
                                      "Node node",
                                      "Node");
-        this.child = new CSharpMethod(CSharpMethod.PUBLIC,
-                                      "child",
+        this.child = new CSharpMethod(modifiers,
+                                      "Child",
                                       "Production node, Node child",
                                       "void");
         initializeCode();
@@ -248,7 +249,7 @@ class CSharpAnalyzerFile {
      */
     private void addEnterCase(String constant, String name, String type) {
         enter.addCode("case (int) " + constant + ":");
-        enter.addCode("    enter" + name + "((" + type + ") node);");
+        enter.addCode("    Enter" + name + "((" + type + ") node);");
         enter.addCode("    break;");
     }
 
@@ -261,7 +262,7 @@ class CSharpAnalyzerFile {
      */
     private void addExitCase(String constant, String name, String type) {
         exit.addCode("case (int) " + constant + ":");
-        exit.addCode("    return exit" + name + "((" + type + ") node);");
+        exit.addCode("    return Exit" + name + "((" + type + ") node);");
     }
 
     /**
@@ -272,7 +273,7 @@ class CSharpAnalyzerFile {
      */
     private void addChildCase(String constant, String name) {
         child.addCode("case (int) " + constant + ":");
-        child.addCode("    child" + name + "(node, child);");
+        child.addCode("    Child" + name + "(node, child);");
         child.addCode("    break;");
     }
 
@@ -285,8 +286,8 @@ class CSharpAnalyzerFile {
     private void addEnterMethod(String name, String type) {
         CSharpMethod  m;
 
-        m = new CSharpMethod(CSharpMethod.PUBLIC,
-                             "enter" + name,
+        m = new CSharpMethod(CSharpMethod.PUBLIC + CSharpMethod.VIRTUAL,
+                             "Enter" + name,
                              type + " node",
                              "void");
         m.addComment(new CSharpComment(ENTER_COMMENT));
@@ -302,8 +303,8 @@ class CSharpAnalyzerFile {
     private void addExitMethod(String name, String type) {
         CSharpMethod  m;
 
-        m = new CSharpMethod(CSharpMethod.PUBLIC,
-                             "exit" + name,
+        m = new CSharpMethod(CSharpMethod.PUBLIC + CSharpMethod.VIRTUAL,
+                             "Exit" + name,
                              type + " node",
                              "Node");
         m.addComment(new CSharpComment(EXIT_COMMENT));
@@ -319,8 +320,8 @@ class CSharpAnalyzerFile {
     private void addChildMethod(String name) {
         CSharpMethod  m;
 
-        m = new CSharpMethod(CSharpMethod.PUBLIC,
-                             "child" + name,
+        m = new CSharpMethod(CSharpMethod.PUBLIC + CSharpMethod.VIRTUAL,
+                             "Child" + name,
                              "Production node, Node child",
                              "void");
         m.addComment(new CSharpComment(CHILD_COMMENT));

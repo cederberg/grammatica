@@ -9,6 +9,21 @@
 
     <list>
       <item>
+        <title>Corrected generation of C# analyzer classes</title>
+        <text>The generation of C# analyzer classes was completely
+        broken in all previous releases, due to missing keywords and
+        erroneous casing of method names. Tests have now been added
+        to verify the generated analyzers. This was only an issue in
+        the C# code generation, as the Java version has been tested
+        continuously. (Bugs #4416 and #4498)</text>
+      </item>
+	</list>
+
+
+    <h1>Version 1.2 (2003-06-10):</h1>
+
+    <list>
+      <item>
         <title>Added profiling for grammars</title>
         <text>A new action <code>--profile</code> has been added that
         prints out the statistics from a profiling run of the 
