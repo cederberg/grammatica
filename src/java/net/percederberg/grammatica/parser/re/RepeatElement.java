@@ -145,7 +145,7 @@ class RepeatElement extends Element {
      * @return the length of the matching string, or
      *         -1 if no match was found
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     public int match(Matcher m, LookAheadReader input, int start, int skip)
         throws IOException {
@@ -181,7 +181,7 @@ class RepeatElement extends Element {
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     private int matchGreedy(Matcher m,
                             LookAheadReader input,
@@ -226,7 +226,7 @@ class RepeatElement extends Element {
      * @return the length of the shortest matching string, or
      *         -1 if no match was found
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     private int matchReluctant(Matcher m,
                                LookAheadReader input,
@@ -266,7 +266,7 @@ class RepeatElement extends Element {
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     private int matchPossessive(Matcher m,
                                 LookAheadReader input,
@@ -304,7 +304,7 @@ class RepeatElement extends Element {
      * @param count          the number of sub-elements matched
      * @param attempt        the number of match attempts here
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     private void findMatches(Matcher m,
                              LookAheadReader input,

@@ -196,7 +196,7 @@ class CharacterSetElement extends Element {
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     public int match(Matcher m, LookAheadReader input, int start, int skip)
         throws IOException {

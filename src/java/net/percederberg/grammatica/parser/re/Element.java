@@ -74,7 +74,7 @@ abstract class Element implements Cloneable {
      * @return the length of the longest matching string, or
      *         -1 if no match was found
      *
-     * @throws IOException if a I/O error occurred
+     * @throws IOException if an I/O error occurred
      */
     public abstract int match(Matcher m,
                               LookAheadReader input,

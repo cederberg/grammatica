@@ -306,11 +306,10 @@ public class Tokenizer {
      *             parsed correctly
      */
     private Token nextToken() throws ParseException {
-        TokenMatcher    m;
-        Token           token;
-        String          str;
-        int             line;
-        int             column;
+        TokenMatcher  m;
+        String        str;
+        int           line;
+        int           column;
 
         try {
             m = findMatch();

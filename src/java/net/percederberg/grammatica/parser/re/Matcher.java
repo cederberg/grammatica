@@ -237,7 +237,7 @@ public class Matcher {
      * @return true if a match was found, or
      *         false otherwise
      *
-     * @throws IOException if an I/O error occurred while matching an
+     * @throws IOException if an I/O error occurred while reading an
      *             input stream
      */
     public boolean matchFromBeginning() throws IOException {
@@ -253,7 +253,7 @@ public class Matcher {
      * @return true if a match was found, or
      *         false otherwise
      *
-     * @throws IOException if an I/O error occurred while matching an
+     * @throws IOException if an I/O error occurred while reading an
      *             input stream
      */
     public boolean matchFrom(int pos) throws IOException {
