@@ -62,7 +62,7 @@
     <antcall target="compile-java" />
     <taskdef name="grammatica"
              classname="net.percederberg.grammatica.ant.GrammaticaTask"
-             classpath="${build.dir}/classes"/>
+             classpath="${build.dir}/classes" />
     <grammatica grammar="${build.dir}/src/grammar/grammar.grammar">
       <java dir="${build.dir}/src/java"
             package="net.percederberg.grammatica" />
@@ -242,8 +242,7 @@
   </target>
 
   <target name="doc-java">
-    <javadoc packagenames="net.percederberg.grammatica.*"
-             excludepackagenames="net.percederberg.grammatica.ant.*"
+    <javadoc packagenames="net.percederberg.grammatica.parser.*"
              sourcepath="${build.dir}/src/java"
              destdir="${build.dir}/doc/api/java"
              classpath="${build.dir}/classes"

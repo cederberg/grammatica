@@ -14,6 +14,13 @@
         See the reference manual for details on how to use it. 
         (Bug #3620)</text>
       </item>
+      
+      <item>
+        <title>Removed API documentation for unsupported API</title>
+        <text>Java API documentation for the unsupported API:s in 
+        Grammatica is no longer created or distributed. 
+        (Bug #4969)</text>
+      </item>
     </list>
 
 
