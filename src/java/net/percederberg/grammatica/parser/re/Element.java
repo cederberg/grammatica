@@ -28,13 +28,16 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+
+import net.percederberg.grammatica.parser.LookAheadReader;
 
 /**
  * A regular expression element. This is the common base class for all
@@ -42,7 +45,7 @@ import java.io.PrintWriter;
  * expression.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 abstract class Element implements Cloneable {
 
@@ -64,17 +67,20 @@ abstract class Element implements Cloneable {
      * elements.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
     public abstract int match(Matcher m,
-                              CharBuffer str,
+                              LookAheadReader input,
                               int start,
-                              int skip);
+                              int skip)
+        throws IOException;
 
     /**
      * Prints this element to the specified output stream.

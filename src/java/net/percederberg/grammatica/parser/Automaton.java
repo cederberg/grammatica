@@ -33,7 +33,7 @@
 
 package net.percederberg.grammatica.parser;
 
-import net.percederberg.grammatica.parser.re.CharBuffer;
+import java.io.IOException;
 
 /**
  * A deterministic finite state automaton. This is a simple automaton
@@ -70,51 +70,57 @@ class Automaton {
      * transitions will be added to extend this automaton to support
      * the specified string.
      *
-     * @param m              the string matcher to use
-     * @param str            the string to match
-     * @param value          the match value
+     * @param str              the string to match
+     * @param caseInsensitive  the case-insensitive match flag
+     * @param value            the match value
      */
-    public void addMatch(StringMatcher m, String str, Object value) {
+    public void addMatch(String str, boolean caseInsensitive, Object value) {
         Automaton  state;
 
         if (str.equals("")) {
             this.value = value;
         } else {
-            state = tree.find(str.charAt(0), m.isCaseInsensitive());
+            state = tree.find(str.charAt(0), caseInsensitive);
             if (state == null) {
                 state = new Automaton();
-                state.addMatch(m, str.substring(1), value);
-                tree.add(str.charAt(0), m.isCaseInsensitive(), state);
+                state.addMatch(str.substring(1), caseInsensitive, value);
+                tree.add(str.charAt(0), caseInsensitive, state);
             } else {
-                state.addMatch(m, str.substring(1), value);
+                state.addMatch(str.substring(1), caseInsensitive, value);
             }
         }
     }
 
     /**
-     * Checks if the automaton matches a string buffer. The matching
+     * Checks if the automaton matches an input stream. The matching
      * will be performed from a specified position. This method will
-     * set the end of string flag in the specified matcher if the end
-     * of the string buffer is reached. The comparison can be done
-     * either in case-sensitive or case-insensitive mode.
+     * not read any characters from the stream, just peek ahead. The
+     * comparison can be done either in case-sensitive or
+     * case-insensitive mode.
      *
-     * @param m              the string matcher to use
-     * @param buffer         the string buffer to check
-     * @param pos            the starting position
+     * @param input            the input stream to check
+     * @param pos              the starting position
+     * @param caseInsensitive  the case-insensitive match flag
      *
      * @return the match value, or
      *         null if no match was found
+     *
+     * @throws IOException if an I/O error occurred
      */
-    public Object matchFrom(StringMatcher m, CharBuffer buffer, int pos) {
+    public Object matchFrom(LookAheadReader input,
+                            int pos,
+                            boolean caseInsensitive)
+        throws IOException {
+
         Object     result = null;
         Automaton  state;
+        int        c;
 
-        if (pos >= buffer.length()) {
-            m.setReadEndOfString();
-        } else if (tree != null) {
-            state = tree.find(buffer.charAt(pos), m.isCaseInsensitive());
+        c = input.peek(pos);
+        if (tree != null && c >= 0) {
+            state = tree.find((char) c, caseInsensitive);
             if (state != null) {
-                result = state.matchFrom(m, buffer, pos + 1);
+                result = state.matchFrom(input, pos + 1, caseInsensitive);
             }
         }
         return (result == null) ? value : result;

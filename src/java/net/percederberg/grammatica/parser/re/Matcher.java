@@ -33,6 +33,12 @@
 
 package net.percederberg.grammatica.parser.re;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+
+import net.percederberg.grammatica.parser.LookAheadReader;
+
 /**
  * A regular expression string matcher. This class handles the
  * matching of a specific string with a specific regular expression.
@@ -51,9 +57,9 @@ public class Matcher {
     private Element element;
 
     /**
-     * The string to work with
+     * The input character stream to work with.
      */
-    private CharBuffer str;
+    private LookAheadReader input;
 
     /**
      * The character case ignore flag.
@@ -80,12 +86,12 @@ public class Matcher {
      * Creates a new matcher with the specified element.
      *
      * @param e              the base regular expression element
-     * @param str            the string to work with
+     * @param input          the input character stream to work with
      * @param ignoreCase     the character case ignore flag
      */
-    protected Matcher(Element e, CharBuffer str, boolean ignoreCase) {
+    Matcher(Element e, LookAheadReader input, boolean ignoreCase) {
         this.element = e;
-        this.str = str;
+        this.input = input;
         this.ignoreCase = ignoreCase;
         this.start = 0;
         reset();
@@ -106,11 +112,66 @@ public class Matcher {
     /**
      * Resets the information about the last match. This will clear
      * all flags and set the match length to a negative value. This
-     * method is automatically called by all matching methods.
+     * method is automatically called before starting a new match.
      */
     public void reset() {
         length = -1;
         endOfString = false;
+    }
+
+    /**
+     * Resets the matcher for use with a new input string. This will
+     * clear all flags and set the match length to a negative value.
+     *
+     * @param str            the new string to work with
+     *
+     * @since 1.5
+     */
+    public void reset(String str) {
+        reset(new StringReader(str));
+    }
+
+    /**
+     * Resets the matcher for use with a new input string. This will
+     * clear all flags and set the match length to a negative value.
+     *
+     * @param str            the new string to work with
+     *
+     * @since 1.5
+     */
+    public void reset(StringBuffer str) {
+        reset(new StringReader(str.toString()));
+    }
+
+    /**
+     * Resets the matcher for use with a new character input stream.
+     * This will clear all flags and set the match length to a
+     * negative value.
+     *
+     * @param input           the character input stream
+     *
+     * @since 1.5
+     */
+    public void reset(Reader input) {
+        if (input instanceof LookAheadReader) {
+            reset((LookAheadReader) input);
+        } else {
+            reset(new LookAheadReader(input));
+        }
+    }
+
+    /**
+     * Resets the matcher for use with a new look-ahead character
+     * input stream. This will clear all flags and set the match
+     * length to a negative value.
+     *
+     * @param input           the character input stream
+     *
+     * @since 1.5
+     */
+    private void reset(LookAheadReader input) {
+        this.input = input;
+        reset();
     }
 
     /**
@@ -175,8 +236,11 @@ public class Matcher {
      *
      * @return true if a match was found, or
      *         false otherwise
+     *
+     * @throws IOException if an I/O error occurred while matching an
+     *             input stream
      */
-    public boolean matchFromBeginning() {
+    public boolean matchFromBeginning() throws IOException {
         return matchFrom(0);
     }
 
@@ -188,11 +252,14 @@ public class Matcher {
      *
      * @return true if a match was found, or
      *         false otherwise
+     *
+     * @throws IOException if an I/O error occurred while matching an
+     *             input stream
      */
-    public boolean matchFrom(int pos) {
+    public boolean matchFrom(int pos) throws IOException {
         reset();
         start = pos;
-        length = element.match(this, str, start, 0);
+        length = element.match(this, input, start, 0);
         return length >= 0;
     }
 
@@ -206,7 +273,11 @@ public class Matcher {
         if (length <= 0) {
             return "";
         } else {
-            return str.substring(start, start + length);
+            try {
+                return input.peekString(start, length);
+            } catch (IOException ignore) {
+                return "";
+            }
         }
     }
 }

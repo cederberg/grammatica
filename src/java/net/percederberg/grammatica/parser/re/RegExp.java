@@ -34,8 +34,12 @@
 package net.percederberg.grammatica.parser.re;
 
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+
+import net.percederberg.grammatica.parser.LookAheadReader;
 
 /**
  * A regular expression. This class creates and holds an internal
@@ -114,9 +118,13 @@ public class RegExp {
      * @param str            the string to work with
      *
      * @return the regular expresion matcher
+     *
+     * @deprecated The CharBuffer class has been deprecated in favor
+     * of LookAheadReader as of version 1.5. Create a LookAheadReader
+     * and use the matcher(Reader) method instead of this one.
      */
     public Matcher matcher(CharBuffer str) {
-        return new Matcher((Element) element.clone(), str, ignoreCase);
+        return matcher(str.toString());
     }
 
     /**
@@ -127,7 +135,7 @@ public class RegExp {
      * @return the regular expresion matcher
      */
     public Matcher matcher(String str) {
-        return matcher(new CharBuffer(str));
+        return matcher(new StringReader(str));
     }
 
     /**
@@ -138,7 +146,38 @@ public class RegExp {
      * @return the regular expresion matcher
      */
     public Matcher matcher(StringBuffer str) {
-        return matcher(new CharBuffer(str));
+        return matcher(new StringReader(str.toString()));
+    }
+
+    /**
+     * Creates a new matcher for the specified character input stream.
+     *
+     * @param input           the character input stream
+     *
+     * @return the regular expresion matcher
+     *
+     * @since 1.5
+     */
+    public Matcher matcher(Reader input) {
+        if (input instanceof LookAheadReader) {
+            return matcher((LookAheadReader) input);
+        } else {
+            return matcher(new LookAheadReader(input));
+        }
+    }
+
+    /**
+     * Creates a new matcher for the specified look-ahead character
+     * input stream.
+     *
+     * @param input           the character input stream
+     *
+     * @return the regular expresion matcher
+     *
+     * @since 1.5
+     */
+    private Matcher matcher(LookAheadReader input) {
+        return new Matcher((Element) element.clone(), input, ignoreCase);
     }
 
     /**

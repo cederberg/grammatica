@@ -28,13 +28,16 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.BitSet;
+
+import net.percederberg.grammatica.parser.LookAheadReader;
 
 /**
  * A regular expression element repeater. The element repeats the
@@ -42,7 +45,7 @@ import java.util.BitSet;
  * repetition count.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.1
+ * @version  1.5
  */
 class RepeatElement extends Element {
 
@@ -135,26 +138,30 @@ class RepeatElement extends Element {
      * specified.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
      * @return the length of the matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
-    public int match(Matcher m, CharBuffer str, int start, int skip) {
+    public int match(Matcher m, LookAheadReader input, int start, int skip)
+        throws IOException {
+
         if (skip == 0) {
             matchStart = -1;
             matches = null;
         }
         switch (type) {
         case GREEDY:
-            return matchGreedy(m, str, start, skip);
+            return matchGreedy(m, input, start, skip);
         case RELUCTANT:
-            return matchReluctant(m, str, start, skip);
+            return matchReluctant(m, input, start, skip);
         case POSSESSIVE:
             if (skip == 0) {
-                return matchPossessive(m, str, start, 0);
+                return matchPossessive(m, input, start, 0);
             }
             break;
         }
@@ -167,28 +174,31 @@ class RepeatElement extends Element {
      * skip can also be specified.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
     private int matchGreedy(Matcher m,
-                            CharBuffer str,
+                            LookAheadReader input,
                             int start,
-                            int skip) {
+                            int skip)
+        throws IOException {
 
         // Check for simple case
         if (skip == 0) {
-            return matchPossessive(m, str, start, 0);
+            return matchPossessive(m, input, start, 0);
         }
 
         // Find all matches
         if (matchStart != start) {
             matchStart = start;
             matches = new BitSet();
-            findMatches(m, str, start, 0, 0, 0);
+            findMatches(m, input, start, 0, 0, 0);
         }
 
         // Find first non-skipped match
@@ -209,23 +219,26 @@ class RepeatElement extends Element {
      * skip can also be specified.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
      * @return the length of the shortest matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
     private int matchReluctant(Matcher m,
-                               CharBuffer str,
+                               LookAheadReader input,
                                int start,
-                               int skip) {
+                               int skip)
+        throws IOException {
 
         // Find all matches
         if (matchStart != start) {
             matchStart = start;
             matches = new BitSet();
-            findMatches(m, str, start, 0, 0, 0);
+            findMatches(m, input, start, 0, 0, 0);
         }
 
         // Find first non-skipped match
@@ -246,24 +259,27 @@ class RepeatElement extends Element {
      * allows no backtracking, i.e. no skips..
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param count          the start count, normally zero (0)
      *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
     private int matchPossessive(Matcher m,
-                                CharBuffer str,
+                                LookAheadReader input,
                                 int start,
-                                int count) {
+                                int count)
+        throws IOException {
 
         int  length = 0;
         int  subLength = 1;
 
         // Match as many elements as possible
         while (subLength > 0 && count < max) {
-            subLength = elem.match(m, str, start + length, 0);
+            subLength = elem.match(m, input, start + length, 0);
             if (subLength >= 0) {
                 count++;
                 length += subLength;
@@ -282,18 +298,21 @@ class RepeatElement extends Element {
      * Finds all matches and adds the lengths to the matches set.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param length         the match length at the start position
      * @param count          the number of sub-elements matched
      * @param attempt        the number of match attempts here
+     *
+     * @throws IOException if a I/O error occurred
      */
     private void findMatches(Matcher m,
-                             CharBuffer str,
+                             LookAheadReader input,
                              int start,
                              int length,
                              int count,
-                             int attempt) {
+                             int attempt)
+        throws IOException {
 
         int  subLength;
 
@@ -306,7 +325,7 @@ class RepeatElement extends Element {
         }
 
         // Check element match
-        subLength = elem.match(m, str, start, attempt);
+        subLength = elem.match(m, input, start, attempt);
         if (subLength < 0) {
             return;
         } else if (subLength == 0) {
@@ -317,9 +336,9 @@ class RepeatElement extends Element {
         }
 
         // Find alternative and subsequent matches
-        findMatches(m, str, start, length, count, attempt + 1);
+        findMatches(m, input, start, length, count, attempt + 1);
         findMatches(m,
-                    str,
+                    input,
                     start + subLength,
                     length + subLength,
                     count + 1,

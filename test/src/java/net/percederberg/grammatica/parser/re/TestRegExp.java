@@ -33,6 +33,8 @@
 
 package net.percederberg.grammatica.parser.re;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 /**
@@ -423,46 +425,6 @@ public class TestRegExp extends TestCase {
     }
 
     /**
-     * Tests the quantifier backtracking state memory. This tests
-     * changes the character buffer used by the matcher object and
-     * tests if the quantifier state is properly reset. (Bug #3653)
-     */
-    public void testCharBufferAppend() {
-        Matcher     m;
-        CharBuffer  buffer;
-
-        buffer = new CharBuffer();
-        m = createRegExp("a*aa").matcher(buffer);
-        buffer.append("a");
-        if (m.matchFromBeginning()) {
-            fail("found invalid match '" + m.toString() +
-                 "' to regexp 'a*aa' in input '" + buffer + "'");
-        }
-        buffer.append("aaa");
-        if (!m.matchFromBeginning()) {
-            fail("couldn't match '" + buffer + "' to regexp 'a*aa'");
-        } else if (!buffer.toString().equals(m.toString())) {
-            fail("incorrect match for 'a*aa', found: '" +
-                 m.toString() + "', expected: '" + buffer + "'");
-        }
-
-        buffer = new CharBuffer();
-        m = createRegExp("a*?b").matcher(buffer);
-        buffer.append("aaa");
-        if (m.matchFromBeginning()) {
-            fail("found invalid match '" + m.toString() +
-                 "' to regexp 'a*?b' in input '" + buffer + "'");
-        }
-        buffer.append("aab");
-        if (!m.matchFromBeginning()) {
-            fail("couldn't match '" + buffer + "' to regexp 'a*?b'");
-        } else if (!buffer.toString().equals(m.toString())) {
-            fail("incorrect match for 'a*?b', found: '" +
-                 m.toString() + "', expected: '" + buffer + "'");
-        }
-    }
-
-    /**
      * Tests matching of various logical operators.
      */
     public void testLogicalOperators() {
@@ -498,6 +460,42 @@ public class TestRegExp extends TestCase {
         matchRegExp("(a*)*aa", "aaaa");
         matchRegExp("a+a+aa", "aaaa");
         matchRegExp("(a+)+aa", "aaaa");
+    }
+
+    /**
+     * Tests resetting the matcher with another input string.
+     */
+    public void testReset() {
+        Matcher  m;
+
+        try {
+            m = createRegExp("a*aa").matcher("a");
+            if (m.matchFromBeginning()) {
+                fail("found invalid match '" + m.toString() +
+                     "' to regexp 'a*aa' in input 'a'");
+            }
+            m.reset("aaaa");
+            if (!m.matchFromBeginning()) {
+                fail("couldn't match 'aaaa' to regexp 'a*aa'");
+            } else if (!m.toString().equals("aaaa")) {
+                fail("incorrect match for 'a*aa', found: '" +
+                     m.toString() + "', expected: 'aaaa'");
+            }
+            m = createRegExp("a*?b").matcher("aaa");
+            if (m.matchFromBeginning()) {
+                fail("found invalid match '" + m.toString() +
+                     "' to regexp 'a*?b' in input 'aaa'");
+            }
+            m.reset("aaaaab");
+            if (!m.matchFromBeginning()) {
+                fail("couldn't match 'aaaaab' to regexp 'a*?b'");
+            } else if (!m.toString().equals("aaaaab")) {
+                fail("incorrect match for 'a*?b', found: '" +
+                     m.toString() + "', expected: 'aaaaab'");
+            }
+        } catch (IOException e) {
+            fail("io error: " + e.getMessage());
+        }
     }
 
     /**
@@ -562,12 +560,16 @@ public class TestRegExp extends TestCase {
         RegExp   r = createRegExp(pattern);
         Matcher  m = r.matcher(input);
 
-        if (!m.matchFromBeginning()) {
-            fail("couldn't match '" + input + "' to regexp '" +
-                 pattern + "'");
-        } else if (!match.equals(m.toString())) {
-            fail("incorrect match for '" + pattern + "', found: '" +
-                 m.toString() + "', expected: '" + match + "'");
+        try {
+            if (!m.matchFromBeginning()) {
+                fail("couldn't match '" + input + "' to regexp '" +
+                     pattern + "'");
+            } else if (!match.equals(m.toString())) {
+                fail("incorrect match for '" + pattern + "', found: '" +
+                     m.toString() + "', expected: '" + match + "'");
+            }
+        } catch (IOException e) {
+            fail("io error: " + e.getMessage());
         }
     }
 
@@ -583,10 +585,14 @@ public class TestRegExp extends TestCase {
         RegExp   r = createRegExp(pattern);
         Matcher  m = r.matcher(input);
 
-        if (m.matchFromBeginning()) {
-            fail("found invalid match '" + m.toString() +
-                 "' to regexp '" + pattern + "' in input '" +
-                 input + "'");
+        try {
+            if (m.matchFromBeginning()) {
+                fail("found invalid match '" + m.toString() +
+                     "' to regexp '" + pattern + "' in input '" +
+                     input + "'");
+            }
+        } catch (IOException e) {
+            fail("io error: " + e.getMessage());
         }
     }
 }

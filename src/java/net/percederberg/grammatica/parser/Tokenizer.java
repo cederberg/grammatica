@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 
-import net.percederberg.grammatica.parser.re.CharBuffer;
 import net.percederberg.grammatica.parser.re.RegExp;
 import net.percederberg.grammatica.parser.re.Matcher;
 import net.percederberg.grammatica.parser.re.RegExpException;
@@ -78,40 +77,9 @@ public class Tokenizer {
     private ArrayList regexpMatchers = new ArrayList();
 
     /**
-     * The input stream to read from. When this is set to null, no
-     * further input is available.
+     * The look-ahead character stream reader.
      */
-    private Reader input = null;
-
-    /**
-     * The buffer with previously read characters. Normally characters
-     * are appended in blocks to this buffer, and for every token that
-     * is found, its characters are removed from the buffer.
-     */
-    private CharBuffer buffer = new CharBuffer();
-
-    /**
-     * The current position in the string buffer.
-     */
-    private int position = 0;
-
-    /**
-     * The line number of the first character in the buffer. This
-     * value will be incremented when reading past line breaks.
-     */
-    private int line = 1;
-
-    /**
-     * The column number of the first character in the buffer. This
-     * value will be updated for every character read.
-     */
-    private int column = 1;
-
-    /**
-     * The end of buffer read flag. This flag is set if the end of
-     * the buffer was encountered while matching token patterns.
-     */
-    private boolean endOfBuffer = false;
+    private LookAheadReader input = null;
 
     /**
      * The previous token in the token list.
@@ -139,7 +107,7 @@ public class Tokenizer {
      * @since 1.5
      */
     public Tokenizer(Reader input, boolean ignoreCase) {
-        this.input = input;
+        this.input = new LookAheadReader(input);
         this.ignoreCase = ignoreCase;
     }
 
@@ -213,7 +181,7 @@ public class Tokenizer {
      * @return the current line number
      */
     public int getCurrentLine() {
-        return line;
+        return input.getLineNumber();
     }
 
     /**
@@ -223,7 +191,7 @@ public class Tokenizer {
      * @return the current column number
      */
     public int getCurrentColumn() {
-        return column;
+        return input.getColumnNumber();
     }
 
     /**
@@ -245,7 +213,7 @@ public class Tokenizer {
             break;
         case TokenPattern.REGEXP_TYPE:
             try {
-                regexpMatchers.add(new RegExpTokenMatcher(pattern));
+                regexpMatchers.add(new RegExpTokenMatcher(pattern, input));
             } catch (RegExpException e) {
                 throw new ParserCreationException(
                     ParserCreationException.INVALID_TOKEN_ERROR,
@@ -259,6 +227,31 @@ public class Tokenizer {
                 ParserCreationException.INVALID_TOKEN_ERROR,
                 pattern.getName(),
                 "pattern type " + pattern.getType() + " is undefined");
+        }
+    }
+
+    /**
+     * Resets this tokenizer for usage with another input stream. This
+     * method will clear all the internal state in the tokenizer as
+     * well as close the previous input stream. It is normally called
+     * in order to reuse a parser and tokenizer pair for parsing
+     * another input stream.
+     *
+     * @param input          the new input stream to read
+     *
+     * @since 1.5
+     */
+    public void reset(Reader input) {
+        try {
+            this.input.close();
+        } catch (IOException ignore) {
+            // Do nothing
+        }
+        this.input = new LookAheadReader(input);
+        this.previousToken = null;
+        stringMatcher.reset();
+        for (int i = 0; i < regexpMatchers.size(); i++) {
+            ((RegExpTokenMatcher) regexpMatchers.get(i)).reset(this.input);
         }
     }
 
@@ -316,91 +309,33 @@ public class Tokenizer {
         TokenMatcher    m;
         Token           token;
         String          str;
-        ParseException  e;
+        int             line;
+        int             column;
 
-        // Find longest matching string
-        do {
-            if (endOfBuffer) {
-                readInput();
-                endOfBuffer = false;
-            }
-            m = findMatch();
-        } while (endOfBuffer && input != null);
-
-        // Return token results
-        if (m != null) {
-            str = buffer.substring(position, position + m.getMatchedLength());
-            token = new Token(m.getMatchedPattern(), str, line, column);
-            position += m.getMatchedLength();
-            line = token.getEndLine();
-            column = token.getEndColumn() + 1;
-            return token;
-        } else if (position >= buffer.length()) {
-            return null;
-        } else {
-            e = new ParseException(
-                ParseException.UNEXPECTED_CHAR_ERROR,
-                String.valueOf(buffer.charAt(position)),
-                line,
-                column);
-            if (buffer.charAt(position) == '\n') {
-                line++;
-                column = 1;
-            } else {
-                column++;
-            }
-            position++;
-            throw e;
-        }
-    }
-
-    /**
-     * Reads characters from the input stream and appends them to the
-     * input buffer. This method is safe to call even though the end
-     * of file has been reached. As a side effect, this method may
-     * also remove
-     *
-     * @throws ParseException if an error was encountered while
-     *             reading the input stream
-     */
-    private void readInput() throws ParseException {
-        char  chars[] = new char[4096];
-        int   length;
-
-        // Check for end of file
-        if (input == null) {
-            return;
-        }
-
-        // Remove old characters from buffer
-        if (position > 1024) {
-            buffer.delete(0, position);
-            position = 0;
-        }
-
-        // Read characters
         try {
-            length = input.read(chars);
+            m = findMatch();
+            if (m != null) {
+                line = input.getLineNumber();
+                column = input.getColumnNumber();
+                str = input.readString(m.getMatchedLength());
+                return new Token(m.getMatchedPattern(), str, line, column);
+            } else if (input.peek(0) < 0) {
+                return null;
+            } else {
+                line = input.getLineNumber();
+                column = input.getColumnNumber();
+                throw new ParseException(ParseException.UNEXPECTED_CHAR_ERROR,
+                                         input.readString(1),
+                                         line,
+                                         column);
+            }
         } catch (IOException e) {
-            input = null;
             throw new ParseException(ParseException.IO_ERROR,
                                      e.getMessage(),
                                      -1,
                                      -1);
         }
 
-        // Append characters to buffer
-        if (length > 0) {
-            buffer.append(chars, 0, length);
-        }
-        if (length < chars.length) {
-            try {
-                input.close();
-            } catch (IOException e) {
-                // Do nothing
-            }
-            input = null;
-        }
     }
 
     /**
@@ -411,32 +346,31 @@ public class Tokenizer {
      *
      * @return the token mathcher with the longest match, or
      *         null if no match was found
+     *
+     * @throws IOException if an I/O error occurred
      */
-    private TokenMatcher findMatch() {
+    private TokenMatcher findMatch() throws IOException {
         TokenMatcher        bestMatch = null;
         int                 bestLength = 0;
         RegExpTokenMatcher  re;
 
+        // TODO: The regexp token patterns might not always be defined
+        //       last. We should check the ordering of the patterns in
+        //       case a string match had the same length as a regexp
+        //       match.
+
         // Check string matches
-        if (stringMatcher.matchFrom(position)) {
+        if (stringMatcher.match(input)) {
             bestMatch = stringMatcher;
             bestLength = bestMatch.getMatchedLength();
-        }
-        if (stringMatcher.hasReadEndOfString()) {
-            endOfBuffer = true;
         }
 
         // Check regular expression matches
         for (int i = 0; i < regexpMatchers.size(); i++) {
             re = (RegExpTokenMatcher) regexpMatchers.get(i);
-            if (re.matchFrom(position)
-             && re.getMatchedLength() > bestLength) {
-
+            if (re.match() && re.getMatchedLength() > bestLength) {
                 bestMatch = re;
-                bestLength = bestMatch.getMatchedLength();
-            }
-            if (re.hasReadEndOfString()) {
-                endOfBuffer = true;
+                bestLength = re.getMatchedLength();
             }
         }
         return bestMatch;
@@ -483,22 +417,13 @@ public class Tokenizer {
          *         zero (0) if no match found
          */
         public abstract int getMatchedLength();
-
-        /**
-         * Checks if the end of string was encountered during the last
-         * match.
-         *
-         * @return true if the end of string was reached, or
-         *         false otherwise
-         */
-        public abstract boolean hasReadEndOfString();
     }
 
 
     /**
      * A regular expression token pattern matcher. This class is used
-     * to match a single regular expression with the tokenizer
-     * buffer. This class also maintains the state of the last match.
+     * to match a single regular expression with an input stream. This
+     * class also maintains the state of the last match.
      */
     private class RegExpTokenMatcher extends TokenMatcher {
 
@@ -521,16 +446,27 @@ public class Tokenizer {
          * Creates a new regular expression token matcher.
          *
          * @param pattern        the pattern to match
+         * @param input          the input stream to check
          *
          * @throws RegExpException if the regular expression couldn't
          *             be created properly
          */
-        public RegExpTokenMatcher(TokenPattern pattern)
+        public RegExpTokenMatcher(TokenPattern pattern, LookAheadReader input)
             throws RegExpException {
 
             this.pattern = pattern;
             this.regExp = new RegExp(pattern.getPattern(), ignoreCase);
-            this.matcher = regExp.matcher(buffer);
+            this.matcher = regExp.matcher(input);
+        }
+
+        /**
+         * Resets the matcher for another character input stream. This
+         * will clear the results of the last match.
+         *
+         * @param input          the new input stream to check
+         */
+        public void reset(LookAheadReader input) {
+            matcher.reset(input);
         }
 
         /**
@@ -540,20 +476,6 @@ public class Tokenizer {
          */
         public TokenPattern getPattern() {
             return pattern;
-        }
-
-        /**
-         * Returns the start position of the latest match.
-         *
-         * @return the start position of the last match, or
-         *         zero (0) if none found
-         */
-        public int start() {
-            if (matcher.length() <= 0) {
-                return 0;
-            } else {
-                return matcher.start();
-            }
         }
 
         /**
@@ -581,28 +503,16 @@ public class Tokenizer {
         }
 
         /**
-         * Checks if the end of string was encountered during the last
-         * match.
-         *
-         * @return true if the end of string was reached, or
-         *         false otherwise
-         */
-        public boolean hasReadEndOfString() {
-            return matcher.hasReadEndOfString();
-        }
-
-        /**
-         * Checks if the token pattern matches the tokenizer buffer
-         * from the specified position. This method will also reset
-         * all flags in this matcher.
-         *
-         * @param pos            the starting position
+         * Checks if the token pattern matches the input stream. This
+         * method will also reset all flags in this matcher.
          *
          * @return true if a match was found, or
          *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred
          */
-        public boolean matchFrom(int pos) {
-            return matcher.matchFrom(pos);
+        public boolean match() throws IOException {
+            return matcher.matchFromBeginning();
         }
 
         /**
@@ -619,12 +529,11 @@ public class Tokenizer {
 
     /**
      * A string token pattern matcher. This class is used to match a
-     * set of strings with the tokenizer buffer. This class
-     * internally uses a DFA for maximum performance. It also
-     * maintains the state of the last match.
+     * set of strings with an input stream. This class internally uses
+     * a DFA for maximum performance. It also maintains the state of
+     * the last match.
      */
-    private class StringTokenMatcher extends TokenMatcher
-        implements StringMatcher {
+    private class StringTokenMatcher extends TokenMatcher {
 
         /**
          * The list of string token patterns.
@@ -642,11 +551,6 @@ public class Tokenizer {
         private TokenPattern match = null;
 
         /**
-         * The end of string read flag.
-         */
-        private boolean endOfString = false;
-
-        /**
          * Creates a new string token matcher.
          */
         public StringTokenMatcher() {
@@ -658,7 +562,6 @@ public class Tokenizer {
          */
         public void reset() {
             match = null;
-            endOfString = false;
         }
 
         /**
@@ -683,34 +586,6 @@ public class Tokenizer {
             } else {
                 return match.getPattern().length();
             }
-        }
-
-        /**
-         * Checks if this matcher compares in case-insensitive mode.
-         *
-         * @return true if the matching is case-insensitive, or
-         *         false otherwise
-         */
-        public boolean isCaseInsensitive() {
-            return ignoreCase;
-        }
-
-        /**
-         * Checks if the end of string was encountered during the last
-         * match.
-         *
-         * @return true if the end of string was reached, or
-         *         false otherwise
-         */
-        public boolean hasReadEndOfString() {
-            return endOfString;
-        }
-
-        /**
-         * Sets the end of string encountered flag.
-         */
-        public void setReadEndOfString() {
-            endOfString = true;
         }
 
         /**
@@ -741,22 +616,23 @@ public class Tokenizer {
          */
         public void addPattern(TokenPattern pattern) {
             patterns.add(pattern);
-            start.addMatch(this, pattern.getPattern(), pattern);
+            start.addMatch(pattern.getPattern(), ignoreCase, pattern);
         }
 
         /**
-         * Checks if the token pattern matches the tokenizer buffer
-         * from the specified position. This method will also reset
-         * all flags in this matcher.
+         * Checks if the token pattern matches the input stream. This
+         * method will also reset all flags in this matcher.
          *
-         * @param pos            the starting position
+         * @param input           the input stream to check
          *
          * @return true if a match was found, or
          *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred
          */
-        public boolean matchFrom(int pos) {
+        public boolean match(LookAheadReader input) throws IOException {
             reset();
-            match = (TokenPattern) start.matchFrom(this, buffer, pos);
+            match = (TokenPattern) start.matchFrom(input, 0, ignoreCase);
             return match != null;
         }
 

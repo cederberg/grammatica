@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -42,7 +42,7 @@ import java.util.HashMap;
  * interface, as well as token handling.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.4
+ * @version  1.5
  */
 public abstract class Parser {
 
@@ -267,10 +267,30 @@ public abstract class Parser {
     }
 
     /**
+     * Resets this parser. This method will clear all the internal
+     * state and error log in the parser, but will not reset the
+     * tokenizer. In order to parse multiple input streams with the
+     * same parser, the Tokenizer.reset() method must also be called.
+     *
+     * @see Tokenizer#reset
+     *
+     * @since 1.5
+     */
+    public void reset() {
+        this.tokens.clear();
+        this.errorLog = new ParserLogException();
+        this.errorRecovery = -1;
+    }
+
+    /**
      * Parses the token stream and returns a parse tree. This method
-     * will call prepare() if not previously called. In case of a
-     * parse error, the parser will attempt to recover and throw all
-     * the errors found in a parser log exception in the end.
+     * will call prepare() if not previously called. It will also call
+     * the reset() method, to making sure that only the
+     * Tokenizer.reset() method must be explicitly called in order to
+     * reuse a parser for multiple input streams. In case of a parse
+     * error, the parser will attempt to recover and throw all the
+     * errors found in a parser log exception at the end of the
+     * parsing.
      *
      * @return the parse tree
      *
@@ -280,6 +300,8 @@ public abstract class Parser {
      *             correctly
      *
      * @see #prepare
+     * @see #reset
+     * @see Tokenizer#reset
      */
     public Node parse() throws ParserCreationException, ParserLogException {
         Node  root = null;
@@ -288,6 +310,7 @@ public abstract class Parser {
         if (!initialized) {
             prepare();
         }
+        reset();
 
         // Parse input
         try {

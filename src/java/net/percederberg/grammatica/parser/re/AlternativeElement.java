@@ -28,19 +28,22 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+
+import net.percederberg.grammatica.parser.LookAheadReader;
 
 /**
  * A regular expression alternative element. This element matches the
  * longest alternative element.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class AlternativeElement extends Element {
 
@@ -85,14 +88,18 @@ class AlternativeElement extends Element {
      * elements.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
-    public int match(Matcher m, CharBuffer str, int start, int skip) {
+    public int match(Matcher m, LookAheadReader input, int start, int skip)
+        throws IOException {
+
         int  length = 0;
         int  length1 = -1;
         int  length2 = -1;
@@ -100,8 +107,8 @@ class AlternativeElement extends Element {
         int  skip2 = 0;
 
         while (length >= 0 && skip1 + skip2 <= skip) {
-            length1 = elem1.match(m, str, start, skip1);
-            length2 = elem2.match(m, str, start, skip2);
+            length1 = elem1.match(m, input, start, skip1);
+            length2 = elem2.match(m, input, start, skip2);
             if (length1 >= length2) {
                 length = length1;
                 skip1++;

@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.test;
@@ -43,7 +43,7 @@ import net.percederberg.grammatica.parser.ParserCreationException;
  * A test case for the generated ArithmeticParser class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class TestArithmeticParser extends ParserTestCase {
 
@@ -143,6 +143,20 @@ public class TestArithmeticParser extends ParserTestCase {
                   ParseException.UNEXPECTED_TOKEN_ERROR,
                   1,
                   7);
+    }
+
+    /**
+     * Tests reusing the same parser for various different inputs.
+     */
+    public void testParserReusage() {
+        Parser  p;
+
+        p = createParser(VALID_INPUT);
+        parse(p, VALID_OUTPUT);
+        p.getTokenizer().reset(new StringReader(UNEXPECTED_CHAR_INPUT));
+        failParse(p, ParseException.UNEXPECTED_CHAR_ERROR, 2, 2);
+        p.getTokenizer().reset(new StringReader(VALID_INPUT));
+        parse(p, VALID_OUTPUT);
     }
 
     /**

@@ -187,6 +187,32 @@ public class TestTokenizer extends TestCase {
     }
 
     /**
+     * Tests resetting the tokenizer with different input streams.
+     */
+    public void testReset() {
+        Tokenizer  tokenizer = createDefaultTokenizer(" 12 keyword 0 ", false);
+
+        readToken(tokenizer, NUMBER);
+        readToken(tokenizer, KEYWORD);
+        readToken(tokenizer, NUMBER);
+        readToken(tokenizer, EOF);
+
+        tokenizer.reset(new StringReader("12 (keyword)"));
+        readToken(tokenizer, NUMBER);
+        failReadToken(tokenizer);
+        readToken(tokenizer, KEYWORD);
+
+        tokenizer.reset(new StringReader(""));
+        readToken(tokenizer, EOF);
+
+        tokenizer.reset(new StringReader(" 12 keyword 0 "));
+        readToken(tokenizer, NUMBER);
+        readToken(tokenizer, KEYWORD);
+        readToken(tokenizer, NUMBER);
+        readToken(tokenizer, EOF);
+    }
+
+    /**
      * Creates a new tokenizer.
      *
      * @param input          the input string

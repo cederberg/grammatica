@@ -33,8 +33,11 @@
 
 package net.percederberg.grammatica.parser.re;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import net.percederberg.grammatica.parser.LookAheadReader;
 
 /**
  * A regular expression character set element. This element matches a
@@ -186,28 +189,32 @@ class CharacterSetElement extends Element {
      * elements.
      *
      * @param m              the matcher being used
-     * @param str            the string to match
+     * @param input          the input character stream to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
      * @return the length of the longest matching string, or
      *         -1 if no match was found
+     *
+     * @throws IOException if a I/O error occurred
      */
-    public int match(Matcher m, CharBuffer str, int start, int skip) {
-        char     c;
+    public int match(Matcher m, LookAheadReader input, int start, int skip)
+        throws IOException {
+
+        int  c;
 
         if (skip != 0) {
             return -1;
         }
-        if (start >= str.length()) {
+        c = input.peek(start);
+        if (c < 0) {
             m.setReadEndOfString();
             return -1;
         }
-        c = str.charAt(start);
         if (m.isCaseInsensitive()) {
-            c = Character.toLowerCase(c);
+            c = (int) Character.toLowerCase((char) c);
         }
-        return inSet(c) ? 1 : -1;
+        return inSet((char) c) ? 1 : -1;
     }
 
     /**
