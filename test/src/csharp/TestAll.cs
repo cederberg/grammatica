@@ -54,6 +54,7 @@ public class TestAll {
 
         // Run all tests
         failures += RunTests(new TestRegExp());
+        failures += RunTests(new TestTokenizer());
         failures += RunTests(new TestProductionPattern());
         failures += RunTests(new TestRecursiveDescentParser());
         failures += RunTests(new TestArithmeticParser());
