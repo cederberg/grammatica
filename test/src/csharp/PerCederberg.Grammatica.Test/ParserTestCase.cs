@@ -117,23 +117,31 @@ namespace PerCederberg.Grammatica.Test {
          * @param result         the result obtained
          */
         private void ValidateLines(string expected, string result) {
-            int  line = 1;
-            int  pos;
-    
-            pos = result.IndexOf('\n');
-            while (pos > 0) {
-                if (expected.Length < pos) {
-                    break;
+            int     line = 1;
+            string  expectLine;
+            string  resultLine;
+            int     pos;
+
+            while (expected.Length > 0 || result.Length > 0) {
+                pos = expected.IndexOf('\n');
+                if (pos >= 0) {
+                    expectLine = expected.Substring(0, pos);
+                    expected = expected.Substring(pos + 1);
+                } else {
+                    expectLine = expected;
+                    expected = "";
                 }
-                ValidateLine(line,
-                             expected.Substring(0, pos),
-                             result.Substring(0, pos));
-                expected = expected.Substring(pos + 1);
-                result = result.Substring(pos + 1);
                 pos = result.IndexOf('\n');
+                if (pos >= 0) {
+                    resultLine = result.Substring(0, pos);
+                    result = result.Substring(pos + 1);
+                } else {
+                    resultLine = result;
+                    result = "";
+                }
+                ValidateLine(line, expectLine, resultLine);
                 line++;
             }
-            ValidateLine(line, expected, result);
         }
 
         /**

@@ -132,23 +132,31 @@ abstract class ParserTestCase extends TestCase {
      * @param result         the result obtained
      */
     private void validateLines(String expected, String result) {
-        int  line = 1;
-        int  pos;
+        int     line = 1;
+        String  expectLine;
+        String  resultLine;
+        int     pos;
 
-        pos = result.indexOf('\n');
-        while (pos > 0) {
-            if (expected.length() < pos) {
-                break;
+        while (expected.length() > 0 || result.length() > 0) {
+            pos = expected.indexOf('\n');
+            if (pos >= 0) {
+                expectLine = expected.substring(0, pos);
+                expected = expected.substring(pos + 1);
+            } else {
+                expectLine = expected;
+                expected = "";
             }
-            validateLine(line,
-                         expected.substring(0, pos), 
-                         result.substring(0, pos));
-            expected = expected.substring(pos + 1);
-            result = result.substring(pos + 1);
             pos = result.indexOf('\n');
+            if (pos >= 0) {
+                resultLine = result.substring(0, pos);
+                result = result.substring(pos + 1);
+            } else {
+                resultLine = result;
+                result = "";
+            }
+            validateLine(line, expectLine, resultLine);
             line++;
         }
-        validateLine(line, expected, result);
     }
     
     /**
