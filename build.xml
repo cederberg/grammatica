@@ -60,15 +60,13 @@
   <target name="codegen">
     <antcall target="compile-clean" />
     <antcall target="compile-java" />
-    <java classname="net.percederberg.grammatica.Grammatica"
-          classpath="${build.dir}/classes"
-          failonerror="true">
-	  <arg value="${build.dir}/src/grammar/grammar.grammar" />
-	  <arg value="--javaoutput" />
-	  <arg value="${build.dir}/src/java" />
-	  <arg value="--javapackage" />
-	  <arg value="net.percederberg.grammatica" />
-    </java>
+    <taskdef name="grammatica"
+             classname="net.percederberg.grammatica.ant.GrammaticaTask"
+             classpath="${build.dir}/classes"/>
+    <grammatica grammar="${build.dir}/src/grammar/grammar.grammar">
+      <java dir="${build.dir}/src/java"
+            package="net.percederberg.grammatica" />
+    </grammatica>
   </target>
 
 
@@ -136,25 +134,25 @@
 
 
 <!-- TEST TARGETS -->
-  <target name="test" depends="compile,test-java,test-csharp">
+  <target name="test" depends="compile,test-codegen,test-java,test-csharp">
   </target>
   
-  <target name="test-java-codegen">
-    <apply executable="java"
-           failonerror="true">
-      <arg line="-jar ${build.dir}/lib/grammatica-${build.version}.jar" />
-      <srcfile />
-	  <arg value="--javaoutput" />
-	  <arg value="${build.dir}/test/src/java" />
-	  <arg value="--javapackage" />
-	  <arg value="net.percederberg.grammatica.test" />
-      <fileset dir="${build.dir}">
-        <include name="test/src/grammar/*.grammar" />
-      </fileset>
-    </apply>
+  <target name="test-codegen">
+    <grammatica grammar="${build.dir}/test/src/grammar/arithmetic.grammar">
+      <java dir="${build.dir}/test/src/java"
+            package="net.percederberg.grammatica.test" />
+      <csharp dir="${build.dir}/test/src/csharp/PerCederberg.Grammatica.Test"
+              namespace="PerCederberg.Grammatica.Test" />
+    </grammatica>
+    <grammatica grammar="${build.dir}/test/src/grammar/regexp.grammar">
+      <java dir="${build.dir}/test/src/java"
+            package="net.percederberg.grammatica.test" />
+      <csharp dir="${build.dir}/test/src/csharp/PerCederberg.Grammatica.Test"
+              namespace="PerCederberg.Grammatica.Test" />
+    </grammatica>
   </target>
 
-  <target name="test-java" depends="test-java-codegen">
+  <target name="test-java">
     <javac srcdir="${build.dir}/test/src/java"
            destdir="${build.dir}/classes"
            classpathref="project.class.path"
@@ -174,22 +172,7 @@
      </junit>
   </target>
   
-  <target name="test-csharp-codegen">
-    <apply executable="java"
-           failonerror="true">
-      <arg line="-jar ${build.dir}/lib/grammatica-${build.version}.jar" />
-      <srcfile />
-	  <arg value="--csoutput" />
-	  <arg value="${build.dir}/test/src/csharp/PerCederberg.Grammatica.Test" />
-	  <arg value="--csnamespace" />
-	  <arg value="PerCederberg.Grammatica.Test" />
-      <fileset dir="${build.dir}">
-        <include name="test/src/grammar/*.grammar" />
-      </fileset>
-    </apply>
-  </target>
-
-  <target name="test-csharp" depends="test-csharp-codegen">
+  <target name="test-csharp">
     <echo level="info" message="compiling C# test sources with Mono..." />
     <apply executable="mcs"
            parallel="true"
@@ -260,6 +243,7 @@
 
   <target name="doc-java">
     <javadoc packagenames="net.percederberg.grammatica.*"
+             excludepackagenames="net.percederberg.grammatica.ant.*"
              sourcepath="${build.dir}/src/java"
              destdir="${build.dir}/doc/api/java"
              classpath="${build.dir}/classes"
