@@ -57,6 +57,7 @@ public class TestAll {
         failures += RunTests(new TestProductionPattern());
         failures += RunTests(new TestRecursiveDescentParser());
         failures += RunTests(new TestArithmeticParser());
+        failures += RunTests(new TestArithmeticCalculator());
         failures += RunTests(new TestRegexpParser());
 
         // Check for failures

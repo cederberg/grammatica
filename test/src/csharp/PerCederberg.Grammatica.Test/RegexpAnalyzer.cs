@@ -51,70 +51,70 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enter(Node node) {
+        public override void Enter(Node node) {
             switch (node.GetId()) {
             case (int) RegexpConstants.LEFT_PAREN:
-                enterLeftParen((Token) node);
+                EnterLeftParen((Token) node);
                 break;
             case (int) RegexpConstants.RIGHT_PAREN:
-                enterRightParen((Token) node);
+                EnterRightParen((Token) node);
                 break;
             case (int) RegexpConstants.LEFT_BRACKET:
-                enterLeftBracket((Token) node);
+                EnterLeftBracket((Token) node);
                 break;
             case (int) RegexpConstants.RIGHT_BRACKET:
-                enterRightBracket((Token) node);
+                EnterRightBracket((Token) node);
                 break;
             case (int) RegexpConstants.LEFT_BRACE:
-                enterLeftBrace((Token) node);
+                EnterLeftBrace((Token) node);
                 break;
             case (int) RegexpConstants.RIGHT_BRACE:
-                enterRightBrace((Token) node);
+                EnterRightBrace((Token) node);
                 break;
             case (int) RegexpConstants.QUESTION:
-                enterQuestion((Token) node);
+                EnterQuestion((Token) node);
                 break;
             case (int) RegexpConstants.ASTERISK:
-                enterAsterisk((Token) node);
+                EnterAsterisk((Token) node);
                 break;
             case (int) RegexpConstants.PLUS:
-                enterPlus((Token) node);
+                EnterPlus((Token) node);
                 break;
             case (int) RegexpConstants.VERTICAL_BAR:
-                enterVerticalBar((Token) node);
+                EnterVerticalBar((Token) node);
                 break;
             case (int) RegexpConstants.DOT:
-                enterDot((Token) node);
+                EnterDot((Token) node);
                 break;
             case (int) RegexpConstants.COMMA:
-                enterComma((Token) node);
+                EnterComma((Token) node);
                 break;
             case (int) RegexpConstants.NUMBER:
-                enterNumber((Token) node);
+                EnterNumber((Token) node);
                 break;
             case (int) RegexpConstants.CHAR:
-                enterChar((Token) node);
+                EnterChar((Token) node);
                 break;
             case (int) RegexpConstants.EXPR:
-                enterExpr((Production) node);
+                EnterExpr((Production) node);
                 break;
             case (int) RegexpConstants.TERM:
-                enterTerm((Production) node);
+                EnterTerm((Production) node);
                 break;
             case (int) RegexpConstants.FACT:
-                enterFact((Production) node);
+                EnterFact((Production) node);
                 break;
             case (int) RegexpConstants.ATOM:
-                enterAtom((Production) node);
+                EnterAtom((Production) node);
                 break;
             case (int) RegexpConstants.ATOM_MODIFIER:
-                enterAtomModifier((Production) node);
+                EnterAtomModifier((Production) node);
                 break;
             case (int) RegexpConstants.CHARACTER_SET:
-                enterCharacterSet((Production) node);
+                EnterCharacterSet((Production) node);
                 break;
             case (int) RegexpConstants.CHARACTER:
-                enterCharacter((Production) node);
+                EnterCharacter((Production) node);
                 break;
             }
         }
@@ -129,50 +129,50 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exit(Node node) {
+        public override Node Exit(Node node) {
             switch (node.GetId()) {
             case (int) RegexpConstants.LEFT_PAREN:
-                return exitLeftParen((Token) node);
+                return ExitLeftParen((Token) node);
             case (int) RegexpConstants.RIGHT_PAREN:
-                return exitRightParen((Token) node);
+                return ExitRightParen((Token) node);
             case (int) RegexpConstants.LEFT_BRACKET:
-                return exitLeftBracket((Token) node);
+                return ExitLeftBracket((Token) node);
             case (int) RegexpConstants.RIGHT_BRACKET:
-                return exitRightBracket((Token) node);
+                return ExitRightBracket((Token) node);
             case (int) RegexpConstants.LEFT_BRACE:
-                return exitLeftBrace((Token) node);
+                return ExitLeftBrace((Token) node);
             case (int) RegexpConstants.RIGHT_BRACE:
-                return exitRightBrace((Token) node);
+                return ExitRightBrace((Token) node);
             case (int) RegexpConstants.QUESTION:
-                return exitQuestion((Token) node);
+                return ExitQuestion((Token) node);
             case (int) RegexpConstants.ASTERISK:
-                return exitAsterisk((Token) node);
+                return ExitAsterisk((Token) node);
             case (int) RegexpConstants.PLUS:
-                return exitPlus((Token) node);
+                return ExitPlus((Token) node);
             case (int) RegexpConstants.VERTICAL_BAR:
-                return exitVerticalBar((Token) node);
+                return ExitVerticalBar((Token) node);
             case (int) RegexpConstants.DOT:
-                return exitDot((Token) node);
+                return ExitDot((Token) node);
             case (int) RegexpConstants.COMMA:
-                return exitComma((Token) node);
+                return ExitComma((Token) node);
             case (int) RegexpConstants.NUMBER:
-                return exitNumber((Token) node);
+                return ExitNumber((Token) node);
             case (int) RegexpConstants.CHAR:
-                return exitChar((Token) node);
+                return ExitChar((Token) node);
             case (int) RegexpConstants.EXPR:
-                return exitExpr((Production) node);
+                return ExitExpr((Production) node);
             case (int) RegexpConstants.TERM:
-                return exitTerm((Production) node);
+                return ExitTerm((Production) node);
             case (int) RegexpConstants.FACT:
-                return exitFact((Production) node);
+                return ExitFact((Production) node);
             case (int) RegexpConstants.ATOM:
-                return exitAtom((Production) node);
+                return ExitAtom((Production) node);
             case (int) RegexpConstants.ATOM_MODIFIER:
-                return exitAtomModifier((Production) node);
+                return ExitAtomModifier((Production) node);
             case (int) RegexpConstants.CHARACTER_SET:
-                return exitCharacterSet((Production) node);
+                return ExitCharacterSet((Production) node);
             case (int) RegexpConstants.CHARACTER:
-                return exitCharacter((Production) node);
+                return ExitCharacter((Production) node);
             }
             return node;
         }
@@ -187,28 +187,28 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void child(Production node, Node child) {
+        public override void Child(Production node, Node child) {
             switch (node.GetId()) {
             case (int) RegexpConstants.EXPR:
-                childExpr(node, child);
+                ChildExpr(node, child);
                 break;
             case (int) RegexpConstants.TERM:
-                childTerm(node, child);
+                ChildTerm(node, child);
                 break;
             case (int) RegexpConstants.FACT:
-                childFact(node, child);
+                ChildFact(node, child);
                 break;
             case (int) RegexpConstants.ATOM:
-                childAtom(node, child);
+                ChildAtom(node, child);
                 break;
             case (int) RegexpConstants.ATOM_MODIFIER:
-                childAtomModifier(node, child);
+                ChildAtomModifier(node, child);
                 break;
             case (int) RegexpConstants.CHARACTER_SET:
-                childCharacterSet(node, child);
+                ChildCharacterSet(node, child);
                 break;
             case (int) RegexpConstants.CHARACTER:
-                childCharacter(node, child);
+                ChildCharacter(node, child);
                 break;
             }
         }
@@ -221,7 +221,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterLeftParen(Token node) {
+        public virtual void EnterLeftParen(Token node) {
         }
 
         /**
@@ -234,7 +234,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitLeftParen(Token node) {
+        public virtual Node ExitLeftParen(Token node) {
             return node;
         }
 
@@ -246,7 +246,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterRightParen(Token node) {
+        public virtual void EnterRightParen(Token node) {
         }
 
         /**
@@ -259,7 +259,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitRightParen(Token node) {
+        public virtual Node ExitRightParen(Token node) {
             return node;
         }
 
@@ -271,7 +271,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterLeftBracket(Token node) {
+        public virtual void EnterLeftBracket(Token node) {
         }
 
         /**
@@ -284,7 +284,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitLeftBracket(Token node) {
+        public virtual Node ExitLeftBracket(Token node) {
             return node;
         }
 
@@ -296,7 +296,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterRightBracket(Token node) {
+        public virtual void EnterRightBracket(Token node) {
         }
 
         /**
@@ -309,7 +309,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitRightBracket(Token node) {
+        public virtual Node ExitRightBracket(Token node) {
             return node;
         }
 
@@ -321,7 +321,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterLeftBrace(Token node) {
+        public virtual void EnterLeftBrace(Token node) {
         }
 
         /**
@@ -334,7 +334,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitLeftBrace(Token node) {
+        public virtual Node ExitLeftBrace(Token node) {
             return node;
         }
 
@@ -346,7 +346,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterRightBrace(Token node) {
+        public virtual void EnterRightBrace(Token node) {
         }
 
         /**
@@ -359,7 +359,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitRightBrace(Token node) {
+        public virtual Node ExitRightBrace(Token node) {
             return node;
         }
 
@@ -371,7 +371,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterQuestion(Token node) {
+        public virtual void EnterQuestion(Token node) {
         }
 
         /**
@@ -384,7 +384,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitQuestion(Token node) {
+        public virtual Node ExitQuestion(Token node) {
             return node;
         }
 
@@ -396,7 +396,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterAsterisk(Token node) {
+        public virtual void EnterAsterisk(Token node) {
         }
 
         /**
@@ -409,7 +409,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitAsterisk(Token node) {
+        public virtual Node ExitAsterisk(Token node) {
             return node;
         }
 
@@ -421,7 +421,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterPlus(Token node) {
+        public virtual void EnterPlus(Token node) {
         }
 
         /**
@@ -434,7 +434,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitPlus(Token node) {
+        public virtual Node ExitPlus(Token node) {
             return node;
         }
 
@@ -446,7 +446,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterVerticalBar(Token node) {
+        public virtual void EnterVerticalBar(Token node) {
         }
 
         /**
@@ -459,7 +459,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitVerticalBar(Token node) {
+        public virtual Node ExitVerticalBar(Token node) {
             return node;
         }
 
@@ -471,7 +471,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterDot(Token node) {
+        public virtual void EnterDot(Token node) {
         }
 
         /**
@@ -484,7 +484,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitDot(Token node) {
+        public virtual Node ExitDot(Token node) {
             return node;
         }
 
@@ -496,7 +496,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterComma(Token node) {
+        public virtual void EnterComma(Token node) {
         }
 
         /**
@@ -509,7 +509,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitComma(Token node) {
+        public virtual Node ExitComma(Token node) {
             return node;
         }
 
@@ -521,7 +521,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterNumber(Token node) {
+        public virtual void EnterNumber(Token node) {
         }
 
         /**
@@ -534,7 +534,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitNumber(Token node) {
+        public virtual Node ExitNumber(Token node) {
             return node;
         }
 
@@ -546,7 +546,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterChar(Token node) {
+        public virtual void EnterChar(Token node) {
         }
 
         /**
@@ -559,7 +559,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitChar(Token node) {
+        public virtual Node ExitChar(Token node) {
             return node;
         }
 
@@ -571,7 +571,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterExpr(Production node) {
+        public virtual void EnterExpr(Production node) {
         }
 
         /**
@@ -584,7 +584,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitExpr(Production node) {
+        public virtual Node ExitExpr(Production node) {
             return node;
         }
 
@@ -598,7 +598,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childExpr(Production node, Node child) {
+        public virtual void ChildExpr(Production node, Node child) {
             node.AddChild(child);
         }
 
@@ -610,7 +610,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterTerm(Production node) {
+        public virtual void EnterTerm(Production node) {
         }
 
         /**
@@ -623,7 +623,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitTerm(Production node) {
+        public virtual Node ExitTerm(Production node) {
             return node;
         }
 
@@ -637,7 +637,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childTerm(Production node, Node child) {
+        public virtual void ChildTerm(Production node, Node child) {
             node.AddChild(child);
         }
 
@@ -649,7 +649,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterFact(Production node) {
+        public virtual void EnterFact(Production node) {
         }
 
         /**
@@ -662,7 +662,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitFact(Production node) {
+        public virtual Node ExitFact(Production node) {
             return node;
         }
 
@@ -676,7 +676,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childFact(Production node, Node child) {
+        public virtual void ChildFact(Production node, Node child) {
             node.AddChild(child);
         }
 
@@ -688,7 +688,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterAtom(Production node) {
+        public virtual void EnterAtom(Production node) {
         }
 
         /**
@@ -701,7 +701,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitAtom(Production node) {
+        public virtual Node ExitAtom(Production node) {
             return node;
         }
 
@@ -715,7 +715,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childAtom(Production node, Node child) {
+        public virtual void ChildAtom(Production node, Node child) {
             node.AddChild(child);
         }
 
@@ -727,7 +727,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterAtomModifier(Production node) {
+        public virtual void EnterAtomModifier(Production node) {
         }
 
         /**
@@ -740,7 +740,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitAtomModifier(Production node) {
+        public virtual Node ExitAtomModifier(Production node) {
             return node;
         }
 
@@ -754,7 +754,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childAtomModifier(Production node, Node child) {
+        public virtual void ChildAtomModifier(Production node, Node child) {
             node.AddChild(child);
         }
 
@@ -766,7 +766,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterCharacterSet(Production node) {
+        public virtual void EnterCharacterSet(Production node) {
         }
 
         /**
@@ -779,7 +779,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitCharacterSet(Production node) {
+        public virtual Node ExitCharacterSet(Production node) {
             return node;
         }
 
@@ -793,7 +793,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childCharacterSet(Production node, Node child) {
+        public virtual void ChildCharacterSet(Production node, Node child) {
             node.AddChild(child);
         }
 
@@ -805,7 +805,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void enterCharacter(Production node) {
+        public virtual void EnterCharacter(Production node) {
         }
 
         /**
@@ -818,7 +818,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public Node exitCharacter(Production node) {
+        public virtual Node ExitCharacter(Production node) {
             return node;
         }
 
@@ -832,7 +832,7 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
-        public void childCharacter(Production node, Node child) {
+        public virtual void ChildCharacter(Production node, Node child) {
             node.AddChild(child);
         }
     }
