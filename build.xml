@@ -72,7 +72,7 @@
 
 <!-- COMPILATION TARGETS -->
   <target name="compile" 
-          depends="init,compile-clean,compile-java,compile-csharp">
+          depends="init,codegen,compile-clean,compile-java,compile-csharp">
     <jar jarfile="${build.dir}/lib/grammatica-${build.version}.jar"
          includesfile="${build.dir}/LICENSE.txt">
       <manifest>
@@ -85,7 +85,7 @@
   </target>
 
   <target name="compile-clean">
-    <delete>
+    <delete quiet="true">
       <fileset dir="${build.dir}/bin" />
       <fileset dir="${build.dir}/classes" />
       <fileset dir="${build.dir}/lib" />
@@ -120,16 +120,14 @@
   </target>
 
   <target name="compile-csharp">
-    <echo level="info" message="Compiling C# sources with Mono..." />
-    <apply executable="mcs"
-           parallel="true"
-           failonerror="true">
-      <arg value="-debug+" />
-      <arg value="-out:${build.dir}/lib/grammatica-${build.version}.dll" />
-      <arg value="-target:library" />
-      <fileset dir="${build.dir}/src/csharp" 
-               includes="**/*.cs" />
-    </apply>
+    <csc destfile="${build.dir}/lib/grammatica-${build.version}.dll"
+         targettype="library"
+         debug="on"
+         warnlevel="4"
+         failonerror="true">
+      <src dir="${build.dir}/src/csharp" 
+           includes="**/*.cs" />
+    </csc>
   </target>
 
 
@@ -173,19 +171,18 @@
   </target>
   
   <target name="test-csharp">
-    <echo level="info" message="compiling C# test sources with Mono..." />
-    <apply executable="mcs"
-           parallel="true"
-           failonerror="true">
-      <arg value="-debug+" />
-      <arg value="-lib:${build.dir}/lib" />
-      <arg value="-reference:grammatica-${build.version}.dll" />
-      <arg value="-out:${build.dir}/lib/cstestall.exe" />
-      <arg value="-main:TestAll" />
-      <arg value="-target:exe" />
-      <fileset dir="${build.dir}/test/src/csharp" 
-               includes="**/*.cs" />
-    </apply>
+    <csc destfile="${build.dir}/lib/cstestall.exe"
+         targettype="exe"
+         mainclass="TestAll"
+         debug="on"
+         warnlevel="4"
+         failonerror="true">
+      <src dir="${build.dir}/test/src/csharp"
+           includes="**/*.cs" />
+      <reference dir="${build.dir}/lib"
+                 includes="*.dll" />
+    </csc>
+    <echo level="info" message="running C# test cases with Mono..." />
     <exec executable="mono"
           failonerror="true">
       <arg value="${build.dir}/lib/cstestall.exe" />
@@ -200,7 +197,7 @@
   </target>
 
   <target name="doc-clean">
-    <delete dir="${build.dir}/doc" />
+    <delete quiet="true" dir="${build.dir}/doc" />
     <mkdir dir="${build.dir}/doc" />
     <mkdir dir="${build.dir}/doc/manual" />
     <mkdir dir="${build.dir}/doc/api/java" />
@@ -267,12 +264,12 @@
 
 <!-- PACKAGING TARGETS -->
   <target name="package" depends="init,codegen,compile,test,doc">
-    <delete>
+    <delete quiet="true">
       <fileset dir="${build.dir}" includes="grammatica-*.tar.gz" />
     </delete>
-	<tar tarfile="${build.dir}/grammatica-${build.version}.tar.gz"
-	     longfile="gnu"
-	     compression="gzip">
+    <tar tarfile="${build.dir}/grammatica-${build.version}.tar.gz"
+         longfile="gnu"
+         compression="gzip">
       <tarfileset dir="${build.dir}"
                   prefix="grammatica-${build.version}">
         <include name="*.txt" />
@@ -282,7 +279,7 @@
         <include name="test/**" />
         <include name="doc/**" />
       </tarfileset>
-	</tar>
+    </tar>
   </target>
 
 </project>
