@@ -28,12 +28,14 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
 using System.Collections;
 using System.IO;
+
+using PerCederberg.Grammatica.Parser;
 
 namespace PerCederberg.Grammatica.Parser.RE {
 
@@ -43,7 +45,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
      * maximum repetition count.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.1
+     * @version  1.5
      */
     internal class RepeatElement : Element {
 
@@ -147,15 +149,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * specified.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         public override int Match(Matcher m,
-                                  string str,
+                                  LookAheadReader input,
                                   int start,
                                   int skip) {
 
@@ -165,12 +169,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
             }
             switch (type) {
             case RepeatType.GREEDY:
-                return MatchGreedy(m, str, start, skip);
+                return MatchGreedy(m, input, start, skip);
             case RepeatType.RELUCTANT:
-                return MatchReluctant(m, str, start, skip);
+                return MatchReluctant(m, input, start, skip);
             case RepeatType.POSSESSIVE:
                 if (skip == 0) {
-                    return MatchPossessive(m, str, start, 0);
+                    return MatchPossessive(m, input, start, 0);
                 }
                 break;
             }
@@ -183,28 +187,30 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * to skip can also be specified.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the longest matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         private int MatchGreedy(Matcher m,
-                                string str,
+                                LookAheadReader input,
                                 int start,
                                 int skip) {
 
             // Check for simple case
             if (skip == 0) {
-                return MatchPossessive(m, str, start, 0);
+                return MatchPossessive(m, input, start, 0);
             }
 
             // Find all matches
             if (matchStart != start) {
                 matchStart = start;
                 matches = new BitArray(10);
-                FindMatches(m, str, start, 0, 0, 0);
+                FindMatches(m, input, start, 0, 0, 0);
             }
 
             // Find first non-skipped match
@@ -225,15 +231,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * skip can also be specified.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the shortest matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         private int MatchReluctant(Matcher m,
-                                   string str,
+                                   LookAheadReader input,
                                    int start,
                                    int skip) {
 
@@ -241,7 +249,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
             if (matchStart != start) {
                 matchStart = start;
                 matches = new BitArray(10);
-                FindMatches(m, str, start, 0, 0, 0);
+                FindMatches(m, input, start, 0, 0, 0);
             }
 
             // Find first non-skipped match
@@ -262,15 +270,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * allows no backtracking, i.e. no skips..
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param count          the start count, normally zero (0)
          *
          * @return the length of the longest matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         private int MatchPossessive(Matcher m,
-                                    string str,
+                                    LookAheadReader input,
                                     int start,
                                     int count) {
 
@@ -279,7 +289,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
 
             // Match as many elements as possible
             while (subLength > 0 && count < max) {
-                subLength = elem.Match(m, str, start + length, 0);
+                subLength = elem.Match(m, input, start + length, 0);
                 if (subLength >= 0) {
                     count++;
                     length += subLength;
@@ -298,14 +308,16 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * Finds all matches and adds the lengths to the matches set.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param length         the match length at the start position
          * @param count          the number of sub-elements matched
          * @param attempt        the number of match attempts here
+         *
+         * @throws IOException if an I/O error occurred
          */
         private void FindMatches(Matcher m,
-                                 string str,
+                                 LookAheadReader input,
                                  int start,
                                  int length,
                                  int count,
@@ -325,7 +337,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
             }
 
             // Check element match
-            subLength = elem.Match(m, str, start, attempt);
+            subLength = elem.Match(m, input, start, attempt);
             if (subLength < 0) {
                 return;
             } else if (subLength == 0) {
@@ -339,9 +351,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
             }
 
             // Find alternative and subsequent matches
-            FindMatches(m, str, start, length, count, attempt + 1);
+            FindMatches(m, input, start, length, count, attempt + 1);
             FindMatches(m,
-                        str,
+                        input,
                         start + subLength,
                         length + subLength,
                         count + 1,

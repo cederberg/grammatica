@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -42,7 +42,7 @@ namespace PerCederberg.Grammatica.Parser {
      * interface, as well as token handling.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.4
+     * @version  1.5
      */
     public abstract class Parser {
 
@@ -262,10 +262,31 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Parses the token stream and returns a parse tree. This method
-         * will call prepare() if not previously called. In case of a
-         * parse error, the parser will attempt to recover and throw all
-         * the errors found in a parser log exception in the end.
+         * Resets this parser. This method will clear all the internal
+         * state and error log in the parser, but will not reset the
+         * tokenizer. In order to parse multiple input streams with
+         * the same parser, the Tokenizer.reset() method must also be
+         * called.
+         *
+         * @see Tokenizer#Reset
+         *
+         * @since 1.5
+         */
+        public void Reset() {
+            this.tokens.Clear();
+            this.errorLog = new ParserLogException();
+            this.errorRecovery = -1;
+        }
+
+        /**
+         * Parses the token stream and returns a parse tree. This
+         * method will call Prepare() if not previously called. It
+         * will also call the Reset() method, to make sure that only
+         * the Tokenizer.Reset() method must be explicitly called in
+         * order to reuse a parser for multiple input streams. In case
+         * of a parse error, the parser will attempt to recover and
+         * throw all the errors found in a parser log exception in the
+         * end.
          *
          * @return the parse tree
          *
@@ -274,7 +295,9 @@ namespace PerCederberg.Grammatica.Parser {
          * @throws ParserLogException if the input couldn't be parsed
          *             correctly
          *
-         * @see #prepare
+         * @see #Prepare
+         * @see #Reset
+         * @see Tokenizer#Reset
          */
         public Node Parse() {
             Node  root = null;
@@ -283,6 +306,7 @@ namespace PerCederberg.Grammatica.Parser {
             if (!initialized) {
                 Prepare();
             }
+            Reset();
 
             // Parse input
             try {

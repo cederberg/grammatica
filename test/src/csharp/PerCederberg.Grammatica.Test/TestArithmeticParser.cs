@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.IO;
@@ -40,7 +40,7 @@ namespace PerCederberg.Grammatica.Test {
      * A test case for the ArithmeticParser class.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class TestArithmeticParser : ParserTestCase {
 
@@ -131,6 +131,20 @@ namespace PerCederberg.Grammatica.Test {
                       ParseException.ErrorType.UNEXPECTED_TOKEN,
                       1,
                       7);
+        }
+
+        /**
+         * Tests reusing the same parser for various different inputs.
+         */
+        public void TestParserReusage() {
+            Parser  p;
+
+            p = CreateParser(VALID_INPUT);
+            Parse(p, VALID_OUTPUT);
+            p.GetTokenizer().Reset(new StringReader(UNEXPECTED_CHAR_INPUT));
+            FailParse(p, ParseException.ErrorType.UNEXPECTED_CHAR, 2, 2);
+            p.GetTokenizer().Reset(new StringReader(VALID_INPUT));
+            Parse(p, VALID_OUTPUT);
         }
 
         /**

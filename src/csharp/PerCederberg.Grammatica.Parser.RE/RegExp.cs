@@ -37,6 +37,8 @@ using System.IO;
 using System.Globalization;
 using System.Text;
 
+using PerCederberg.Grammatica.Parser;
+
 namespace PerCederberg.Grammatica.Parser.RE {
 
     /**
@@ -117,7 +119,39 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * @return the regular expresion matcher
          */
         public Matcher Matcher(string str) {
-            return new Matcher((Element) element.Clone(), str, ignoreCase);
+            return Matcher(new StringReader(str));
+        }
+
+        /**
+         * Creates a new matcher for the specified character input
+         * stream.
+         *
+         * @param input          the character input stream
+         *
+         * @return the regular expresion matcher
+         *
+         * @since 1.5
+         */
+        public Matcher Matcher(TextReader input) {
+            if (input is LookAheadReader) {
+                return Matcher((LookAheadReader) input);
+            } else {
+                return Matcher(new LookAheadReader(input));
+            }
+        }
+
+        /**
+         * Creates a new matcher for the specified look-ahead
+         * character input stream.
+         *
+         * @param input          the character input stream
+         *
+         * @return the regular expresion matcher
+         *
+         * @since 1.5
+         */
+        private Matcher Matcher(LookAheadReader input) {
+            return new Matcher((Element) element.Clone(), input, ignoreCase);
         }
 
         /**

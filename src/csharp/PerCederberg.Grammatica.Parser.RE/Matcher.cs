@@ -31,6 +31,10 @@
  * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
+using System.IO;
+
+using PerCederberg.Grammatica.Parser;
+
 namespace PerCederberg.Grammatica.Parser.RE {
 
     /**
@@ -51,9 +55,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
         private Element element;
 
         /**
-         * The string to work with
+         * The input character stream to work with.
          */
-        private string str;
+        private LookAheadReader input;
 
         /**
          * The character case ignore flag.
@@ -80,12 +84,12 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * Creates a new matcher with the specified element.
          *
          * @param e              the base regular expression element
-         * @param str            the string to work with
+         * @param input          the input character stream to work with
          * @param ignoreCase     the character case ignore flag
          */
-        internal Matcher(Element e, string str, bool ignoreCase) {
+        internal Matcher(Element e, LookAheadReader input, bool ignoreCase) {
             this.element = e;
-            this.str = str;
+            this.input = input;
             this.ignoreCase = ignoreCase;
             this.start = 0;
             Reset();
@@ -106,12 +110,56 @@ namespace PerCederberg.Grammatica.Parser.RE {
         /**
          * Resets the information about the last match. This will
          * clear all flags and set the match length to a negative
-         * value. This method is automatically called by all matching
-         * methods.
+         * value. This method is automatically called before starting
+         * a new match.
          */
         public void Reset() {
             length = -1;
             endOfString = false;
+        }
+
+        /**
+         * Resets the matcher for use with a new input string. This
+         * will clear all flags and set the match length to a negative
+         * value.
+         *
+         * @param str            the new string to work with
+         *
+         * @since 1.5
+         */
+        public void Reset(string str) {
+            Reset(new StringReader(str));
+        }
+
+        /**
+         * Resets the matcher for use with a new character input
+         * stream. This will clear all flags and set the match length
+         * to a negative value.
+         *
+         * @param input           the character input stream
+         *
+         * @since 1.5
+         */
+        public void Reset(TextReader input) {
+            if (input is LookAheadReader) {
+                Reset((LookAheadReader) input);
+            } else {
+                Reset(new LookAheadReader(input));
+            }
+        }
+
+        /**
+         * Resets the matcher for use with a new look-ahead character
+         * input stream. This will clear all flags and set the match
+         * length to a negative value.
+         *
+         * @param input           the character input stream
+         *
+         * @since 1.5
+         */
+        private void Reset(LookAheadReader input) {
+            this.input = input;
+            Reset();
         }
 
         /**
@@ -168,6 +216,9 @@ namespace PerCederberg.Grammatica.Parser.RE {
          *
          * @return true if a match was found, or
          *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred while reading
+         *             an input stream
          */
         public bool MatchFromBeginning() {
             return MatchFrom(0);
@@ -181,11 +232,14 @@ namespace PerCederberg.Grammatica.Parser.RE {
          *
          * @return true if a match was found, or
          *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred while reading
+         *             an input stream
          */
         public bool MatchFrom(int pos) {
             Reset();
             start = pos;
-            length = element.Match(this, str, start, 0);
+            length = element.Match(this, input, start, 0);
             return length >= 0;
         }
 
@@ -199,7 +253,11 @@ namespace PerCederberg.Grammatica.Parser.RE {
             if (length <= 0) {
                 return "";
             } else {
-                return str.Substring(start, length);
+                try {
+                    return input.PeekString(start, length);
+                } catch (IOException ignore) {
+                    return "";
+                }
             }
         }
 

@@ -185,6 +185,32 @@ public class TestTokenizer {
     }
 
     /**
+     * Tests resetting the tokenizer with different input streams.
+     */
+    public void TestReset() {
+        Tokenizer  tokenizer = CreateDefaultTokenizer(" 12 keyword 0 ", false);
+
+        ReadToken(tokenizer, NUMBER);
+        ReadToken(tokenizer, KEYWORD);
+        ReadToken(tokenizer, NUMBER);
+        ReadToken(tokenizer, EOF);
+
+        tokenizer.Reset(new StringReader("12 (keyword)"));
+        ReadToken(tokenizer, NUMBER);
+        FailReadToken(tokenizer);
+        ReadToken(tokenizer, KEYWORD);
+
+        tokenizer.Reset(new StringReader(""));
+        ReadToken(tokenizer, EOF);
+
+        tokenizer.Reset(new StringReader(" 12 keyword 0 "));
+        ReadToken(tokenizer, NUMBER);
+        ReadToken(tokenizer, KEYWORD);
+        ReadToken(tokenizer, NUMBER);
+        ReadToken(tokenizer, EOF);
+    }
+
+    /**
      * Creates a new tokenizer.
      *
      * @param input          the input string

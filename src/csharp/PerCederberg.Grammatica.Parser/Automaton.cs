@@ -71,51 +71,56 @@ namespace PerCederberg.Grammatica.Parser {
          * transitions will be added to extend this automaton to
          * support the specified string.
          *
-         * @param m              the string matcher to use
-         * @param str            the string to match
-         * @param value          the match value
+         * @param str              the string to match
+         * @param caseInsensitive  the case-insensitive flag
+         * @param value            the match value
          */
-        public void AddMatch(StringMatcher m, string str, object value) {
+        public void AddMatch(string str, bool caseInsensitive, object value) {
             Automaton  state;
 
             if (str.Equals("")) {
                 this.value = value;
             } else {
-                state = tree.Find(str[0], m.IsCaseInsensitive());
+                state = tree.Find(str[0], caseInsensitive);
                 if (state == null) {
                     state = new Automaton();
-                    state.AddMatch(m, str.Substring(1), value);
-                    tree.Add(str[0], m.IsCaseInsensitive(), state);
+                    state.AddMatch(str.Substring(1), caseInsensitive, value);
+                    tree.Add(str[0], caseInsensitive, state);
                 } else {
-                    state.AddMatch(m, str.Substring(1), value);
+                    state.AddMatch(str.Substring(1), caseInsensitive, value);
                 }
             }
         }
 
         /**
-         * Checks if the automaton matches a string. The matching will
-         * be performed from a specified position. This method will
-         * set the end of string flag in the specified matcher if the
-         * end of the string is reached. The comparison can be done
-         * either in case-sensitive or case-insensitive mode.
+         * Checks if the automaton matches an input stream. The
+         * matching will be performed from a specified position. This
+         * method will not read any characters from the stream, just
+         * peek ahead. The comparison can be done either in
+         * case-sensitive or case-insensitive mode.
          *
-         * @param m              the string matcher to use
-         * @param buffer         the string buffer to check
-         * @param pos            the starting position
+         * @param input            the input stream to check
+         * @param pos              the starting position
+         * @param caseInsensitive  the case-insensitive flag
          *
          * @return the match value, or
          *         null if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
-        public object MatchFrom(StringMatcher m, string str, int pos) {
+        public object MatchFrom(LookAheadReader input,
+                                int pos,
+                                bool caseInsensitive) {
+
             object     result = null;
             Automaton  state;
+            int        c;
 
-            if (pos >= str.Length) {
-                m.SetReadEndOfString();
-            } else if (tree != null) {
-                state = tree.Find(str[pos], m.IsCaseInsensitive());
+            c = input.Peek(pos);
+            if (tree != null && c >= 0) {
+                state = tree.Find((char) c, caseInsensitive);
                 if (state != null) {
-                    result = state.MatchFrom(m, str, pos + 1);
+                    result = state.MatchFrom(input, pos + 1, caseInsensitive);
                 }
             }
             return (result == null) ? value : result;

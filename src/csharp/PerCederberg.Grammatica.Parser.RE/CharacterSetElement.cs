@@ -36,6 +36,8 @@ using System.Collections;
 using System.IO;
 using System.Text;
 
+using PerCederberg.Grammatica.Parser;
+
 namespace PerCederberg.Grammatica.Parser.RE {
 
     /**
@@ -188,32 +190,34 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * elements.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         public override int Match(Matcher m,
-                                  string str,
+                                  LookAheadReader input,
                                   int start,
                                   int skip) {
 
-            char  c;
+            int  c;
 
             if (skip != 0) {
                 return -1;
             }
-            if (start >= str.Length) {
+            c = input.Peek(start);
+            if (c < 0) {
                 m.SetReadEndOfString();
                 return -1;
             }
-            c = str[start];
             if (m.IsCaseInsensitive()) {
-                c = Char.ToLower(c);
+                c = (int) Char.ToLower((char) c);
             }
-            return InSet(c) ? 1 : -1;
+            return InSet((char) c) ? 1 : -1;
         }
 
         /**

@@ -32,6 +32,7 @@
  */
 
 using System;
+using System.IO;
 using System.Text;
 
 using PerCederberg.Grammatica.Parser.RE;
@@ -458,6 +459,42 @@ public class TestRegExp {
     }
 
     /**
+     * Tests resetting the matcher with another input string.
+     */
+    public void TestReset() {
+        Matcher  m;
+
+        try {
+            m = CreateRegExp("a*aa").Matcher("a");
+            if (m.MatchFromBeginning()) {
+                Fail("found invalid match '" + m.ToString() +
+                     "' to regexp 'a*aa' in input 'a'");
+            }
+            m.Reset("aaaa");
+            if (!m.MatchFromBeginning()) {
+                Fail("couldn't match 'aaaa' to regexp 'a*aa'");
+            } else if (!m.ToString().Equals("aaaa")) {
+                Fail("incorrect match for 'a*aa', found: '" +
+                     m.ToString() + "', expected: 'aaaa'");
+            }
+            m = CreateRegExp("a*?b").Matcher("aaa");
+            if (m.MatchFromBeginning()) {
+                Fail("found invalid match '" + m.ToString() +
+                     "' to regexp 'a*?b' in input 'aaa'");
+            }
+            m.Reset("aaaaab");
+            if (!m.MatchFromBeginning()) {
+                Fail("couldn't match 'aaaaab' to regexp 'a*?b'");
+            } else if (!m.ToString().Equals("aaaaab")) {
+                Fail("incorrect match for 'a*?b', found: '" +
+                     m.ToString() + "', expected: 'aaaaab'");
+            }
+        } catch (IOException e) {
+            Fail("io error: " + e.Message);
+        }
+    }
+
+    /**
      * Creates a new regular expression. If the expression couldn't be
      * parsed correctly, a test failure will be reported.
      *
@@ -519,12 +556,16 @@ public class TestRegExp {
         RegExp   r = CreateRegExp(pattern);
         Matcher  m = r.Matcher(input);
 
-        if (!m.MatchFromBeginning()) {
-            Fail("couldn't match '" + input + "' to regexp '" +
-                 pattern + "'");
-        } else if (!match.Equals(m.ToString())) {
-            Fail("incorrect match for '" + pattern + "', found: '" +
-                 m.ToString() + "', expected: '" + match + "'");
+        try {
+            if (!m.MatchFromBeginning()) {
+                Fail("couldn't match '" + input + "' to regexp '" +
+                     pattern + "'");
+            } else if (!match.Equals(m.ToString())) {
+                Fail("incorrect match for '" + pattern + "', found: '" +
+                     m.ToString() + "', expected: '" + match + "'");
+            }
+        } catch (IOException e) {
+            Fail("io error: " + e.Message);
         }
     }
 
@@ -540,10 +581,14 @@ public class TestRegExp {
         RegExp   r = CreateRegExp(pattern);
         Matcher  m = r.Matcher(input);
 
-        if (m.MatchFromBeginning()) {
-            Fail("found invalid match '" + m.ToString() +
-                 "' to regexp '" + pattern + "' in input '" +
-                 input + "'");
+        try {
+            if (m.MatchFromBeginning()) {
+                Fail("found invalid match '" + m.ToString() +
+                     "' to regexp '" + pattern + "' in input '" +
+                     input + "'");
+            }
+        } catch (IOException e) {
+            Fail("io error: " + e.Message);
         }
     }
 

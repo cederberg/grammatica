@@ -28,10 +28,12 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.IO;
+
+using PerCederberg.Grammatica.Parser;
 
 namespace PerCederberg.Grammatica.Parser.RE {
 
@@ -40,7 +42,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
      * two consecutive elements.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     internal class CombineElement : Element {
 
@@ -86,15 +88,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * elements.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the longest matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         public override int Match(Matcher m,
-                                  string str,
+                                  LookAheadReader input,
                                   int start,
                                   int skip) {
 
@@ -104,11 +108,11 @@ namespace PerCederberg.Grammatica.Parser.RE {
             int  skip2 = 0;
 
             while (skip >= 0) {
-                length1 = elem1.Match(m, str, start, skip1);
+                length1 = elem1.Match(m, input, start, skip1);
                 if (length1 < 0) {
                     return -1;
                 }
-                length2 = elem2.Match(m, str, start + length1, skip2);
+                length2 = elem2.Match(m, input, start + length1, skip2);
                 if (length2 < 0) {
                     skip1++;
                     skip2 = 0;

@@ -28,11 +28,13 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
 using System.IO;
+
+using PerCederberg.Grammatica.Parser;
 
 namespace PerCederberg.Grammatica.Parser.RE {
 
@@ -65,15 +67,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * combine other elements.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         public abstract int Match(Matcher m,
-                                  string str,
+                                  LookAheadReader input,
                                   int start,
                                   int skip);
 

@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.IO;
@@ -40,7 +40,7 @@ namespace PerCederberg.Grammatica.Parser.RE {
      * the longest alternative element.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     internal class AlternativeElement : Element {
 
@@ -86,15 +86,17 @@ namespace PerCederberg.Grammatica.Parser.RE {
          * combine other elements.
          *
          * @param m              the matcher being used
-         * @param str            the string to match
+         * @param input          the input character stream to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
          * @return the length of the longest matching string, or
          *         -1 if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         public override int Match(Matcher m,
-                                  string str,
+                                  LookAheadReader input,
                                   int start,
                                   int skip) {
 
@@ -105,8 +107,8 @@ namespace PerCederberg.Grammatica.Parser.RE {
             int  skip2 = 0;
 
             while (length >= 0 && skip1 + skip2 <= skip) {
-                length1 = elem1.Match(m, str, start, skip1);
-                length2 = elem2.Match(m, str, start, skip2);
+                length1 = elem1.Match(m, input, start, skip1);
+                length2 = elem2.Match(m, input, start, skip2);
                 if (length1 >= length2) {
                     length = length1;
                     skip1++;

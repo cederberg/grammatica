@@ -74,40 +74,9 @@ namespace PerCederberg.Grammatica.Parser {
         private ArrayList regexpMatchers = new ArrayList();
 
         /**
-         * The input stream to read from. When this is set to null, no
-         * further input is available.
+         * The look-ahead character stream reader.
          */
-        private TextReader input = null;
-
-        /**
-         * The buffer with previously read characters. Normally characters
-         * are appended in blocks to this buffer, and for every token that
-         * is found, its characters are removed from the buffer.
-         */
-        private StringBuilder buffer = new StringBuilder();
-
-        /**
-         * The current position in the string buffer.
-         */
-        private int position = 0;
-
-        /**
-         * The line number of the first character in the buffer. This
-         * value will be incremented when reading past line breaks.
-         */
-        private int line = 1;
-
-        /**
-         * The column number of the first character in the buffer. This
-         * value will be updated for every character read.
-         */
-        private int column = 1;
-
-        /**
-         * The end of buffer read flag. This flag is set if the end of
-         * the buffer was encountered while matching token patterns.
-         */
-        private bool endOfBuffer = false;
+        private LookAheadReader input = null;
 
         /**
          * The previous token in the token list.
@@ -136,7 +105,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public Tokenizer(TextReader input, bool ignoreCase) {
             this.stringMatcher = new StringTokenMatcher(ignoreCase);
-            this.input = input;
+            this.input = new LookAheadReader(input);
             this.ignoreCase = ignoreCase;
         }
 
@@ -210,7 +179,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the current line number
          */
         public int GetCurrentLine() {
-            return line;
+            return input.GetLineNumber();
         }
 
         /**
@@ -220,7 +189,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the current column number
          */
         public int GetCurrentColumn() {
-            return column;
+            return input.GetColumnNumber();
         }
 
         /**
@@ -241,7 +210,8 @@ namespace PerCederberg.Grammatica.Parser {
             case TokenPattern.PatternType.REGEXP:
                 try {
                     regexpMatchers.Add(new RegExpTokenMatcher(pattern,
-                                                              ignoreCase));
+                                                              ignoreCase,
+                                                              input));
                 } catch (RegExpException e) {
                     throw new ParserCreationException(
                         ParserCreationException.ErrorType.INVALID_TOKEN,
@@ -256,6 +226,27 @@ namespace PerCederberg.Grammatica.Parser {
                     pattern.GetName(),
                     "pattern type " + pattern.GetPatternType() +
                     " is undefined");
+            }
+        }
+
+        /**
+         * Resets this tokenizer for usage with another input stream.
+         * This method will clear all the internal state in the
+         * tokenizer as well as close the previous input stream. It is
+         * normally called in order to reuse a parser and tokenizer
+         * pair for parsing another input stream.
+         *
+         * @param input          the new input stream to read
+         *
+         * @since 1.5
+         */
+        public void Reset(TextReader input) {
+            this.input.Close();
+            this.input = new LookAheadReader(input);
+            this.previousToken = null;
+            stringMatcher.Reset();
+            for (int i = 0; i < regexpMatchers.Count; i++) {
+                ((RegExpTokenMatcher) regexpMatchers[i]).Reset(this.input);
             }
         }
 
@@ -310,90 +301,34 @@ namespace PerCederberg.Grammatica.Parser {
          *             parsed correctly
          */
         private Token NextToken() {
-            TokenMatcher    m;
-            Token           token;
-            string          str;
-            ParseException  e;
+            TokenMatcher  m;
+            string        str;
+            int           line;
+            int           column;
 
-            // Find longest matching string
-            do {
-                if (endOfBuffer) {
-                    ReadInput();
-                    endOfBuffer = false;
-                }
-                m = FindMatch();
-            } while (endOfBuffer && input != null);
-
-            // Return token results
-            if (m != null) {
-                str = buffer.ToString();
-                str = str.Substring(position, m.GetMatchedLength());
-                token = new Token(m.GetMatchedPattern(), str, line, column);
-                position += m.GetMatchedLength();
-                line = token.GetEndLine();
-                column = token.GetEndColumn() + 1;
-                return token;
-            } else if (position >= buffer.Length) {
-                return null;
-            } else {
-                e = new ParseException(
-                    ParseException.ErrorType.UNEXPECTED_CHAR,
-                    buffer[position].ToString(),
-                    line,
-                    column);
-                if (buffer[position] == '\n') {
-                    line++;
-                    column = 1;
-                } else {
-                    column++;
-                }
-                position++;
-                throw e;
-            }
-        }
-
-        /**
-         * Reads characters from the input stream and appends them to
-         * the input buffer. This method is safe to call even though
-         * the end of file has been reached. As a side effect, this
-         * method may also remove
-         *
-         * @throws ParseException if an error was encountered while
-         *             reading the input stream
-         */
-        private void ReadInput() {
-            char[]  chars = new char[4096];
-            int     length;
-
-            // Check for end of file
-            if (input == null) {
-                return;
-            }
-
-            // Remove old characters from buffer
-            if (position > 1024) {
-                buffer.Remove(0, position);
-                position = 0;
-            }
-
-            // Read characters
             try {
-                length = input.Read(chars, 0, chars.Length);
+                m = FindMatch();
+                if (m != null) {
+                    line = input.GetLineNumber();
+                    column = input.GetColumnNumber();
+                    str = input.ReadString(m.GetMatchedLength());
+                    return new Token(m.GetMatchedPattern(), str, line, column);
+                } else if (input.Peek() < 0) {
+                    return null;
+                } else {
+                    line = input.GetLineNumber();
+                    column = input.GetColumnNumber();
+                    throw new ParseException(
+                        ParseException.ErrorType.UNEXPECTED_CHAR,
+                        input.ReadString(1),
+                        line,
+                        column);
+                }
             } catch (IOException e) {
-                input = null;
                 throw new ParseException(ParseException.ErrorType.IO,
                                          e.Message,
                                          -1,
                                          -1);
-            }
-
-            // Append characters to buffer
-            if (length > 0) {
-                buffer.Append(chars, 0, length);
-            }
-            if (length < chars.Length) {
-                input.Close();
-                input = null;
             }
         }
 
@@ -405,33 +340,26 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the token mathcher with the longest match, or
          *         null if no match was found
+         *
+         * @throws IOException if an I/O error occurred
          */
         private TokenMatcher FindMatch() {
             TokenMatcher        bestMatch = null;
             int                 bestLength = 0;
             RegExpTokenMatcher  re;
-            string              str = buffer.ToString();
 
             // Check string matches
-            if (stringMatcher.MatchFrom(str, position)) {
+            if (stringMatcher.Match(input)) {
                 bestMatch = stringMatcher;
                 bestLength = bestMatch.GetMatchedLength();
-            }
-            if (stringMatcher.HasReadEndOfString()) {
-                endOfBuffer = true;
             }
 
             // Check regular expression matches
             for (int i = 0; i < regexpMatchers.Count; i++) {
                 re = (RegExpTokenMatcher) regexpMatchers[i];
-                if (re.MatchFrom(str, position)
-                 && re.GetMatchedLength() > bestLength) {
-
+                if (re.Match() && re.GetMatchedLength() > bestLength) {
                     bestMatch = re;
-                    bestLength = bestMatch.GetMatchedLength();
-                }
-                if (re.HasReadEndOfString()) {
-                    endOfBuffer = true;
+                    bestLength = re.GetMatchedLength();
                 }
             }
             return bestMatch;
@@ -479,22 +407,13 @@ namespace PerCederberg.Grammatica.Parser {
          *         zero (0) if no match found
          */
         public abstract int GetMatchedLength();
-
-        /**
-         * Checks if the end of string was encountered during the last
-         * match.
-         *
-         * @return true if the end of string was reached, or
-         *         false otherwise
-         */
-        public abstract bool HasReadEndOfString();
     }
 
 
     /**
      * A regular expression token pattern matcher. This class is used
-     * to match a single regular expression with the tokenizer
-     * buffer. This class also maintains the state of the last match.
+     * to match a single regular expression with an input stream. This
+     * class also maintains the state of the last match.
      */
     internal class RegExpTokenMatcher : TokenMatcher {
 
@@ -518,13 +437,28 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @param pattern        the pattern to match
          * @param ignoreCase     the character case ignore flag
+         * @param input          the input stream to check
          *
          * @throws RegExpException if the regular expression couldn't
          *             be created properly
          */
-        public RegExpTokenMatcher(TokenPattern pattern, bool ignoreCase) {
+        public RegExpTokenMatcher(TokenPattern pattern,
+                                  bool ignoreCase,
+                                  LookAheadReader input) {
+
             this.pattern = pattern;
             this.regExp = new RegExp(pattern.GetPattern(), ignoreCase);
+            this.matcher = regExp.Matcher(input);
+        }
+
+        /**
+         * Resets the matcher for another character input stream. This
+         * will clear the results of the last match.
+         *
+         * @param input           the new input stream to check
+         */
+        public void Reset(LookAheadReader input) {
+            matcher.Reset(input);
         }
 
         /**
@@ -534,20 +468,6 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public TokenPattern GetPattern() {
             return pattern;
-        }
-
-        /**
-         * Returns the start position of the latest match.
-         *
-         * @return the start position of the last match, or
-         *         zero (0) if none found
-         */
-        public int Start() {
-            if (matcher == null || matcher.Length() <= 0) {
-                return 0;
-            } else {
-                return matcher.Start();
-            }
         }
 
         /**
@@ -575,30 +495,19 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Checks if the end of string was encountered during the last
-         * match.
-         *
-         * @return true if the end of string was reached, or
-         *         false otherwise
-         */
-        public override bool HasReadEndOfString() {
-            return (matcher == null) ? false : matcher.HasReadEndOfString();
-        }
-
-        /**
-         * Checks if the token pattern matches the tokenizer buffer
-         * from the specified position. This method will also reset
-         * all flags in this matcher.
+         * Checks if the token pattern matches the input stream. This
+         * method will also reset all flags in this matcher.
          *
          * @param str            the string to match
          * @param pos            the starting position
          *
          * @return true if a match was found, or
          *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred
          */
-        public bool MatchFrom(string str, int pos) {
-            matcher = regExp.Matcher(str);
-            return matcher.MatchFrom(pos);
+        public bool Match() {
+            return matcher.MatchFromBeginning();
         }
 
         /**
@@ -615,11 +524,11 @@ namespace PerCederberg.Grammatica.Parser {
 
     /**
      * A string token pattern matcher. This class is used to match a
-     * set of strings with the tokenizer buffer. This class
-     * internally uses a DFA for maximum performance. It also
-     * maintains the state of the last match.
+     * set of strings with an input stream. This class internally uses
+     * a DFA for maximum performance. It also maintains the state of
+     * the last match.
      */
-    internal class StringTokenMatcher : TokenMatcher, StringMatcher {
+    internal class StringTokenMatcher : TokenMatcher {
 
         /**
          * The list of string token patterns.
@@ -635,11 +544,6 @@ namespace PerCederberg.Grammatica.Parser {
          * The last token pattern match found.
          */
         private TokenPattern match = null;
-
-        /**
-         * The end of string read flag.
-         */
-        private bool endOfString = false;
 
         /**
          * The ignore character case flag.
@@ -661,7 +565,6 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public void Reset() {
             match = null;
-            endOfString = false;
         }
 
         /**
@@ -686,34 +589,6 @@ namespace PerCederberg.Grammatica.Parser {
             } else {
                 return match.GetPattern().Length;
             }
-        }
-
-        /**
-         * Checks if this matcher compares in case-insensitive mode.
-         *
-         * @return true if the matching is case-insensitive, or
-         *         false otherwise
-         */
-        public bool IsCaseInsensitive() {
-            return ignoreCase;
-        }
-
-        /**
-         * Checks if the end of string was encountered during the last
-         * match.
-         *
-         * @return true if the end of string was reached, or
-         *         false otherwise
-         */
-        public override bool HasReadEndOfString() {
-            return endOfString;
-        }
-
-        /**
-         * Sets the end of string encountered flag.
-         */
-        public void SetReadEndOfString() {
-            endOfString = true;
         }
 
         /**
@@ -744,23 +619,23 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public void AddPattern(TokenPattern pattern) {
             patterns.Add(pattern);
-            start.AddMatch(this, pattern.GetPattern(), pattern);
+            start.AddMatch(pattern.GetPattern(), ignoreCase, pattern);
         }
 
         /**
-         * Checks if the token pattern matches the tokenizer buffer
-         * from the specified position. This method will also reset
-         * all flags in this matcher.
+         * Checks if the token pattern matches the input stream. This
+         * method will also reset all flags in this matcher.
          *
-         * @param str            the string to match
-         * @param pos            the starting position
+         * @param input          the input stream to match
          *
          * @return true if a match was found, or
          *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred
          */
-        public bool MatchFrom(string str, int pos) {
+        public bool Match(LookAheadReader input) {
             Reset();
-            match = (TokenPattern) start.MatchFrom(this, str, pos);
+            match = (TokenPattern) start.MatchFrom(input, 0, ignoreCase);
             return match != null;
         }
 

@@ -21,7 +21,25 @@
         been added to make it possible to parse in case-insensitive
         mode. By default all parsing is case-sensitive. Thanks to
         Adrian Moore for providing a partial implementation.
-        <ref bug=""/></text>
+        <ref bug="5060"/></text>
+      </item>
+
+      <item>
+        <title>Added support for reusing parsers and tokenizers</title>
+        <text>A <code>reset()</code> method has been added to both the
+        Parser and the Tokenizer classes, allowing to reuse a parser
+        with a new input stream. By reusing a single parser and
+        tokenizer for various input files speed and memory gains can
+        be made, especially for complex grammars.
+        <ref bug="4500"/></text>
+      </item>
+
+      <item>
+        <title>Changed regular expression API subtly</title>
+        <text>Due to fixes required to be able to reuse tokenizers,
+        the regular expression class API had to be changed subtly. In
+        essence, all the methods can now throw IOException which
+        breaks a Java compile. <ref bug="4500"/></text>
       </item>
 
       <item>
