@@ -12,7 +12,7 @@
         <title>Added Visual Basic.NET code generation</title>
         <text>A Visual Basic.NET source code generator has been
         contributed by Adrian Moore. It uses the same run-time library
-        (DLL) as the C# .NET version. (Bug #8199)</text>
+        (DLL) as the C# .NET version. <ref bug="8199"/></text>
       </item>
 
       <item>
@@ -20,7 +20,7 @@
         <text>When profiling grammars with small input files, the time
         measured could previously be zero (0). This caused a division
         by zero exception when calculating the number of tokens parsed
-        per second. (Bug #7998)</text>
+        per second. <ref bug="7998"/></text>
       </item>
     </list>
 
@@ -32,7 +32,7 @@
         <title>Added Apache Ant task</title>
         <text>An Apache Ant task has been added to the distribution.
         See the reference manual for details on how to use it. 
-        (Bug #3620)</text>
+        <ref bug="3620"/></text>
       </item>
 
       <item>
@@ -43,14 +43,14 @@
         whitespace and comment tokens, although otherwise ignored by 
         the parser. By default this feature is off, to avoid potetial
         garbage collection problems when parsing large files. 
-        (Bug #3605)</text>
+        <ref bug="3605"/></text>
       </item>
 
       <item>
         <title>Removed API documentation for unsupported API</title>
         <text>Java API documentation for the unsupported API:s in 
         Grammatica is no longer created or distributed. 
-        (Bug #4969)</text>
+        <ref bug="4969"/></text>
       </item>
 
       <item>
@@ -58,7 +58,7 @@
         <text>When using <code>--profile</code> a null pointer 
         exception was thrown during the parsing of the file. This
         was due to the analyzer being set to null, something that has
-        now been made impossible. (Bug #4967)</text>
+        now been made impossible. <ref bug="4967"/></text>
       </item>
     </list>
 
@@ -70,21 +70,21 @@
         <title>Added C# API documentation</title>
         <text>C# API documentation has now been added to the 
         release documentation. The build file uses CppDoc to
-        generate the HTML documents. (Bug #3612)</text>
+        generate the HTML documents. <ref bug="3612"/></text>
       </item>
       
       <item>
         <title>Added source code examples to documentation</title>
         <text>Some examples of Java source code for creating a
         parser has been added to the reference manual. 
-        (Bug #4093)</text>
+        <ref bug="4093"/></text>
       </item>
 
       <item>
         <title>Improved and clarified the Analyzer API</title>
         <text>The Analyzer class API has been clarified by improving
         the generated comments slightly and by adding a 
-        <code>getChildValues()</code> method. (Bug #4181)</text>
+        <code>getChildValues()</code> method. <ref bug="4181"/></text>
       </item>
 
       <item>
@@ -94,7 +94,7 @@
         erroneous casing of method names. Tests have now been added
         to verify the generated analyzers. This was only an issue in
         the C# code generation, as the Java version has been tested
-        continuously. (Bugs #4416 and #4498)</text>
+        continuously. <ref bug="4416"/> &amp; <ref bug="4498"/></text>
       </item>
 	</list>
 
@@ -107,7 +107,7 @@
         <text>A new action <code>--profile</code> has been added that
         prints out the statistics from a profiling run of the 
         grammar. This is useful for improving the grammar and parsing 
-        speed. (Bug #3936)</text>
+        speed. <ref bug="3936"/></text>
       </item>
 
       <item>
@@ -115,14 +115,15 @@
         <text>The tokenizer performance has been much improved for
         string tokens. The speed improvement is about 100% on 
         average,  meaning that the tokenizer will use half the time
-        for most input and grammars. (Bug #3603)</text>
+        for most input and grammars. <ref bug="3603"/></text>
       </item>
       
       <item>
         <title>Improved the parse tree output on error</title>
         <text>The parse tree was previously only printed when a file
         could be parsed correctly. Now the parse tree is printed 
-        until the first syntax error is found. (Bug #3930)</text>
+        until the first syntax error is found.
+        <ref bug="3930"/></text>
       </item>
 
       <item>
@@ -130,7 +131,7 @@
         <text>When missing the final '%' character in the grammar 
         file, the error message printed was not logical. This has 
         been improved by printing an 'unterminated directive' error
-        instead. (Bug #3931)</text>
+        instead. <ref bug="3931"/></text>
       </item>
 
       <item>
@@ -138,7 +139,7 @@
         <text>The reference manual has been improved to the point 
         where it is considered finished. There is still room for
         much improvement, however, and such fixes will added in 
-        later versions. (Bug #3598)</text>
+        later versions. <ref bug="3598"/></text>
       </item>
 
       <item>
@@ -148,7 +149,7 @@
         for productions containing alternatives with ambiguities that
         were resolved with one alternative being set as the default.
         This has now been corrected, which should also improve the
-        error recovery in these cases. (Bug #3929)</text>
+        error recovery in these cases. <ref bug="3929"/></text>
       </item>
     </list>
 
@@ -161,7 +162,7 @@
         <text>Automatic error recovery is now always attempted 
         without any changes to the grammar. Unfortunately the parser
         library API had to be changed a bit to make this possible. 
-        (Bug #3601)</text>
+        <ref bug="3601"/></text>
       </item>
 
       <item>
@@ -169,7 +170,7 @@
         <text>A new action <code>--debug</code> has been added that
         prints out the internal representation of the grammar. This
         is useful for debugging, as it also prints the look-ahead
-        token sets calculated. (Bug #3692)</text>
+        token sets calculated. <ref bug="3692"/></text>
       </item>
 
       <item>
@@ -179,7 +180,7 @@
         due to the algorithm being used. A new algorithm has now
         been implemented, speeding up the process and allowing
         calculation of look-aheads of at least 10 tokens length.
-        (Bug #3674)</text>
+        <ref bug="3674"/></text>
       </item>
     
       <item>
@@ -188,7 +189,8 @@
         (such as '*?') caused stack overflow errors when matching 
         long input strings (about 4096 characters). This has now
         been fixed in both the C# and Java versions, and new 
-        automatic test cases have been added. (Bug #3632)</text>
+        automatic test cases have been added.
+        <ref bug="3632"/></text>
       </item>
 
       <item>
@@ -198,7 +200,7 @@
         containing quantifiers ('*', '+', '*?' and '+?'), and only 
         extremely seldom due to a failure to reset previous matches.
         This was only ever an issue in the Java version, where it has
-        now been fixed. (Bug #3653)</text>
+        now been fixed. <ref bug="3653"/></text>
       </item>
     </list>
 
