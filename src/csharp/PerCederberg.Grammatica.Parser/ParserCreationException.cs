@@ -12,7 +12,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software 
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
@@ -38,7 +38,7 @@ using System.Text;
 namespace PerCederberg.Grammatica.Parser {
 
     /**
-     * A parser creation exception. This exception is used for signalling 
+     * A parser creation exception. This exception is used for signalling
      * an error in the token or production patterns, making it impossible
      * to create a working parser or tokenizer.
      *
@@ -52,44 +52,44 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public enum ErrorType {
 
-            /**
-             * The internal error type is only used to signal an 
+            /*
+             * The internal error type is only used to signal an
              * error that is a result of a bug in the parser or
              * tokenizer code.
              */
             INTERNAL,
-    
-            /**
-             * The invalid parser error type is used when the parser 
-             * as such is invalid. This error is typically caused by 
+
+            /*
+             * The invalid parser error type is used when the parser
+             * as such is invalid. This error is typically caused by
              * using a parser without any patterns.
              */
             INVALID_PARSER,
-    
-            /**
-             * The invalid token error type is used when a token 
-             * pattern is erroneous. This error is typically caused 
-             * by an invalid pattern type or an erroneous regular 
+
+            /*
+             * The invalid token error type is used when a token
+             * pattern is erroneous. This error is typically caused
+             * by an invalid pattern type or an erroneous regular
              * expression.
              */
             INVALID_TOKEN,
-        
-            /**
-             * The invalid production error type is used when a 
-             * production pattern is erroneous. This error is 
-             * typically caused by referencing undeclared productions, 
+
+            /*
+             * The invalid production error type is used when a
+             * production pattern is erroneous. This error is
+             * typically caused by referencing undeclared productions,
              * or violating some other production pattern constraint.
              */
             INVALID_PRODUCTION,
-    
-            /**
-             * The infinite loop error type is used when an infinite 
+
+            /*
+             * The infinite loop error type is used when an infinite
              * loop has been detected in the grammar. One of the
              * productions in the loop will be reported.
              */
             INFINITE_LOOP,
-    
-            /**
+
+            /*
              * The inherent ambiguity error type is used when the set
              * of production patterns (i.e. the grammar) contains
              * ambiguities that cannot be resolved.
@@ -101,52 +101,52 @@ namespace PerCederberg.Grammatica.Parser {
          * The error type.
          */
         private ErrorType type;
-        
+
         /**
          * The token or production pattern name. This variable is only
          * set for some error types.
          */
         private string name;
-    
+
         /**
          * The additional error information string. This variable is only
          * set for some error types.
          */
         private string info;
-        
+
         /**
-         * The error details list. This variable is only set for some 
+         * The error details list. This variable is only set for some
          * error types.
          */
         private ArrayList details;
-    
+
         /**
          * Creates a new parser creation exception.
-         * 
+         *
          * @param type           the parse error type
          * @param info           the additional error information
          */
-        public ParserCreationException(ErrorType type, 
-                                       String info) 
+        public ParserCreationException(ErrorType type,
+                                       String info)
             : this(type, null, info) {
         }
-    
+
         /**
          * Creates a new parser creation exception.
-         * 
+         *
          * @param type           the parse error type
          * @param name           the token or production pattern name
          * @param info           the additional error information
          */
         public ParserCreationException(ErrorType type,
-                                       String name, 
-                                       String info) 
+                                       String name,
+                                       String info)
             : this(type, name, info, null) {
         }
-    
+
         /**
          * Creates a new parser creation exception.
-         * 
+         *
          * @param type           the parse error type
          * @param name           the token or production pattern name
          * @param info           the additional error information
@@ -154,7 +154,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public ParserCreationException(ErrorType type,
                                        String name,
-                                       String info, 
+                                       String info,
                                        ArrayList details) {
 
             this.type = type;
@@ -162,52 +162,52 @@ namespace PerCederberg.Grammatica.Parser {
             this.info = info;
             this.details = details;
         }
-    
+
         /**
          * The message property. This property contains the detailed
          * exception error message.
          */
         public override string Message {
             get{
-                return GetMessage(); 
-            }   
+                return GetMessage();
+            }
         }
 
         /**
-         * Returns the error type. 
-         * 
+         * Returns the error type.
+         *
          * @return the error type
          */
         public ErrorType GetErrorType() {
             return type;
         }
-    
+
         /**
          * Returns the token or production name.
-         * 
+         *
          * @return the token or production name
          */
         public string GetName() {
             return name;
         }
-    
+
         /**
          * Returns the additional error information.
-         * 
+         *
          * @return the additional error information
          */
         public string GetInfo() {
             return info;
         }
-        
+
         /**
          * Returns the detailed error information as a string
-         * 
+         *
          * @return the detailed error information
          */
         public string GetDetails() {
             StringBuilder  buffer = new StringBuilder();
-            
+
             if (details == null) {
                 return null;
             }
@@ -220,19 +220,19 @@ namespace PerCederberg.Grammatica.Parser {
                 }
                 buffer.Append(details[i]);
             }
-    
+
             return buffer.ToString();
         }
-    
+
         /**
-         * Returns the error message. This message will contain all the 
+         * Returns the error message. This message will contain all the
          * information available.
-         * 
+         *
          * @return the error message
          */
         public string GetMessage() {
             StringBuilder  buffer = new StringBuilder();
-    
+
             switch (type) {
             case ErrorType.INVALID_PARSER:
                 buffer.Append("parser is invalid, as ");
@@ -262,7 +262,7 @@ namespace PerCederberg.Grammatica.Parser {
                 if (info != null) {
                     buffer.Append(" ");
                     buffer.Append(info);
-                }            
+                }
                 if (details != null) {
                     buffer.Append(" starting with ");
                     if (details.Count > 1) {
@@ -277,7 +277,7 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append("internal error");
                 break;
             }
-    
+
             return buffer.ToString();
         }
     }
