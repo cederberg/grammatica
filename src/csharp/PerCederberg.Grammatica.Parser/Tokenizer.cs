@@ -110,6 +110,28 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The token list flag property. If the token list flag is
+         * set, all tokens (including ignored tokens) link to each
+         * other in a double-linked list. By default the token list
+         * flag is set to false.
+         *
+         * @see #GetUseTokenList
+         * @see #SetUseTokenList
+         * @see Token#Previous
+         * @see Token#Next
+         *
+         * @since 1.5
+         */
+        public bool UseTokenList {
+            get {
+                return useTokenList;
+            }
+            set {
+                useTokenList = value;
+            }
+        }
+
+        /**
          * Checks if the token list feature is used. The token list
          * feature makes all tokens (including ignored tokens) link to
          * each other in a linked list. By default the token list feature
@@ -118,11 +140,14 @@ namespace PerCederberg.Grammatica.Parser {
          * @return true if the token list feature is used, or
          *         false otherwise
          *
-         * @see #setUseTokenList
-         * @see Token#getPreviousToken
-         * @see Token#getNextToken
+         * @see #UseTokenList
+         * @see #SetUseTokenList
+         * @see Token#GetPreviousToken
+         * @see Token#GetNextToken
          *
          * @since 1.4
+         *
+         * @deprecated Use the UseTokenList property instead.
          */
         public bool GetUseTokenList() {
             return useTokenList;
@@ -136,11 +161,14 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @param useTokenList   the token list feature flag
          *
-         * @see #getUseTokenList
-         * @see Token#getPreviousToken
-         * @see Token#getNextToken
+         * @see #UseTokenList
+         * @see #GetUseTokenList
+         * @see Token#GetPreviousToken
+         * @see Token#GetNextToken
          *
          * @since 1.4
+         *
+         * @deprecated Use the UseTokenList property instead.
          */
         public void SetUseTokenList(bool useTokenList) {
             this.useTokenList = useTokenList;
@@ -165,7 +193,7 @@ namespace PerCederberg.Grammatica.Parser {
             }
             for (int i = 0; i < regexpMatchers.Count; i++) {
                 re = (RegExpTokenMatcher) regexpMatchers[i];
-                if (re.GetPattern().GetId() == id) {
+                if (re.GetPattern().Id == id) {
                     return re.GetPattern().ToShortString();
                 }
             }
@@ -179,7 +207,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the current line number
          */
         public int GetCurrentLine() {
-            return input.GetLineNumber();
+            return input.LineNumber;
         }
 
         /**
@@ -189,7 +217,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the current column number
          */
         public int GetCurrentColumn() {
-            return input.GetColumnNumber();
+            return input.ColumnNumber;
         }
 
         /**
@@ -203,7 +231,7 @@ namespace PerCederberg.Grammatica.Parser {
          *             added to the tokenizer
          */
         public void AddPattern(TokenPattern pattern) {
-            switch (pattern.GetPatternType()) {
+            switch (pattern.Type) {
             case TokenPattern.PatternType.STRING:
                 stringMatcher.AddPattern(pattern);
                 break;
@@ -215,7 +243,7 @@ namespace PerCederberg.Grammatica.Parser {
                 } catch (RegExpException e) {
                     throw new ParserCreationException(
                         ParserCreationException.ErrorType.INVALID_TOKEN,
-                        pattern.GetName(),
+                        pattern.Name,
                         "regular expression contains error(s): " +
                         e.Message);
                 }
@@ -223,8 +251,8 @@ namespace PerCederberg.Grammatica.Parser {
             default:
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_TOKEN,
-                    pattern.GetName(),
-                    "pattern type " + pattern.GetPatternType() +
+                    pattern.Name,
+                    "pattern type " + pattern.Type +
                     " is undefined");
             }
         }
@@ -270,18 +298,18 @@ namespace PerCederberg.Grammatica.Parser {
             do {
                 token = NextToken();
                 if (useTokenList && token != null) {
-                    token.SetPreviousToken(previousToken);
+                    token.Previous = previousToken;
                     previousToken = token;
                 }
                 if (token == null) {
                     return null;
-                } else if (token.GetPattern().IsError()) {
+                } else if (token.Pattern.IsError()) {
                     throw new ParseException(
                         ParseException.ErrorType.INVALID_TOKEN,
-                        token.GetPattern().GetErrorMessage(),
-                        token.GetStartLine(),
-                        token.GetStartColumn());
-                } else if (token.GetPattern().IsIgnore()) {
+                        token.Pattern.ErrorMessage,
+                        token.StartLine,
+                        token.StartColumn);
+                } else if (token.Pattern.IsIgnore()) {
                     token = null;
                 }
             } while (token == null);
@@ -309,15 +337,15 @@ namespace PerCederberg.Grammatica.Parser {
             try {
                 m = FindMatch();
                 if (m != null) {
-                    line = input.GetLineNumber();
-                    column = input.GetColumnNumber();
+                    line = input.LineNumber;
+                    column = input.ColumnNumber;
                     str = input.ReadString(m.GetMatchedLength());
                     return new Token(m.GetMatchedPattern(), str, line, column);
                 } else if (input.Peek() < 0) {
                     return null;
                 } else {
-                    line = input.GetLineNumber();
-                    column = input.GetColumnNumber();
+                    line = input.LineNumber;
+                    column = input.ColumnNumber;
                     throw new ParseException(
                         ParseException.ErrorType.UNEXPECTED_CHAR,
                         input.ReadString(1),
@@ -605,7 +633,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             for (int i = 0; i < patterns.Count; i++) {
                 pattern = (TokenPattern) patterns[i];
-                if (pattern.GetId() == id) {
+                if (pattern.Id == id) {
                     return pattern;
                 }
             }
@@ -619,7 +647,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public void AddPattern(TokenPattern pattern) {
             patterns.Add(pattern);
-            start.AddMatch(pattern.GetPattern(), ignoreCase, pattern);
+            start.AddMatch(pattern.Pattern, ignoreCase, pattern);
         }
 
         /**

@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -85,7 +85,7 @@ namespace PerCederberg.Grammatica.Parser {
             if (pattern.IsMatchingEmpty()) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
-                    pattern.GetName(),
+                    pattern.Name,
                     "zero elements can be matched (minimum is one)");
             }
 
@@ -93,7 +93,7 @@ namespace PerCederberg.Grammatica.Parser {
             if (pattern.IsLeftRecursive()) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
-                    pattern.GetName(),
+                    pattern.Name,
                     "left recursive patterns are not allowed");
             }
 
@@ -149,8 +149,8 @@ namespace PerCederberg.Grammatica.Parser {
                     ParseException.ErrorType.UNEXPECTED_TOKEN,
                     token.ToShortString(),
                     list,
-                    token.GetStartLine(),
-                    token.GetStartColumn());
+                    token.StartLine,
+                    token.StartColumn);
             }
             return node;
         }
@@ -170,7 +170,7 @@ namespace PerCederberg.Grammatica.Parser {
             ProductionPatternAlternative  alt;
             ProductionPatternAlternative  defaultAlt;
 
-            defaultAlt = pattern.GetDefaultAlternative();
+            defaultAlt = pattern.DefaultAlternative;
             for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
                 alt = pattern.GetAlternative(i);
                 if (defaultAlt != alt && IsNext(alt)) {
@@ -198,7 +198,7 @@ namespace PerCederberg.Grammatica.Parser {
         private Node ParseAlternative(ProductionPatternAlternative alt) {
             Production  node;
 
-            node = new Production(alt.GetPattern());
+            node = new Production(alt.Pattern);
             EnterNode(node);
             for (int i = 0; i < alt.GetElementCount(); i++) {
                 try {
@@ -228,14 +228,14 @@ namespace PerCederberg.Grammatica.Parser {
 
             Node  child;
 
-            for (int i = 0; i < elem.GetMaxCount(); i++) {
-                if (i < elem.GetMinCount() || IsNext(elem)) {
+            for (int i = 0; i < elem.MaxCount; i++) {
+                if (i < elem.MinCount || IsNext(elem)) {
                     if (elem.IsToken()) {
-                        child = NextToken(elem.GetId());
+                        child = NextToken(elem.Id);
                         EnterNode(child);
                         AddNode(node, ExitNode(child));
                     } else {
-                        child = ParsePattern(GetPattern(elem.GetId()));
+                        child = ParsePattern(GetPattern(elem.Id));
                         AddNode(node, child);
                     }
                 } else {
@@ -255,7 +255,7 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         private bool IsNext(ProductionPattern pattern) {
-            LookAheadSet  set = pattern.GetLookAhead();
+            LookAheadSet  set = pattern.LookAhead;
 
             if (set == null) {
                 return false;
@@ -275,7 +275,7 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         private bool IsNext(ProductionPatternAlternative alt) {
-            LookAheadSet  set = alt.GetLookAhead();
+            LookAheadSet  set = alt.LookAhead;
 
             if (set == null) {
                 return false;
@@ -296,14 +296,14 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         private bool IsNext(ProductionPatternElement elem) {
-            LookAheadSet  set = elem.GetLookAhead();
+            LookAheadSet  set = elem.LookAhead;
 
             if (set != null) {
                 return set.IsNext(this);
             } else if (elem.IsToken()) {
                 return elem.IsMatch(PeekToken(0));
             } else {
-                return IsNext(GetPattern(elem.GetId()));
+                return IsNext(GetPattern(elem.Id));
             }
         }
 
@@ -328,17 +328,17 @@ namespace PerCederberg.Grammatica.Parser {
             CallStack                     stack = new CallStack();
 
             // Calculate simple look-ahead
-            stack.Push(pattern.GetName(), 1);
+            stack.Push(pattern.Name, 1);
             result = new LookAheadSet(1);
             alternatives = new LookAheadSet[pattern.GetAlternativeCount()];
             for (i = 0; i < pattern.GetAlternativeCount(); i++) {
                 alt = pattern.GetAlternative(i);
                 alternatives[i] = FindLookAhead(alt, 1, 0, stack, null);
-                alt.SetLookAhead(alternatives[i]);
+                alt.LookAhead = alternatives[i];
                 result.AddAll(alternatives[i]);
             }
-            if (pattern.GetLookAhead() == null) {
-                pattern.SetLookAhead(result);
+            if (pattern.LookAhead == null) {
+                pattern.LookAhead = result;
             }
             conflicts = FindConflicts(pattern, 1);
 
@@ -346,7 +346,7 @@ namespace PerCederberg.Grammatica.Parser {
             while (conflicts.Size() > 0) {
                 length++;
                 stack.Clear();
-                stack.Push(pattern.GetName(), length);
+                stack.Push(pattern.Name, length);
                 conflicts.AddAll(previous);
                 for (i = 0; i < pattern.GetAlternativeCount(); i++) {
                     alt = pattern.GetAlternative(i);
@@ -356,14 +356,14 @@ namespace PerCederberg.Grammatica.Parser {
                                                         0,
                                                         stack,
                                                         conflicts);
-                        alt.SetLookAhead(alternatives[i]);
+                        alt.LookAhead = alternatives[i];
                     }
                     if (alternatives[i].Intersects(conflicts)) {
-                        if (pattern.GetDefaultAlternative() == null) {
-                            pattern.SetDefaultAlternative(i);
-                        } else if (pattern.GetDefaultAlternative() != alt) {
+                        if (pattern.DefaultAlternative == null) {
+                            pattern.DefaultAlternative = alt;
+                        } else if (pattern.DefaultAlternative != alt) {
                             result = alternatives[i].CreateIntersection(conflicts);
-                            ThrowAmbiguityException(pattern.GetName(),
+                            ThrowAmbiguityException(pattern.Name,
                                                     null,
                                                     result);
                         }
@@ -409,9 +409,9 @@ namespace PerCederberg.Grammatica.Parser {
             }
 
             // Check for non-optional element
-            pattern = alt.GetPattern();
+            pattern = alt.Pattern;
             elem = alt.GetElement(pos);
-            if (elem.GetMinCount() == elem.GetMaxCount()) {
+            if (elem.MinCount == elem.MaxCount) {
                 CalculateLookAhead(alt, pos + 1);
                 return;
             }
@@ -422,7 +422,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             // Resolve conflicts
             location = "at position " + (pos + 1);
-            conflicts = FindConflicts(pattern.GetName(),
+            conflicts = FindConflicts(pattern.Name,
                                       location,
                                       first,
                                       follow);
@@ -439,13 +439,13 @@ namespace PerCederberg.Grammatica.Parser {
                                        new CallStack(),
                                        conflicts);
                 first = first.CreateCombination(follow);
-                elem.SetLookAhead(first);
+                elem.LookAhead = first;
                 if (first.Intersects(conflicts)) {
                     first = first.CreateIntersection(conflicts);
-                    ThrowAmbiguityException(pattern.GetName(), location, first);
+                    ThrowAmbiguityException(pattern.Name, location, first);
                 }
                 previous = conflicts;
-                conflicts = FindConflicts(pattern.GetName(),
+                conflicts = FindConflicts(pattern.Name,
                                           location,
                                           first,
                                           follow);
@@ -480,15 +480,15 @@ namespace PerCederberg.Grammatica.Parser {
             LookAheadSet  temp;
 
             // Check for infinite loop
-            if (stack.Contains(pattern.GetName(), length)) {
+            if (stack.Contains(pattern.Name, length)) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INFINITE_LOOP,
-                    pattern.GetName(),
+                    pattern.Name,
                     (String) null);
             }
 
             // Find pattern look-ahead
-            stack.Push(pattern.GetName(), length);
+            stack.Push(pattern.Name, length);
             result = new LookAheadSet(length);
             for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
                 temp = FindLookAhead(pattern.GetAlternative(i),
@@ -538,7 +538,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             // Find look-ahead for this element
             first = FindLookAhead(alt.GetElement(pos), length, stack, filter);
-            if (alt.GetElement(pos).GetMinCount() == 0) {
+            if (alt.GetElement(pos).MinCount == 0) {
                 first.AddEmpty();
             }
 
@@ -599,10 +599,10 @@ namespace PerCederberg.Grammatica.Parser {
             }
 
             // Handle element repetitions
-            if (elem.GetMaxCount() == Int32.MaxValue) {
+            if (elem.MaxCount == Int32.MaxValue) {
                 first = first.CreateRepetitive();
             }
-            max = elem.GetMaxCount();
+            max = elem.MaxCount;
             if (length < max) {
                 max = length;
             }
@@ -653,11 +653,11 @@ namespace PerCederberg.Grammatica.Parser {
 
             if (elem.IsToken()) {
                 result = new LookAheadSet(length);
-                result.Add(elem.GetId());
+                result.Add(elem.Id);
             } else {
-                pattern = GetPattern(elem.GetId());
+                pattern = GetPattern(elem.Id);
                 result = FindLookAhead(pattern, length, stack, filter);
-                if (stack.Contains(pattern.GetName())) {
+                if (stack.Contains(pattern.Name)) {
                     result = result.CreateRepetitive();
                 }
             }
@@ -685,14 +685,14 @@ namespace PerCederberg.Grammatica.Parser {
             LookAheadSet  set2;
 
             for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
-                set1 = pattern.GetAlternative(i).GetLookAhead();
+                set1 = pattern.GetAlternative(i).LookAhead;
                 for (int j = 0; j < i; j++) {
-                    set2 = pattern.GetAlternative(j).GetLookAhead();
+                    set2 = pattern.GetAlternative(j).LookAhead;
                     result.AddAll(set1.CreateIntersection(set2));
                 }
             }
             if (result.IsRepetitive()) {
-                ThrowAmbiguityException(pattern.GetName(), null, result);
+                ThrowAmbiguityException(pattern.Name, null, result);
             }
             return result;
         }
@@ -739,14 +739,14 @@ namespace PerCederberg.Grammatica.Parser {
             int           i;
 
             for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                result = pattern.GetAlternative(i).GetLookAhead();
+                result = pattern.GetAlternative(i).LookAhead;
                 if (result.GetMaxLength() > length) {
                     length = result.GetMaxLength();
                 }
             }
             result = new LookAheadSet(length);
             for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                result.AddAll(pattern.GetAlternative(i).GetLookAhead());
+                result.AddAll(pattern.GetAlternative(i).LookAhead);
             }
 
             return result;
@@ -768,7 +768,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             // Read tokens until mismatch
             while (set.IsNext(this, 1)) {
-                set = set.CreateNextSet(NextToken().GetId());
+                set = set.CreateNextSet(NextToken().Id);
             }
 
             // Find next token descriptions
@@ -782,8 +782,8 @@ namespace PerCederberg.Grammatica.Parser {
             throw new ParseException(ParseException.ErrorType.UNEXPECTED_TOKEN,
                                      token.ToShortString(),
                                      list,
-                                     token.GetStartLine(),
-                                     token.GetStartColumn());
+                                     token.StartLine,
+                                     token.StartColumn);
         }
 
         /**

@@ -120,14 +120,46 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The tokenizer property (read-only). This property contains
+         * the tokenizer in use by this parser.
+         *
+         * @see #GetTokenizer
+         *
+         * @since 1.5
+         */
+        public Tokenizer Tokenizer {
+            get {
+                return tokenizer;
+            }
+        }
+
+        /**
+         * The analyzer property (read-only). This property contains
+         * the analyzer in use by this parser.
+         *
+         * @see #GetAnalyzer
+         *
+         * @since 1.5
+         */
+        public Analyzer Analyzer {
+            get {
+                return analyzer;
+            }
+        }
+
+        /**
          * Returns the tokenizer in use by this parser.
          *
          * @return the tokenizer in use by this parser
          *
          * @since 1.4
+         *
+         * @see #Tokenizer
+         *
+         * @deprecated Use the Tokenizer property instead.
          */
         public Tokenizer GetTokenizer() {
-            return tokenizer;
+            return Tokenizer;
         }
 
         /**
@@ -136,9 +168,13 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the analyzer in use by this parser
          *
          * @since 1.4
+         *
+         * @see #Analyzer
+         *
+         * @deprecated Use the Analyzer property instead.
          */
         public Analyzer GetAnalyzer() {
-            return analyzer;
+            return Analyzer;
         }
 
         /**
@@ -166,19 +202,19 @@ namespace PerCederberg.Grammatica.Parser {
             if (pattern.GetAlternativeCount() <= 0) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
-                    pattern.GetName(),
+                    pattern.Name,
                     "no production alternatives are present (must have at " +
                     "least one)");
             }
-            if (patternIds.ContainsKey(pattern.GetId())) {
+            if (patternIds.ContainsKey(pattern.Id)) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
-                    pattern.GetName(),
-                    "another pattern with the same id (" + pattern.GetId() +
+                    pattern.Name,
+                    "another pattern with the same id (" + pattern.Id +
                     ") has already been added");
             }
             patterns.Add(pattern);
-            patternIds.Add(pattern.GetId(), pattern);
+            patternIds.Add(pattern.Id, pattern);
             SetInitialized(false);
         }
 
@@ -214,7 +250,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         private void CheckPattern(ProductionPattern pattern) {
             for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
-                CheckRule(pattern.GetName(), pattern.GetAlternative(i));
+                CheckRule(pattern.Name, pattern.GetAlternative(i));
             }
         }
 
@@ -252,11 +288,11 @@ namespace PerCederberg.Grammatica.Parser {
         private void CheckElement(string name,
                                   ProductionPatternElement elem) {
 
-            if (elem.IsProduction() && GetPattern(elem.GetId()) == null) {
+            if (elem.IsProduction() && GetPattern(elem.Id) == null) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
                     name,
-                    "an undefined production pattern id (" + elem.GetId() +
+                    "an undefined production pattern id (" + elem.Id +
                     ") is referenced");
             }
         }
@@ -497,7 +533,7 @@ namespace PerCederberg.Grammatica.Parser {
             Token      token = NextToken();
             ArrayList  list;
 
-            if (token.GetId() == id) {
+            if (token.Id == id) {
                 if (errorRecovery > 0) {
                     errorRecovery--;
                 }
@@ -509,8 +545,8 @@ namespace PerCederberg.Grammatica.Parser {
                     ParseException.ErrorType.UNEXPECTED_TOKEN,
                     token.ToShortString(),
                     list,
-                    token.GetStartLine(),
-                    token.GetStartColumn());
+                    token.StartLine,
+                    token.StartColumn);
             }
         }
 
@@ -572,9 +608,9 @@ namespace PerCederberg.Grammatica.Parser {
             LookAheadSet   set;
             int            i;
 
-            buffer.Append(prod.GetName());
+            buffer.Append(prod.Name);
             buffer.Append(" (");
-            buffer.Append(prod.GetId());
+            buffer.Append(prod.Id);
             buffer.Append(") ");
             for (i = 0; i < buffer.Length; i++) {
                 indent.Append(" ");
@@ -589,7 +625,7 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append("\n");
             }
             for (i = 0; i < prod.GetAlternativeCount(); i++) {
-                set = prod.GetAlternative(i).GetLookAhead();
+                set = prod.GetAlternative(i).LookAhead;
                 if (set.GetMaxLength() > 1) {
                     buffer.Append("Using ");
                     buffer.Append(set.GetMaxLength());
@@ -633,16 +669,16 @@ namespace PerCederberg.Grammatica.Parser {
          */
         private string ToString(ProductionPatternElement elem) {
             StringBuilder  buffer = new StringBuilder();
-            int            min = elem.GetMinCount();
-            int            max = elem.GetMaxCount();
+            int            min = elem.MinCount;
+            int            max = elem.MaxCount;
 
             if (min == 0 && max == 1) {
                 buffer.Append("[");
             }
             if (elem.IsToken()) {
-                buffer.Append(GetTokenDescription(elem.GetId()));
+                buffer.Append(GetTokenDescription(elem.Id));
             } else {
-                buffer.Append(GetPattern(elem.GetId()).GetName());
+                buffer.Append(GetPattern(elem.Id).Name);
             }
             if (min == 0 && max == 1) {
                 buffer.Append("]");

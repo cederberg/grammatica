@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -42,7 +42,7 @@ namespace PerCederberg.Grammatica.Parser {
      * set of production patterns (i.e. grammar rules).
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.1
+     * @version  1.5
      */
     public class Production : Node {
 
@@ -67,6 +67,20 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The production pattern property (read-only). This property
+         * contains the production pattern linked to this production.
+         *
+         * @see #GetPattern
+         *
+         * @since 1.5
+         */
+        public ProductionPattern Pattern {
+            get {
+                return GetPattern();
+            }
+        }
+
+        /**
          * Checks if this node is hidden, i.e. if it should not be visible
          * outside the parser.
          *
@@ -81,6 +95,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the production pattern for this production.
          *
          * @return the production pattern
+         *
+         * @see #Pattern
+         *
+         * @deprecated Use the Pattern property instead.
          */
         public ProductionPattern GetPattern() {
             return pattern;
@@ -92,6 +110,10 @@ namespace PerCederberg.Grammatica.Parser {
          * simplify later identification.
          *
          * @return the production id
+         *
+         * @see Node#Id
+         *
+         * @deprecated Use the Id property instead.
          */
         public override int GetId() {
             return pattern.GetId();
@@ -101,6 +123,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the production node name.
          *
          * @return the production node name
+         *
+         * @see Node#Name
+         *
+         * @deprecated Use the Name property instead.
          */
         public override string GetName() {
             return pattern.GetName();

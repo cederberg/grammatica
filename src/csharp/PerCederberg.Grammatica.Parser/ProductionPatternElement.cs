@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -44,7 +44,7 @@ namespace PerCederberg.Grammatica.Parser {
      * contained within a production pattern rule.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class ProductionPatternElement {
 
@@ -105,6 +105,58 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The node identity property (read-only).
+         *
+         * @see #GetId
+         *
+         * @since 1.5
+         */
+        public int Id {
+            get {
+                return id;
+            }
+        }
+
+        /**
+         * The minimum occurence count property (read-only).
+         *
+         * @see #GetMinCount
+         *
+         * @since 1.5
+         */
+        public int MinCount {
+            get {
+                return min;
+            }
+        }
+
+        /**
+         * The maximum occurence count property (read-only).
+         *
+         * @see #GetMaxCount
+         *
+         * @since 1.5
+         */
+        public int MaxCount {
+            get {
+                return max;
+            }
+        }
+
+        /**
+         * The look-ahead set property. This is the look-ahead set
+         * associated with this alternative.
+         */
+        internal LookAheadSet LookAhead {
+            get {
+                return lookAhead;
+            }
+            set {
+                lookAhead = value;
+            }
+        }
+
+        /**
          * Returns true if this element represents a token.
          *
          * @return true if the element is a token, or
@@ -142,6 +194,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the node identity.
          *
          * @return the node identity
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
          */
         public int GetId() {
             return id;
@@ -151,6 +207,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the minimum occurence count.
          *
          * @return the minimum occurence count
+         *
+         * @see #MinCount
+         *
+         * @deprecated Use the MinCount property instead.
          */
         public int GetMinCount() {
             return min;
@@ -160,6 +220,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the maximum occurence count.
          *
          * @return the maximum occurence count
+         *
+         * @see #MaxCount
+         *
+         * @deprecated Use the MaxCount property instead.
          */
         public int GetMaxCount() {
             return max;
@@ -211,24 +275,6 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append("}");
             }
             return buffer.ToString();
-        }
-
-        /**
-         * Returns the look-ahead set associated with this alternative.
-         *
-         * @return the look-ahead set associated with this alternative
-         */
-        internal LookAheadSet GetLookAhead() {
-            return lookAhead;
-        }
-
-        /**
-         * Sets the look-ahead set for this alternative.
-         *
-         * @param lookAhead      the new look-ahead set
-         */
-        internal void SetLookAhead(LookAheadSet lookAhead) {
-            this.lookAhead = lookAhead;
         }
     }
 }

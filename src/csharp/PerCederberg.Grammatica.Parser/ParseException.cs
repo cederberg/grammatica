@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -41,7 +41,7 @@ namespace PerCederberg.Grammatica.Parser {
      * A parse exception.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.1
+     * @version  1.5
      */
     public class ParseException : Exception {
 
@@ -164,8 +164,80 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The message property. This property contains the detailed
-         * exception error message.
+         * The error type property (read-only).
+         *
+         * @see #GetErrorType
+         *
+         * @since 1.5
+         */
+        public ErrorType Type {
+            get {
+                return GetErrorType();
+            }
+        }
+
+        /**
+         * The additional error information property (read-only).
+         *
+         * @see #GetInfo
+         *
+         * @since 1.5
+         */
+        public string Info {
+            get {
+                return GetInfo();
+            }
+        }
+
+        /**
+         * The additional detailed error information property
+         * (read-only).
+         *
+         * @see #GetDetails
+         *
+         * @since 1.5
+         */
+        public ArrayList Details {
+            get {
+                return GetDetails();
+            }
+        }
+
+        /**
+         * The line number property (read-only). This is the line
+         * number where the error occured, or -1 if unknown.
+         *
+         * @see #GetLine
+         *
+         * @since 1.5
+         */
+        public int Line {
+            get {
+                return GetLine();
+            }
+        }
+
+        /**
+         * The column number property (read-only). This is the column
+         * number where the error occured, or -1 if unknown.
+         *
+         * @see #GetColumn
+         *
+         * @since 1.5
+         */
+        public int Column {
+            get {
+                return GetColumn();
+            }
+        }
+
+        /**
+         * The message property (read-only). This property contains
+         * the detailed exception error message, including line and
+         * column numbers when available.
+         *
+         * @see #GetMessage
+         * @see #ErrorMessage
          */
         public override string Message {
             get{
@@ -174,9 +246,29 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The error message property (read-only). This property
+         * contains all the information available, except for the line
+         * and column number information.
+         *
+         * @see #GetErrorMessage
+         * @see #Message
+         *
+         * @since 1.5
+         */
+        public string ErrorMessage {
+            get {
+                return GetErrorMessage();
+            }
+        }
+
+        /**
          * Returns the error type.
          *
          * @return the error type
+         *
+         * @see #Type
+         *
+         * @deprecated Use the Type property instead.
          */
         public ErrorType GetErrorType() {
             return type;
@@ -186,6 +278,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the additional error information.
          *
          * @return the additional error information
+         *
+         * @see #Info
+         *
+         * @deprecated Use the Info property instead.
          */
         public string GetInfo() {
             return info;
@@ -195,6 +291,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the additional detailed error information.
          *
          * @return the additional detailed error information
+         *
+         * @see #Details
+         *
+         * @deprecated Use the Details property instead.
          */
         public ArrayList GetDetails() {
             return new ArrayList(details);
@@ -205,6 +305,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the line number of the error, or
          *         -1 if unknown
+         *
+         * @see #Line
+         *
+         * @deprecated Use the Line property instead.
          */
         public int GetLine() {
             return line;
@@ -215,6 +319,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the column number of the error, or
          *         -1 if unknown
+         *
+         * @see #Column
+         *
+         * @deprecated Use the Column property instead.
          */
         public int GetColumn() {
             return column;
@@ -224,6 +332,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns a default error message.
          *
          * @return a default error message
+         *
+         * @see #Message
+         *
+         * @deprecated Use the Message property instead.
          */
         public string GetMessage() {
             StringBuilder  buffer = new StringBuilder();
@@ -248,6 +360,10 @@ namespace PerCederberg.Grammatica.Parser {
          * information.
          *
          * @return the error message
+         *
+         * @see #ErrorMessage
+         *
+         * @deprecated Use the ErrorMessage property instead.
          */
         public string GetErrorMessage() {
             StringBuilder  buffer = new StringBuilder();

@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -43,7 +43,7 @@ namespace PerCederberg.Grammatica.Parser {
      * to create a working parser or tokenizer.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class ParserCreationException : Exception {
 
@@ -164,8 +164,62 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The message property. This property contains the detailed
-         * exception error message.
+         * The error type property (read-only).
+         *
+         * @see #GetErrorType
+         *
+         * @since 1.5
+         */
+        public ErrorType Type {
+            get {
+                return GetErrorType();
+            }
+        }
+
+        /**
+         * The token or production name property (read-only).
+         *
+         * @see #GetName
+         *
+         * @since 1.5
+         */
+        public string Name {
+            get {
+                return GetName();
+            }
+        }
+
+        /**
+         * The additional error information property (read-only).
+         *
+         * @see #GetInfo
+         *
+         * @since 1.5
+         */
+        public string Info {
+            get {
+                return GetInfo();
+            }
+        }
+
+        /**
+         * The detailed error information property (read-only).
+         *
+         * @see #GetDetails
+         *
+         * @since 1.5
+         */
+        public string Details {
+            get {
+                return GetDetails();
+            }
+        }
+
+        /**
+         * The message property (read-only). This property contains
+         * the detailed exception error message.
+         *
+         * @see #GetMessage
          */
         public override string Message {
             get{
@@ -177,6 +231,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the error type.
          *
          * @return the error type
+         *
+         * @see #Type
+         *
+         * @deprecated Use the Type property instead.
          */
         public ErrorType GetErrorType() {
             return type;
@@ -186,6 +244,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the token or production name.
          *
          * @return the token or production name
+         *
+         * @see #Name
+         *
+         * @deprecated Use the Name property instead.
          */
         public string GetName() {
             return name;
@@ -195,6 +257,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the additional error information.
          *
          * @return the additional error information
+         *
+         * @see #Info
+         *
+         * @deprecated Use the Info property instead.
          */
         public string GetInfo() {
             return info;
@@ -204,6 +270,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the detailed error information as a string
          *
          * @return the detailed error information
+         *
+         * @see #Details
+         *
+         * @deprecated Use the Details property instead.
          */
         public string GetDetails() {
             StringBuilder  buffer = new StringBuilder();
@@ -229,6 +299,10 @@ namespace PerCederberg.Grammatica.Parser {
          * information available.
          *
          * @return the error message
+         *
+         * @see #Message
+         *
+         * @deprecated Use the Message property instead.
          */
         public string GetMessage() {
             StringBuilder  buffer = new StringBuilder();

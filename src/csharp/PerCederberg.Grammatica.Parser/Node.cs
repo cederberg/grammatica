@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -42,7 +42,7 @@ namespace PerCederberg.Grammatica.Parser {
      * classes.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.2
+     * @version  1.5
      */
     public abstract class Node {
 
@@ -68,11 +68,129 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The node type id property (read-only). This value is set as
+         * a unique identifier for each type of node, in order to
+         * simplify later identification.
+         *
+         * @see #GetId
+         *
+         * @since 1.5
+         */
+        public int Id {
+            get {
+                return GetId();
+            }
+        }
+
+        /**
+         * The node name property (read-only).
+         *
+         * @see #GetName
+         *
+         * @since 1.5
+         */
+        public string Name {
+            get {
+                return GetName();
+            }
+        }
+
+        /**
+         * The line number property of the first character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the first child.
+         *
+         * @see #GetStartLine
+         *
+         * @since 1.5
+         */
+        public int StartLine {
+            get {
+                return GetStartLine();
+            }
+        }
+
+        /**
+         * The column number property of the first character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the first child.
+         *
+         * @see #GetStartColumn
+         *
+         * @since 1.5
+         */
+        public int StartColumn {
+            get {
+                return GetStartColumn();
+            }
+        }
+
+        /**
+         * The line number property of the last character in this node
+         * (read-only). If the node has child elements, this value
+         * will be fetched from the last child.
+         *
+         * @see #GetEndLine
+         *
+         * @since 1.5
+         */
+        public int EndLine {
+            get {
+                return GetEndLine();
+            }
+        }
+
+        /**
+         * The parent node property (read-only).
+         *
+         * @see #GetParent
+         *
+         * @since 1.5
+         */
+        public Node Parent {
+            get {
+                return GetParent();
+            }
+        }
+
+        /**
+         * The node values property. This property provides direct
+         * access to the list of computed values associated with this
+         * node during analysis. Note that setting this property to
+         * null will remove all node values. Any operation on the
+         * value array list is allowed and is immediately reflected
+         * through the various value reading and manipulation methods.
+         *
+         * @see #GetValueCount
+         * @see #GetValueAt
+         * @see #AddValue
+         * @see #AddAllValues
+         * @see #RemoveValue
+         *
+         * @since 1.5
+         */
+        public ArrayList Values {
+            get {
+                if (values == null) {
+                    values = new ArrayList();
+                }
+                return values;
+            }
+            set {
+                this.values = value;
+            }
+        }
+
+        /**
          * Returns the node type id. This value is set as a unique
          * identifier for each type of node, in order to simplify
          * later identification.
          *
          * @return the node type id
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
          */
         public abstract int GetId();
 
@@ -80,6 +198,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the node name.
          *
          * @return the node name
+         *
+         * @see #Name
+         *
+         * @deprecated Use the Name property instead.
          */
         public abstract string GetName();
 
@@ -90,6 +212,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the line number of the first character, or
          *         -1 if not applicable
+         *
+         * @see #StartLine
+         *
+         * @deprecated Use the StartLine property instead.
          */
         public virtual int GetStartLine() {
             int  line;
@@ -110,6 +236,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the column number of the first token character, or
          *         -1 if not applicable
+         *
+         * @see #StartColumn
+         *
+         * @deprecated Use the StartColumn property instead.
          */
         public virtual int GetStartColumn() {
             int  col;
@@ -130,6 +260,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the line number of the last token character, or
          *         -1 if not applicable
+         *
+         * @see #EndLine
+         *
+         * @deprecated Use the EndLine property instead.
          */
         public virtual int GetEndLine() {
             int  line;
@@ -150,6 +284,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the column number of the last token character, or
          *         -1 if not applicable
+         *
+         * @see #EndColumn
+         *
+         * @deprecated Use the EndColumn property instead.
          */
         public virtual int GetEndColumn() {
             int  col;
@@ -167,6 +305,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the parent node.
          *
          * @return the parent parse tree node
+         *
+         * @see #Parent
+         *
+         * @deprecated Use the Parent property instead.
          */
         public Node GetParent() {
             return parent;
@@ -224,6 +366,11 @@ namespace PerCederberg.Grammatica.Parser {
          * through calls to AddValue().
          *
          * @return the number of values associated with this node
+         *
+         * @see #Values
+         *
+         * @deprecated Use the Values and Values.Count properties
+         *     instead.
          */
         public int GetValueCount() {
             if (values == null) {
@@ -242,6 +389,11 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the computed node value, or
          *         null if not set
+         *
+         * @see #Values
+         *
+         * @deprecated Use the Values property and it's array indexer
+         *     instead.
          */
         public object GetValue(int pos) {
             if (values == null || pos < 0 || pos >= values.Count) {
@@ -258,6 +410,11 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return a list with all values, or
          *         null if no values have been set
+         *
+         * @see #Values
+         *
+         * @deprecated Use the Values property instead. Note that the
+         *     Values property will never be null, but possibly empty.
          */
         public ArrayList GetAllValues() {
             return values;
@@ -269,6 +426,11 @@ namespace PerCederberg.Grammatica.Parser {
          * during analysis.
          *
          * @param value          the node value
+         *
+         * @see #Values
+         *
+         * @deprecated Use the Values property and the Values.Add
+         *     method instead.
          */
         public void AddValue(object value) {
             if (value != null) {
@@ -283,17 +445,28 @@ namespace PerCederberg.Grammatica.Parser {
          * Adds a set of computed values to this node.
          *
          * @param values         the vector with node values
+         *
+         * @see #Values
+         *
+         * @deprecated Use the Values property and the Values.AddRange
+         *     method instead.
          */
         public void AddValues(ArrayList values) {
-        	if (values != null) {
+            if (values != null) {
                 for (int i = 0; i < values.Count; i++) {
                     AddValue(values[i]);
                 }
-        	}
+            }
         }
 
         /**
          * Removes all computed values stored in this node.
+         *
+         * @see #Values
+         *
+         * @deprecated Use the Values property and the Values.Clear
+         *     method instead. Alternatively the Values property can 
+         *     be set to null.
          */
         public void RemoveAllValues() {
             values = null;

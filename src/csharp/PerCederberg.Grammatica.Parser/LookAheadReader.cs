@@ -109,23 +109,23 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the current line number. This number is the line
-         * number of the next character to read.
-         *
-         * @return the current line number
+         * The current line number property (read-only). This number
+         * is the line number of the next character to read.
          */
-        public int GetLineNumber() {
-            return line;
+        public int LineNumber {
+            get {
+                return line;
+            }
         }
 
         /**
-         * Returns the current column number. This number is the
-         * column number of the next character to read.
-         *
-         * @return the current column number
+         * The current column number property (read-only). This number
+         * is the column number of the next character to read.
          */
-        public int GetColumnNumber() {
-            return column;
+        public int ColumnNumber {
+            get {
+                return column;
+            }
         }
 
         /**

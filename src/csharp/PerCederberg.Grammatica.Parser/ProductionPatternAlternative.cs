@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -46,7 +46,7 @@ namespace PerCederberg.Grammatica.Parser {
      * within a production pattern.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class ProductionPatternAlternative {
 
@@ -69,6 +69,33 @@ namespace PerCederberg.Grammatica.Parser {
          * Creates a new production pattern alternative.
          */
         public ProductionPatternAlternative() {
+        }
+
+        /**
+         * The production pattern property (read-only). This property
+         * contains the pattern having this alternative.
+         *
+         * @see #GetPattern
+         *
+         * @since 1.5
+         */
+        public ProductionPattern Pattern {
+            get {
+                return GetPattern();
+            }
+        }
+
+        /**
+         * The look-ahead set property. This property contains the
+         * look-ahead set associated with this alternative.
+         */
+        internal LookAheadSet LookAhead {
+            get {
+                return lookAhead;
+            }
+            set {
+                lookAhead = value;
+            }
         }
 
         /**
@@ -132,6 +159,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the production pattern containing this alternative.
          *
          * @return the production pattern for this alternative
+         *
+         * @see #Pattern
+         *
+         * @deprecated Use the Pattern property instead.
          */
         public ProductionPattern GetPattern() {
             return pattern;
@@ -325,24 +356,6 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append(elements[i]);
             }
             return buffer.ToString();
-        }
-
-        /**
-         * Returns the look-ahead set associated with this alternative.
-         *
-         * @return the look-ahead set associated with this alternative
-         */
-        internal LookAheadSet GetLookAhead() {
-            return lookAhead;
-        }
-
-        /**
-         * Sets the look-ahead set for this alternative.
-         *
-         * @param lookAhead      the new look-ahead set
-         */
-        internal void SetLookAhead(LookAheadSet lookAhead) {
-            this.lookAhead = lookAhead;
         }
     }
 }

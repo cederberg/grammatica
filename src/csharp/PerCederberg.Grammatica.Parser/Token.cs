@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.Text;
@@ -42,7 +42,7 @@ namespace PerCederberg.Grammatica.Parser {
      * token patterns.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.4
+     * @version  1.5
      */
     public class Token : Node {
 
@@ -110,23 +110,115 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The token image property (read-only). The token image
+         * consists of the input characters matched to form this
+         * token.
+         *
+         * @see #GetImage
+         *
+         * @since 1.5
+         */
+        public string Image {
+            get {
+                return GetImage();
+            }
+        }
+
+        /**
+         * The token pattern property (read-only).
+         */
+        internal TokenPattern Pattern {
+            get {
+                return pattern;
+            }
+        }
+
+        /**
+         * The previous token property. If the token list feature is
+         * used in the tokenizer, all tokens found will be chained
+         * together in a double-linked list. The previous token may be
+         * a token that was ignored during the parsing, due to it's
+         * ignore flag being set. If there is no previous token or if
+         * the token list feature wasn't used in the tokenizer (the
+         * default), the previous token will always be null.
+         *
+         * @see #Next
+         * @see #GetPreviousToken
+         * @see Tokenizer#UseTokenList
+         *
+         * @since 1.5
+         */
+        public Token Previous {
+            get {
+                return previous;
+            }
+            set {
+                if (previous != null) {
+                    previous.next = null;
+                }
+                previous = value;
+                if (previous != null) {
+                    previous.next = this;
+                }
+            }
+        }
+
+        /**
+         * The next token property. If the token list feature is used
+         * in the tokenizer, all tokens found will be chained together
+         * in a double-linked list. The next token may be a token that
+         * was ignored during the parsing, due to it's ignore flag
+         * being set. If there is no next token or if the token list
+         * feature wasn't used in the tokenizer (the default), the
+         * next token will always be null.
+         *
+         * @see #Previous
+         * @see #GetNextToken
+         * @see Tokenizer#UseTokenList
+         *
+         * @since 1.5
+         */
+        public Token Next {
+            get {
+                return next;
+            }
+            set {
+                if (next != null) {
+                    next.previous = null;
+                }
+                next = value;
+                if (next != null) {
+                    next.previous = this;
+                }
+            }
+        }
+
+        /**
          * Returns the token (pattern) id. This value is set as a unique
          * identifier when creating the token pattern to simplify later
          * identification.
          *
          * @return the token id
+         *
+         * @see Node#Id
+         *
+         * @deprecated Use the Id property instead.
          */
         public override int GetId() {
-            return pattern.GetId();
+            return pattern.Id;
         }
 
         /**
          * Returns the token node name.
          *
          * @return the token node name
+         *
+         * @see Node#Name
+         *
+         * @deprecated Use the Name property instead.
          */
         public override string GetName() {
-            return pattern.GetName();
+            return pattern.Name;
         }
 
         /**
@@ -134,6 +226,10 @@ namespace PerCederberg.Grammatica.Parser {
          * input characters matched to form this token.
          *
          * @return the token image
+         *
+         * @see #Image
+         *
+         * @deprecated Use the Image property instead.
          */
         public string GetImage() {
             return image;
@@ -143,6 +239,10 @@ namespace PerCederberg.Grammatica.Parser {
          * The line number of the first character in the token image.
          *
          * @return the line number of the first token character
+         *
+         * @see Node#StartLine
+         *
+         * @deprecated Use the StartLine property instead.
          */
         public override int GetStartLine() {
             return startLine;
@@ -152,6 +252,10 @@ namespace PerCederberg.Grammatica.Parser {
          * The column number of the first character in the token image.
          *
          * @return the column number of the first token character
+         *
+         * @see Node#StartColumn
+         *
+         * @deprecated Use the StartColumn property instead.
          */
         public override int GetStartColumn() {
             return startColumn;
@@ -161,6 +265,10 @@ namespace PerCederberg.Grammatica.Parser {
          * The line number of the last character in the token image.
          *
          * @return the line number of the last token character
+         *
+         * @see Node#EndLine
+         *
+         * @deprecated Use the EndLine property instead.
          */
         public override int GetEndLine() {
             return endLine;
@@ -170,18 +278,13 @@ namespace PerCederberg.Grammatica.Parser {
          * The column number of the last character in the token image.
          *
          * @return the column number of the last token character
+         *
+         * @see Node#EndColumn
+         *
+         * @deprecated Use the EndColumn property instead.
          */
         public override int GetEndColumn() {
             return endColumn;
-        }
-
-        /**
-         * Returns the token pattern.
-         *
-         * @return the token pattern
-         */
-        internal TokenPattern GetPattern() {
-            return pattern;
         }
 
         /**
@@ -194,33 +297,16 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the previous token, or
          *         null if no such token is available
          *
-         * @see #getNextToken
-         * @see Tokenizer#getUseTokenList
-         * @see Tokenizer#setUseTokenList
+         * @see #Previous
+         * @see #GetNextToken
+         * @see Tokenizer#UseTokenList
          *
          * @since 1.4
+         *
+         * @deprecated Use the Previous property instead.
          */
         public Token GetPreviousToken() {
             return previous;
-        }
-
-        /**
-         * Sets the previous token in the token list. This method will
-         * also modify the token specified to have this token as it's
-         * next token.
-         *
-         * @param previous       the previous token, or null for none
-         *
-         * @since 1.4
-         */
-        internal void SetPreviousToken(Token previous) {
-            if (this.previous != null) {
-                this.previous.next = null;
-            }
-            this.previous = previous;
-            if (previous != null) {
-                previous.next = this;
-            }
         }
 
         /**
@@ -233,33 +319,16 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the next token, or
          *         null if no such token is available
          *
-         * @see #getPreviousToken
-         * @see Tokenizer#getUseTokenList
-         * @see Tokenizer#setUseTokenList
+         * @see #Next
+         * @see #GetPreviousToken
+         * @see Tokenizer#UseTokenList
          *
          * @since 1.4
+         *
+         * @deprecated Use the Next property instead.
          */
         public Token GetNextToken() {
             return next;
-        }
-
-        /**
-         * Sets the next token in the token list. This method will also
-         * modify the token specified to have this token as it's
-         * previous token.
-         *
-         * @param next           the next token, or null for none
-         *
-         * @since 1.4
-         */
-        internal void SetNextToken(Token next) {
-            if (this.next != null) {
-                this.next.previous = null;
-            }
-            this.next = next;
-            if (next != null) {
-                next.previous = this;
-            }
         }
 
         /**
@@ -271,9 +340,9 @@ namespace PerCederberg.Grammatica.Parser {
             StringBuilder  buffer = new StringBuilder();
             int            newline = image.IndexOf('\n');
 
-            buffer.Append(pattern.GetName());
+            buffer.Append(pattern.Name);
             buffer.Append("(");
-            buffer.Append(pattern.GetId());
+            buffer.Append(pattern.Id);
             buffer.Append("): \"");
             if (newline >= 0) {
                 if (newline > 0 && image[newline - 1] == '\r') {
@@ -314,9 +383,9 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append(image);
             }
             buffer.Append('"');
-            if (pattern.GetPatternType() == TokenPattern.PatternType.REGEXP) {
+            if (pattern.Type == TokenPattern.PatternType.REGEXP) {
                 buffer.Append(" <");
-                buffer.Append(pattern.GetName());
+                buffer.Append(pattern.Name);
                 buffer.Append(">");
             }
 

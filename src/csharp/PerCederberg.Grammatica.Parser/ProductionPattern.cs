@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -45,7 +45,7 @@ namespace PerCederberg.Grammatica.Parser {
      * elements.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class ProductionPattern {
 
@@ -99,6 +99,94 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The production pattern identity property (read-only). This
+         * property contains the unique identity value.
+         *
+         * @see #GetId
+         *
+         * @since 1.5
+         */
+        public int Id {
+            get {
+                return GetId();
+            }
+        }
+
+        /**
+         * The production pattern name property (read-only).
+         *
+         * @see #GetName
+         *
+         * @since 1.5
+         */
+        public string Name {
+            get {
+                return GetName();
+            }
+        }
+
+        /**
+         * The syntetic production pattern property. If this property
+         * is set, the production identified by this pattern has been
+         * artificially inserted into the grammar. No parse tree nodes
+         * will be created for such nodes, instead the child nodes
+         * will be added directly to the parent node. By default this
+         * property is set to false.
+         *
+         * @see #IsSyntetic
+         * @see #SetSyntetic
+         *
+         * @since 1.5
+         */
+        public bool Syntetic {
+            get {
+                return IsSyntetic();
+            }
+            set {
+                SetSyntetic(value);
+            }
+        }
+
+        /**
+         * The look-ahead set property. This property contains the
+         * look-ahead set associated with this alternative.
+         */
+        internal LookAheadSet LookAhead {
+            get {
+                return lookAhead;
+            }
+            set {
+                lookAhead = value;
+            }
+        }
+
+        /**
+         * The default pattern alternative property. The default
+         * alternative is used when no other alternative matches. The
+         * default alternative must previously have been added to the
+         * list of alternatives. This property is set to null if no
+         * default pattern alternative has been set.
+         */
+        internal ProductionPatternAlternative DefaultAlternative {
+            get {
+                if (defaultAlt >= 0) {
+                    object obj = alternatives[defaultAlt];
+                    return (ProductionPatternAlternative) obj;
+                } else {
+                    return null;
+                }
+            }
+            set {
+                defaultAlt = 0;
+                for (int i = 0; i < alternatives.Count; i++) {
+                    if (alternatives[i] == value) {
+                        defaultAlt = i;
+                    }
+                }
+            }
+        }
+
+        /**
          * Checks if the syntetic production flag is set. If this flag
          * is set, the production identified by this pattern has been
          * artificially inserted into the grammar. No parse tree nodes
@@ -107,6 +195,10 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return true if this production pattern is syntetic, or
          *         false otherwise
+         *
+         * @see #Syntetic
+         *
+         * @deprecated Use the Syntetic property instead.
          */
         public bool IsSyntetic() {
             return syntetic;
@@ -176,6 +268,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the unique production pattern identity value.
          *
          * @return the production pattern id
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
          */
         public int GetId() {
             return id;
@@ -185,6 +281,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the production pattern name.
          *
          * @return the production pattern name
+         *
+         * @see #Name
+         *
+         * @deprecated Use the Name property instead.
          */
         public string GetName() {
             return name;
@@ -197,6 +297,10 @@ namespace PerCederberg.Grammatica.Parser {
          * false.
          *
          * @param syntetic       the new value of the syntetic flag
+         *
+         * @see #Syntetic
+         *
+         * @deprecated Use the Syntetic property instead.
          */
         public void SetSyntetic(bool syntetic) {
             this.syntetic = syntetic;
@@ -269,52 +373,6 @@ namespace PerCederberg.Grammatica.Parser {
                 buffer.Append(alternatives[i]);
             }
             return buffer.ToString();
-        }
-
-        /**
-         * Returns the look-ahead set associated with this alternative.
-         *
-         * @return the look-ahead set associated with this alternative
-         */
-        internal LookAheadSet GetLookAhead() {
-            return lookAhead;
-        }
-
-        /**
-         * Sets the look-ahead set for this alternative.
-         *
-         * @param lookAhead      the new look-ahead set
-         */
-        internal void SetLookAhead(LookAheadSet lookAhead) {
-            this.lookAhead = lookAhead;
-        }
-
-        /**
-         * Returns the default pattern alternative. The default
-         * alternative is used when no other alternative matches.
-         *
-         * @return the default pattern alternative, or
-         *         null if none has been set
-         */
-        internal ProductionPatternAlternative GetDefaultAlternative() {
-            if (defaultAlt >= 0) {
-                object obj = alternatives[defaultAlt];
-                return (ProductionPatternAlternative) obj;
-            } else {
-                return null;
-            }
-        }
-
-        /**
-         * Sets the default pattern alternative. The default alternative
-         * is used when no other alternative matches.
-         *
-         * @param pos            the position of the default alternative
-         */
-        internal void SetDefaultAlternative(int pos) {
-            if (pos >= 0 && pos < alternatives.Count) {
-                this.defaultAlt = pos;
-            }
         }
     }
 }

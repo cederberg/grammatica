@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -38,11 +38,11 @@ using System.Text;
 namespace PerCederberg.Grammatica.Parser {
 
     /**
-     * A parser log exception. This class contains a list of all the parse
-     * errors encountered while parsing.
+     * A parser log exception. This class contains a list of all the
+     * parse errors encountered while parsing.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.1
+     * @version  1.5
      * @since    1.1
      */
     public class ParserLogException : Exception {
@@ -59,8 +59,10 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The message property. This property contains the detailed
-         * exception error message.
+         * The message property (read-only). This property contains
+         * the detailed exception error message.
+         *
+         * @see #GetMessage
          */
         public override string Message {
             get{
@@ -103,6 +105,10 @@ namespace PerCederberg.Grammatica.Parser {
          * a newline.
          *
          * @return the detailed error message
+         *
+         * @see #Message
+         *
+         * @deprecated Use the Message property instead.
          */
         public string GetMessage() {
             StringBuilder  buffer = new StringBuilder();

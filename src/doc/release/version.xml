@@ -35,6 +35,15 @@
       </item>
 
       <item>
+        <title>Changed C# parser API for better integration</title>
+        <text>The C# parser API has been modified for almost all
+        classes, introducing properties instead of getter and setter
+        methods. The old methods have been deprecated but are kept for
+        backwards compability during a transitional phase.
+        <ref bug="8693" /></text>
+      </item>
+
+      <item>
         <title>Changed regular expression API subtly</title>
         <text>Due to fixes required to be able to reuse tokenizers,
         the regular expression class API had to be changed subtly. In
