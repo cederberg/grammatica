@@ -35,7 +35,7 @@
 package net.percederberg.grammatica.code.visualbasic;
 
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.LinkedList;
 
 import net.percederberg.grammatica.code.CodeElement;
 import net.percederberg.grammatica.code.CodeStyle;
@@ -142,7 +142,7 @@ public class VisualBasicMethod extends CodeElement {
     /**
      * The implementing code.
      */
-    private Vector code;
+    private LinkedList code;
 
     /**
      * The method comment.
@@ -203,7 +203,7 @@ public class VisualBasicMethod extends CodeElement {
         this.name = name;
         this.args = args;
         this.returnType = returnType;
-        this.code = new Vector();
+        this.code = new LinkedList();
         this.comment = null;
         this.printCode = true;
     }
@@ -218,11 +218,11 @@ public class VisualBasicMethod extends CodeElement {
 
         pos = codeLines.indexOf('\n');
         while (pos >= 0) {
-            code.addElement(codeLines.substring(0, pos));
+            code.add(codeLines.substring(0, pos));
             codeLines = codeLines.substring(pos + 1);
             pos = codeLines.indexOf('\n');
         }
-        code.addElement(codeLines);
+        code.add(codeLines);
     }
 
     /**
@@ -307,9 +307,9 @@ public class VisualBasicMethod extends CodeElement {
         if (canPrintCode()) {
             res.append("\n");
             for (int i = 0; i < code.size(); i++) {
-                if (code.elementAt(i).toString().length() > 0) {
+                if (code.get(i).toString().length() > 0) {
                     res.append(codeIndentStr);
-                    res.append(code.elementAt(i).toString());
+                    res.append(code.get(i).toString());
                     res.append("\n");
                 } else {
                     res.append("\n");

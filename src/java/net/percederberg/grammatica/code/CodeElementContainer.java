@@ -37,7 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.LinkedList;
 
 /**
  * The abstract base class for all code element containers. The code
@@ -49,10 +49,10 @@ import java.util.Vector;
 public abstract class CodeElementContainer extends CodeElement {
 
     /**
-     * The code element contents. This vector contains the code
-     * elements contained inside this element.
+     * The code element contents. This list contains the code elements
+     * contained inside this element.
      */
-    private Vector contents = new Vector();
+    private LinkedList contents = new LinkedList();
 
     /**
      * Adds a code element to this container.

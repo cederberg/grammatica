@@ -28,14 +28,14 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code.java;
 
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.LinkedList;
 
 import net.percederberg.grammatica.code.CodeElement;
 import net.percederberg.grammatica.code.CodeStyle;
@@ -44,7 +44,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * A class generating a Java constructor declaration.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class JavaConstructor extends CodeElement {
 
@@ -86,12 +86,12 @@ public class JavaConstructor extends CodeElement {
     /**
      * The exceptions declared to be thrown.
      */
-    private Vector throwList;
+    private LinkedList throwList;
 
     /**
      * The implementing code.
      */
-    private Vector code;
+    private LinkedList code;
 
     /**
      * The constructor comment.
@@ -124,8 +124,8 @@ public class JavaConstructor extends CodeElement {
         this.modifiers = modifiers;
         this.cls = null;
         this.args = args;
-        this.throwList = new Vector();
-        this.code = new Vector();
+        this.throwList = new LinkedList();
+        this.code = new LinkedList();
         this.comment = null;
     }
 
@@ -239,9 +239,9 @@ public class JavaConstructor extends CodeElement {
             res.append("\n");
         }
         for (int i = 0; i < code.size(); i++) {
-            if (code.elementAt(i).toString().length() > 0) {
+            if (code.get(i).toString().length() > 0) {
                 res.append(codeIndentStr);
-                res.append(code.elementAt(i).toString());
+                res.append(code.get(i).toString());
                 res.append("\n");
             } else {
                 res.append("\n");
@@ -269,7 +269,7 @@ public class JavaConstructor extends CodeElement {
         }
         Collections.sort(throwList);
         for (int i = 0; i < throwList.size(); i++) {
-            res.append(throwList.elementAt(i).toString());
+            res.append(throwList.get(i).toString());
             if (i < throwList.size() - 1) {
                 res.append(", ");
             }

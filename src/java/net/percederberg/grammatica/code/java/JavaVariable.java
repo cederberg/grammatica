@@ -28,13 +28,13 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.code.java;
 
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.LinkedList;
 
 import net.percederberg.grammatica.code.CodeElement;
 import net.percederberg.grammatica.code.CodeStyle;
@@ -44,7 +44,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * declaration should be placed as a member in a class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class JavaVariable extends CodeElement {
 
@@ -113,12 +113,12 @@ public class JavaVariable extends CodeElement {
     private String initValue;
 
     /**
-     * The vector init values. These initialization values are only
-     * used for vector initializations, not for single values.
+     * The list of init values. These initialization values are only
+     * used for array initializations, not for single values.
      *
      * @see #initValue
      */
-    private Vector initValueVector;
+    private LinkedList initValueList;
 
     /**
      * The variable comment.
@@ -177,7 +177,7 @@ public class JavaVariable extends CodeElement {
         this.type = type;
         this.name = name;
         this.initValue = initValue;
-        this.initValueVector = new Vector();
+        this.initValueList = new LinkedList();
         this.comment = null;
     }
 
@@ -191,19 +191,19 @@ public class JavaVariable extends CodeElement {
     }
 
     /**
-     * Adds initialization code for a vector element value. Each
-     * vector element value added will be added last in the list of
+     * Adds initialization code for an array element value. Each array
+     * element value added will be added last in the list of
      * initialization values. If an init value has been specified with
-     * the constructor, it will be added first in the vector.
+     * the constructor, it will be added first.
      *
-     * @param elementValue    the vector element value
+     * @param elementValue    the array element value
      */
-    public void addVectorInit(String elementValue) {
+    public void addArrayInit(String elementValue) {
         if (this.initValue != null) {
-            this.initValueVector.add(this.initValue);
+            this.initValueList.add(this.initValue);
             this.initValue = null;
         }
-        this.initValueVector.add(elementValue);
+        this.initValueList.add(elementValue);
     }
 
     /**
@@ -257,7 +257,7 @@ public class JavaVariable extends CodeElement {
         StringBuffer res;
 
         // Check for simple init values
-        if (initValueVector.size() == 0 && initValue == null) {
+        if (initValueList.size() == 0 && initValue == null) {
             return null;
         } else if (initValue != null) {
             return initValue;
@@ -265,10 +265,10 @@ public class JavaVariable extends CodeElement {
 
         // Create array of init values
         res = new StringBuffer("{\n");
-        for (int i = 0; i < initValueVector.size(); i++) {
+        for (int i = 0; i < initValueList.size(); i++) {
             res.append(codeIndentStr);
-            res.append(initValueVector.elementAt(i).toString());
-            if (i + 1 < initValueVector.size()) {
+            res.append(initValueList.get(i).toString());
+            if (i + 1 < initValueList.size()) {
                 res.append(",\n");
             } else {
                 res.append("\n");
