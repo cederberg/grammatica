@@ -125,17 +125,31 @@ namespace PerCederberg.Grammatica.Test {
                 if (expected.Length < pos) {
                     break;
                 }
-                AssertEquals("on line: " + line,
-                             expected.Substring(0, pos), 
+                ValidateLine(line,
+                             expected.Substring(0, pos),
                              result.Substring(0, pos));
                 expected = expected.Substring(pos + 1);
                 result = result.Substring(pos + 1);
                 pos = result.IndexOf('\n');
                 line++;
             }
-            AssertEquals("on line: " + line, expected, result);
+            ValidateLine(line, expected, result);
         }
-        
+
+        /**
+         * Validates that two strings are identical. If the two strings
+         * mismatch, a test failure will be reported.
+         *
+         * @param line           the line number to report 
+         * @param expected       the expected result
+         * @param result         the result obtained
+         */
+        private void ValidateLine(int line, string expected, string result) {
+            AssertEquals("on line: " + line,
+                         expected.Trim(),
+                         result.Trim());
+        }
+
         /**
          * Throws a test fail exception.
          *

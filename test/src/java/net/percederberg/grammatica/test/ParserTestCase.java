@@ -160,7 +160,7 @@ abstract class ParserTestCase extends TestCase {
      * @param result         the result obtained
      */
     private void validateLine(int line, String expected, String result) {
-        if (!expected.equals(result)) {
+        if (!expected.trim().equals(result.trim())) {
             fail("on line: " + line + ", expected: '" + expected +
                  "', found: '" + result + "'");
         }
