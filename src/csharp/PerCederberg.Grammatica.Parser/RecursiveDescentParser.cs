@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -171,8 +171,8 @@ namespace PerCederberg.Grammatica.Parser {
             ProductionPatternAlternative  defaultAlt;
 
             defaultAlt = pattern.DefaultAlternative;
-            for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
-                alt = pattern.GetAlternative(i);
+            for (int i = 0; i < pattern.Count; i++) {
+                alt = pattern[i];
                 if (defaultAlt != alt && IsNext(alt)) {
                     return ParseAlternative(alt);
                 }
@@ -200,9 +200,9 @@ namespace PerCederberg.Grammatica.Parser {
 
             node = new Production(alt.Pattern);
             EnterNode(node);
-            for (int i = 0; i < alt.GetElementCount(); i++) {
+            for (int i = 0; i < alt.Count; i++) {
                 try {
-                    ParseElement(node, alt.GetElement(i));
+                    ParseElement(node, alt[i]);
                 } catch (ParseException e) {
                     AddError(e, true);
                     NextToken();
@@ -330,9 +330,9 @@ namespace PerCederberg.Grammatica.Parser {
             // Calculate simple look-ahead
             stack.Push(pattern.Name, 1);
             result = new LookAheadSet(1);
-            alternatives = new LookAheadSet[pattern.GetAlternativeCount()];
-            for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                alt = pattern.GetAlternative(i);
+            alternatives = new LookAheadSet[pattern.Count];
+            for (i = 0; i < pattern.Count; i++) {
+                alt = pattern[i];
                 alternatives[i] = FindLookAhead(alt, 1, 0, stack, null);
                 alt.LookAhead = alternatives[i];
                 result.AddAll(alternatives[i]);
@@ -348,8 +348,8 @@ namespace PerCederberg.Grammatica.Parser {
                 stack.Clear();
                 stack.Push(pattern.Name, length);
                 conflicts.AddAll(previous);
-                for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                    alt = pattern.GetAlternative(i);
+                for (i = 0; i < pattern.Count; i++) {
+                    alt = pattern[i];
                     if (alternatives[i].Intersects(conflicts)) {
                         alternatives[i] = FindLookAhead(alt,
                                                         length,
@@ -374,8 +374,8 @@ namespace PerCederberg.Grammatica.Parser {
             }
 
             // Resolve conflicts inside rules
-            for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                CalculateLookAhead(pattern.GetAlternative(i), 0);
+            for (i = 0; i < pattern.Count; i++) {
+                CalculateLookAhead(pattern[i], 0);
             }
         }
 
@@ -404,13 +404,13 @@ namespace PerCederberg.Grammatica.Parser {
             int                       length = 1;
 
             // Check trivial cases
-            if (pos >= alt.GetElementCount()) {
+            if (pos >= alt.Count) {
                 return;
             }
 
             // Check for non-optional element
             pattern = alt.Pattern;
-            elem = alt.GetElement(pos);
+            elem = alt[pos];
             if (elem.MinCount == elem.MaxCount) {
                 CalculateLookAhead(alt, pos + 1);
                 return;
@@ -490,8 +490,8 @@ namespace PerCederberg.Grammatica.Parser {
             // Find pattern look-ahead
             stack.Push(pattern.Name, length);
             result = new LookAheadSet(length);
-            for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
-                temp = FindLookAhead(pattern.GetAlternative(i),
+            for (int i = 0; i < pattern.Count; i++) {
+                temp = FindLookAhead(pattern[i],
                                      length,
                                      0,
                                      stack,
@@ -532,13 +532,13 @@ namespace PerCederberg.Grammatica.Parser {
             LookAheadSet  overlaps;
 
             // Check trivial cases
-            if (length <= 0 || pos >= alt.GetElementCount()) {
+            if (length <= 0 || pos >= alt.Count) {
                 return new LookAheadSet(0);
             }
 
             // Find look-ahead for this element
-            first = FindLookAhead(alt.GetElement(pos), length, stack, filter);
-            if (alt.GetElement(pos).MinCount == 0) {
+            first = FindLookAhead(alt[pos], length, stack, filter);
+            if (alt[pos].MinCount == 0) {
                 first.AddEmpty();
             }
 
@@ -684,10 +684,10 @@ namespace PerCederberg.Grammatica.Parser {
             LookAheadSet  set1;
             LookAheadSet  set2;
 
-            for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
-                set1 = pattern.GetAlternative(i).LookAhead;
+            for (int i = 0; i < pattern.Count; i++) {
+                set1 = pattern[i].LookAhead;
                 for (int j = 0; j < i; j++) {
-                    set2 = pattern.GetAlternative(j).LookAhead;
+                    set2 = pattern[j].LookAhead;
                     result.AddAll(set1.CreateIntersection(set2));
                 }
             }
@@ -738,15 +738,15 @@ namespace PerCederberg.Grammatica.Parser {
             int           length = 0;
             int           i;
 
-            for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                result = pattern.GetAlternative(i).LookAhead;
+            for (i = 0; i < pattern.Count; i++) {
+                result = pattern[i].LookAhead;
                 if (result.GetMaxLength() > length) {
                     length = result.GetMaxLength();
                 }
             }
             result = new LookAheadSet(length);
-            for (i = 0; i < pattern.GetAlternativeCount(); i++) {
-                result.AddAll(pattern.GetAlternative(i).LookAhead);
+            for (i = 0; i < pattern.Count; i++) {
+                result.AddAll(pattern[i].LookAhead);
             }
 
             return result;
