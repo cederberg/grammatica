@@ -89,8 +89,8 @@ namespace PerCederberg.Grammatica.Test {
 
                 AssertEquals("error count", 1, e.Count);
                 AssertEquals("error type", type, p.Type);
-                AssertEquals("line number", line, p.GetLine());
-                AssertEquals("column number", column, p.GetColumn());
+                AssertEquals("line number", line, p.Line);
+                AssertEquals("column number", column, p.Column);
             }
         }
 

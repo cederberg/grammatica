@@ -147,30 +147,30 @@ public class TestTokenizer {
 
         AssertEquals("default token list setting",
                      false,
-                     tokenizer.GetUseTokenList());
-        tokenizer.SetUseTokenList(true);
+                     tokenizer.UseTokenList);
+        tokenizer.UseTokenList = true;
         token = ReadToken(tokenizer, NUMBER);
         ReadToken(tokenizer, KEYWORD);
         ReadToken(tokenizer, NUMBER);
         ReadToken(tokenizer, EOF);
-        AssertEquals("previous token", null, token.GetPreviousToken());
-        token = token.GetNextToken();
-        AssertEquals("token id", WHITESPACE, token.GetId());
-        token = token.GetNextToken();
-        AssertEquals("token id", KEYWORD, token.GetId());
-        token = token.GetNextToken();
-        AssertEquals("token id", WHITESPACE, token.GetId());
-        token = token.GetNextToken();
-        AssertEquals("token id", NUMBER, token.GetId());
-        AssertEquals("next token", null, token.GetNextToken());
-        token = token.GetPreviousToken();
-        AssertEquals("token id", WHITESPACE, token.GetId());
-        token = token.GetPreviousToken();
-        AssertEquals("token id", KEYWORD, token.GetId());
-        token = token.GetPreviousToken();
-        AssertEquals("token id", WHITESPACE, token.GetId());
-        token = token.GetPreviousToken();
-        AssertEquals("token id", NUMBER, token.GetId());
+        AssertEquals("previous token", null, token.Previous);
+        token = token.Next;
+        AssertEquals("token id", WHITESPACE, token.Id);
+        token = token.Next;
+        AssertEquals("token id", KEYWORD, token.Id);
+        token = token.Next;
+        AssertEquals("token id", WHITESPACE, token.Id);
+        token = token.Next;
+        AssertEquals("token id", NUMBER, token.Id);
+        AssertEquals("next token", null, token.Next);
+        token = token.Previous;
+        AssertEquals("token id", WHITESPACE, token.Id);
+        token = token.Previous;
+        AssertEquals("token id", KEYWORD, token.Id);
+        token = token.Previous;
+        AssertEquals("token id", WHITESPACE, token.Id);
+        token = token.Previous;
+        AssertEquals("token id", NUMBER, token.Id);
     }
 
     /**
@@ -254,13 +254,13 @@ public class TestTokenizer {
                                    "WHITESPACE",
                                    TokenPattern.PatternType.REGEXP,
                                    "[ \t\n]+");
-        pattern.SetIgnore();
+        pattern.Ignore = true;
         AddPattern(tokenizer, pattern);
         pattern = new TokenPattern(ERROR,
                                    "ERROR",
                                    TokenPattern.PatternType.STRING,
                                    "error");
-        pattern.SetError();
+        pattern.Error = true;
         AddPattern(tokenizer, pattern);
 
         return tokenizer;
@@ -277,7 +277,7 @@ public class TestTokenizer {
         try {
             tokenizer.AddPattern(pattern);
         } catch (ParserCreationException e) {
-            Fail("couldn't add pattern " + pattern.GetName() + ": " +
+            Fail("couldn't add pattern " + pattern.Name + ": " +
                  e.Message);
         }
     }
@@ -292,7 +292,7 @@ public class TestTokenizer {
     private void FailAddPattern(Tokenizer tokenizer, TokenPattern pattern) {
         try {
             tokenizer.AddPattern(pattern);
-            Fail("could add pattern " + pattern.GetName());
+            Fail("could add pattern " + pattern.Name);
         } catch (ParserCreationException e) {
             // Failure was expected
         }
@@ -333,7 +333,7 @@ public class TestTokenizer {
             }
         } else {
             if (token != null) {
-                AssertEquals("token id", id, token.GetId());
+                AssertEquals("token id", id, token.Id);
             } else {
                 Fail("expected " + id + ", found EOF");
             }

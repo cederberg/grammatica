@@ -83,7 +83,7 @@ namespace PerCederberg.Grammatica.Test {
             parser = new ArithmeticParser(new StringReader(expression), this);
             parser.Prepare();
             node = parser.Parse();
-            return (int) node.GetValue(0);
+            return (int) node.Values[0];
         }
 
         /**
@@ -94,7 +94,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitAdd(Token node) {
-            node.AddValue("+");
+            node.Values.Add("+");
             return node;
         }
 
@@ -106,7 +106,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitSub(Token node) {
-            node.AddValue("-");
+            node.Values.Add("-");
             return node;
         }
 
@@ -118,7 +118,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitMul(Token node) {
-            node.AddValue("*");
+            node.Values.Add("*");
             return node;
         }
 
@@ -130,7 +130,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitDiv(Token node) {
-            node.AddValue("/");
+            node.Values.Add("/");
             return node;
         }
 
@@ -142,7 +142,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitNumber(Token node) {
-            node.AddValue(Int32.Parse(node.GetImage()));
+            node.Values.Add(Int32.Parse(node.Image));
             return node;
         }
 
@@ -154,7 +154,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitIdentifier(Token node) {
-            node.AddValue(variables[node.GetImage()]);
+            node.Values.Add(variables[node.Image]);
             return node;
         }
 
@@ -180,7 +180,7 @@ namespace PerCederberg.Grammatica.Test {
                 op = (string) values[1];
                 result = Operate(op, value1, value2);
             }
-            node.AddValue(result);
+            node.Values.Add(result);
             return node;
         }
 
@@ -192,7 +192,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitExpressionRest(Production node) {
-            node.AddValues(GetChildValues(node));
+            node.Values.AddRange(GetChildValues(node));
             return node;
         }
 
@@ -218,7 +218,7 @@ namespace PerCederberg.Grammatica.Test {
                 op = (string) values[1];
                 result = Operate(op, value1, value2);
             }
-            node.AddValue(result);
+            node.Values.Add(result);
             return node;
         }
 
@@ -230,7 +230,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitTermRest(Production node) {
-            node.AddValues(GetChildValues(node));
+            node.Values.AddRange(GetChildValues(node));
             return node;
         }
 
@@ -246,12 +246,12 @@ namespace PerCederberg.Grammatica.Test {
         public override Node ExitFactor(Production node) {
             int  result;
 
-            if (node.GetChildCount() == 1) {
+            if (node.Count == 1) {
                 result = GetIntValue(GetChildAt(node, 0), 0);
             } else {
                 result = GetIntValue(GetChildAt(node, 1), 0);
             }
-            node.AddValue(result);
+            node.Values.Add(result);
             return node;
         }
 
@@ -263,7 +263,7 @@ namespace PerCederberg.Grammatica.Test {
          * @return the node to add to the parse tree
          */
         public override Node ExitAtom(Production node) {
-            node.AddValues(GetChildValues(node));
+            node.Values.AddRange(GetChildValues(node));
             return node;
         }
 

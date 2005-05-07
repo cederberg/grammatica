@@ -141,9 +141,9 @@ namespace PerCederberg.Grammatica.Test {
 
             p = CreateParser(VALID_INPUT);
             Parse(p, VALID_OUTPUT);
-            p.GetTokenizer().Reset(new StringReader(UNEXPECTED_CHAR_INPUT));
+            p.Tokenizer.Reset(new StringReader(UNEXPECTED_CHAR_INPUT));
             FailParse(p, ParseException.ErrorType.UNEXPECTED_CHAR, 2, 2);
-            p.GetTokenizer().Reset(new StringReader(VALID_INPUT));
+            p.Tokenizer.Reset(new StringReader(VALID_INPUT));
             Parse(p, VALID_OUTPUT);
         }
 
