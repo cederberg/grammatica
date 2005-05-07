@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -150,7 +150,7 @@ public class TestProductionPattern {
         try {
             pattern.AddAlternative(alt);
         } catch (ParserCreationException e) {
-            Fail("couldn't add alternative to " + pattern.GetName() +
+            Fail("couldn't add alternative to " + pattern.Name +
                  ": " + e.Message);
         }
     }
@@ -167,7 +167,7 @@ public class TestProductionPattern {
 
         try {
             pattern.AddAlternative(alt);
-            Fail("could add alternative to " + pattern.GetName());
+            Fail("could add alternative to " + pattern.Name);
         } catch (ParserCreationException e) {
             // Failure was expected
         }

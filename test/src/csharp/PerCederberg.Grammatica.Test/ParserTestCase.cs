@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -60,7 +60,7 @@ namespace PerCederberg.Grammatica.Test {
             } catch (ParserCreationException e) {
                 Fail(e.Message);
             } catch (ParserLogException e) {
-                Fail(e.GetError(0).GetMessage());
+                Fail(e[0].Message);
             }
         }
 
@@ -85,10 +85,10 @@ namespace PerCederberg.Grammatica.Test {
             } catch (ParserCreationException e) {
                 Fail(e.Message);
             } catch (ParserLogException e) {
-                ParseException  p = e.GetError(0);
+                ParseException  p = e[0];
 
-                AssertEquals("error count", 1, e.GetErrorCount());
-                AssertEquals("error type", type, p.GetErrorType());
+                AssertEquals("error count", 1, e.Count);
+                AssertEquals("error type", type, p.Type);
                 AssertEquals("line number", line, p.GetLine());
                 AssertEquals("column number", column, p.GetColumn());
             }

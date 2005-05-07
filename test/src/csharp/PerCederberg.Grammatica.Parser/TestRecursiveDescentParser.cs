@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -530,7 +530,7 @@ public class TestRecursiveDescentParser {
         try {
             parser.AddPattern(pattern);
         } catch (ParserCreationException e) {
-            Fail("couldn't add pattern " + pattern.GetName() + ": " +
+            Fail("couldn't add pattern " + pattern.Name + ": " +
                  e.Message);
         }
     }
@@ -545,7 +545,7 @@ public class TestRecursiveDescentParser {
     private void FailAddPattern(Parser parser, ProductionPattern pattern) {
         try {
             parser.AddPattern(pattern);
-            Fail("could add pattern " + pattern.GetName());
+            Fail("could add pattern " + pattern.Name);
         } catch (ParserCreationException e) {
             // Failure was expected
         }
@@ -564,7 +564,7 @@ public class TestRecursiveDescentParser {
         try {
             pattern.AddAlternative(alt);
         } catch (ParserCreationException e) {
-            Fail("couldn't add alternative to " + pattern.GetName() +
+            Fail("couldn't add alternative to " + pattern.Name +
                  ": " + e.Message);
         }
     }

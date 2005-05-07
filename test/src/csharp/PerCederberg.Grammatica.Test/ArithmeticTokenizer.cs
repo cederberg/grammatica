@@ -121,7 +121,7 @@ namespace PerCederberg.Grammatica.Test {
                                        "WHITESPACE",
                                        TokenPattern.PatternType.REGEXP,
                                        "[ \\t\\n\\r]+");
-            pattern.SetIgnore();
+            pattern.Ignore = true;
             AddPattern(pattern);
         }
     }

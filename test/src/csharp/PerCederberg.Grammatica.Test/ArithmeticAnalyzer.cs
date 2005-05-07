@@ -52,7 +52,7 @@ namespace PerCederberg.Grammatica.Test {
          * discovered errors</exception>
          */
         public override void Enter(Node node) {
-            switch (node.GetId()) {
+            switch (node.Id) {
             case (int) ArithmeticConstants.ADD:
                 EnterAdd((Token) node);
                 break;
@@ -110,7 +110,7 @@ namespace PerCederberg.Grammatica.Test {
          * discovered errors</exception>
          */
         public override Node Exit(Node node) {
-            switch (node.GetId()) {
+            switch (node.Id) {
             case (int) ArithmeticConstants.ADD:
                 return ExitAdd((Token) node);
             case (int) ArithmeticConstants.SUB:
@@ -154,7 +154,7 @@ namespace PerCederberg.Grammatica.Test {
          * discovered errors</exception>
          */
         public override void Child(Production node, Node child) {
-            switch (node.GetId()) {
+            switch (node.Id) {
             case (int) ArithmeticConstants.EXPRESSION:
                 ChildExpression(node, child);
                 break;

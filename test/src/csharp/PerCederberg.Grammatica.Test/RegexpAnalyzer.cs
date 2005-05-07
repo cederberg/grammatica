@@ -52,7 +52,7 @@ namespace PerCederberg.Grammatica.Test {
          * discovered errors</exception>
          */
         public override void Enter(Node node) {
-            switch (node.GetId()) {
+            switch (node.Id) {
             case (int) RegexpConstants.LEFT_PAREN:
                 EnterLeftParen((Token) node);
                 break;
@@ -131,7 +131,7 @@ namespace PerCederberg.Grammatica.Test {
          * discovered errors</exception>
          */
         public override Node Exit(Node node) {
-            switch (node.GetId()) {
+            switch (node.Id) {
             case (int) RegexpConstants.LEFT_PAREN:
                 return ExitLeftParen((Token) node);
             case (int) RegexpConstants.RIGHT_PAREN:
@@ -189,7 +189,7 @@ namespace PerCederberg.Grammatica.Test {
          * discovered errors</exception>
          */
         public override void Child(Production node, Node child) {
-            switch (node.GetId()) {
+            switch (node.Id) {
             case (int) RegexpConstants.EXPR:
                 ChildExpr(node, child);
                 break;

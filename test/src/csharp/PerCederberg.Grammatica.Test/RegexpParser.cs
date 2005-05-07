@@ -218,7 +218,7 @@ namespace PerCederberg.Grammatica.Test {
 
             pattern = new ProductionPattern((int) SynteticPatterns.SUBPRODUCTION_1,
                                             "Subproduction1");
-            pattern.SetSyntetic(true);
+            pattern.Syntetic = true;
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) RegexpConstants.VERTICAL_BAR, 1, 1);
             alt.AddProduction((int) RegexpConstants.EXPR, 1, 1);
@@ -227,7 +227,7 @@ namespace PerCederberg.Grammatica.Test {
 
             pattern = new ProductionPattern((int) SynteticPatterns.SUBPRODUCTION_2,
                                             "Subproduction2");
-            pattern.SetSyntetic(true);
+            pattern.Syntetic = true;
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) RegexpConstants.COMMA, 1, 1);
             alt.AddToken((int) RegexpConstants.NUMBER, 0, 1);
