@@ -220,26 +220,28 @@ public abstract class Parser {
         throws ParserCreationException {
 
         for (int i = 0; i < pattern.getAlternativeCount(); i++) {
-            checkRule(pattern.getName(), pattern.getAlternative(i));
+            checkAlternative(pattern.getName(), pattern.getAlternative(i));
         }
     }
 
     /**
-     * Checks a production pattern rule for completeness. If some
-     * element in the rule referenced an production pattern not added
-     * to this parser, a parser creation exception will be thrown.
+     * Checks a production pattern alternative for completeness. If
+     * some element in the alternative referenced an production
+     * pattern not added to this parser, a parser creation exception
+     * will be thrown.
      *
      * @param name           the name of the pattern being checked
-     * @param rule           the production pattern rule to check
+     * @param alt            the production pattern alternative
      *
-     * @throws ParserCreationException if the rule referenced a
+     * @throws ParserCreationException if the alternative referenced a
      *             pattern not added to this parser
      */
-    private void checkRule(String name, ProductionPatternAlternative rule)
+    private void checkAlternative(String name,
+                                  ProductionPatternAlternative alt)
         throws ParserCreationException {
 
-        for (int i = 0; i < rule.getElementCount(); i++) {
-            checkElement(name, rule.getElement(i));
+        for (int i = 0; i < alt.getElementCount(); i++) {
+            checkElement(name, alt.getElement(i));
         }
     }
 
