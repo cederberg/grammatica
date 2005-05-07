@@ -105,7 +105,7 @@ class RepeatElement extends Element {
      *
      * @see #GREEDY
      * @see #RELUCTANT
-     * @see #POSSESIVE
+     * @see #POSSESSIVE
      */
     public RepeatElement(Element elem, int min, int max, int type) {
         this.elem = elem;
