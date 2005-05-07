@@ -212,7 +212,7 @@ class CharacterSetElement extends Element {
             return -1;
         }
         if (m.isCaseInsensitive()) {
-            c = (int) Character.toLowerCase((char) c);
+            c = Character.toLowerCase((char) c);
         }
         return inSet((char) c) ? 1 : -1;
     }
