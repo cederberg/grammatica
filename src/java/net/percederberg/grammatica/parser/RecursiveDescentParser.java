@@ -34,7 +34,6 @@
 package net.percederberg.grammatica.parser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
