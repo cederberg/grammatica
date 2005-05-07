@@ -45,7 +45,7 @@ import net.percederberg.grammatica.parser.Token;
  * A class providing callback methods for the parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.2
+ * @version  1.5
  */
 abstract class GrammarAnalyzer extends Analyzer {
 

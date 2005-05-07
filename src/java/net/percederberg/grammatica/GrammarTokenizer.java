@@ -45,7 +45,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * A character stream tokenizer.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.2
+ * @version  1.5
  */
 class GrammarTokenizer extends Tokenizer {
 
@@ -210,7 +210,7 @@ class GrammarTokenizer extends Tokenizer {
         pattern = new TokenPattern(GrammarConstants.MULTI_LINE_COMMENT,
                                    "MULTI_LINE_COMMENT",
                                    TokenPattern.REGEXP_TYPE,
-                                   "/\\*([^*]|\\*[^/])*\\*/");
+                                   "/\\*([^*]|\\*[^/])*\\*\\*?/");
         pattern.setIgnore();
         addPattern(pattern);
 

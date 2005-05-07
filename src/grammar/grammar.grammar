@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 %header%
@@ -40,8 +40,8 @@ DESCRIPTION = "A grammar for the grammar file format. The grammar is LL(1),
                The grammar file format is used for describing grammars."
 
 AUTHOR      = "Per Cederberg, <per at percederberg dot net>"
-VERSION     = "1.2"
-DATE        = "10 June 2003"
+VERSION     = "1.5"
+DATE        = "7 May 2005"
 
 LICENSE     = "This work is free software; you can redistribute it and/or modify
                it under the terms of the GNU General Public License as published
@@ -97,7 +97,7 @@ IDENTIFIER                   = <<[A-Za-z][A-Za-z0-9_]*>>
 QUOTED_STRING                = <<("[^"]*")|('[^']*')>>
 REGEXP                       = <<\<\<([^\\\>]|(\\.)|(\>[^\>]))*\>\>>>
 SINGLE_LINE_COMMENT          = <<//.*>> %ignore%
-MULTI_LINE_COMMENT           = <</\*([^*]|\*[^/])*\*/>> %ignore%
+MULTI_LINE_COMMENT           = <</\*([^*]|\*[^/])*\*\*?/>> %ignore%
 WHITESPACE                   = <<[ \t\n\r]+>> %ignore%
 
 
