@@ -81,7 +81,7 @@ namespace PerCederberg.Grammatica.Parser {
             ParserLogException  log = new ParserLogException();
 
             node = Analyze(node, log);
-            if (log.GetErrorCount() > 0) {
+            if (log.Count > 0) {
                 throw log;
             }
             return node;
@@ -105,18 +105,18 @@ namespace PerCederberg.Grammatica.Parser {
             Production  prod;
             int         errorCount;
 
-            errorCount = log.GetErrorCount();
+            errorCount = log.Count;
             if (node is Production) {
                 prod = (Production) node;
-                prod = new Production(prod.GetPattern());
+                prod = new Production(prod.Pattern);
                 try {
                     Enter(prod);
                 } catch (ParseException e) {
                     log.AddError(e);
                 }
-                for (int i = 0; i < node.GetChildCount(); i++) {
+                for (int i = 0; i < node.Count; i++) {
                     try {
-                        Child(prod, Analyze(node.GetChildAt(i), log));
+                        Child(prod, Analyze(node[i], log));
                     } catch (ParseException e) {
                         log.AddError(e);
                     }
@@ -124,12 +124,12 @@ namespace PerCederberg.Grammatica.Parser {
                 try {
                     return Exit(prod);
                 } catch (ParseException e) {
-                    if (errorCount == log.GetErrorCount()) {
+                    if (errorCount == log.Count) {
                         log.AddError(e);
                     }
                 }
             } else {
-                node.RemoveAllValues();
+                node.Values.Clear();
                 try {
                     Enter(node);
                 } catch (ParseException e) {
@@ -138,7 +138,7 @@ namespace PerCederberg.Grammatica.Parser {
                 try {
                     return Exit(node);
                 } catch (ParseException e) {
-                    if (errorCount == log.GetErrorCount()) {
+                    if (errorCount == log.Count) {
                         log.AddError(e);
                     }
                 }
@@ -214,14 +214,14 @@ namespace PerCederberg.Grammatica.Parser {
                     -1,
                     -1);
             }
-            child = node.GetChildAt(pos);
+            child = node[pos];
             if (child == null) {
                 throw new ParseException(
                     ParseException.ErrorType.INTERNAL,
-                    "node '" + node.GetName() + "' has no child at " +
+                    "node '" + node.Name + "' has no child at " +
                     "position " + pos,
-                    node.GetStartLine(),
-                    node.GetStartColumn());
+                    node.StartLine,
+                    node.StartColumn);
             }
             return child;
         }
@@ -250,17 +250,17 @@ namespace PerCederberg.Grammatica.Parser {
                     -1,
                     -1);
             }
-            for (int i = 0; i < node.GetChildCount(); i++) {
-                child = node.GetChildAt(i);
-                if (child != null && child.GetId() == id) {
+            for (int i = 0; i < node.Count; i++) {
+                child = node[i];
+                if (child != null && child.Id == id) {
                     return child;
                 }
             }
             throw new ParseException(
                 ParseException.ErrorType.INTERNAL,
-                "node '" + node.GetName() + "' has no child with id " + id,
-                node.GetStartLine(),
-                node.GetStartColumn());
+                "node '" + node.Name + "' has no child with id " + id,
+                node.StartLine,
+                node.StartColumn);
         }
 
         /**
@@ -285,14 +285,14 @@ namespace PerCederberg.Grammatica.Parser {
                     -1,
                     -1);
             }
-            value = node.GetValue(pos);
+            value = node.Values[pos];
             if (value == null) {
                 throw new ParseException(
                     ParseException.ErrorType.INTERNAL,
-                    "node '" + node.GetName() + "' has no value at " +
+                    "node '" + node.Name + "' has no value at " +
                     "position " + pos,
-                    node.GetStartLine(),
-                    node.GetStartColumn());
+                    node.StartLine,
+                    node.StartColumn);
             }
             return value;
         }
@@ -320,10 +320,10 @@ namespace PerCederberg.Grammatica.Parser {
             } else {
                 throw new ParseException(
                     ParseException.ErrorType.INTERNAL,
-                    "node '" + node.GetName() + "' has no integer value " +
+                    "node '" + node.Name + "' has no integer value " +
                     "at position " + pos,
-                    node.GetStartLine(),
-                    node.GetStartColumn());
+                    node.StartLine,
+                    node.StartColumn);
             }
         }
 
@@ -350,10 +350,10 @@ namespace PerCederberg.Grammatica.Parser {
             } else {
                 throw new ParseException(
                     ParseException.ErrorType.INTERNAL,
-                    "node '" + node.GetName() + "' has no string value " +
+                    "node '" + node.Name + "' has no string value " +
                     "at position " + pos,
-                    node.GetStartLine(),
-                    node.GetStartColumn());
+                    node.StartLine,
+                    node.StartColumn);
             }
         }
 
@@ -371,9 +371,9 @@ namespace PerCederberg.Grammatica.Parser {
             Node       child;
             ArrayList  values;
 
-            for (int i = 0; i < node.GetChildCount(); i++) {
-                child = node.GetChildAt(i);
-                values = child.GetAllValues();
+            for (int i = 0; i < node.Count; i++) {
+                child = node[i];
+                values = child.Values;
                 if (values != null) {
                     result.AddRange(values);
                 }
