@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -123,8 +123,6 @@ namespace PerCederberg.Grammatica.Parser {
          * The tokenizer property (read-only). This property contains
          * the tokenizer in use by this parser.
          *
-         * @see #GetTokenizer
-         *
          * @since 1.5
          */
         public Tokenizer Tokenizer {
@@ -136,8 +134,6 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The analyzer property (read-only). This property contains
          * the analyzer in use by this parser.
-         *
-         * @see #GetAnalyzer
          *
          * @since 1.5
          */
@@ -199,7 +195,7 @@ namespace PerCederberg.Grammatica.Parser {
          *             added correctly to the parser
          */
         public virtual void AddPattern(ProductionPattern pattern) {
-            if (pattern.GetAlternativeCount() <= 0) {
+            if (pattern.Count <= 0) {
                 throw new ParserCreationException(
                     ParserCreationException.ErrorType.INVALID_PRODUCTION,
                     pattern.Name,
@@ -249,28 +245,28 @@ namespace PerCederberg.Grammatica.Parser {
          *             pattern not added to this parser
          */
         private void CheckPattern(ProductionPattern pattern) {
-            for (int i = 0; i < pattern.GetAlternativeCount(); i++) {
-                CheckRule(pattern.Name, pattern.GetAlternative(i));
+            for (int i = 0; i < pattern.Count; i++) {
+                CheckAlternative(pattern.Name, pattern[i]);
             }
         }
 
         /**
-         * Checks a production pattern rule for completeness. If some
-         * element in the rule referenced an production pattern not
-         * added to this parser, a parser creation exception will be
-         * thrown.
+         * Checks a production pattern alternative for completeness.
+         * If some element in the alternative referenced a production
+         * pattern not added to this parser, a parser creation
+         * exception will be thrown.
          *
          * @param name           the name of the pattern being checked
-         * @param rule           the production pattern rule to check
+         * @param alt            the production pattern alternative
          *
-         * @throws ParserCreationException if the rule referenced a
-         *             pattern not added to this parser
+         * @throws ParserCreationException if the alternative
+         *             referenced a pattern not added to this parser
          */
-        private void CheckRule(string name,
-                               ProductionPatternAlternative rule) {
+        private void CheckAlternative(string name,
+                                      ProductionPatternAlternative alt) {
 
-            for (int i = 0; i < rule.GetElementCount(); i++) {
-                CheckElement(name, rule.GetElement(i));
+            for (int i = 0; i < alt.Count; i++) {
+                CheckElement(name, alt[i]);
             }
         }
 
@@ -352,7 +348,7 @@ namespace PerCederberg.Grammatica.Parser {
             }
 
             // Check for errors
-            if (errorLog.GetErrorCount() > 0) {
+            if (errorLog.Count > 0) {
                 throw errorLog;
             }
 
@@ -479,8 +475,8 @@ namespace PerCederberg.Grammatica.Parser {
             } else if (node.IsHidden()) {
                 node.AddChild(child);
             } else if (child != null && child.IsHidden()) {
-                for (int i = 0; i < child.GetChildCount(); i++) {
-                    AddNode(node, child.GetChildAt(i));
+                for (int i = 0; i < child.Count; i++) {
+                    AddNode(node, child[i]);
                 }
             } else {
                 try {
@@ -617,15 +613,15 @@ namespace PerCederberg.Grammatica.Parser {
             }
             buffer.Append("= ");
             indent.Append("| ");
-            for (i = 0; i < prod.GetAlternativeCount(); i++) {
+            for (i = 0; i < prod.Count; i++) {
                 if (i > 0) {
                     buffer.Append(indent);
                 }
-                buffer.Append(ToString(prod.GetAlternative(i)));
+                buffer.Append(ToString(prod[i]));
                 buffer.Append("\n");
             }
-            for (i = 0; i < prod.GetAlternativeCount(); i++) {
-                set = prod.GetAlternative(i).LookAhead;
+            for (i = 0; i < prod.Count; i++) {
+                set = prod[i].LookAhead;
                 if (set.GetMaxLength() > 1) {
                     buffer.Append("Using ");
                     buffer.Append(set.GetMaxLength());
@@ -650,11 +646,11 @@ namespace PerCederberg.Grammatica.Parser {
         private string ToString(ProductionPatternAlternative alt) {
             StringBuilder  buffer = new StringBuilder();
 
-            for (int i = 0; i < alt.GetElementCount(); i++) {
+            for (int i = 0; i < alt.Count; i++) {
                 if (i > 0) {
                     buffer.Append(" ");
                 }
-                buffer.Append(ToString(alt.GetElement(i)));
+                buffer.Append(ToString(alt[i]));
             }
             return buffer.ToString();
         }
