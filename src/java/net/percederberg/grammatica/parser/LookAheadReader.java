@@ -302,10 +302,12 @@ public class LookAheadReader extends Reader {
      * input buffer. This method is safe to call even though the end
      * of file has been reached. As a side effect, this method may
      * also remove characters at the beginning of the buffer. It will
-     * also enlarge the buffer if needed.
+     * enlarge the buffer as needed.
      *
-     * @throws ParseException if an error was encountered while
-     *             reading the input stream
+     * @param offset         the read offset, from 0 and up
+     *
+     * @throws IOException if an error was encountered while reading
+     *             the input stream
      */
     private void readAhead(int offset) throws IOException {
         int  size;
@@ -324,7 +326,7 @@ public class LookAheadReader extends Reader {
         }
 
         // Calculate number of characters to read
-        size = pos + offset - length;
+        size = pos + offset - length + 1;
         if (size % STREAM_BLOCK_SIZE != 0) {
             size = (size / STREAM_BLOCK_SIZE) * STREAM_BLOCK_SIZE;
             size += STREAM_BLOCK_SIZE;

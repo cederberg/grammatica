@@ -299,9 +299,11 @@ namespace PerCederberg.Grammatica.Parser {
          * the input buffer. This method is safe to call even though
          * the end of file has been reached. As a side effect, this
          * method may also remove characters at the beginning of the
-         * buffer. It will also enlarge the buffer if needed.
+         * buffer. It will enlarge the buffer as needed.
          *
-         * @throws ParseException if an error was encountered while
+         * @param offset         the read offset, from 0 and up
+         *
+         * @throws IOException if an error was encountered while
          *             reading the input stream
          */
         private void ReadAhead(int offset) {
@@ -321,7 +323,7 @@ namespace PerCederberg.Grammatica.Parser {
             }
 
             // Calculate number of characters to read
-            size = pos + offset - length;
+            size = pos + offset - length + 1;
             if (size % STREAM_BLOCK_SIZE != 0) {
                 size = (size / STREAM_BLOCK_SIZE) * STREAM_BLOCK_SIZE;
                 size += STREAM_BLOCK_SIZE;
