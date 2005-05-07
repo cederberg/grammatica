@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -115,8 +115,6 @@ namespace PerCederberg.Grammatica.Parser {
          * other in a double-linked list. By default the token list
          * flag is set to false.
          *
-         * @see #GetUseTokenList
-         * @see #SetUseTokenList
          * @see Token#Previous
          * @see Token#Next
          *
@@ -303,13 +301,13 @@ namespace PerCederberg.Grammatica.Parser {
                 }
                 if (token == null) {
                     return null;
-                } else if (token.Pattern.IsError()) {
+                } else if (token.Pattern.Error) {
                     throw new ParseException(
                         ParseException.ErrorType.INVALID_TOKEN,
                         token.Pattern.ErrorMessage,
                         token.StartLine,
                         token.StartColumn);
-                } else if (token.Pattern.IsIgnore()) {
+                } else if (token.Pattern.Ignore) {
                     token = null;
                 }
             } while (token == null);
@@ -475,7 +473,7 @@ namespace PerCederberg.Grammatica.Parser {
                                   LookAheadReader input) {
 
             this.pattern = pattern;
-            this.regExp = new RegExp(pattern.GetPattern(), ignoreCase);
+            this.regExp = new RegExp(pattern.Pattern, ignoreCase);
             this.matcher = regExp.Matcher(input);
         }
 
@@ -615,7 +613,7 @@ namespace PerCederberg.Grammatica.Parser {
             if (match == null) {
                 return 0;
             } else {
-                return match.GetPattern().Length;
+                return match.Pattern.Length;
             }
         }
 
