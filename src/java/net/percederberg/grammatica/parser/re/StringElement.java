@@ -120,9 +120,9 @@ class StringElement extends Element {
                 return -1;
             }
             if (m.isCaseInsensitive()) {
-                c = (int) Character.toLowerCase((char) c);
+                c = Character.toLowerCase((char) c);
             }
-            if (c != (int) value.charAt(i)) {
+            if (c != value.charAt(i)) {
                 return -1;
             }
         }
