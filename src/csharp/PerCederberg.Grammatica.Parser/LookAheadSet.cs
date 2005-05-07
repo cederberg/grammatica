@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -771,7 +771,7 @@ namespace PerCederberg.Grammatica.Parser {
                 for (int i = 0; i < tokens.Count; i++) {
                     id = (int) tokens[i];
                     token = parser.PeekToken(i);
-                    if (token == null || token.GetId() != id) {
+                    if (token == null || token.Id != id) {
                         return false;
                     }
                 }
@@ -798,7 +798,7 @@ namespace PerCederberg.Grammatica.Parser {
                 for (int i = 0; i < length; i++) {
                     id = (int) tokens[i];
                     token = parser.PeekToken(i);
-                    if (token == null || token.GetId() != id) {
+                    if (token == null || token.Id != id) {
                         return false;
                     }
                 }
