@@ -56,7 +56,7 @@ public class Tokenizer {
     /**
      * The ignore character case flag.
      */
-    private boolean ignoreCase = false;
+    protected boolean ignoreCase = false;
 
     /**
      * The token list feature flag.
