@@ -23,7 +23,20 @@
         In some cases this may also lead to parse errors as ambiguities
         have not been resolved with the appropriate number of look-ahead
         tokens. This error is present in all versions of Grammatica,
-        but occurs infrequently. (Bug #4117)</text>
+        but occurs infrequently. <ref bug="4117"/></text>
+      </item>
+
+      <item>
+        <title>Tokenizer: String tokens are always considered first</title>
+        <text>When tokenizing an input string, the string token
+        patterns are always checked and considered first. This means
+        that if a regular expression and a string token pattern matches
+        the same input sequence, the string token will always be
+        returned. This is wrong, as the token pattern order should
+        determine which token is returned in cases where multiple
+        patterns match. In practice though, this only hides errors in
+        the grammars and does what the user expects.
+        <ref bug="13009"/></text>
       </item>
 
       <item>
@@ -31,7 +44,7 @@
         <text>The regular expression library is still lacking in some
         ways compared to the implementation in JDK 1.4 (or Perl 5). 
         The library should be extended to support as many constructs 
-        as possible. (Bug #3597)</text>
+        as possible. <ref bug="3597"/></text>
       </item>
     </list>
     
@@ -48,7 +61,7 @@
         would be possible to create more complex modular parsers.
         This feature also requires support for modular tokenizers
         and parses, as well as the generation of modular code. 
-        (Bug #3599)</text>
+        <ref bug="3599"/></text>
       </item>
 
       <item>
@@ -58,7 +71,7 @@
         messages without rewriting the grammar file. This 
         architecture must support different methods depending on 
         generated source (ResourceBundles in Java, Gnu Gettext in C 
-        &amp; C++). (Bug #3600)</text>
+        &amp; C++). <ref bug="3600"/></text>
       </item>
 
       <item>
@@ -69,7 +82,7 @@
         found, as the number of look-ahead tokens needed to separate
         the alternatives is infinite. If these alternatives could 
         share the first elements, this ambiguity would not require
-        a rewrite of the grammar. (Bug #4322)</text>
+        a rewrite of the grammar. <ref bug="4322"/></text>
       </item>
 
       <item>
@@ -78,7 +91,7 @@
         such. Instead, a new syntetic production is added in each 
         case. This will cause problems for LR parsers, and is 
         generally inefficient. Identical syntetic productions should 
-        be unified. (Bug #3602)</text>
+        be unified. <ref bug="3602"/></text>
       </item>
 
       <item>
@@ -86,7 +99,8 @@
         <text>There are probably still substantial parsing speed 
         improvements to gain by improving the tokenizer performance. 
         All the obvious optimizations have already been done, however. 
-        The next step is probably to create a DFA. (Bug #3603)</text>
+        The next step is probably to create a DFA.
+        <ref bug="3603"/></text>
       </item>
 
       <item>
@@ -95,13 +109,14 @@
         able to enter some kind of "mode", limiting the set of tokens
         that are considered for a match. This is highly useful in 
         some grammars, where the token syntax isn't easily 
-        represented with regular expressions. (Bug #3604)</text>
+        represented with regular expressions. <ref bug="3604"/></text>
       </item>
 
       <item>
         <title>Parser: Add support for LR grammars</title>
         <text>This probably means writing at least an LALR(1) parser, 
-        and probably also some kind of LR(k) parser. (Bug #3606)</text>
+        and probably also some kind of LR(k) parser.
+        <ref bug="3606"/></text>
       </item>
 
       <item>
@@ -109,43 +124,33 @@
         <text>This would allow more complex grammars to be parsed 
         where some productions cannot be expressed in EBNF. Instead a
         callback method would be called to parse some specific 
-        productions. (Bug #3607)</text>
-      </item>
-    
-      <item>
-        <title>Parser: Support parsing several files with one instance</title>
-        <text>A single parser instance should be possible to use for 
-        parsing several files, something not allowed by the current 
-        API. The current solution is ineffective when parsing multiple
-        files through the same parser, as the look-ahead token sets 
-        must be calculated again every time a new file is parsed.
-        (Bug #4500)</text>
+        productions. <ref bug="3607"/></text>
       </item>
     
       <item>
         <title>Analyzer: Allow node values propagating downwards</title>
         <text>Improve the analyzer framework to handle node values 
         propagating downwards or sideways in the tree as well.
-        (Bug #3608)</text>
+        <ref bug="3608"/></text>
       </item>
 
       <item>
         <title>Code Generation: Support creation of a C parser</title>
-        <text>This requires the writing of a C runtime library plus 
-        appropriate code generation classes. (Bug #3609)</text>
+        <text>This requires the writing of a C runtime library.
+        <ref bug="3609"/></text>
       </item>
   
       <item>
         <title>Code Generation: Support creation of a C++ parser</title>
         <text>This requires the writing of a C++ runtime library plus 
-        appropriate code generation classes. (Bug #3610)</text>
+        appropriate code generation classes. <ref bug="3610"/></text>
       </item>
       
       <item>
         <title>Error Handling: Add file reference in errors</title>
         <text>The exceptions could be extended with a file location
         object (a file reference) to simplify the error handling 
-        when several files are parsed. (Bug #4180)</text>
+        when several files are parsed. <ref bug="4180"/></text>
       </item>
     </list>
 
