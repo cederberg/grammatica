@@ -29,7 +29,7 @@
  * do so, delete this exception statement from your version.
  *
  * Copyright (c) 2004 Adrian Moore. All rights reserved.
- * Copyright (c) 2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -190,17 +190,17 @@ class VisualBasicAnalyzerFile {
 
         // Add enter method
         enter.addComment(new VisualBasicComment(ENTER_COMMENT));
-        enter.addCode("Select Case node.GetId()");
+        enter.addCode("Select Case node.Id");
         cls.addMethod(enter);
 
         // Add exit method
         exit.addComment(new VisualBasicComment(EXIT_COMMENT));
-        exit.addCode("Select Case node.GetId()");
+        exit.addCode("Select Case node.Id");
         cls.addMethod(exit);
 
         // Add child method
         child.addComment(new VisualBasicComment(CHILD_COMMENT));
-        child.addCode("Select Case node.GetId()");
+        child.addCode("Select Case node.Id");
         cls.addMethod(child);
     }
 

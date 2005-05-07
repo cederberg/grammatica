@@ -29,7 +29,7 @@
  * do so, delete this exception statement from your version.
  *
  * Copyright (c) 2004 Adrian Moore. All rights reserved.
- * Copyright (c) 2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -202,20 +202,24 @@ class VisualBasicTokenizerFile {
 
         // Add error and ignore messages
         if (pattern.isError()) {
-            code.append("pattern.SetError(");
-            if (pattern.getErrorMessage() != null) {
+            if (pattern.getErrorMessage() == null) {
+                code.append("pattern.Error = True");
+            } else {
+                code.append("pattern.ErrorMessage = ");
                 str = pattern.getErrorMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '"'));
             }
-            code.append(")\n");
+            code.append("\n");
         }
         if (pattern.isIgnore()) {
-            code.append("pattern.SetIgnore(");
-            if (pattern.getIgnoreMessage() != null) {
+            if (pattern.getIgnoreMessage() == null) {
+                code.append("pattern.Ignore = True");
+            } else {
+                code.append("pattern.IgnoreMessage = ");
                 str = pattern.getIgnoreMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '"'));
             }
-            code.append(")\n");
+            code.append("\n");
         }
 
         // Add pattern to tokenizer
