@@ -58,6 +58,13 @@
         by zero exception when calculating the number of tokens parsed
         per second. <ref bug="7998"/></text>
       </item>
+
+      <item>
+        <title>Fixed parse error on some grammar comments</title>
+        <text>Grammar comments ending with "**/" previously caused a
+        parse error. The comment token regular expression has now been
+        corrected to fix this. <ref bug="12767"/></text>
+      </item>
     </list>
 
 
