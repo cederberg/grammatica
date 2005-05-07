@@ -61,25 +61,29 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The message property (read-only). This property contains
          * the detailed exception error message.
-         *
-         * @see #GetMessage
          */
         public override string Message {
             get{
-                return GetMessage();
+                StringBuilder  buffer = new StringBuilder();
+
+                for (int i = 0; i < Count; i++) {
+                    if (i > 0) {
+                        buffer.Append("\n");
+                    }
+                    buffer.Append(this[i].Message);
+                }
+                return buffer.ToString();
             }
         }
 
         /**
          * The error count property (read-only).
          *
-         * @see #GetErrorCount
-         *
          * @since 1.5
          */
         public int Count {
             get {
-                return GetErrorCount();
+                return errors.Count;
             }
         }
 
@@ -93,7 +97,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Count property instead.
          */
         public int GetErrorCount() {
-            return errors.Count;
+            return Count;
         }
 
         /**
@@ -108,7 +112,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public ParseException this[int index] {
             get {
-                return GetError(index);
+                return (ParseException) errors[index];
             }
         }
 
@@ -122,7 +126,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the class indexer instead.
          */
         public ParseException GetError(int index) {
-            return (ParseException) errors[index];
+            return this[index];
         }
 
         /**
@@ -146,15 +150,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Message property instead.
          */
         public string GetMessage() {
-            StringBuilder  buffer = new StringBuilder();
-
-            for (int i = 0; i < GetErrorCount(); i++) {
-                if (i > 0) {
-                    buffer.Append("\n");
-                }
-                buffer.Append(GetError(i).GetMessage());
-            }
-            return buffer.ToString();
+            return Message;
         }
     }
 }
