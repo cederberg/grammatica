@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -71,12 +71,45 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The error count property (read-only).
+         *
+         * @see #GetErrorCount
+         *
+         * @since 1.5
+         */
+        public int Count {
+            get {
+                return GetErrorCount();
+            }
+        }
+
+        /**
          * Returns the number of errors in this log.
          *
          * @return the number of errors in this log
+         *
+         * @see #Count
+         *
+         * @deprecated Use the Count property instead.
          */
         public int GetErrorCount() {
             return errors.Count;
+        }
+
+        /**
+         * The error index (read-only). This index contains all the
+         * errors in this error log.
+         *
+         * @param index          the error index, 0 <= index < Count
+         *
+         * @return the parse error requested
+         *
+         * @since 1.5
+         */
+        public ParseException this[int index] {
+            get {
+                return GetError(index);
+            }
         }
 
         /**
@@ -85,6 +118,8 @@ namespace PerCederberg.Grammatica.Parser {
          * @param index          the error index, 0 <= index < count
          *
          * @return the parse error requested
+         *
+         * @deprecated Use the class indexer instead.
          */
         public ParseException GetError(int index) {
             return (ParseException) errors[index];

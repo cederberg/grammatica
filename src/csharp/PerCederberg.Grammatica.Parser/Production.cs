@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -64,6 +64,37 @@ namespace PerCederberg.Grammatica.Parser {
         public Production(ProductionPattern pattern) {
             this.pattern = pattern;
             this.children = new ArrayList();
+        }
+
+        /**
+         * The child node count property (read-only).
+         *
+         * @see #GetChildCount
+         *
+         * @since 1.5
+         */
+        public override int Count {
+            get {
+                return GetChildCount();
+            }
+        }
+
+        /**
+         * The child node index (read-only).
+         *
+         * @param index          the child index, 0 <= index < Count
+         *
+         * @return the child node found, or
+         *         null if index out of bounds
+         *
+         * @see #GetChildAt
+         *
+         * @since 1.5
+         */
+        public override Node this[int index] {
+            get {
+                return GetChildAt(index);
+            }
         }
 
         /**
@@ -136,6 +167,8 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the number of child nodes.
          *
          * @return the number of child nodes
+         *
+         * @deprecated Use the Count property instead.
          */
         public override int GetChildCount() {
             return children.Count;
@@ -148,6 +181,8 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the child node found, or
          *         null if index out of bounds
+         *
+         * @deprecated Use the class indexer instead.
          */
         public override Node GetChildAt(int index) {
             if (index < 0 || index >= children.Count) {

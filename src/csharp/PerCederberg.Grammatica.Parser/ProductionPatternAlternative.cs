@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -95,6 +95,36 @@ namespace PerCederberg.Grammatica.Parser {
             }
             set {
                 lookAhead = value;
+            }
+        }
+
+        /**
+         * The production pattern element count property (read-only).
+         *
+         * @see #GetElementCount
+         *
+         * @since 1.5
+         */
+        public int Count {
+            get {
+                return GetElementCount();
+            }
+        }
+
+        /**
+         * The production pattern element index (read-only).
+         *
+         * @param index          the element index, 0 <= pos < Count
+         *
+         * @return the element found
+         *
+         * @see #GetElement
+         *
+         * @since 1.5
+         */
+        public ProductionPatternElement this[int index] {
+            get {
+                return GetElement(index);
             }
         }
 
@@ -183,6 +213,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the number of elements in this alternative.
          *
          * @return the number of elements in this alternative
+         *
+         * @see #Count
+         *
+         * @deprecated Use the Count property instead.
          */
         public int GetElementCount() {
             return elements.Count;
@@ -234,6 +268,8 @@ namespace PerCederberg.Grammatica.Parser {
          * @param pos            the element position, 0 <= pos < count
          *
          * @return the element found
+         *
+         * @deprecated Use the class indexer instead.
          */
         public ProductionPatternElement GetElement(int pos) {
             return (ProductionPatternElement) elements[pos];

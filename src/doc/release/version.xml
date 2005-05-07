@@ -37,9 +37,9 @@
       <item>
         <title>Changed C# parser API for better integration</title>
         <text>The C# parser API has been modified for almost all
-        classes, introducing properties instead of getter and setter
-        methods. The old methods have been deprecated but are kept for
-        backwards compability during a transitional phase.
+        classes, introducing properties and indices instead of getter
+        and setter methods. The old methods have been deprecated but
+        are kept for backwards compability during a transitional phase.
         <ref bug="8693" /></text>
       </item>
 

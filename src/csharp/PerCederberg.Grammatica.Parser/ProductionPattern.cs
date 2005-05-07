@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -187,6 +187,37 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The production pattern alternative count property
+         * (read-only).
+         *
+         * @see #GetAlternativeCount
+         *
+         * @since 1.5
+         */
+        public int Count {
+            get {
+                return GetAlternativeCount();
+            }
+        }
+
+        /**
+         * The production pattern alternative index (read-only).
+         *
+         * @param index          the alternative index, 0 <= pos < Count
+         *
+         * @return the alternative found
+         *
+         * @see #GetAlternative
+         *
+         * @since 1.5
+         */
+        public ProductionPatternAlternative this[int index] {
+            get {
+                return GetAlternative(index);
+            }
+        }
+
+        /**
          * Checks if the syntetic production flag is set. If this flag
          * is set, the production identified by this pattern has been
          * artificially inserted into the grammar. No parse tree nodes
@@ -310,6 +341,10 @@ namespace PerCederberg.Grammatica.Parser {
          * Returns the number of alternatives in this pattern.
          *
          * @return the number of alternatives in this pattern
+         *
+         * @see #Count
+         *
+         * @deprecated Use the Count property instead.
          */
         public int GetAlternativeCount() {
             return alternatives.Count;
@@ -321,6 +356,8 @@ namespace PerCederberg.Grammatica.Parser {
          * @param pos            the alternative position, 0 <= pos < count
          *
          * @return the alternative found
+         *
+         * @deprecated Use the class indexer instead.
          */
         public ProductionPatternAlternative GetAlternative(int pos) {
             return (ProductionPatternAlternative) alternatives[pos];
