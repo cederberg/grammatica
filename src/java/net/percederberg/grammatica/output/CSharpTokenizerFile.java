@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -200,20 +200,24 @@ class CSharpTokenizerFile {
 
         // Add error and ignore messages
         if (pattern.isError()) {
-            code.append("pattern.SetError(");
-            if (pattern.getErrorMessage() != null) {
+            if (pattern.getErrorMessage() == null) {
+                code.append("pattern.Error = true");
+            } else {
+                code.append("pattern.ErrorMessage = ");
                 str = pattern.getErrorMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
-            code.append(");\n");
+            code.append(";\n");
         }
         if (pattern.isIgnore()) {
-            code.append("pattern.SetIgnore(");
-            if (pattern.getIgnoreMessage() != null) {
+            if (pattern.getIgnoreMessage() == null) {
+                code.append("pattern.Ignore = true");
+            } else {
+                code.append("pattern.IgnoreMessage = ");
                 str = pattern.getIgnoreMessage();
                 code.append(gen.getCodeStyle().getStringConstant(str, '\\'));
             }
-            code.append(");\n");
+            code.append(";\n");
         }
 
         // Add pattern to tokenizer

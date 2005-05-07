@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -53,7 +53,7 @@ import net.percederberg.grammatica.parser.ProductionPatternElement;
  * C# code necessary for creating a parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class CSharpParserFile {
 
@@ -274,7 +274,7 @@ class CSharpParserFile {
 
         // Set syntetic flag
         if (pattern.isSyntetic()) {
-            initMethod.addCode("pattern.SetSyntetic(true);");
+            initMethod.addCode("pattern.Syntetic = true;");
         }
 
         // Create pattern rules
