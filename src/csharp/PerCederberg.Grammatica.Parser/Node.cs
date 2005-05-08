@@ -72,14 +72,10 @@ namespace PerCederberg.Grammatica.Parser {
          * a unique identifier for each type of node, in order to
          * simplify later identification.
          *
-         * @see #GetId
-         *
          * @since 1.5
          */
-        public int Id {
-            get {
-                return GetId();
-            }
+        public abstract int Id {
+            get;
         }
 
         /**
@@ -93,19 +89,17 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @deprecated Use the Id property instead.
          */
-        public abstract int GetId();
+        public virtual int GetId() {
+            return Id;
+        }
 
         /**
          * The node name property (read-only).
          *
-         * @see #GetName
-         *
          * @since 1.5
          */
-        public string Name {
-            get {
-                return GetName();
-            }
+        public abstract string Name {
+            get;
         }
 
         /**
@@ -117,20 +111,28 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @deprecated Use the Name property instead.
          */
-        public abstract string GetName();
+        public virtual string GetName() {
+            return Name;
+        }
 
         /**
          * The line number property of the first character in this
          * node (read-only). If the node has child elements, this
          * value will be fetched from the first child.
          *
-         * @see #GetStartLine
-         *
          * @since 1.5
          */
-        public int StartLine {
+        public virtual int StartLine {
             get {
-                return GetStartLine();
+                int  line;
+
+                for (int i = 0; i < Count; i++) {
+                    line = this[i].StartLine;
+                    if (line >= 0) {
+                        return line;
+                    }
+                }
+                return -1;
             }
         }
 
@@ -147,15 +149,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the StartLine property instead.
          */
         public virtual int GetStartLine() {
-            int  line;
-
-            for (int i = 0; i < GetChildCount(); i++) {
-                line = GetChildAt(i).GetStartLine();
-                if (line >= 0) {
-                    return line;
-                }
-            }
-            return -1;
+            return StartLine;
         }
 
         /**
@@ -163,13 +157,19 @@ namespace PerCederberg.Grammatica.Parser {
          * node (read-only). If the node has child elements, this
          * value will be fetched from the first child.
          *
-         * @see #GetStartColumn
-         *
          * @since 1.5
          */
-        public int StartColumn {
+        public virtual int StartColumn {
             get {
-                return GetStartColumn();
+                int  col;
+
+                for (int i = 0; i < Count; i++) {
+                    col = this[i].StartColumn;
+                    if (col >= 0) {
+                        return col;
+                    }
+                }
+                return -1;
             }
         }
 
@@ -186,15 +186,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the StartColumn property instead.
          */
         public virtual int GetStartColumn() {
-            int  col;
-
-            for (int i = 0; i < GetChildCount(); i++) {
-                col = GetChildAt(i).GetStartColumn();
-                if (col >= 0) {
-                    return col;
-                }
-            }
-            return -1;
+            return StartColumn;
         }
 
         /**
@@ -202,13 +194,19 @@ namespace PerCederberg.Grammatica.Parser {
          * (read-only). If the node has child elements, this value
          * will be fetched from the last child.
          *
-         * @see #GetEndLine
-         *
          * @since 1.5
          */
-        public int EndLine {
+        public virtual int EndLine {
             get {
-                return GetEndLine();
+                int  line;
+
+                for (int i = Count - 1; i >= 0; i--) {
+                    line = this[i].EndLine;
+                    if (line >= 0) {
+                        return line;
+                    }
+                }
+                return -1;
             }
         }
 
@@ -225,15 +223,28 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the EndLine property instead.
          */
         public virtual int GetEndLine() {
-            int  line;
+            return EndLine;
+        }
 
-            for (int i = GetChildCount() - 1; i >= 0; i--) {
-                line = GetChildAt(i).GetEndLine();
-                if (line >= 0) {
-                    return line;
+        /**
+         * The column number property of the last character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the last child.
+         *
+         * @since 1.5
+         */
+        public virtual int EndColumn {
+            get {
+                int  col;
+
+                for (int i = Count - 1; i >= 0; i--) {
+                    col = this[i].EndColumn;
+                    if (col >= 0) {
+                        return col;
+                    }
                 }
+                return -1;
             }
-            return -1;
         }
 
         /**
@@ -249,27 +260,17 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the EndColumn property instead.
          */
         public virtual int GetEndColumn() {
-            int  col;
-
-            for (int i = GetChildCount() - 1; i >= 0; i--) {
-                col = GetChildAt(i).GetEndColumn();
-                if (col >= 0) {
-                    return col;
-                }
-            }
-            return -1;
+            return EndColumn;
         }
 
         /**
          * The parent node property (read-only).
          *
-         * @see #GetParent
-         *
          * @since 1.5
          */
         public Node Parent {
             get {
-                return GetParent();
+                return parent;
             }
         }
 
@@ -283,7 +284,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Parent property instead.
          */
         public Node GetParent() {
-            return parent;
+            return Parent;
         }
 
         /**
@@ -298,13 +299,11 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The child node count property (read-only).
          *
-         * @see #GetChildCount
-         *
          * @since 1.5
          */
         public virtual int Count {
             get {
-                return GetChildCount();
+                return 0;
             }
         }
 
@@ -316,7 +315,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Count property instead.
          */
         public virtual int GetChildCount() {
-            return 0;
+            return Count;
         }
 
         /**
@@ -329,8 +328,8 @@ namespace PerCederberg.Grammatica.Parser {
         public int GetDescendantCount() {
             int  count = 0;
 
-            for (int i = 0; i < GetChildCount(); i++) {
-                count += 1 + GetChildAt(i).GetDescendantCount();
+            for (int i = 0; i < Count; i++) {
+                count += 1 + this[i].GetDescendantCount();
             }
             return count;
         }
@@ -343,13 +342,11 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the child node found, or
          *         null if index out of bounds
          *
-         * @see #GetChildAt
-         *
          * @since 1.5
          */
         public virtual Node this[int index] {
             get {
-                return GetChildAt(index);
+                return null;
             }
         }
 
@@ -364,7 +361,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the class indexer instead.
          */
         public virtual Node GetChildAt(int index) {
-            return null;
+            return this[index];
         }
 
         /**
@@ -374,12 +371,6 @@ namespace PerCederberg.Grammatica.Parser {
          * null will remove all node values. Any operation on the
          * value array list is allowed and is immediately reflected
          * through the various value reading and manipulation methods.
-         *
-         * @see #GetValueCount
-         * @see #GetValueAt
-         * @see #AddValue
-         * @see #AddAllValues
-         * @see #RemoveValue
          *
          * @since 1.5
          */
@@ -431,11 +422,7 @@ namespace PerCederberg.Grammatica.Parser {
          *     instead.
          */
         public object GetValue(int pos) {
-            if (values == null || pos < 0 || pos >= values.Count) {
-                return null;
-            } else {
-                return values[pos];
-            }
+            return Values[pos];
         }
 
         /**
@@ -469,10 +456,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public void AddValue(object value) {
             if (value != null) {
-                if (values == null) {
-                    values = new ArrayList();
-                }
-                values.Add(value);
+                Values.Add(value);
             }
         }
 
@@ -488,9 +472,7 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public void AddValues(ArrayList values) {
             if (values != null) {
-                for (int i = 0; i < values.Count; i++) {
-                    AddValue(values[i]);
-                }
+                Values.AddRange(values);
             }
         }
 
@@ -500,7 +482,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @see #Values
          *
          * @deprecated Use the Values property and the Values.Clear
-         *     method instead. Alternatively the Values property can 
+         *     method instead. Alternatively the Values property can
          *     be set to null.
          */
         public void RemoveAllValues() {
@@ -528,8 +510,8 @@ namespace PerCederberg.Grammatica.Parser {
         private void PrintTo(TextWriter output, string indent) {
             output.WriteLine(indent + ToString());
             indent = indent + "  ";
-            for (int i = 0; i < GetChildCount(); i++) {
-                GetChildAt(i).PrintTo(output, indent);
+            for (int i = 0; i < Count; i++) {
+                this[i].PrintTo(output, indent);
             }
         }
     }
