@@ -83,6 +83,19 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * Returns the node type id. This value is set as a unique
+         * identifier for each type of node, in order to simplify
+         * later identification.
+         *
+         * @return the node type id
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
+         */
+        public abstract int GetId();
+
+        /**
          * The node name property (read-only).
          *
          * @see #GetName
@@ -94,6 +107,17 @@ namespace PerCederberg.Grammatica.Parser {
                 return GetName();
             }
         }
+
+        /**
+         * Returns the node name.
+         *
+         * @return the node name
+         *
+         * @see #Name
+         *
+         * @deprecated Use the Name property instead.
+         */
+        public abstract string GetName();
 
         /**
          * The line number property of the first character in this
@@ -109,132 +133,6 @@ namespace PerCederberg.Grammatica.Parser {
                 return GetStartLine();
             }
         }
-
-        /**
-         * The column number property of the first character in this
-         * node (read-only). If the node has child elements, this
-         * value will be fetched from the first child.
-         *
-         * @see #GetStartColumn
-         *
-         * @since 1.5
-         */
-        public int StartColumn {
-            get {
-                return GetStartColumn();
-            }
-        }
-
-        /**
-         * The line number property of the last character in this node
-         * (read-only). If the node has child elements, this value
-         * will be fetched from the last child.
-         *
-         * @see #GetEndLine
-         *
-         * @since 1.5
-         */
-        public int EndLine {
-            get {
-                return GetEndLine();
-            }
-        }
-
-        /**
-         * The parent node property (read-only).
-         *
-         * @see #GetParent
-         *
-         * @since 1.5
-         */
-        public Node Parent {
-            get {
-                return GetParent();
-            }
-        }
-
-        /**
-         * The child node count property (read-only).
-         *
-         * @see #GetChildCount
-         *
-         * @since 1.5
-         */
-        public virtual int Count {
-            get {
-                return GetChildCount();
-            }
-        }
-
-        /**
-         * The child node index (read-only).
-         *
-         * @param index          the child index, 0 <= index < Count
-         *
-         * @return the child node found, or
-         *         null if index out of bounds
-         *
-         * @see #GetChildAt
-         *
-         * @since 1.5
-         */
-        public virtual Node this[int index] {
-            get {
-                return GetChildAt(index);
-            }
-        }
-
-        /**
-         * The node values property. This property provides direct
-         * access to the list of computed values associated with this
-         * node during analysis. Note that setting this property to
-         * null will remove all node values. Any operation on the
-         * value array list is allowed and is immediately reflected
-         * through the various value reading and manipulation methods.
-         *
-         * @see #GetValueCount
-         * @see #GetValueAt
-         * @see #AddValue
-         * @see #AddAllValues
-         * @see #RemoveValue
-         *
-         * @since 1.5
-         */
-        public ArrayList Values {
-            get {
-                if (values == null) {
-                    values = new ArrayList();
-                }
-                return values;
-            }
-            set {
-                this.values = value;
-            }
-        }
-
-        /**
-         * Returns the node type id. This value is set as a unique
-         * identifier for each type of node, in order to simplify
-         * later identification.
-         *
-         * @return the node type id
-         *
-         * @see #Id
-         *
-         * @deprecated Use the Id property instead.
-         */
-        public abstract int GetId();
-
-        /**
-         * Returns the node name.
-         *
-         * @return the node name
-         *
-         * @see #Name
-         *
-         * @deprecated Use the Name property instead.
-         */
-        public abstract string GetName();
 
         /**
          * The line number of the first character in this node. If the
@@ -261,6 +159,21 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The column number property of the first character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the first child.
+         *
+         * @see #GetStartColumn
+         *
+         * @since 1.5
+         */
+        public int StartColumn {
+            get {
+                return GetStartColumn();
+            }
+        }
+
+        /**
          * The column number of the first character in this node. If
          * the node has child elements, this value will be fetched
          * from the first child.
@@ -282,6 +195,21 @@ namespace PerCederberg.Grammatica.Parser {
                 }
             }
             return -1;
+        }
+
+        /**
+         * The line number property of the last character in this node
+         * (read-only). If the node has child elements, this value
+         * will be fetched from the last child.
+         *
+         * @see #GetEndLine
+         *
+         * @since 1.5
+         */
+        public int EndLine {
+            get {
+                return GetEndLine();
+            }
         }
 
         /**
@@ -333,6 +261,19 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The parent node property (read-only).
+         *
+         * @see #GetParent
+         *
+         * @since 1.5
+         */
+        public Node Parent {
+            get {
+                return GetParent();
+            }
+        }
+
+        /**
          * Returns the parent node.
          *
          * @return the parent parse tree node
@@ -355,6 +296,19 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The child node count property (read-only).
+         *
+         * @see #GetChildCount
+         *
+         * @since 1.5
+         */
+        public virtual int Count {
+            get {
+                return GetChildCount();
+            }
+        }
+
+        /**
          * Returns the number of child nodes.
          *
          * @return the number of child nodes
@@ -363,6 +317,40 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public virtual int GetChildCount() {
             return 0;
+        }
+
+        /**
+         * Returns the number of descendant nodes.
+         *
+         * @return the number of descendant nodes
+         *
+         * @since 1.2
+         */
+        public int GetDescendantCount() {
+            int  count = 0;
+
+            for (int i = 0; i < GetChildCount(); i++) {
+                count += 1 + GetChildAt(i).GetDescendantCount();
+            }
+            return count;
+        }
+
+        /**
+         * The child node index (read-only).
+         *
+         * @param index          the child index, 0 <= index < Count
+         *
+         * @return the child node found, or
+         *         null if index out of bounds
+         *
+         * @see #GetChildAt
+         *
+         * @since 1.5
+         */
+        public virtual Node this[int index] {
+            get {
+                return GetChildAt(index);
+            }
         }
 
         /**
@@ -380,19 +368,31 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the number of descendant nodes.
+         * The node values property. This property provides direct
+         * access to the list of computed values associated with this
+         * node during analysis. Note that setting this property to
+         * null will remove all node values. Any operation on the
+         * value array list is allowed and is immediately reflected
+         * through the various value reading and manipulation methods.
          *
-         * @return the number of descendant nodes
+         * @see #GetValueCount
+         * @see #GetValueAt
+         * @see #AddValue
+         * @see #AddAllValues
+         * @see #RemoveValue
          *
-         * @since 1.2
+         * @since 1.5
          */
-        public int GetDescendantCount() {
-            int  count = 0;
-
-            for (int i = 0; i < GetChildCount(); i++) {
-                count += 1 + GetChildAt(i).GetDescendantCount();
+        public ArrayList Values {
+            get {
+                if (values == null) {
+                    values = new ArrayList();
+                }
+                return values;
             }
-            return count;
+            set {
+                this.values = value;
+            }
         }
 
         /**
