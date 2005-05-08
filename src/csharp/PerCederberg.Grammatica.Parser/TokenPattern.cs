@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -144,8 +144,6 @@ namespace PerCederberg.Grammatica.Parser {
          * The token pattern identity property (read-only). This
          * property contains the unique token pattern identity value.
          *
-         * @see #GetId
-         *
          * @since 1.5
          */
         public int Id {
@@ -155,9 +153,20 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The token pattern name property (read-only).
+         * Returns the unique token pattern identity value.
          *
-         * @see #GetName
+         * @return the token pattern id
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
+         */
+        public int GetId() {
+            return id;
+        }
+
+        /**
+         * The token pattern name property (read-only).
          *
          * @since 1.5
          */
@@ -168,9 +177,20 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The token pattern type property (read-only).
+         * Returns the token pattern name.
          *
-         * @see #GetPatternType
+         * @return the token pattern name
+         *
+         * @see #Name
+         *
+         * @deprecated Use the Name property instead.
+         */
+        public string GetName() {
+            return name;
+        }
+
+        /**
+         * The token pattern type property (read-only).
          *
          * @since 1.5
          */
@@ -181,11 +201,22 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * Returns the token pattern type.
+         *
+         * @return the token pattern type
+         *
+         * @see #Type
+         *
+         * @deprecated Use the Type property instead.
+         */
+        public PatternType GetPatternType() {
+            return type;
+        }
+
+        /**
          * The token pattern property (read-only). This property
          * contains the actual pattern (string or regexp) which have
          * to be matched.
-         *
-         * @see #GetPattern
          *
          * @since 1.5
          */
@@ -196,14 +227,24 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * Returns te token pattern.
+         *
+         * @return the token pattern
+         *
+         * @see #Pattern
+         *
+         * @deprecated Use the Pattern property instead.
+         */
+        public string GetPattern() {
+            return pattern;
+        }
+
+        /**
          * The error flag property. If this property is true, the
          * token pattern corresponds to an error token and an error
          * should be reported if a match is found. When setting this
          * property to true, a default error message is created if
          * none was previously set.
-         *
-         * @see #IsError
-         * @see #SetError
          *
          * @since 1.5
          */
@@ -225,8 +266,6 @@ namespace PerCederberg.Grammatica.Parser {
          * message property also sets the error flag to true.
          *
          * @see #Error
-         * @see #GetErrorMessage
-         * @see #SetError
          *
          * @since 1.5
          */
@@ -237,46 +276,6 @@ namespace PerCederberg.Grammatica.Parser {
             set {
                 error = true;
                 errorMessage = value;
-            }
-        }
-
-        /**
-         * The ignore flag property. If this property is true, the
-         * token pattern corresponds to an ignore token and should be
-         * skipped if a match is found.
-         *
-         * @see #IsIgnore
-         * @see #SetIgnore
-         *
-         * @since 1.5
-         */
-        public bool Ignore {
-            get {
-                return ignore;
-            }
-            set {
-                ignore = value;
-            }
-        }
-
-        /**
-         * The token ignore message property. The ignore message is
-         * printed whenever the token is matched. Setting the ignore
-         * message property also sets the ignore flag to true.
-         *
-         * @see #Ignore
-         * @see #GetIgnoreMessage
-         * @see #SetIgnore
-         *
-         * @since 1.5
-         */
-        public string IgnoreMessage {
-            get {
-                return ignoreMessage;
-            }
-            set {
-                ignore = true;
-                ignoreMessage = value;
             }
         }
 
@@ -297,73 +296,6 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Checks if the pattern corresponds to an ignored token. If this
-         * is true, it means that the token should be ignored if found.
-         *
-         * @return true if the pattern maps to an ignored token, or
-         *         false otherwise
-         *
-         * @see #Ignore
-         *
-         * @deprecated Use the Ignore property instead.
-         */
-        public bool IsIgnore() {
-            return Ignore;
-        }
-
-        /**
-         * Returns the unique token pattern identity value.
-         *
-         * @return the token pattern id
-         *
-         * @see #Id
-         *
-         * @deprecated Use the Id property instead.
-         */
-        public int GetId() {
-            return id;
-        }
-
-        /**
-         * Returns the token pattern name.
-         *
-         * @return the token pattern name
-         *
-         * @see #Name
-         *
-         * @deprecated Use the Name property instead.
-         */
-        public string GetName() {
-            return name;
-        }
-
-        /**
-         * Returns the token pattern type.
-         *
-         * @return the token pattern type
-         *
-         * @see #Type
-         *
-         * @deprecated Use the Type property instead.
-         */
-        public PatternType GetPatternType() {
-            return type;
-        }
-
-        /**
-         * Returns te token pattern.
-         *
-         * @return the token pattern
-         *
-         * @see #Pattern
-         *
-         * @deprecated Use the Pattern property instead.
-         */
-        public string GetPattern() {
-            return pattern;
-        }
-
-        /**
          * Returns the token error message if the pattern corresponds to
          * an error token.
          *
@@ -375,20 +307,6 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public string GetErrorMessage() {
             return ErrorMessage;
-        }
-
-        /**
-         * Returns the token ignore message if the pattern corresponds to
-         * an ignored token.
-         *
-         * @return the token ignore message
-         *
-         * @see #IgnoreMessage
-         *
-         * @deprecated Use the IgnoreMessage property instead.
-         */
-        public string GetIgnoreMessage() {
-            return IgnoreMessage;
         }
 
         /**
@@ -414,6 +332,70 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public void SetError(string message) {
             ErrorMessage = message;
+        }
+
+        /**
+         * The ignore flag property. If this property is true, the
+         * token pattern corresponds to an ignore token and should be
+         * skipped if a match is found.
+         *
+         * @since 1.5
+         */
+        public bool Ignore {
+            get {
+                return ignore;
+            }
+            set {
+                ignore = value;
+            }
+        }
+
+        /**
+         * The token ignore message property. The ignore message is
+         * printed whenever the token is matched. Setting the ignore
+         * message property also sets the ignore flag to true.
+         *
+         * @see #Ignore
+         *
+         * @since 1.5
+         */
+        public string IgnoreMessage {
+            get {
+                return ignoreMessage;
+            }
+            set {
+                ignore = true;
+                ignoreMessage = value;
+            }
+        }
+
+        /**
+         * Checks if the pattern corresponds to an ignored token. If this
+         * is true, it means that the token should be ignored if found.
+         *
+         * @return true if the pattern maps to an ignored token, or
+         *         false otherwise
+         *
+         * @see #Ignore
+         *
+         * @deprecated Use the Ignore property instead.
+         */
+        public bool IsIgnore() {
+            return Ignore;
+        }
+
+        /**
+         * Returns the token ignore message if the pattern corresponds to
+         * an ignored token.
+         *
+         * @return the token ignore message
+         *
+         * @see #IgnoreMessage
+         *
+         * @deprecated Use the IgnoreMessage property instead.
+         */
+        public string GetIgnoreMessage() {
+            return IgnoreMessage;
         }
 
         /**
