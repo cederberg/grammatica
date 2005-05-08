@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -166,64 +166,11 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The error type property (read-only).
          *
-         * @see #GetErrorType
-         *
          * @since 1.5
          */
         public ErrorType Type {
             get {
-                return GetErrorType();
-            }
-        }
-
-        /**
-         * The token or production name property (read-only).
-         *
-         * @see #GetName
-         *
-         * @since 1.5
-         */
-        public string Name {
-            get {
-                return GetName();
-            }
-        }
-
-        /**
-         * The additional error information property (read-only).
-         *
-         * @see #GetInfo
-         *
-         * @since 1.5
-         */
-        public string Info {
-            get {
-                return GetInfo();
-            }
-        }
-
-        /**
-         * The detailed error information property (read-only).
-         *
-         * @see #GetDetails
-         *
-         * @since 1.5
-         */
-        public string Details {
-            get {
-                return GetDetails();
-            }
-        }
-
-        /**
-         * The message property (read-only). This property contains
-         * the detailed exception error message.
-         *
-         * @see #GetMessage
-         */
-        public override string Message {
-            get{
-                return GetMessage();
+                return type;
             }
         }
 
@@ -237,7 +184,18 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Type property instead.
          */
         public ErrorType GetErrorType() {
-            return type;
+            return Type;
+        }
+
+        /**
+         * The token or production name property (read-only).
+         *
+         * @since 1.5
+         */
+        public string Name {
+            get {
+                return name;
+            }
         }
 
         /**
@@ -250,7 +208,18 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Name property instead.
          */
         public string GetName() {
-            return name;
+            return Name;
+        }
+
+        /**
+         * The additional error information property (read-only).
+         *
+         * @since 1.5
+         */
+        public string Info {
+            get {
+                return info;
+            }
         }
 
         /**
@@ -263,7 +232,33 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Info property instead.
          */
         public string GetInfo() {
-            return info;
+            return Info;
+        }
+
+        /**
+         * The detailed error information property (read-only).
+         *
+         * @since 1.5
+         */
+        public string Details {
+            get {
+                StringBuilder  buffer = new StringBuilder();
+
+                if (details == null) {
+                    return null;
+                }
+                for (int i = 0; i < details.Count; i++) {
+                    if (i > 0) {
+                        buffer.Append(", ");
+                        if (i + 1 == details.Count) {
+                            buffer.Append("and ");
+                        }
+                    }
+                    buffer.Append(details[i]);
+                }
+
+                return buffer.ToString();
+            }
         }
 
         /**
@@ -276,22 +271,63 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Details property instead.
          */
         public string GetDetails() {
-            StringBuilder  buffer = new StringBuilder();
+            return Details;
+        }
 
-            if (details == null) {
-                return null;
-            }
-            for (int i = 0; i < details.Count; i++) {
-                if (i > 0) {
-                    buffer.Append(", ");
-                    if (i + 1 == details.Count) {
-                        buffer.Append("and ");
+        /**
+         * The message property (read-only). This property contains
+         * the detailed exception error message.
+         */
+        public override string Message {
+            get{
+                StringBuilder  buffer = new StringBuilder();
+
+                switch (type) {
+                case ErrorType.INVALID_PARSER:
+                    buffer.Append("parser is invalid, as ");
+                    buffer.Append(info);
+                    break;
+                case ErrorType.INVALID_TOKEN:
+                    buffer.Append("token '");
+                    buffer.Append(name);
+                    buffer.Append("' is invalid, as ");
+                    buffer.Append(info);
+                    break;
+                case ErrorType.INVALID_PRODUCTION:
+                    buffer.Append("production '");
+                    buffer.Append(name);
+                    buffer.Append("' is invalid, as ");
+                    buffer.Append(info);
+                    break;
+                case ErrorType.INFINITE_LOOP:
+                    buffer.Append("infinite loop found in production pattern '");
+                    buffer.Append(name);
+                    buffer.Append("'");
+                    break;
+                case ErrorType.INHERENT_AMBIGUITY:
+                    buffer.Append("inherent ambiguity in production '");
+                    buffer.Append(name);
+                    buffer.Append("'");
+                    if (info != null) {
+                        buffer.Append(" ");
+                        buffer.Append(info);
                     }
+                    if (details != null) {
+                        buffer.Append(" starting with ");
+                        if (details.Count > 1) {
+                            buffer.Append("tokens ");
+                        } else {
+                            buffer.Append("token ");
+                        }
+                        buffer.Append(Details);
+                    }
+                    break;
+                default:
+                    buffer.Append("internal error");
+                    break;
                 }
-                buffer.Append(details[i]);
+                return buffer.ToString();
             }
-
-            return buffer.ToString();
         }
 
         /**
@@ -305,54 +341,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Message property instead.
          */
         public string GetMessage() {
-            StringBuilder  buffer = new StringBuilder();
-
-            switch (type) {
-            case ErrorType.INVALID_PARSER:
-                buffer.Append("parser is invalid, as ");
-                buffer.Append(info);
-                break;
-            case ErrorType.INVALID_TOKEN:
-                buffer.Append("token '");
-                buffer.Append(name);
-                buffer.Append("' is invalid, as ");
-                buffer.Append(info);
-                break;
-            case ErrorType.INVALID_PRODUCTION:
-                buffer.Append("production '");
-                buffer.Append(name);
-                buffer.Append("' is invalid, as ");
-                buffer.Append(info);
-                break;
-            case ErrorType.INFINITE_LOOP:
-                buffer.Append("infinite loop found in production pattern '");
-                buffer.Append(name);
-                buffer.Append("'");
-                break;
-            case ErrorType.INHERENT_AMBIGUITY:
-                buffer.Append("inherent ambiguity in production '");
-                buffer.Append(name);
-                buffer.Append("'");
-                if (info != null) {
-                    buffer.Append(" ");
-                    buffer.Append(info);
-                }
-                if (details != null) {
-                    buffer.Append(" starting with ");
-                    if (details.Count > 1) {
-                        buffer.Append("tokens ");
-                    } else {
-                        buffer.Append("token ");
-                    }
-                    buffer.Append(GetDetails());
-                }
-                break;
-            default:
-                buffer.Append("internal error");
-                break;
-            }
-
-            return buffer.ToString();
+            return Message;
         }
     }
 }
