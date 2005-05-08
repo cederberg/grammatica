@@ -46,11 +46,11 @@ public class ProductionPattern {
     private String name;
 
     /**
-     * The syntectic production flag. If this flag is set, the
+     * The synthectic production flag. If this flag is set, the
      * production identified by this pattern has been artificially
      * inserted into the grammar.
      */
-    private boolean syntetic;
+    private boolean synthetic;
 
     /**
      * The list of production pattern alternatives.
@@ -78,24 +78,43 @@ public class ProductionPattern {
     public ProductionPattern(int id, String name) {
         this.id = id;
         this.name = name;
-        this.syntetic = false;
+        this.synthetic = false;
         this.alternatives = new ArrayList();
         this.defaultAlt = -1;
         this.lookAhead = null;
     }
 
     /**
-     * Checks if the syntetic production flag is set. If this flag is
+     * Checks if the synthetic production flag is set. If this flag is
      * set, the production identified by this pattern has been
      * artificially inserted into the grammar. No parse tree nodes
      * will be created for such nodes, instead the child nodes will
      * be added directly to the parent node.
      *
-     * @return true if this production pattern is syntetic, or
+     * @return true if this production pattern is synthetic, or
      *         false otherwise
+     *
+     * @since 1.5
+     */
+    public boolean isSynthetic() {
+        return synthetic;
+    }
+
+    /**
+     * Checks if the synthetic production flag is set. If this flag is
+     * set, the production identified by this pattern has been
+     * artificially inserted into the grammar. No parse tree nodes
+     * will be created for such nodes, instead the child nodes will
+     * be added directly to the parent node.
+     *
+     * @return true if this production pattern is synthetic, or
+     *         false otherwise
+     *
+     * @deprecated Use the isSynthetic() method instead. This method
+     *     name contained a spelling error.
      */
     public boolean isSyntetic() {
-        return syntetic;
+        return isSynthetic();
     }
 
     /**
@@ -177,15 +196,32 @@ public class ProductionPattern {
     }
 
     /**
-     * Sets the syntetic production pattern flag. If this flag is set,
+     * Sets the synthetic production pattern flag. If this flag is set,
      * the production identified by this pattern has been artificially
      * inserted into the grammar. By default this flag is set to
      * false.
      *
-     * @param syntetic       the new value of the syntetic flag
+     * @param synthetic       the new value of the synthetic flag
+     *
+     * @since 1.5
      */
-    public void setSyntetic(boolean syntetic) {
-        this.syntetic = syntetic;
+    public void setSynthetic(boolean synthetic) {
+        this.synthetic = synthetic;
+    }
+
+    /**
+     * Sets the synthetic production pattern flag. If this flag is set,
+     * the production identified by this pattern has been artificially
+     * inserted into the grammar. By default this flag is set to
+     * false.
+     *
+     * @param synthetic       the new value of the synthetic flag
+     *
+     * @deprecated Use the setSynthetic() method instead. This method
+     *     name contained a spelling error.
+     */
+    public void setSyntetic(boolean synthetic) {
+        setSynthetic(synthetic);
     }
 
     /**

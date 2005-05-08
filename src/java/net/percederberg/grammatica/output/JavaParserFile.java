@@ -216,7 +216,7 @@ class JavaParserFile {
         JavaVariable  var;
         int           modifiers;
 
-        if (pattern.isSyntetic()) {
+        if (pattern.isSynthetic()) {
             constant = "SUBPRODUCTION_" + constantId;
             modifiers = JavaVariable.PRIVATE + JavaVariable.STATIC +
                         JavaVariable.FINAL;
@@ -248,7 +248,7 @@ class JavaParserFile {
         code.append(getConstant(constants, pattern.getId()));
         code.append(",\n");
         code.append("                                \"");
-        if (pattern.isSyntetic()) {
+        if (pattern.isSynthetic()) {
             str = getConstant(constants, pattern.getId());
             code.append(gen.getCodeStyle().getMixedCase(str, true));
         } else {
@@ -259,8 +259,8 @@ class JavaParserFile {
         initMethod.addCode(code.toString());
 
         // Set syntetic flag
-        if (pattern.isSyntetic()) {
-            initMethod.addCode("pattern.setSyntetic(true);");
+        if (pattern.isSynthetic()) {
+            initMethod.addCode("pattern.setSynthetic(true);");
         }
 
         // Create pattern rules

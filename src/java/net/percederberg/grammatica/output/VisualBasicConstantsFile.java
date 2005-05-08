@@ -139,7 +139,7 @@ class VisualBasicConstantsFile {
     public void addProduction(ProductionPattern pattern) {
         String  constant;
 
-        if (!pattern.isSyntetic()) {
+        if (!pattern.isSynthetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             enm.addConstant(constant, String.valueOf(pattern.getId()));
             constantNames.put(new Integer(pattern.getId()), constant);

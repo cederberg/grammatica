@@ -225,7 +225,7 @@ class VisualBasicAnalyzerFile {
         String   constant = constants.getConstant(pattern.getId());
         String   name;
 
-        if (!pattern.isSyntetic()) {
+        if (!pattern.isSynthetic()) {
             name = gen.getCodeStyle().getMixedCase(pattern.getName(),
                                                    true);
             addEnterCase(constant, name, "Production");

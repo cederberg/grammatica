@@ -218,7 +218,7 @@ class GrammarParser extends RecursiveDescentParser {
 
         pattern = new ProductionPattern(SUBPRODUCTION_1,
                                         "Subproduction1");
-        pattern.setSyntetic(true);
+        pattern.setSynthetic(true);
         alt = new ProductionPatternAlternative();
         alt.addToken(GrammarConstants.VERTICAL_BAR, 1, 1);
         alt.addProduction(GrammarConstants.PRODUCTION, 1, 1);
@@ -227,7 +227,7 @@ class GrammarParser extends RecursiveDescentParser {
 
         pattern = new ProductionPattern(SUBPRODUCTION_2,
                                         "Subproduction2");
-        pattern.setSyntetic(true);
+        pattern.setSynthetic(true);
         alt = new ProductionPatternAlternative();
         alt.addToken(GrammarConstants.QUESTION_MARK, 1, 1);
         pattern.addAlternative(alt);
@@ -241,7 +241,7 @@ class GrammarParser extends RecursiveDescentParser {
 
         pattern = new ProductionPattern(SUBPRODUCTION_3,
                                         "Subproduction3");
-        pattern.setSyntetic(true);
+        pattern.setSynthetic(true);
         alt = new ProductionPatternAlternative();
         alt.addToken(GrammarConstants.QUESTION_MARK, 1, 1);
         pattern.addAlternative(alt);
@@ -255,7 +255,7 @@ class GrammarParser extends RecursiveDescentParser {
 
         pattern = new ProductionPattern(SUBPRODUCTION_4,
                                         "Subproduction4");
-        pattern.setSyntetic(true);
+        pattern.setSynthetic(true);
         alt = new ProductionPatternAlternative();
         alt.addToken(GrammarConstants.QUESTION_MARK, 1, 1);
         pattern.addAlternative(alt);

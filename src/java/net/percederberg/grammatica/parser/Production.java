@@ -62,7 +62,7 @@ public class Production extends Node {
      *         false otherwise
      */
     boolean isHidden() {
-        return pattern.isSyntetic();
+        return pattern.isSynthetic();
     }
 
     /**

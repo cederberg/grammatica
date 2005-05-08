@@ -225,7 +225,7 @@ class CSharpParserFile {
     public void addProductionConstant(ProductionPattern pattern) {
         String   constant;
 
-        if (pattern.isSyntetic()) {
+        if (pattern.isSynthetic()) {
             constant = "SUBPRODUCTION_" + constantId;
             enm.addConstant(constant, String.valueOf(constantId + 3000));
             constantNames.put(new Integer(pattern.getId()), constant);
@@ -250,7 +250,7 @@ class CSharpParserFile {
         code.append(getConstant(constants, pattern.getId()));
         code.append(",\n");
         code.append("                                \"");
-        if (pattern.isSyntetic()) {
+        if (pattern.isSynthetic()) {
             str = (String) constantNames.get(new Integer(pattern.getId()));
             code.append(gen.getCodeStyle().getMixedCase(str, true));
         } else {
@@ -261,8 +261,8 @@ class CSharpParserFile {
         initMethod.addCode(code.toString());
 
         // Set syntetic flag
-        if (pattern.isSyntetic()) {
-            initMethod.addCode("pattern.Syntetic = true;");
+        if (pattern.isSynthetic()) {
+            initMethod.addCode("pattern.Synthetic = true;");
         }
 
         // Create pattern rules

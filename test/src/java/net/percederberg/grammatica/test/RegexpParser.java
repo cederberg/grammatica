@@ -212,7 +212,7 @@ class RegexpParser extends RecursiveDescentParser {
 
         pattern = new ProductionPattern(SUBPRODUCTION_1,
                                         "Subproduction1");
-        pattern.setSyntetic(true);
+        pattern.setSynthetic(true);
         alt = new ProductionPatternAlternative();
         alt.addToken(RegexpConstants.VERTICAL_BAR, 1, 1);
         alt.addProduction(RegexpConstants.EXPR, 1, 1);
@@ -221,7 +221,7 @@ class RegexpParser extends RecursiveDescentParser {
 
         pattern = new ProductionPattern(SUBPRODUCTION_2,
                                         "Subproduction2");
-        pattern.setSyntetic(true);
+        pattern.setSynthetic(true);
         alt = new ProductionPatternAlternative();
         alt.addToken(RegexpConstants.COMMA, 1, 1);
         alt.addToken(RegexpConstants.NUMBER, 0, 1);

@@ -334,7 +334,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
             str = currentProduction.getName() + "(" +
                   (nextSynteticId - 3000) + ")";
             prod = new ProductionPattern(nextSynteticId, str);
-            prod.setSyntetic(true);
+            prod.setSynthetic(true);
             for (int i = 0; i < node.getValueCount(); i++) {
                 alt = (ProductionPatternAlternative) getValue(node, i);
                 try {

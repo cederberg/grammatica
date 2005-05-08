@@ -48,11 +48,11 @@ namespace PerCederberg.Grammatica.Parser {
         private string name;
 
         /**
-         * The syntectic production flag. If this flag is set, the
+         * The synthectic production flag. If this flag is set, the
          * production identified by this pattern has been artificially
          * inserted into the grammar.
          */
-        private bool syntetic;
+        private bool synthetic;
 
         /**
          * The list of production pattern alternatives.
@@ -80,7 +80,7 @@ namespace PerCederberg.Grammatica.Parser {
         public ProductionPattern(int id, string name) {
             this.id = id;
             this.name = name;
-            this.syntetic = false;
+            this.synthetic = false;
             this.alternatives = new ArrayList();
             this.defaultAlt = -1;
             this.lookAhead = null;
@@ -136,7 +136,7 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The syntetic production pattern property. If this property
+         * The synthetic production pattern property. If this property
          * is set, the production identified by this pattern has been
          * artificially inserted into the grammar. No parse tree nodes
          * will be created for such nodes, instead the child nodes
@@ -145,12 +145,12 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @since 1.5
          */
-        public bool Syntetic {
+        public bool Synthetic {
             get {
-                return syntetic;
+                return synthetic;
             }
             set {
-                syntetic = value;
+                synthetic = value;
             }
         }
 
@@ -169,7 +169,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Synthetic property instead.
          */
         public bool IsSyntetic() {
-            return syntetic;
+            return Synthetic;
         }
 
         /**
@@ -184,8 +184,8 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @deprecated Use the Synthetic property instead.
          */
-        public void SetSyntetic(bool syntetic) {
-            this.syntetic = syntetic;
+        public void SetSyntetic(bool synthetic) {
+            Synthetic = synthetic;
         }
 
         /**

@@ -228,7 +228,7 @@ class VisualBasicParserFile {
     public void addProductionConstant(ProductionPattern pattern) {
         String   constant;
 
-        if (pattern.isSyntetic()) {
+        if (pattern.isSynthetic()) {
             constant = "SUBPRODUCTION_" + constantId;
             enm.addConstant(constant, String.valueOf(constantId + 3000));
             constantNames.put(new Integer(pattern.getId()), constant);
@@ -252,7 +252,7 @@ class VisualBasicParserFile {
         code.append("pattern = New ProductionPattern(CInt(");
         code.append(getConstant(constants, pattern.getId()));
         code.append("), \"");
-        if (pattern.isSyntetic()) {
+        if (pattern.isSynthetic()) {
             str = (String) constantNames.get(new Integer(pattern.getId()));
             code.append(gen.getCodeStyle().getMixedCase(str, true));
         } else {
@@ -263,8 +263,8 @@ class VisualBasicParserFile {
         initMethod.addCode(code.toString());
 
         // Set syntetic flag
-        if (pattern.isSyntetic()) {
-            initMethod.addCode("pattern.Syntetic = True");
+        if (pattern.isSynthetic()) {
+            initMethod.addCode("pattern.Synthetic = True");
         }
 
         // Create pattern rules

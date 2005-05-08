@@ -155,7 +155,7 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         internal override bool IsHidden() {
-            return pattern.Syntetic;
+            return pattern.Synthetic;
         }
 
         /**

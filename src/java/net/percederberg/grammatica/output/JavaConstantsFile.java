@@ -153,7 +153,7 @@ class JavaConstantsFile {
         JavaVariable  var;
         int           modifiers;
 
-        if (!pattern.isSyntetic()) {
+        if (!pattern.isSynthetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             modifiers = JavaVariable.PUBLIC + JavaVariable.STATIC +
                         JavaVariable.FINAL;
