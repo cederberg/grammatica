@@ -134,55 +134,55 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The line number of the first character in the token image.
+         * The line number property of the first character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the first child.
          *
-         * @return the line number of the first token character
-         *
-         * @see Node#StartLine
-         *
-         * @deprecated Use the StartLine property instead.
+         * @since 1.5
          */
-        public override int GetStartLine() {
-            return startLine;
+        public override int StartLine {
+            get {
+                return startLine;
+            }
         }
 
         /**
-         * The column number of the first character in the token image.
+         * The column number property of the first character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the first child.
          *
-         * @return the column number of the first token character
-         *
-         * @see Node#StartColumn
-         *
-         * @deprecated Use the StartColumn property instead.
+         * @since 1.5
          */
-        public override int GetStartColumn() {
-            return startColumn;
+        public override int StartColumn {
+            get {
+                return startColumn;
+            }
         }
 
         /**
-         * The line number of the last character in the token image.
+         * The line number property of the last character in this node
+         * (read-only). If the node has child elements, this value
+         * will be fetched from the last child.
          *
-         * @return the line number of the last token character
-         *
-         * @see Node#EndLine
-         *
-         * @deprecated Use the EndLine property instead.
+         * @since 1.5
          */
-        public override int GetEndLine() {
-            return endLine;
+        public override int EndLine {
+            get {
+                return endLine;
+            }
         }
 
         /**
-         * The column number of the last character in the token image.
+         * The column number property of the last character in this
+         * node (read-only). If the node has child elements, this
+         * value will be fetched from the last child.
          *
-         * @return the column number of the last token character
-         *
-         * @see Node#EndColumn
-         *
-         * @deprecated Use the EndColumn property instead.
+         * @since 1.5
          */
-        public override int GetEndColumn() {
-            return endColumn;
+        public override int EndColumn {
+            get {
+                return endColumn;
+            }
         }
 
         /**
@@ -190,13 +190,11 @@ namespace PerCederberg.Grammatica.Parser {
          * consists of the input characters matched to form this
          * token.
          *
-         * @see #GetImage
-         *
          * @since 1.5
          */
         public string Image {
             get {
-                return GetImage();
+                return image;
             }
         }
 
@@ -211,7 +209,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Image property instead.
          */
         public string GetImage() {
-            return image;
+            return Image;
         }
 
         /**
@@ -233,7 +231,6 @@ namespace PerCederberg.Grammatica.Parser {
          * default), the previous token will always be null.
          *
          * @see #Next
-         * @see #GetPreviousToken
          * @see Tokenizer#UseTokenList
          *
          * @since 1.5
@@ -254,7 +251,7 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the previuos token. The previous token may be a token
+         * Returns the previous token. The previous token may be a token
          * that has been ignored in the parsing. Note that if the token
          * list feature hasn't been used in the tokenizer, this method
          * will always return null. By default the token list feature is
@@ -272,7 +269,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Previous property instead.
          */
         public Token GetPreviousToken() {
-            return previous;
+            return Previous;
         }
 
         /**
@@ -285,7 +282,6 @@ namespace PerCederberg.Grammatica.Parser {
          * next token will always be null.
          *
          * @see #Previous
-         * @see #GetNextToken
          * @see Tokenizer#UseTokenList
          *
          * @since 1.5
@@ -324,7 +320,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Next property instead.
          */
         public Token GetNextToken() {
-            return next;
+            return Next;
         }
 
         /**
