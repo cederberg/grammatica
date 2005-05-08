@@ -102,27 +102,49 @@ namespace PerCederberg.Grammatica.Parser {
          * The production pattern identity property (read-only). This
          * property contains the unique identity value.
          *
-         * @see #GetId
-         *
          * @since 1.5
          */
         public int Id {
             get {
-                return GetId();
+                return id;
             }
+        }
+
+        /**
+         * Returns the unique production pattern identity value.
+         *
+         * @return the production pattern id
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
+         */
+        public int GetId() {
+            return Id;
         }
 
         /**
          * The production pattern name property (read-only).
          *
-         * @see #GetName
-         *
          * @since 1.5
          */
         public string Name {
             get {
-                return GetName();
+                return name;
             }
+        }
+
+        /**
+         * Returns the production pattern name.
+         *
+         * @return the production pattern name
+         *
+         * @see #Name
+         *
+         * @deprecated Use the Name property instead.
+         */
+        public string GetName() {
+            return Name;
         }
 
         /**
@@ -133,18 +155,49 @@ namespace PerCederberg.Grammatica.Parser {
          * will be added directly to the parent node. By default this
          * property is set to false.
          *
-         * @see #IsSyntetic
-         * @see #SetSyntetic
-         *
          * @since 1.5
          */
         public bool Syntetic {
             get {
-                return IsSyntetic();
+                return syntetic;
             }
             set {
-                SetSyntetic(value);
+                syntetic = value;
             }
+        }
+
+        /**
+         * Checks if the synthetic production flag is set. If this
+         * flag is set, the production identified by this pattern has
+         * been artificially inserted into the grammar. No parse tree
+         * nodes will be created for such nodes, instead the child
+         * nodes will be added directly to the parent node.
+         *
+         * @return true if this production pattern is synthetic, or
+         *         false otherwise
+         *
+         * @see #Synthetic
+         *
+         * @deprecated Use the Synthetic property instead.
+         */
+        public bool IsSyntetic() {
+            return syntetic;
+        }
+
+        /**
+         * Sets the synthetic production pattern flag. If this flag is set,
+         * the production identified by this pattern has been artificially
+         * inserted into the grammar. By default this flag is set to
+         * false.
+         *
+         * @param syntetic       the new value of the synthetic flag
+         *
+         * @see #Synthetic
+         *
+         * @deprecated Use the Synthetic property instead.
+         */
+        public void SetSyntetic(bool syntetic) {
+            this.syntetic = syntetic;
         }
 
         /**
@@ -190,14 +243,25 @@ namespace PerCederberg.Grammatica.Parser {
          * The production pattern alternative count property
          * (read-only).
          *
-         * @see #GetAlternativeCount
-         *
          * @since 1.5
          */
         public int Count {
             get {
-                return GetAlternativeCount();
+                return alternatives.Count;
             }
+        }
+
+        /**
+         * Returns the number of alternatives in this pattern.
+         *
+         * @return the number of alternatives in this pattern
+         *
+         * @see #Count
+         *
+         * @deprecated Use the Count property instead.
+         */
+        public int GetAlternativeCount() {
+            return Count;
         }
 
         /**
@@ -207,32 +271,25 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the alternative found
          *
-         * @see #GetAlternative
-         *
          * @since 1.5
          */
         public ProductionPatternAlternative this[int index] {
             get {
-                return GetAlternative(index);
+                return (ProductionPatternAlternative) alternatives[index];
             }
         }
 
         /**
-         * Checks if the syntetic production flag is set. If this flag
-         * is set, the production identified by this pattern has been
-         * artificially inserted into the grammar. No parse tree nodes
-         * will be created for such nodes, instead the child nodes
-         * will be added directly to the parent node.
+         * Returns an alternative in this pattern.
          *
-         * @return true if this production pattern is syntetic, or
-         *         false otherwise
+         * @param pos            the alternative position, 0 <= pos < count
          *
-         * @see #Syntetic
+         * @return the alternative found
          *
-         * @deprecated Use the Syntetic property instead.
+         * @deprecated Use the class indexer instead.
          */
-        public bool IsSyntetic() {
-            return syntetic;
+        public ProductionPatternAlternative GetAlternative(int pos) {
+            return this[pos];
         }
 
         /**
@@ -293,74 +350,6 @@ namespace PerCederberg.Grammatica.Parser {
                 }
             }
             return false;
-        }
-
-        /**
-         * Returns the unique production pattern identity value.
-         *
-         * @return the production pattern id
-         *
-         * @see #Id
-         *
-         * @deprecated Use the Id property instead.
-         */
-        public int GetId() {
-            return id;
-        }
-
-        /**
-         * Returns the production pattern name.
-         *
-         * @return the production pattern name
-         *
-         * @see #Name
-         *
-         * @deprecated Use the Name property instead.
-         */
-        public string GetName() {
-            return name;
-        }
-
-        /**
-         * Sets the syntetic production pattern flag. If this flag is set,
-         * the production identified by this pattern has been artificially
-         * inserted into the grammar. By default this flag is set to
-         * false.
-         *
-         * @param syntetic       the new value of the syntetic flag
-         *
-         * @see #Syntetic
-         *
-         * @deprecated Use the Syntetic property instead.
-         */
-        public void SetSyntetic(bool syntetic) {
-            this.syntetic = syntetic;
-        }
-
-        /**
-         * Returns the number of alternatives in this pattern.
-         *
-         * @return the number of alternatives in this pattern
-         *
-         * @see #Count
-         *
-         * @deprecated Use the Count property instead.
-         */
-        public int GetAlternativeCount() {
-            return alternatives.Count;
-        }
-
-        /**
-         * Returns an alternative in this pattern.
-         *
-         * @param pos            the alternative position, 0 <= pos < count
-         *
-         * @return the alternative found
-         *
-         * @deprecated Use the class indexer instead.
-         */
-        public ProductionPatternAlternative GetAlternative(int pos) {
-            return (ProductionPatternAlternative) alternatives[pos];
         }
 
         /**

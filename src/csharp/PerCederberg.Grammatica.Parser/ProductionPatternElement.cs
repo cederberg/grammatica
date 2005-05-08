@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -107,8 +107,6 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The node identity property (read-only).
          *
-         * @see #GetId
-         *
          * @since 1.5
          */
         public int Id {
@@ -118,9 +116,20 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The minimum occurence count property (read-only).
+         * Returns the node identity.
          *
-         * @see #GetMinCount
+         * @return the node identity
+         *
+         * @see #Id
+         *
+         * @deprecated Use the Id property instead.
+         */
+        public int GetId() {
+            return Id;
+        }
+
+        /**
+         * The minimum occurence count property (read-only).
          *
          * @since 1.5
          */
@@ -131,9 +140,20 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The maximum occurence count property (read-only).
+         * Returns the minimum occurence count.
          *
-         * @see #GetMaxCount
+         * @return the minimum occurence count
+         *
+         * @see #MinCount
+         *
+         * @deprecated Use the MinCount property instead.
+         */
+        public int GetMinCount() {
+            return MinCount;
+        }
+
+        /**
+         * The maximum occurence count property (read-only).
          *
          * @since 1.5
          */
@@ -141,6 +161,19 @@ namespace PerCederberg.Grammatica.Parser {
             get {
                 return max;
             }
+        }
+
+        /**
+         * Returns the maximum occurence count.
+         *
+         * @return the maximum occurence count
+         *
+         * @see #MaxCount
+         *
+         * @deprecated Use the MaxCount property instead.
+         */
+        public int GetMaxCount() {
+            return MaxCount;
         }
 
         /**
@@ -187,46 +220,7 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         public bool IsMatch(Token token) {
-            return IsToken() && token != null && token.GetId() == id;
-        }
-
-        /**
-         * Returns the node identity.
-         *
-         * @return the node identity
-         *
-         * @see #Id
-         *
-         * @deprecated Use the Id property instead.
-         */
-        public int GetId() {
-            return id;
-        }
-
-        /**
-         * Returns the minimum occurence count.
-         *
-         * @return the minimum occurence count
-         *
-         * @see #MinCount
-         *
-         * @deprecated Use the MinCount property instead.
-         */
-        public int GetMinCount() {
-            return min;
-        }
-
-        /**
-         * Returns the maximum occurence count.
-         *
-         * @return the maximum occurence count
-         *
-         * @see #MaxCount
-         *
-         * @deprecated Use the MaxCount property instead.
-         */
-        public int GetMaxCount() {
-            return max;
+            return IsToken() && token != null && token.Id == id;
         }
 
         /**

@@ -75,14 +75,25 @@ namespace PerCederberg.Grammatica.Parser {
          * The production pattern property (read-only). This property
          * contains the pattern having this alternative.
          *
-         * @see #GetPattern
-         *
          * @since 1.5
          */
         public ProductionPattern Pattern {
             get {
-                return GetPattern();
+                return pattern;
             }
+        }
+
+        /**
+         * Returns the production pattern containing this alternative.
+         *
+         * @return the production pattern for this alternative
+         *
+         * @see #Pattern
+         *
+         * @deprecated Use the Pattern property instead.
+         */
+        public ProductionPattern GetPattern() {
+            return Pattern;
         }
 
         /**
@@ -101,14 +112,25 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The production pattern element count property (read-only).
          *
-         * @see #GetElementCount
-         *
          * @since 1.5
          */
         public int Count {
             get {
-                return GetElementCount();
+                return elements.Count;
             }
+        }
+
+        /**
+         * Returns the number of elements in this alternative.
+         *
+         * @return the number of elements in this alternative
+         *
+         * @see #Count
+         *
+         * @deprecated Use the Count property instead.
+         */
+        public int GetElementCount() {
+            return Count;
         }
 
         /**
@@ -118,14 +140,25 @@ namespace PerCederberg.Grammatica.Parser {
          *
          * @return the element found
          *
-         * @see #GetElement
-         *
          * @since 1.5
          */
         public ProductionPatternElement this[int index] {
             get {
-                return GetElement(index);
+                return (ProductionPatternElement) elements[index];
             }
+        }
+
+        /**
+         * Returns an element in this alternative.
+         *
+         * @param pos            the element position, 0 <= pos < count
+         *
+         * @return the element found
+         *
+         * @deprecated Use the class indexer instead.
+         */
+        public ProductionPatternElement GetElement(int pos) {
+            return this[pos];
         }
 
         /**
@@ -142,9 +175,9 @@ namespace PerCederberg.Grammatica.Parser {
 
             for (int i = 0; i < elements.Count; i++) {
                 elem = (ProductionPatternElement) elements[i];
-                if (elem.GetId() == pattern.GetId()) {
+                if (elem.Id == pattern.Id) {
                     return true;
-                } else if (elem.GetMinCount() > 0) {
+                } else if (elem.MinCount > 0) {
                     break;
                 }
             }
@@ -164,9 +197,9 @@ namespace PerCederberg.Grammatica.Parser {
 
             for (int i = elements.Count - 1; i >= 0; i--) {
                 elem = (ProductionPatternElement) elements[i];
-                if (elem.GetId() == pattern.GetId()) {
+                if (elem.Id == pattern.Id) {
                     return true;
-                } else if (elem.GetMinCount() > 0) {
+                } else if (elem.MinCount > 0) {
                     break;
                 }
             }
@@ -186,19 +219,6 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the production pattern containing this alternative.
-         *
-         * @return the production pattern for this alternative
-         *
-         * @see #Pattern
-         *
-         * @deprecated Use the Pattern property instead.
-         */
-        public ProductionPattern GetPattern() {
-            return pattern;
-        }
-
-        /**
          * Changes the production pattern containing this alternative.
          * This method should only be called by the production pattern
          * class.
@@ -207,19 +227,6 @@ namespace PerCederberg.Grammatica.Parser {
          */
         internal void SetPattern(ProductionPattern pattern) {
             this.pattern = pattern;
-        }
-
-        /**
-         * Returns the number of elements in this alternative.
-         *
-         * @return the number of elements in this alternative
-         *
-         * @see #Count
-         *
-         * @deprecated Use the Count property instead.
-         */
-        public int GetElementCount() {
-            return elements.Count;
         }
 
         /**
@@ -235,7 +242,7 @@ namespace PerCederberg.Grammatica.Parser {
 
             for (int i = 0; i < elements.Count; i++) {
                 elem = (ProductionPatternElement) elements[i];
-                min += elem.GetMinCount();
+                min += elem.MinCount;
             }
             return min;
         }
@@ -253,26 +260,13 @@ namespace PerCederberg.Grammatica.Parser {
 
             for (int i = 0; i < elements.Count; i++) {
                 elem = (ProductionPatternElement) elements[i];
-                if (elem.GetMaxCount() >= Int32.MaxValue) {
+                if (elem.MaxCount >= Int32.MaxValue) {
                     return Int32.MaxValue;
                 } else {
-                    max += elem.GetMaxCount();
+                    max += elem.MaxCount;
                 }
             }
             return max;
-        }
-
-        /**
-         * Returns an element in this alternative.
-         *
-         * @param pos            the element position, 0 <= pos < count
-         *
-         * @return the element found
-         *
-         * @deprecated Use the class indexer instead.
-         */
-        public ProductionPatternElement GetElement(int pos) {
-            return (ProductionPatternElement) elements[pos];
         }
 
         /**
@@ -331,9 +325,9 @@ namespace PerCederberg.Grammatica.Parser {
                                int max) {
 
             if (elem.IsToken()) {
-                AddToken(elem.GetId(), min, max);
+                AddToken(elem.Id, min, max);
             } else {
-                AddProduction(elem.GetId(), min, max);
+                AddProduction(elem.Id, min, max);
             }
         }
 
