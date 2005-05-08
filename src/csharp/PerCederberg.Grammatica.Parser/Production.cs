@@ -67,55 +67,38 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * Returns the production (pattern) id. This value is set as a
-         * unique identifier when creating the production pattern to
+         * The node type id property (read-only). This value is set as
+         * a unique identifier for each type of node, in order to
          * simplify later identification.
          *
-         * @return the production id
-         *
-         * @see Node#Id
-         *
-         * @deprecated Use the Id property instead.
+         * @since 1.5
          */
-        public override int GetId() {
-            return pattern.GetId();
+        public override int Id {
+            get {
+                return pattern.Id;
+            }
         }
 
         /**
-         * Returns the production node name.
+         * The node name property (read-only).
          *
-         * @return the production node name
-         *
-         * @see Node#Name
-         *
-         * @deprecated Use the Name property instead.
+         * @since 1.5
          */
-        public override string GetName() {
-            return pattern.GetName();
+        public override string Name {
+            get {
+                return pattern.Name;
+            }
         }
 
         /**
          * The child node count property (read-only).
          *
-         * @see #GetChildCount
-         *
          * @since 1.5
          */
         public override int Count {
             get {
-                return GetChildCount();
+                return children.Count;
             }
-        }
-
-        /**
-         * Returns the number of child nodes.
-         *
-         * @return the number of child nodes
-         *
-         * @deprecated Use the Count property instead.
-         */
-        public override int GetChildCount() {
-            return children.Count;
         }
 
         /**
@@ -126,31 +109,15 @@ namespace PerCederberg.Grammatica.Parser {
          * @return the child node found, or
          *         null if index out of bounds
          *
-         * @see #GetChildAt
-         *
          * @since 1.5
          */
         public override Node this[int index] {
             get {
-                return GetChildAt(index);
-            }
-        }
-
-        /**
-         * Returns the child node with the specified index.
-         *
-         * @param index          the child index, 0 <= index < count
-         *
-         * @return the child node found, or
-         *         null if index out of bounds
-         *
-         * @deprecated Use the class indexer instead.
-         */
-        public override Node GetChildAt(int index) {
-            if (index < 0 || index >= children.Count) {
-                return null;
-            } else {
-                return (Node) children[index];
+                if (index < 0 || index >= children.Count) {
+                    return null;
+                } else {
+                    return (Node) children[index];
+                }
             }
         }
 
@@ -171,13 +138,11 @@ namespace PerCederberg.Grammatica.Parser {
          * The production pattern property (read-only). This property
          * contains the production pattern linked to this production.
          *
-         * @see #GetPattern
-         *
          * @since 1.5
          */
         public ProductionPattern Pattern {
             get {
-                return GetPattern();
+                return pattern;
             }
         }
 
@@ -191,7 +156,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Pattern property instead.
          */
         public ProductionPattern GetPattern() {
-            return pattern;
+            return Pattern;
         }
 
         /**
@@ -202,7 +167,7 @@ namespace PerCederberg.Grammatica.Parser {
          *         false otherwise
          */
         internal override bool IsHidden() {
-            return pattern.IsSyntetic();
+            return pattern.Syntetic;
         }
 
         /**
@@ -211,8 +176,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @return a string representation of this production
          */
         public override string ToString() {
-            return pattern.GetName() + '(' +
-                   pattern.GetId() + ')';
+            return pattern.Name + '(' + pattern.Id + ')';
         }
     }
 }
