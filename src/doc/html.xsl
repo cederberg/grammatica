@@ -76,15 +76,14 @@
         <xsl:value-of select="$date" />
         <xsl:text>). See the</xsl:text>
         &newline;&indent;&indent;
-        <a href="http://www.nongnu.org/grammatica">Grammatica web site</a>
+        <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
         &newline;&indent;&indent;
         <xsl:text>for more information.</xsl:text>
       </p>
       &newline;&newline;&indent;&indent;
       <p class="footer">
-        <xsl:text disable-output-escaping="yes">Copyright &amp;copy; 2003-2004 Per Cederberg. Permission
-    is granted to copy this document verbatim in any medium, provided
-    that this copyright notice is left intact.</xsl:text>
+        <xsl:text disable-output-escaping="yes">Copyright &amp;copy; 2003-2005 Per Cederberg. This document is
+    distributed as part of Grammatica under the GNU LGPL license.</xsl:text>
       </p>
       &newline;&newline;&indent;
     </body>

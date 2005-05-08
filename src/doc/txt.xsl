@@ -50,12 +50,11 @@ Grammatica </xsl:text>
     <xsl:value-of select="$version" />
     <xsl:text> (</xsl:text>
     <xsl:value-of select="$date" />
-    <xsl:text>). See http://www.nongnu.org/grammatica for
+    <xsl:text>). See http://grammatica.percederberg.net/ for
 more information.
 
-Copyright (c) 2003-2004 Per Cederberg. Permission is granted to copy
-this document verbatim in any medium, provided that this copyright
-notice is left intact.</xsl:text>
+Copyright (c) 2003-2005 Per Cederberg. This document is distributed
+as a part of Grammatica under the GNU LGPL license.</xsl:text>
     &newline;
   </xsl:template>
 
