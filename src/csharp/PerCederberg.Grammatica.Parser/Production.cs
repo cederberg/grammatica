@@ -67,75 +67,6 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
-         * The child node count property (read-only).
-         *
-         * @see #GetChildCount
-         *
-         * @since 1.5
-         */
-        public override int Count {
-            get {
-                return GetChildCount();
-            }
-        }
-
-        /**
-         * The child node index (read-only).
-         *
-         * @param index          the child index, 0 <= index < Count
-         *
-         * @return the child node found, or
-         *         null if index out of bounds
-         *
-         * @see #GetChildAt
-         *
-         * @since 1.5
-         */
-        public override Node this[int index] {
-            get {
-                return GetChildAt(index);
-            }
-        }
-
-        /**
-         * The production pattern property (read-only). This property
-         * contains the production pattern linked to this production.
-         *
-         * @see #GetPattern
-         *
-         * @since 1.5
-         */
-        public ProductionPattern Pattern {
-            get {
-                return GetPattern();
-            }
-        }
-
-        /**
-         * Checks if this node is hidden, i.e. if it should not be visible
-         * outside the parser.
-         *
-         * @return true if the node should be hidden, or
-         *         false otherwise
-         */
-        internal override bool IsHidden() {
-            return pattern.IsSyntetic();
-        }
-
-        /**
-         * Returns the production pattern for this production.
-         *
-         * @return the production pattern
-         *
-         * @see #Pattern
-         *
-         * @deprecated Use the Pattern property instead.
-         */
-        public ProductionPattern GetPattern() {
-            return pattern;
-        }
-
-        /**
          * Returns the production (pattern) id. This value is set as a
          * unique identifier when creating the production pattern to
          * simplify later identification.
@@ -164,6 +95,19 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The child node count property (read-only).
+         *
+         * @see #GetChildCount
+         *
+         * @since 1.5
+         */
+        public override int Count {
+            get {
+                return GetChildCount();
+            }
+        }
+
+        /**
          * Returns the number of child nodes.
          *
          * @return the number of child nodes
@@ -172,6 +116,24 @@ namespace PerCederberg.Grammatica.Parser {
          */
         public override int GetChildCount() {
             return children.Count;
+        }
+
+        /**
+         * The child node index (read-only).
+         *
+         * @param index          the child index, 0 <= index < Count
+         *
+         * @return the child node found, or
+         *         null if index out of bounds
+         *
+         * @see #GetChildAt
+         *
+         * @since 1.5
+         */
+        public override Node this[int index] {
+            get {
+                return GetChildAt(index);
+            }
         }
 
         /**
@@ -203,6 +165,44 @@ namespace PerCederberg.Grammatica.Parser {
                 child.SetParent(this);
                 children.Add(child);
             }
+        }
+
+        /**
+         * The production pattern property (read-only). This property
+         * contains the production pattern linked to this production.
+         *
+         * @see #GetPattern
+         *
+         * @since 1.5
+         */
+        public ProductionPattern Pattern {
+            get {
+                return GetPattern();
+            }
+        }
+
+        /**
+         * Returns the production pattern for this production.
+         *
+         * @return the production pattern
+         *
+         * @see #Pattern
+         *
+         * @deprecated Use the Pattern property instead.
+         */
+        public ProductionPattern GetPattern() {
+            return pattern;
+        }
+
+        /**
+         * Checks if this node is hidden, i.e. if it should not be visible
+         * outside the parser.
+         *
+         * @return true if the node should be hidden, or
+         *         false otherwise
+         */
+        internal override bool IsHidden() {
+            return pattern.IsSyntetic();
         }
 
         /**
