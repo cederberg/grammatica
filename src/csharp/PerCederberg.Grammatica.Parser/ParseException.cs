@@ -28,7 +28,7 @@
  * library, but you are not obligated to do so. If you do not wish to
  * do so, delete this exception statement from your version.
  *
- * Copyright (c) 2003-2004 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -166,98 +166,11 @@ namespace PerCederberg.Grammatica.Parser {
         /**
          * The error type property (read-only).
          *
-         * @see #GetErrorType
-         *
          * @since 1.5
          */
         public ErrorType Type {
             get {
-                return GetErrorType();
-            }
-        }
-
-        /**
-         * The additional error information property (read-only).
-         *
-         * @see #GetInfo
-         *
-         * @since 1.5
-         */
-        public string Info {
-            get {
-                return GetInfo();
-            }
-        }
-
-        /**
-         * The additional detailed error information property
-         * (read-only).
-         *
-         * @see #GetDetails
-         *
-         * @since 1.5
-         */
-        public ArrayList Details {
-            get {
-                return GetDetails();
-            }
-        }
-
-        /**
-         * The line number property (read-only). This is the line
-         * number where the error occured, or -1 if unknown.
-         *
-         * @see #GetLine
-         *
-         * @since 1.5
-         */
-        public int Line {
-            get {
-                return GetLine();
-            }
-        }
-
-        /**
-         * The column number property (read-only). This is the column
-         * number where the error occured, or -1 if unknown.
-         *
-         * @see #GetColumn
-         *
-         * @since 1.5
-         */
-        public int Column {
-            get {
-                return GetColumn();
-            }
-        }
-
-        /**
-         * The message property (read-only). This property contains
-         * the detailed exception error message, including line and
-         * column numbers when available.
-         *
-         * @see #GetMessage
-         * @see #ErrorMessage
-         */
-        public override string Message {
-            get{
-                return GetMessage();
-            }
-        }
-
-        /**
-         * The error message property (read-only). This property
-         * contains all the information available, except for the line
-         * and column number information.
-         *
-         * @see #GetErrorMessage
-         * @see #Message
-         *
-         * @since 1.5
-         */
-        public string ErrorMessage {
-            get {
-                return GetErrorMessage();
+                return type;
             }
         }
 
@@ -271,7 +184,18 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Type property instead.
          */
         public ErrorType GetErrorType() {
-            return type;
+            return Type;
+        }
+
+        /**
+         * The additional error information property (read-only).
+         *
+         * @since 1.5
+         */
+        public string Info {
+            get {
+                return info;
+            }
         }
 
         /**
@@ -284,7 +208,19 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Info property instead.
          */
         public string GetInfo() {
-            return info;
+            return Info;
+        }
+
+        /**
+         * The additional detailed error information property
+         * (read-only).
+         *
+         * @since 1.5
+         */
+        public ArrayList Details {
+            get {
+                return new ArrayList(details);
+            }
         }
 
         /**
@@ -297,7 +233,19 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Details property instead.
          */
         public ArrayList GetDetails() {
-            return new ArrayList(details);
+            return Details;
+        }
+
+        /**
+         * The line number property (read-only). This is the line
+         * number where the error occured, or -1 if unknown.
+         *
+         * @since 1.5
+         */
+        public int Line {
+            get {
+                return line;
+            }
         }
 
         /**
@@ -311,7 +259,19 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Line property instead.
          */
         public int GetLine() {
-            return line;
+            return Line;
+        }
+
+        /**
+         * The column number property (read-only). This is the column
+         * number where the error occured, or -1 if unknown.
+         *
+         * @since 1.5
+         */
+        public int Column {
+            get {
+                return column;
+            }
         }
 
         /**
@@ -329,6 +289,32 @@ namespace PerCederberg.Grammatica.Parser {
         }
 
         /**
+         * The message property (read-only). This property contains
+         * the detailed exception error message, including line and
+         * column numbers when available.
+         *
+         * @see #ErrorMessage
+         */
+        public override string Message {
+            get{
+                StringBuilder  buffer = new StringBuilder();
+
+                // Add error description
+                buffer.Append(ErrorMessage);
+
+                // Add line and column
+                if (line > 0 && column > 0) {
+                    buffer.Append(", on line: ");
+                    buffer.Append(line);
+                    buffer.Append(" column: ");
+                    buffer.Append(column);
+                }
+
+                return buffer.ToString();
+            }
+        }
+
+        /**
          * Returns a default error message.
          *
          * @return a default error message
@@ -338,20 +324,64 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the Message property instead.
          */
         public string GetMessage() {
-            StringBuilder  buffer = new StringBuilder();
+            return Message;
+        }
 
-            // Add error description
-            buffer.Append(GetErrorMessage());
+        /**
+         * The error message property (read-only). This property
+         * contains all the information available, except for the line
+         * and column number information.
+         *
+         * @see #Message
+         *
+         * @since 1.5
+         */
+        public string ErrorMessage {
+            get {
+                StringBuilder  buffer = new StringBuilder();
 
-            // Add line and column
-            if (line > 0 && column > 0) {
-                buffer.Append(", on line: ");
-                buffer.Append(line);
-                buffer.Append(" column: ");
-                buffer.Append(column);
+                // Add type and info
+                switch (type) {
+                case ErrorType.IO:
+                    buffer.Append("I/O error: ");
+                    buffer.Append(info);
+                    break;
+                case ErrorType.UNEXPECTED_EOF:
+                    buffer.Append("unexpected end of file");
+                    break;
+                case ErrorType.UNEXPECTED_CHAR:
+                    buffer.Append("unexpected character '");
+                    buffer.Append(info);
+                    buffer.Append("'");
+                    break;
+                case ErrorType.UNEXPECTED_TOKEN:
+                    buffer.Append("unexpected token ");
+                    buffer.Append(info);
+                    if (details != null) {
+                        buffer.Append(", expected ");
+                        if (details.Count > 1) {
+                            buffer.Append("one of ");
+                        }
+                        buffer.Append(GetMessageDetails());
+                    }
+                    break;
+                case ErrorType.INVALID_TOKEN:
+                    buffer.Append(info);
+                    break;
+                case ErrorType.ANALYSIS:
+                    buffer.Append(info);
+                    break;
+                default:
+                    buffer.Append("internal error");
+                    if (info != null) {
+                	    buffer.Append(": ");
+                        buffer.Append(info);
+                    }
+                    break;
+                }
+
+                return buffer.ToString();
             }
-
-            return buffer.ToString();
         }
 
         /**
@@ -366,49 +396,7 @@ namespace PerCederberg.Grammatica.Parser {
          * @deprecated Use the ErrorMessage property instead.
          */
         public string GetErrorMessage() {
-            StringBuilder  buffer = new StringBuilder();
-
-            // Add type and info
-            switch (type) {
-            case ErrorType.IO:
-                buffer.Append("I/O error: ");
-                buffer.Append(info);
-                break;
-            case ErrorType.UNEXPECTED_EOF:
-                buffer.Append("unexpected end of file");
-                break;
-            case ErrorType.UNEXPECTED_CHAR:
-                buffer.Append("unexpected character '");
-                buffer.Append(info);
-                buffer.Append("'");
-                break;
-            case ErrorType.UNEXPECTED_TOKEN:
-                buffer.Append("unexpected token ");
-                buffer.Append(info);
-                if (details != null) {
-                    buffer.Append(", expected ");
-                    if (details.Count > 1) {
-                        buffer.Append("one of ");
-                    }
-                    buffer.Append(GetMessageDetails());
-                }
-                break;
-            case ErrorType.INVALID_TOKEN:
-                buffer.Append(info);
-                break;
-            case ErrorType.ANALYSIS:
-                buffer.Append(info);
-                break;
-            default:
-                buffer.Append("internal error");
-                if (info != null) {
-                	buffer.Append(": ");
-                	buffer.Append(info);
-                }
-                break;
-            }
-
-            return buffer.ToString();
+            return ErrorMessage;
         }
 
         /**
