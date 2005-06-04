@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * conflicting sequences can be repeated (would cause infinite loop).
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.1
+ * @version  1.5
  */
 class LookAheadSet {
 
@@ -74,12 +74,15 @@ class LookAheadSet {
     }
 
     /**
-     * Returns the size of this look-ahead set.
+     * Checks if this look-ahead set is empty.
      *
-     * @return the number of token sequences in the set
+     * @return true if this look-ahead set is empty, or
+     *         false otherwise
+     *
+     * @since 1.5
      */
-    public int size() {
-        return elements.size();
+    public boolean isEmpty() {
+        return elements.size() == 0;
     }
 
     /**
@@ -217,10 +220,12 @@ class LookAheadSet {
      *
      * @return true if there is some token sequence that overlaps, or
      *         false otherwise
+     *
+     * @since 1.5
      */
-    public boolean isOverlap(LookAheadSet set) {
+    public boolean hasOverlap(LookAheadSet set) {
         for (int i = 0; i < elements.size(); i++) {
-            if (set.isOverlap((Sequence) elements.get(i))) {
+            if (set.hasOverlap((Sequence) elements.get(i))) {
                 return true;
             }
         }
@@ -237,13 +242,35 @@ class LookAheadSet {
      *
      * @return true if there is some token sequence that overlaps, or
      *         false otherwise
+     *
+     * @since 1.5
      */
-    private boolean isOverlap(Sequence seq) {
+    private boolean hasOverlap(Sequence seq) {
         Sequence  elem;
 
         for (int i = 0; i < elements.size(); i++) {
             elem = (Sequence) elements.get(i);
             if (seq.startsWith(elem) || elem.startsWith(seq)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if some token sequence is present in both this set
+     * and a specified one.
+     *
+     * @param set            the look-ahead set to compare with
+     *
+     * @return true if the look-ahead sets intersect, or
+     *         false otherwise
+     *
+     * @since 1.5
+     */
+    public boolean hasIntersection(LookAheadSet set) {
+        for (int i = 0; i < elements.size(); i++) {
+            if (set.contains((Sequence) elements.get(i))) {
                 return true;
             }
         }
@@ -261,24 +288,6 @@ class LookAheadSet {
      */
     private boolean contains(Sequence elem) {
         return findSequence(elem) != null;
-    }
-
-    /**
-     * Checks if some token sequence is present in both this set
-     * and a specified one.
-     *
-     * @param set            the look-ahead set to compare with
-     *
-     * @return true if the look-ahead sets intersect, or
-     *         false otherwise
-     */
-    public boolean intersects(LookAheadSet set) {
-        for (int i = 0; i < elements.size(); i++) {
-            if (set.contains((Sequence) elements.get(i))) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -435,9 +444,9 @@ class LookAheadSet {
         Sequence      second;
 
         // Handle special cases
-        if (this.size() <= 0) {
+        if (this.isEmpty()) {
             return set;
-        } else if (set.size() <= 0) {
+        } else if (set.isEmpty()) {
             return this;
         }
 
@@ -473,7 +482,7 @@ class LookAheadSet {
 
         for (int i = 0; i < elements.size(); i++) {
             seq = (Sequence) elements.get(i);
-            if (set.isOverlap(seq)) {
+            if (set.hasOverlap(seq)) {
                 result.add(seq);
             }
         }
@@ -495,7 +504,7 @@ class LookAheadSet {
         Sequence      second;
 
         // Handle special cases
-        if (this.size() <= 0 || set.size() <= 0) {
+        if (this.isEmpty() || set.isEmpty()) {
             return this;
         }
 

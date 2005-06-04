@@ -31,7 +31,7 @@ import java.util.Iterator;
  * that is has to consider.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.2
+ * @version  1.5
  */
 public class RecursiveDescentParser extends Parser {
 
@@ -336,14 +336,14 @@ public class RecursiveDescentParser extends Parser {
         conflicts = findConflicts(pattern, 1);
 
         // Resolve conflicts
-        while (conflicts.size() > 0) {
+        while (!conflicts.isEmpty()) {
             length++;
             stack.clear();
             stack.push(pattern.getName(), length);
             conflicts.addAll(previous);
             for (i = 0; i < pattern.getAlternativeCount(); i++) {
                 alt = pattern.getAlternative(i);
-                if (alternatives[i].intersects(conflicts)) {
+                if (alternatives[i].hasIntersection(conflicts)) {
                     alternatives[i] = findLookAhead(alt,
                                                     length,
                                                     0,
@@ -351,7 +351,7 @@ public class RecursiveDescentParser extends Parser {
                                                     conflicts);
                     alt.setLookAhead(alternatives[i]);
                 }
-                if (alternatives[i].intersects(conflicts)) {
+                if (alternatives[i].hasIntersection(conflicts)) {
                     if (pattern.getDefaultAlternative() == null) {
                         pattern.setDefaultAlternative(i);
                     } else if (pattern.getDefaultAlternative() != alt) {
@@ -420,7 +420,7 @@ public class RecursiveDescentParser extends Parser {
                                   location,
                                   first,
                                   follow);
-        while (conflicts.size() > 0) {
+        while (!conflicts.isEmpty()) {
             length++;
             conflicts.addAll(previous);
             first = findLookAhead(elem,
@@ -434,7 +434,7 @@ public class RecursiveDescentParser extends Parser {
                                    conflicts);
             first = first.createCombination(follow);
             elem.setLookAhead(first);
-            if (first.intersects(conflicts)) {
+            if (first.hasIntersection(conflicts)) {
                 first = first.createIntersection(conflicts);
                 throwAmbiguityException(pattern.getName(), location, first);
             }
@@ -545,7 +545,7 @@ public class RecursiveDescentParser extends Parser {
                 follow = findLookAhead(alt, length, pos + 1, stack, null);
                 first = first.createCombination(follow);
             }
-        } else if (filter.isOverlap(first)) {
+        } else if (filter.hasOverlap(first)) {
             overlaps = first.createOverlaps(filter);
             length -= overlaps.getMinLength();
             filter = filter.createFilter(overlaps);
@@ -591,7 +591,7 @@ public class RecursiveDescentParser extends Parser {
         first = findLookAhead(elem, length, 0, stack, filter);
         result = new LookAheadSet(length);
         result.addAll(first);
-        if (filter == null || !filter.isOverlap(result)) {
+        if (filter == null || !filter.hasOverlap(result)) {
             return result;
         }
 
@@ -602,7 +602,7 @@ public class RecursiveDescentParser extends Parser {
         max = Math.min(length, elem.getMaxCount());
         for (int i = 1; i < max; i++) {
             first = first.createOverlaps(filter);
-            if (first.size() <= 0 || first.getMinLength() >= length) {
+            if (first.isEmpty() || first.getMinLength() >= length) {
                 break;
             }
             follow = findLookAhead(elem,
