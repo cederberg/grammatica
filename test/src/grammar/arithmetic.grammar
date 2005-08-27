@@ -47,6 +47,7 @@ LICENSE     = "This library is free software; you can redistribute it and/or
 COPYRIGHT   = "Copyright (c) 2003 Per Cederberg. All rights reserved."
 
 
+/** Token definitions **/
 %tokens%
 
 ADD                          = "+"
@@ -60,6 +61,7 @@ IDENTIFIER                   = <<[a-z]>>
 WHITESPACE                   = <<[ \t\n\r]+>> %ignore%
 
 
+/** Production definitions **/
 %productions%
 
 Expression = Term [ExpressionRest] ;
