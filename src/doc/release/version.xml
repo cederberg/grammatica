@@ -35,8 +35,16 @@
       </item>
 
       <item>
-        <title>Changed C# parser API for better integration</title>
-        <text>The C# parser API has been modified for almost all
+        <title>Changed .NET parser namespace for C# 2.0</title>
+	<text>The C# parser namespace has been modified from
+	<code>PerCederberg.Grammatica.Parser</code> to
+	<code>PerCederberg.Grammatica.Runtime</code> due to the new
+	C# 2.0 compiler strictness. <ref bug="14302"/></text>
+      </item>
+
+      <item>
+        <title>Changed .NET parser API for better integration</title>
+        <text>The .NET parser API has been modified for almost all
         classes, introducing properties and indices instead of getter
         and setter methods. The old methods have been deprecated, but
         are still available to avoid breaking existing applications.
