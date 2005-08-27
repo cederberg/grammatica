@@ -123,7 +123,7 @@ class VisualBasicTokenizerFile {
 
         // Add using
         file.addImports(new VisualBasicImports("System.IO"));
-        file.addImports(new VisualBasicImports("PerCederberg.Grammatica.Parser"));
+        file.addImports(new VisualBasicImports("PerCederberg.Grammatica.Runtime"));
 
         // Add namespace
         if (gen.getNamespace() == null) {

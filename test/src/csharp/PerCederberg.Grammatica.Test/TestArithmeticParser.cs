@@ -20,7 +20,7 @@
  */
 
 using System.IO;
-using PerCederberg.Grammatica.Parser;
+using PerCederberg.Grammatica.Runtime;
 
 namespace PerCederberg.Grammatica.Test {
 

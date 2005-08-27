@@ -21,7 +21,7 @@
  * Copyright (c) 2003 Per Cederberg. All rights reserved.
  */
 
-using PerCederberg.Grammatica.Parser;
+using PerCederberg.Grammatica.Runtime;
 
 namespace PerCederberg.Grammatica.Test {
 

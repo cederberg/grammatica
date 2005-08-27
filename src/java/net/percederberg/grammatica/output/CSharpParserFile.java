@@ -169,7 +169,7 @@ class CSharpParserFile {
 
         // Add using
         file.addUsing(new CSharpUsing("System.IO"));
-        file.addUsing(new CSharpUsing("PerCederberg.Grammatica.Parser"));
+        file.addUsing(new CSharpUsing("PerCederberg.Grammatica.Runtime"));
 
         // Add namespace
         if (gen.getNamespace() == null) {

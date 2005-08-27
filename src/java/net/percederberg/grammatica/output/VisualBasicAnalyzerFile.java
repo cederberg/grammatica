@@ -157,7 +157,7 @@ class VisualBasicAnalyzerFile {
         String                str;
 
         // Add using
-        file.addImports(new VisualBasicImports("PerCederberg.Grammatica.Parser"));
+        file.addImports(new VisualBasicImports("PerCederberg.Grammatica.Runtime"));
 
         // Add namespace
         if (gen.getNamespace() == null) {

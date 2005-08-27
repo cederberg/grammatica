@@ -149,7 +149,7 @@ class CSharpAnalyzerFile {
         String  str;
 
         // Add using
-        file.addUsing(new CSharpUsing("PerCederberg.Grammatica.Parser"));
+        file.addUsing(new CSharpUsing("PerCederberg.Grammatica.Runtime"));
 
         // Add namespace
         if (gen.getNamespace() == null) {
