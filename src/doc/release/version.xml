@@ -9,6 +9,14 @@
 
     <list>
       <item>
+        <title>License modified to GNU LGPL version 3</title>
+        <text>The license agreement for this library has been changed
+        to <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL,
+        version 3</a>. This change was made for compatibility reasons
+        and most users will remain unaffected.</text>
+      </item>
+
+      <item>
         <title>Added Visual Basic.NET code generation</title>
         <text>A Visual Basic.NET source code generator has been
         contributed by Adrian Moore. It uses the same run-time library
