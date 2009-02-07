@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import org.apache.tools.ant.BuildException;
-
 import net.percederberg.grammatica.Grammar;
 import net.percederberg.grammatica.GrammarException;
 import net.percederberg.grammatica.TreePrinter;
@@ -68,6 +66,7 @@ public class ValidationElement implements ProcessingElement {
      * Creates a new validation element.
      */
     public ValidationElement() {
+        // Nothing to do here
     }
 
     /**
@@ -102,12 +101,12 @@ public class ValidationElement implements ProcessingElement {
     /**
      * Validates all attributes in the element.
      *
-     * @throws BuildException if some attribute was missing or had an
+     * @throws RuntimeException if some attribute was missing or had an
      *             invalid value
      */
-    public void validate() throws BuildException {
+    public void validate() throws RuntimeException {
         if (type == null) {
-            throw new BuildException(
+            throw new RuntimeException(
                 "missing 'type' attribute in <validate>");
         }
         if (!type.equals("debug")
@@ -115,12 +114,12 @@ public class ValidationElement implements ProcessingElement {
          && !type.equals("parse")
          && !type.equals("profile")) {
 
-            throw new BuildException(
+            throw new RuntimeException(
                 "value of 'type' attribute in <validate> must be one " +
                 "of 'debug', 'tokenize', 'parse', or 'profile'");
         }
         if (file == null && !type.equals("debug")) {
-            throw new BuildException(
+            throw new RuntimeException(
                 "missing 'inputfile' attribute in <validate>");
         }
     }
@@ -130,10 +129,10 @@ public class ValidationElement implements ProcessingElement {
      *
      * @param grammar        the grammar to process
      *
-     * @throws BuildException if the grammar couldn't be processed
+     * @throws RuntimeException if the grammar couldn't be processed
      *             correctly
      */
-    public void process(Grammar grammar) throws BuildException {
+    public void process(Grammar grammar) throws RuntimeException {
         if (type.equals("debug")) {
             debug(grammar);
         } else if (type.equals("tokenize")) {
@@ -143,7 +142,7 @@ public class ValidationElement implements ProcessingElement {
         } else if (type.equals("profile")) {
             profile(grammar);
         } else {
-            throw new BuildException("unknown <validation> type: " + type);
+            throw new RuntimeException("unknown <validation> type: " + type);
         }
     }
 
@@ -152,9 +151,9 @@ public class ValidationElement implements ProcessingElement {
      *
      * @param grammar        the grammar to use
      *
-     * @throws BuildException if a parser couldn't be created
+     * @throws RuntimeException if a parser couldn't be created
      */
-    private void debug(Grammar grammar) throws BuildException {
+    private void debug(Grammar grammar) throws RuntimeException {
         Tokenizer  tokenizer = null;
         Parser     parser = null;
 
@@ -163,8 +162,8 @@ public class ValidationElement implements ProcessingElement {
             tokenizer = grammar.createTokenizer(null);
             parser = grammar.createParser(tokenizer);
         } catch (GrammarException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         }
 
         // Print tokenizer and parser
@@ -186,10 +185,10 @@ public class ValidationElement implements ProcessingElement {
      *
      * @param grammar        the grammar to use
      *
-     * @throws BuildException if the input file couldn't be tokenized
+     * @throws RuntimeException if the input file couldn't be tokenized
      *             correctly
      */
-    private void tokenize(Grammar grammar) throws BuildException {
+    private void tokenize(Grammar grammar) throws RuntimeException {
         Tokenizer  tokenizer;
         Token      token;
 
@@ -204,13 +203,13 @@ public class ValidationElement implements ProcessingElement {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new BuildException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (GrammarException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         } catch (ParseException e) {
-            throw new BuildException("in file " + file + ": " +
-                                     e.getMessage());
+            throw new RuntimeException("in file " + file + ": " +
+                                       e.getMessage());
         }
     }
 
@@ -219,10 +218,10 @@ public class ValidationElement implements ProcessingElement {
      *
      * @param grammar        the grammar to use
      *
-     * @throws BuildException if the input file couldn't be parsed
+     * @throws RuntimeException if the input file couldn't be parsed
      *             correctly
      */
-    private void parse(Grammar grammar) throws BuildException {
+    private void parse(Grammar grammar) throws RuntimeException {
         Tokenizer  tokenizer;
         Analyzer   analyzer;
         Parser     parser;
@@ -240,16 +239,16 @@ public class ValidationElement implements ProcessingElement {
             }
             parser.parse();
         } catch (FileNotFoundException e) {
-            throw new BuildException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (GrammarException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         } catch (ParserCreationException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         } catch (ParserLogException e) {
-            throw new BuildException("in file " + file + ": " +
-                                     e.getMessage());
+            throw new RuntimeException("in file " + file + ": " +
+                                       e.getMessage());
         }
     }
 
@@ -259,10 +258,10 @@ public class ValidationElement implements ProcessingElement {
      *
      * @param grammar        the grammar to use
      *
-     * @throws BuildException if the input file couldn't be profiled
+     * @throws RuntimeException if the input file couldn't be profiled
      *             correctly
      */
-    private void profile(Grammar grammar) throws BuildException {
+    private void profile(Grammar grammar) throws RuntimeException {
         Tokenizer  tokenizer;
         Parser     parser;
         Node       node;
@@ -284,13 +283,13 @@ public class ValidationElement implements ProcessingElement {
             System.out.println("  Average speed: " + (counter / time) +
                                " tokens/millisec");
         } catch (FileNotFoundException e) {
-            throw new BuildException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (GrammarException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         } catch (ParseException e) {
-            throw new BuildException("in file " + file + ": " +
-                                     e.getMessage());
+            throw new RuntimeException("in file " + file + ": " +
+                                       e.getMessage());
         }
 
         // Profile parser
@@ -307,16 +306,16 @@ public class ValidationElement implements ProcessingElement {
             System.out.println("  Average speed: " + (counter / time) +
                                " nodes/millisec");
         } catch (FileNotFoundException e) {
-            throw new BuildException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (GrammarException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         } catch (ParserCreationException e) {
-            throw new BuildException("in grammar " + grammar.getFileName() +
-                                     ": " + e.getMessage());
+            throw new RuntimeException("in grammar " + grammar.getFileName() +
+                                       ": " + e.getMessage());
         } catch (ParserLogException e) {
-            throw new BuildException("in file " + file + ": " +
-                                     e.getMessage());
+            throw new RuntimeException("in file " + file + ": " +
+                                       e.getMessage());
         }
     }
 }

@@ -21,8 +21,6 @@
 
 package net.percederberg.grammatica.ant;
 
-import org.apache.tools.ant.BuildException;
-
 import net.percederberg.grammatica.Grammar;
 
 /**
@@ -39,18 +37,18 @@ public interface ProcessingElement {
     /**
      * Validates all attributes in the element.
      *
-     * @throws BuildException if some attribute was missing or had an
+     * @throws RuntimeException if some attribute was missing or had an
      *             invalid value
      */
-    void validate() throws BuildException;
+    void validate() throws RuntimeException;
 
     /**
      * Proceses the specified grammar.
      *
      * @param grammar        the grammar to process
      *
-     * @throws BuildException if the grammar couldn't be processed
+     * @throws RuntimeException if the grammar couldn't be processed
      *             correctly
      */
-    void process(Grammar grammar) throws BuildException;
+    void process(Grammar grammar) throws RuntimeException;
 }

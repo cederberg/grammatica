@@ -24,8 +24,6 @@ package net.percederberg.grammatica.ant;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.tools.ant.BuildException;
-
 import net.percederberg.grammatica.Grammar;
 import net.percederberg.grammatica.output.CSharpParserGenerator;
 
@@ -63,6 +61,7 @@ public class CSharpElement implements ProcessingElement {
      * Creates a new C# output element.
      */
     public CSharpElement() {
+        // Nothing to do here
     }
 
     /**
@@ -107,12 +106,12 @@ public class CSharpElement implements ProcessingElement {
     /**
      * Validates all attributes in the element.
      *
-     * @throws BuildException if some attribute was missing or had an
+     * @throws RuntimeException if some attribute was missing or had an
      *             invalid value
      */
-    public void validate() throws BuildException {
+    public void validate() throws RuntimeException {
         if (dir == null) {
-            throw new BuildException(
+            throw new RuntimeException(
                 "missing 'dir' attribute in <csharp> element");
         }
     }
@@ -122,10 +121,10 @@ public class CSharpElement implements ProcessingElement {
      *
      * @param grammar        the grammar to process
      *
-     * @throws BuildException if the grammar couldn't be processed
+     * @throws RuntimeException if the grammar couldn't be processed
      *             correctly
      */
-    public void process(Grammar grammar) throws BuildException {
+    public void process(Grammar grammar) throws RuntimeException {
         CSharpParserGenerator gen = new CSharpParserGenerator(grammar);
 
         gen.setBaseDir(dir);
@@ -141,7 +140,7 @@ public class CSharpElement implements ProcessingElement {
             gen.write();
             System.out.println("Done.");
         } catch (IOException e) {
-            throw new BuildException(e);
+            throw new RuntimeException(e);
         }
     }
 }

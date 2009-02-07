@@ -25,9 +25,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
-
 import net.percederberg.grammatica.Grammar;
 import net.percederberg.grammatica.GrammarException;
 import net.percederberg.grammatica.parser.ParserLogException;
@@ -39,7 +36,7 @@ import net.percederberg.grammatica.parser.ParserLogException;
  * @version  1.5
  * @since    1.4
  */
-public class GrammaticaTask extends Task {
+public class GrammaticaTask {
 
     /**
      * The grammar file to process.
@@ -60,6 +57,7 @@ public class GrammaticaTask extends Task {
      * Creates a new Grammatica Ant task.
      */
     public GrammaticaTask() {
+        // Nothing to do here
     }
 
     /**
@@ -119,18 +117,18 @@ public class GrammaticaTask extends Task {
     /**
      * Executes the task.
      *
-     * @throws BuildException if the task execution failed
+     * @throws RuntimeException if the task execution failed
      */
-    public void execute() throws BuildException {
+    public void execute() throws RuntimeException {
         Grammar  grammar;
         int      i;
 
         // Validate all elements
         if (file == null) {
-            throw new BuildException("missing 'grammar' attribute");
+            throw new RuntimeException("missing 'grammar' attribute");
         }
         if (processors.size() <= 0) {
-            throw new BuildException(
+            throw new RuntimeException(
                 "missing <validate>, <java>, <csharp> or <visualbasic> " +
                 "inner element");
         }
@@ -142,7 +140,7 @@ public class GrammaticaTask extends Task {
         try {
             grammar = new Grammar(file);
         } catch (FileNotFoundException e) {
-            throw new BuildException(e);
+            throw new RuntimeException(e);
         } catch (ParserLogException e) {
             handleError(e);
             return;
@@ -155,7 +153,7 @@ public class GrammaticaTask extends Task {
         for (i = 0; i < processors.size(); i++) {
             try {
                 ((ProcessingElement) processors.get(i)).process(grammar);
-            } catch (BuildException e) {
+            } catch (RuntimeException e) {
                 handleError(e);
             }
         }
@@ -167,14 +165,14 @@ public class GrammaticaTask extends Task {
      *
      * @param e              the error exception
      *
-     * @throws BuildException if the build should fail on errors
+     * @throws RuntimeException if the build should fail on errors
      */
-    private void handleError(Exception e) throws BuildException {
+    private void handleError(Exception e) throws RuntimeException {
         if (failOnError) {
-            if (e instanceof BuildException) {
-                throw (BuildException) e;
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
             } else {
-                throw new BuildException(e);
+                throw new RuntimeException(e);
             }
         }
         System.err.println("ERROR: " + e.getMessage());
