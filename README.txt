@@ -4,17 +4,19 @@ GRAMMATICA README
 1. Introduction
 ---------------
 
-  Grammatica is a parser generator for C# and Java. It reads a grammar
-  file and creates source code for a parser. The grammar file format
-  describes the language in EBNF, with tokens described as regular
-  expressions.
-  
+  Grammatica is a C# and Java parser generator (compiler compiler).
+  It reads a grammar file (in an EBNF format) and creates well-
+  commented and readable C# or Java source code for the parser. It
+  supports LL(k) grammars, automatic error recovery, readable error
+  messages and a clean separation between the grammar and the source
+  code.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   separate LICENCE.txt file for more details.
-  
-  Please see http://www.nongnu.org/grammatica/ for more information.
+
+  Please see http://grammatica.percederberg.net/ for more information.
 
 
 2. Installation & Usage
@@ -37,21 +39,19 @@ GRAMMATICA README
   See the following web page for further information about reporting
   errors:
 
-    http://www.nongnu.org/grammatica/support.html
+    http://grammatica.percederberg.net/help/
 
 
 5. Contributing
 ---------------
 
   If you find this software package useful or interesting, please 
-  consider contributing to the project. The easiest way to contribute
-  is to report errors or problems encountered when using this 
-  software. Please see the project web site for more information:
+  consider contributing to the project. Please see the project web
+  site for more information:
 
-    http://www.nongnu.org/grammatica/   
-  
+    http://grammatica.percederberg.net/
+
 _____________________________________________________________________
-
-Copyright (c) 2003 Per Cederberg. Permission is granted to copy this 
-document verbatim in any medium, provided that this copyright notice 
-is left intact.
+Copyright (c) 2003-2009 Per Cederberg. Permission is granted to copy
+this document verbatim in any medium, provided that this copyright
+notice  is left intact.
