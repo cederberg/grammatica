@@ -77,11 +77,9 @@
 
   <target name="compile-clean">
     <delete quiet="true">
-      <fileset dir="bin" />
       <fileset dir="classes" />
       <fileset dir="lib" includes="${build.name}-*" />
     </delete>
-    <mkdir dir="bin" />
     <mkdir dir="classes" />
     <mkdir dir="lib" />
   </target>
