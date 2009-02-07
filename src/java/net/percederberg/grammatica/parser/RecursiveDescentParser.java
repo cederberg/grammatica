@@ -823,7 +823,7 @@ public class RecursiveDescentParser extends Parser {
      * A name value stack. This stack is used to detect loops and
      * repetitions of the same production during look-ahead analysis.
      */
-    private class CallStack {
+    class CallStack {
 
         /**
          * A stack with names.

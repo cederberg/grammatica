@@ -52,12 +52,6 @@ public class ProductionPatternAlternative {
     private LookAheadSet lookAhead = null;
 
     /**
-     * Creates a new production pattern alternative.
-     */
-    public ProductionPatternAlternative() {
-    }
-
-    /**
      * Checks if this alternative is recursive on the left-hand side.
      * This method checks all the possible left side elements and
      * returns true if the pattern itself is among them.

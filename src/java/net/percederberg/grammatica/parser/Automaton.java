@@ -48,12 +48,6 @@ class Automaton {
     private AutomatonTree tree = new AutomatonTree();
 
     /**
-     * Creates a new empty automaton.
-     */
-    public Automaton() {
-    }
-
-    /**
      * Adds a string match to this automaton. New states and
      * transitions will be added to extend this automaton to support
      * the specified string.
@@ -124,7 +118,7 @@ class Automaton {
      * @version  1.5
      * @since    1.5
      */
-    private class AutomatonTree {
+    class AutomatonTree {
 
         /**
          * The transition character. If this value is set to the zero
@@ -146,12 +140,6 @@ class Automaton {
          * The right subtree.
          */
         private AutomatonTree right = null;
-
-        /**
-         * Creates a new empty automaton transition tree.
-         */
-        public AutomatonTree() {
-        }
 
         /**
          * Finds an automaton state from the specified transition

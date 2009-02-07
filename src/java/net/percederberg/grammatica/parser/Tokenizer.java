@@ -387,7 +387,7 @@ public class Tokenizer {
      * checks for matches with the tokenizer buffer, and maintains the
      * state of the last match.
      */
-    private abstract class TokenMatcher {
+    abstract class TokenMatcher {
 
         /**
          * Returns the latest matched token pattern.
@@ -412,7 +412,7 @@ public class Tokenizer {
      * to match a single regular expression with an input stream. This
      * class also maintains the state of the last match.
      */
-    private class RegExpTokenMatcher extends TokenMatcher {
+    class RegExpTokenMatcher extends TokenMatcher {
 
         /**
          * The token pattern to match with.
@@ -520,7 +520,7 @@ public class Tokenizer {
      * a DFA for maximum performance. It also maintains the state of
      * the last match.
      */
-    private class StringTokenMatcher extends TokenMatcher {
+    class StringTokenMatcher extends TokenMatcher {
 
         /**
          * The list of string token patterns.
@@ -536,12 +536,6 @@ public class Tokenizer {
          * The last token pattern match found.
          */
         private TokenPattern match = null;
-
-        /**
-         * Creates a new string token matcher.
-         */
-        public StringTokenMatcher() {
-        }
 
         /**
          * Resets the matcher state. This will clear the results of

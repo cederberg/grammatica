@@ -39,12 +39,6 @@ public class ParserLogException extends Exception {
     private ArrayList errors = new ArrayList();
 
     /**
-     * Creates a new empty parser log exception.
-     */
-    public ParserLogException() {
-    }
-
-    /**
      * Returns the number of errors in this log.
      *
      * @return the number of errors in this log

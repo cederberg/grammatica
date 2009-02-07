@@ -44,12 +44,6 @@ import java.util.ArrayList;
 public class Analyzer {
 
     /**
-     * Creates a new parse tree analyzer.
-     */
-    public Analyzer() {
-    }
-
-    /**
      * Analyzes a parse tree node by traversing all it's child nodes.
      * The tree traversal is depth-first, and the appropriate
      * callback methods will be called. If the node is a production
@@ -144,6 +138,7 @@ public class Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enter(Node node) throws ParseException {
+        // Nothing is done here by default
     }
 
     /**
