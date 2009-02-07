@@ -18,7 +18,7 @@
   <xsl:output method="text"
               encoding="ISO-8859-1" />
 
-  <xsl:strip-space elements="doc" />
+  <xsl:strip-space elements="*" />
 
 
   <!-- ### DOCUMENT HEADER ### -->
@@ -45,15 +45,14 @@
     <xsl:apply-templates />
     &newline;
     <xsl:text>_____________________________________________________________________
-
 Grammatica </xsl:text>
     <xsl:value-of select="$version" />
     <xsl:text> (</xsl:text>
     <xsl:value-of select="$date" />
-    <xsl:text>). See http://grammatica.percederberg.net/ for
-more information.
+    <xsl:text>). See http://grammatica.percederberg.net/
+for more information.
 
-Copyright (c) 2003-2005 Per Cederberg. This document is distributed
+Copyright (c) 2003-2009 Per Cederberg. This document is distributed
 as a part of Grammatica under the GNU LGPL license.</xsl:text>
     &newline;
   </xsl:template>

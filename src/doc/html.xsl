@@ -82,7 +82,7 @@
       </p>
       &newline;&newline;&indent;&indent;
       <p class="footer">
-        <xsl:text disable-output-escaping="yes">Copyright &amp;copy; 2003-2005 Per Cederberg. This document is
+        <xsl:text disable-output-escaping="yes">Copyright &amp;copy; 2003-2009 Per Cederberg. This document is
     distributed as part of Grammatica under the GNU LGPL license.</xsl:text>
       </p>
       &newline;&newline;&indent;
