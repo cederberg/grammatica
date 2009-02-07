@@ -56,11 +56,6 @@ public class JavaFile extends CodeElementContainer {
     private File dir;
 
     /**
-     * The package this file is contained in.
-     */
-    private JavaPackage filePackage;
-
-    /**
      * The first class or interface added.
      */
     private CodeElement first = null;
@@ -72,7 +67,6 @@ public class JavaFile extends CodeElementContainer {
      */
     public JavaFile(File basedir) {
         this.dir = basedir;
-        this.filePackage = null;
     }
 
     /**
@@ -85,7 +79,6 @@ public class JavaFile extends CodeElementContainer {
      */
     public JavaFile(File basedir, JavaPackage filePackage) {
         this.dir = filePackage.toFile(basedir);
-        this.filePackage = filePackage;
         addElement(filePackage);
     }
 
