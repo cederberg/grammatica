@@ -4,6 +4,5 @@
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/junit-4.5.jar"/>
-	<classpathentry kind="lib" path="lib/ant-1.7.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
