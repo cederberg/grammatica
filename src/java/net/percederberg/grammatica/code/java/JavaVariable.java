@@ -108,7 +108,7 @@ public class JavaVariable extends CodeElement {
      * if a single initialization value is added. Otherwise the vector
      * initialization is used.
      *
-     * @see #vectorInit
+     * @see #initValueList
      */
     private String initValue;
 
