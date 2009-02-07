@@ -29,34 +29,26 @@
   library, but you are not obligated to do so. If you do not wish to
   do so, delete this exception statement from your version.
 
-  Copyright (c) 2003 Per Cederberg. All rights reserved.
+  Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
 -->
 
-<project name="grammatica" default="package" basedir=".">
-
+<project name="grammatica" default="package">
 
 <!-- INITIALIZATION -->
-  <property name="build.dir"
-            value="${basedir}" />
-
+  <property name="build.name" value="${ant.project.name}" />
+  <property name="build.title" value="Grammatica" />
+  <tstamp>
+    <format property="build.printdate" pattern="yyyy-MM-dd" />
+  </tstamp>
+  <condition property="build.version" value="${DSTAMP}">
+    <not>
+      <isset property="build.version" />
+    </not>
+  </condition>
+  <property name="build.date" value="${DSTAMP}" />
   <path id="project.class.path">
-    <fileset dir="${build.dir}/lib">
-      <include name="**/*.jar"/>
-    </fileset>
+    <fileset dir="lib" includes="**/*.jar" />
   </path>
-
-  <target name="init">
-    <tstamp>
-      <format property="build.printdate"
-              pattern="yyyy-MM-dd" />
-    </tstamp>
-    <condition property="build.version" value="${DSTAMP}">
-      <not>
-        <isset property="build.version" />
-      </not>
-    </condition>
-    <property name="build.date" value="${DSTAMP}" />
-  </target>
 
 
 <!-- CODE GENERATION TARGETS -->
@@ -65,43 +57,44 @@
     <antcall target="compile-java" />
     <taskdef name="grammatica"
              classname="net.percederberg.grammatica.ant.GrammaticaTask"
-             classpath="${build.dir}/classes" />
-    <grammatica grammar="${build.dir}/src/grammar/grammar.grammar">
-      <java dir="${build.dir}/src/java"
-            package="net.percederberg.grammatica" />
+             classpath="classes" />
+    <grammatica grammar="src/grammar/grammar.grammar">
+      <java dir="src/java" package="net.percederberg.grammatica" />
     </grammatica>
   </target>
 
 
 <!-- COMPILATION TARGETS -->
-  <target name="compile"
-          depends="init,codegen,compile-clean,compile-java,compile-csharp">
-    <jar jarfile="${build.dir}/lib/grammatica-${build.version}.jar"
-         includesfile="${build.dir}/LICENSE.txt">
+  <target name="compile" description="Builds the project from source code"
+          depends="codegen,compile-clean,compile-info,compile-java,compile-csharp">
+    <jar jarfile="lib/${build.name}-${build.version}.jar">
       <manifest>
         <attribute name="Main-Class"
                    value="net.percederberg.grammatica.Grammatica" />
       </manifest>
-      <fileset dir="${build.dir}" includes="*.txt" />
-      <fileset dir="${build.dir}/classes" />
+      <fileset dir="." includes="LICENSE.txt" />
+      <fileset dir="classes" />
     </jar>
   </target>
 
   <target name="compile-clean">
     <delete quiet="true">
-      <fileset dir="${build.dir}/bin" />
-      <fileset dir="${build.dir}/classes" />
-      <fileset dir="${build.dir}/lib" 
-               includes="grammatica*" />
+      <fileset dir="bin" />
+      <fileset dir="classes" />
+      <fileset dir="lib" includes="${build.name}-*" />
     </delete>
-    <mkdir dir="${build.dir}/bin" />
-    <mkdir dir="${build.dir}/classes" />
-    <mkdir dir="${build.dir}/lib" />
+    <mkdir dir="bin" />
+    <mkdir dir="classes" />
+    <mkdir dir="lib" />
+  </target>
+
+  <target name="compile-info" unless="build.dotnet">
+    <echo>WARNING: Use -Dbuild.dotnet=1 to compile C#/.NET version</echo>
   </target>
 
   <target name="compile-java">
-    <javac srcdir="${build.dir}/src/java"
-           destdir="${build.dir}/classes"
+    <javac srcdir="src/java"
+           destdir="classes"
            classpathref="project.class.path"
            source="1.2"
            target="1.2"
@@ -109,55 +102,41 @@
            deprecation="on" />
   </target>
 
-  <target name="compile-java-bin">
-    <echo level="info" message="Compiling Java sources with gcj..." />
-    <fail unless="build.gcj.classpath"
-          message="The 'build.gcj.classpath' property must be set." />
-    <apply executable="gcj"
-           parallel="true"
-           failonerror="true">
-      <arg value="--classpath=${build.gcj.classpath}" />
-      <arg value="--main=net.percederberg.grammatica.Grammatica" />
-      <arg line="-o ${build.dir}/bin/grammatica" />
-      <fileset dir="${build.dir}/src/java"
-               includes="**/*.java" />
-    </apply>
-  </target>
-
-  <target name="compile-csharp">
-    <csc destfile="${build.dir}/lib/grammatica-${build.version}.dll"
+  <target name="compile-csharp" if="build.dotnet">
+    <csc destfile="lib/${build.name}-${build.version}.dll"
          targettype="library"
          debug="on"
          warnlevel="4"
          failonerror="true">
-      <src dir="${build.dir}/src/csharp"
+      <src dir="src/csharp"
            includes="**/*.cs" />
     </csc>
   </target>
 
 
 <!-- TEST TARGETS -->
-  <target name="test" depends="compile,test-codegen,test-java,test-csharp">
+  <target name="test" description="Runs all automated tests for the project"
+  	      depends="compile,test-codegen,test-java,test-csharp">
   </target>
 
   <target name="test-codegen">
-    <grammatica grammar="${build.dir}/test/src/grammar/arithmetic.grammar">
-      <java dir="${build.dir}/test/src/java"
+    <grammatica grammar="test/src/grammar/arithmetic.grammar">
+      <java dir="test/src/java"
             package="net.percederberg.grammatica.test" />
-      <csharp dir="${build.dir}/test/src/csharp/PerCederberg.Grammatica.Test"
+      <csharp dir="test/src/csharp/PerCederberg.Grammatica.Test"
               namespace="PerCederberg.Grammatica.Test" />
     </grammatica>
-    <grammatica grammar="${build.dir}/test/src/grammar/regexp.grammar">
-      <java dir="${build.dir}/test/src/java"
+    <grammatica grammar="test/src/grammar/regexp.grammar">
+      <java dir="test/src/java"
             package="net.percederberg.grammatica.test" />
-      <csharp dir="${build.dir}/test/src/csharp/PerCederberg.Grammatica.Test"
+      <csharp dir="test/src/csharp/PerCederberg.Grammatica.Test"
               namespace="PerCederberg.Grammatica.Test" />
     </grammatica>
   </target>
 
   <target name="test-java">
-    <javac srcdir="${build.dir}/test/src/java"
-           destdir="${build.dir}/classes"
+    <javac srcdir="test/src/java"
+           destdir="classes"
            classpathref="project.class.path"
            source="1.2"
            target="1.2"
@@ -165,55 +144,53 @@
            deprecation="on" />
     <junit haltonfailure="on">
       <batchtest>
-        <fileset dir="${build.dir}/test/src/java">
-          <include name="**/Test*.java"/>
-        </fileset>
+        <fileset dir="test/src/java" includes="**/Test*.java" />
       </batchtest>
       <formatter type="plain" usefile="false" />
       <classpath>
-        <pathelement location="${build.dir}/classes" />
+        <pathelement location="classes" />
+      	<path refid="project.class.path" />
       </classpath>
      </junit>
   </target>
 
-  <target name="test-csharp">
-    <csc destfile="${build.dir}/lib/cstestall.exe"
+  <target name="test-csharp" if="build.dotnet">
+    <csc destfile="lib/cstestall.exe"
          targettype="exe"
          mainclass="TestAll"
          debug="on"
          warnlevel="4"
          failonerror="true">
-      <src dir="${build.dir}/test/src/csharp"
+      <src dir="test/src/csharp"
            includes="**/*.cs" />
-      <reference dir="${build.dir}/lib"
-                 includes="*.dll" />
+      <reference dir="lib" includes="*.dll" />
     </csc>
     <echo level="info" message="running C# test cases with Mono..." />
     <exec executable="mono"
           failonerror="true">
-      <arg value="${build.dir}/lib/cstestall.exe" />
+      <arg value="lib/cstestall.exe" />
     </exec>
-    <delete file="${build.dir}/lib/cstestall.exe" />
+    <delete file="lib/cstestall.exe" />
   </target>
 
 
 <!-- DOCUMENTATION TARGETS -->
-  <target name="doc"
-          depends="init,doc-clean,doc-text,doc-html,doc-java,doc-csharp">
+  <target name="doc" description="Generates the project documentation"
+          depends="doc-clean,doc-text,doc-html,doc-java,doc-csharp">
   </target>
 
   <target name="doc-clean">
-    <delete quiet="true" dir="${build.dir}/doc" />
-    <mkdir dir="${build.dir}/doc" />
-    <mkdir dir="${build.dir}/doc/manual" />
-    <mkdir dir="${build.dir}/doc/api/java" />
-    <mkdir dir="${build.dir}/doc/api/csharp" />
+    <delete quiet="true" dir="doc" />
+    <mkdir dir="doc" />
+    <mkdir dir="doc/manual" />
+    <mkdir dir="doc/api/java" />
+    <mkdir dir="doc/api/csharp" />
   </target>
 
   <target name="doc-text">
-    <xslt style="${build.dir}/src/doc/txt.xsl"
-          basedir="${build.dir}/src/doc/release"
-          destdir="${build.dir}/doc"
+    <xslt style="src/doc/txt.xsl"
+          basedir="src/doc/release"
+          destdir="doc"
           extension=".txt"
           includes="*.xml">
       <param name="version" expression="${build.version}" />
@@ -222,20 +199,20 @@
   </target>
 
   <target name="doc-html">
-    <copy file="${build.dir}/src/doc/style.css"
-          todir="${build.dir}/doc" />
-    <xslt style="${build.dir}/src/doc/html.xsl"
-          basedir="${build.dir}/src/doc/release"
-          destdir="${build.dir}/doc"
+    <copy file="src/doc/style.css"
+          todir="doc" />
+    <xslt style="src/doc/html.xsl"
+          basedir="src/doc/release"
+          destdir="doc"
           extension=".html"
           includes="*.xml">
       <param name="version" expression="${build.version}" />
       <param name="date" expression="${build.printdate}" />
       <param name="style" expression="style.css" />
     </xslt>
-    <xslt style="${build.dir}/src/doc/html.xsl"
-          basedir="${build.dir}/src/doc/manual"
-          destdir="${build.dir}/doc/manual"
+    <xslt style="src/doc/html.xsl"
+          basedir="src/doc/manual"
+          destdir="doc/manual"
           extension=".html"
           includes="*.xml">
       <param name="version" expression="${build.version}" />
@@ -246,42 +223,42 @@
 
   <target name="doc-java">
     <javadoc packagenames="net.percederberg.grammatica.parser.*"
-             sourcepath="${build.dir}/src/java"
-             destdir="${build.dir}/doc/api/java"
-             classpath="${build.dir}/classes"
+             sourcepath="src/java"
+             destdir="doc/api/java"
+             classpath="classes"
              classpathref="project.class.path"
              version="false"
              use="true"
              author="false"
-             windowtitle="Grammatica ${build.version} Documentation"
+             windowtitle="${build.title} ${build.version} Documentation"
              failonerror="true" />
   </target>
 
-  <target name="doc-csharp">
+  <target name="doc-csharp" if="build.dotnet">
     <exec executable="cppdoc"
-          dir="${build.dir}/doc/api/csharp"
+          dir="doc/api/csharp"
           failonerror="true">
       <arg value="-classdir=." />
-      <arg value="-title=Grammatica ${build.version} Documentation" />
-      <arg value="${build.dir}/src/csharp" />
+      <arg value="-title=${build.title} ${build.version} Documentation" />
+      <arg value="src/csharp" />
     </exec>
   </target>
 
 
 <!-- PACKAGING TARGETS -->
-  <target name="package" depends="init,codegen,compile,test,doc">
+  <target name="package" description="Builds a complete distribution package"
+  	      depends="codegen,compile,test,doc">
     <delete quiet="true">
-      <fileset dir="${build.dir}" includes="grammatica-*.tar.gz" />
+      <fileset dir="." includes="${build.name}-*.tar.gz" />
     </delete>
-    <tar tarfile="${build.dir}/grammatica-${build.version}.tar.gz"
+    <tar tarfile="${build.name}-${build.version}.tar.gz"
          longfile="gnu"
          compression="gzip">
-      <tarfileset dir="${build.dir}"
-                  prefix="grammatica-${build.version}">
+      <tarfileset dir="." prefix="${build.name}-${build.version}">
         <include name="LICENSE.txt" />
         <include name="README.txt" />
         <include name="*.xml" />
-        <include name="lib/grammatica*" />
+        <include name="lib/**" />
         <include name="src/**" />
         <include name="test/**" />
         <include name="doc/**" />
