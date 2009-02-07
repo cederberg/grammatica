@@ -17,8 +17,7 @@
       <code>grammatica</code> task available.</caption>
     
       <content>
-        <pre>&lt;taskdef name="grammatica"
-         classname="net.percederberg.grammatica.ant.GrammaticaTask"
+        <pre>&lt;taskdef resource="ant-grammatica.properties"
          classpath="grammatica-<param name="version"/>.jar" /&gt;</pre>
       </content>
     </figure>
@@ -184,7 +183,9 @@
       a Java parser for <code>simple.grammar</code>.</caption>
 
       <content>
-        <pre>&lt;grammatica grammar="simple.grammar"&gt;
+        <pre>&lt;taskdef resource="ant-grammatica.properties"
+         classpath="grammatica-<param name="version"/>.jar" /&gt;
+&lt;grammatica grammar="simple.grammar"&gt;
   &lt;java dir="src"
         package="com.test.simple"
         public="true" /&gt;

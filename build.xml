@@ -55,9 +55,7 @@
   <target name="codegen">
     <antcall target="compile-clean" />
     <antcall target="compile-java" />
-    <taskdef name="grammatica"
-             classname="net.percederberg.grammatica.ant.GrammaticaTask"
-             classpath="classes" />
+    <taskdef resource="ant-grammatica.properties" classpath="classes" />
     <grammatica grammar="src/grammar/grammar.grammar">
       <java dir="src/java" package="net.percederberg.grammatica" />
     </grammatica>
@@ -100,6 +98,9 @@
            target="1.2"
            debug="on"
            deprecation="on" />
+  	<copy todir="classes">
+  	  <fileset dir="src/java" excludes="**/*.java" />
+  	</copy>
   </target>
 
   <target name="compile-csharp" if="build.dotnet">
