@@ -86,7 +86,7 @@ public class VisualBasicEnumeration extends VisualBasicType {
     /**
      * The last enumeration constant added.
      */
-    private Constant last = null;
+    Constant last = null;
 
     /**
      * Creates a new enumeration code generator with public access.
