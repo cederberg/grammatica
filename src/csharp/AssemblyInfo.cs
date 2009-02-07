@@ -3,7 +3,7 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -27,7 +27,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("http://grammatica.percederberg.net/")]
 [assembly: AssemblyProduct("Grammatica")]
-[assembly: AssemblyCopyright("2003-2005 Per Cederberg")]
+[assembly: AssemblyCopyright("2003-2009 Per Cederberg")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("1.5.0.*")]
