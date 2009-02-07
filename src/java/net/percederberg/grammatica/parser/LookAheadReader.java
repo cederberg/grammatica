@@ -323,22 +323,19 @@ public class LookAheadReader extends Reader {
 
         // Read characters
         try {
-            readSize = input.read(buffer, length, size);
+            while (input != null && size > 0) {
+                readSize = input.read(buffer, length, size);
+                if (readSize > 0) {
+                    length += readSize;
+                    size -= readSize;
+                } else {
+                    input.close();
+                    input = null;
+                }
+            }
         } catch (IOException e) {
             input = null;
             throw e;
-        }
-
-        // Append characters to buffer
-        if (readSize > 0) {
-            length += readSize;
-        }
-        if (readSize < size) {
-            try {
-                input.close();
-            } finally {
-                input = null;
-            }
         }
     }
 

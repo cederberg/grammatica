@@ -81,6 +81,13 @@
         parse error. The comment token regular expression has now been
         corrected to fix this. <ref bug="12767"/></text>
       </item>
+
+      <item>
+        <title>Fixed premature EOF reported in some cases</title>
+        <text>The tokenizer previously assumed EOF had been encountered
+        when a full look-ahead buffer couldn't be read. This has now been
+        corrected to check for a proper EOF result. <ref bug="23818"/></text>
+      </item>
     </list>
 
 
