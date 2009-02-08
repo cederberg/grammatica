@@ -257,20 +257,20 @@ public class Token extends Node {
      */
     public String toString() {
         StringBuffer  buffer = new StringBuffer();
-        int           newline = image.indexOf('\n');
+        char          chr;
 
         buffer.append(pattern.getName());
         buffer.append("(");
         buffer.append(pattern.getId());
         buffer.append("): \"");
-        if (newline >= 0) {
-            if (newline > 0 && image.charAt(newline - 1) == '\r') {
-                newline--;
+        for (int i = 0; i < image.length(); i++) {
+            chr = image.charAt(i);
+            if (Character.isISOControl(chr) || (i > 25 && image.length() > 30)) {
+                buffer.append("(...)");
+                break;
+            } else {
+                buffer.append(chr);
             }
-            buffer.append(image.substring(0, newline));
-            buffer.append("(...)");
-        } else {
-            buffer.append(image);
         }
         buffer.append("\", line: ");
         buffer.append(startLine);
@@ -289,17 +289,17 @@ public class Token extends Node {
      */
     public String toShortString() {
         StringBuffer  buffer = new StringBuffer();
-        int           newline = image.indexOf('\n');
+        char          chr;
 
         buffer.append('"');
-        if (newline >= 0) {
-            if (newline > 0 && image.charAt(newline - 1) == '\r') {
-                newline--;
+        for (int i = 0; i < image.length(); i++) {
+            chr = image.charAt(i);
+            if (Character.isISOControl(chr) || (i > 25 && image.length() > 30)) {
+                buffer.append("(...)");
+                break;
+            } else {
+                buffer.append(chr);
             }
-            buffer.append(image.substring(0, newline));
-            buffer.append("(...)");
-        } else {
-            buffer.append(image);
         }
         buffer.append('"');
         if (pattern.getType() == TokenPattern.REGEXP_TYPE) {
