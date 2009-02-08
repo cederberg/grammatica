@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import net.percederberg.grammatica.parser.LookAheadReader;
+import net.percederberg.grammatica.parser.ReaderBuffer;
 
 /**
  * A regular expression character set element. This element matches a
@@ -177,7 +177,7 @@ class CharacterSetElement extends Element {
      * elements.
      *
      * @param m              the matcher being used
-     * @param input          the input character stream to match
+     * @param buffer         the input character buffer to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
@@ -186,7 +186,7 @@ class CharacterSetElement extends Element {
      *
      * @throws IOException if an I/O error occurred
      */
-    public int match(Matcher m, LookAheadReader input, int start, int skip)
+    public int match(Matcher m, ReaderBuffer buffer, int start, int skip)
         throws IOException {
 
         int  c;
@@ -194,7 +194,7 @@ class CharacterSetElement extends Element {
         if (skip != 0) {
             return -1;
         }
-        c = input.peek(start);
+        c = buffer.peek(start);
         if (c < 0) {
             m.setReadEndOfString();
             return -1;

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -24,7 +24,7 @@ package net.percederberg.grammatica.parser.re;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import net.percederberg.grammatica.parser.LookAheadReader;
+import net.percederberg.grammatica.parser.ReaderBuffer;
 
 /**
  * A regular expression string element. This element only matches an
@@ -84,7 +84,7 @@ class StringElement extends Element {
      * elements.
      *
      * @param m              the matcher being used
-     * @param input          the input character stream to match
+     * @param buffer         the input character buffer to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
@@ -93,7 +93,7 @@ class StringElement extends Element {
      *
      * @throws IOException if a I/O error occurred
      */
-    public int match(Matcher m, LookAheadReader input, int start, int skip)
+    public int match(Matcher m, ReaderBuffer buffer, int start, int skip)
         throws IOException {
 
         int  c;
@@ -102,7 +102,7 @@ class StringElement extends Element {
             return -1;
         }
         for (int i = 0; i < value.length(); i++) {
-            c = input.peek(start + i);
+            c = buffer.peek(start + i);
             if (c < 0) {
                 m.setReadEndOfString();
                 return -1;

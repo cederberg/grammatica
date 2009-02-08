@@ -16,18 +16,17 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
 
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
-import net.percederberg.grammatica.parser.LookAheadReader;
+import net.percederberg.grammatica.parser.ReaderBuffer;
 
 /**
  * A regular expression. This class creates and holds an internal
@@ -108,8 +107,8 @@ public class RegExp {
      * @return the regular expresion matcher
      *
      * @deprecated The CharBuffer class has been deprecated in favor
-     * of LookAheadReader as of version 1.5. Create a LookAheadReader
-     * and use the matcher(Reader) method instead of this one.
+     * of ReaderBuffer as of version 1.5. Create a ReaderBuffer
+     * and use the matcher(ReaderBuffer) method instead of this one.
      */
     public Matcher matcher(CharBuffer str) {
         return matcher(str.toString());
@@ -120,52 +119,24 @@ public class RegExp {
      *
      * @param str            the string to work with
      *
-     * @return the regular expresion matcher
+     * @return the regular expression matcher
      */
     public Matcher matcher(String str) {
-        return matcher(new StringReader(str));
-    }
-
-    /**
-     * Creates a new matcher for the specified string.
-     *
-     * @param str            the string to work with
-     *
-     * @return the regular expresion matcher
-     */
-    public Matcher matcher(StringBuffer str) {
-        return matcher(new StringReader(str.toString()));
-    }
-
-    /**
-     * Creates a new matcher for the specified character input stream.
-     *
-     * @param input           the character input stream
-     *
-     * @return the regular expresion matcher
-     *
-     * @since 1.5
-     */
-    public Matcher matcher(Reader input) {
-        if (input instanceof LookAheadReader) {
-            return matcher((LookAheadReader) input);
-        } else {
-            return matcher(new LookAheadReader(input));
-        }
+        return matcher(new ReaderBuffer(new StringReader(str)));
     }
 
     /**
      * Creates a new matcher for the specified look-ahead character
      * input stream.
      *
-     * @param input           the character input stream
+     * @param buffer         the character input buffer
      *
-     * @return the regular expresion matcher
+     * @return the regular expression matcher
      *
      * @since 1.5
      */
-    private Matcher matcher(LookAheadReader input) {
-        return new Matcher((Element) element.clone(), input, ignoreCase);
+    public Matcher matcher(ReaderBuffer buffer) {
+        return new Matcher((Element) element.clone(), buffer, ignoreCase);
     }
 
     /**

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -65,9 +65,9 @@ public class Tokenizer {
     private ArrayList regexpMatchers = new ArrayList();
 
     /**
-     * The look-ahead character stream reader.
+     * The character stream reader buffer.
      */
-    private LookAheadReader input = null;
+    private ReaderBuffer buffer = null;
 
     /**
      * The previous token in the token list.
@@ -95,7 +95,7 @@ public class Tokenizer {
      * @since 1.5
      */
     public Tokenizer(Reader input, boolean ignoreCase) {
-        this.input = new LookAheadReader(input);
+        this.buffer = new ReaderBuffer(input);
         this.ignoreCase = ignoreCase;
     }
 
@@ -169,7 +169,7 @@ public class Tokenizer {
      * @return the current line number
      */
     public int getCurrentLine() {
-        return input.getLineNumber();
+        return buffer.lineNumber();
     }
 
     /**
@@ -179,7 +179,7 @@ public class Tokenizer {
      * @return the current column number
      */
     public int getCurrentColumn() {
-        return input.getColumnNumber();
+        return buffer.columnNumber();
     }
 
     /**
@@ -201,7 +201,7 @@ public class Tokenizer {
             break;
         case TokenPattern.REGEXP_TYPE:
             try {
-                regexpMatchers.add(new RegExpTokenMatcher(pattern, input));
+                regexpMatchers.add(new RegExpTokenMatcher(pattern, buffer));
             } catch (RegExpException e) {
                 throw new ParserCreationException(
                     ParserCreationException.INVALID_TOKEN_ERROR,
@@ -230,16 +230,12 @@ public class Tokenizer {
      * @since 1.5
      */
     public void reset(Reader input) {
-        try {
-            this.input.close();
-        } catch (IOException ignore) {
-            // Do nothing
-        }
-        this.input = new LookAheadReader(input);
+        this.buffer.dispose();
+        this.buffer = new ReaderBuffer(input);
         this.previousToken = null;
         stringMatcher.reset();
         for (int i = 0; i < regexpMatchers.size(); i++) {
-            ((RegExpTokenMatcher) regexpMatchers.get(i)).reset(this.input);
+            ((RegExpTokenMatcher) regexpMatchers.get(i)).reset(this.buffer);
         }
     }
 
@@ -302,17 +298,17 @@ public class Tokenizer {
         try {
             m = findMatch();
             if (m != null) {
-                line = input.getLineNumber();
-                column = input.getColumnNumber();
-                str = input.readString(m.getMatchedLength());
+                line = buffer.lineNumber();
+                column = buffer.columnNumber();
+                str = buffer.read(m.getMatchedLength());
                 return new Token(m.getMatchedPattern(), str, line, column);
-            } else if (input.peek(0) < 0) {
+            } else if (buffer.peek(0) < 0) {
                 return null;
             } else {
-                line = input.getLineNumber();
-                column = input.getColumnNumber();
+                line = buffer.lineNumber();
+                column = buffer.columnNumber();
                 throw new ParseException(ParseException.UNEXPECTED_CHAR_ERROR,
-                                         input.readString(1),
+                                         buffer.read(1),
                                          line,
                                          column);
             }
@@ -347,7 +343,7 @@ public class Tokenizer {
         //       match.
 
         // Check string matches
-        if (stringMatcher.match(input)) {
+        if (stringMatcher.match(buffer)) {
             bestMatch = stringMatcher;
             bestLength = bestMatch.getMatchedLength();
         }
@@ -433,27 +429,27 @@ public class Tokenizer {
          * Creates a new regular expression token matcher.
          *
          * @param pattern        the pattern to match
-         * @param input          the input stream to check
+         * @param buffer         the input buffer to check
          *
          * @throws RegExpException if the regular expression couldn't
          *             be created properly
          */
-        public RegExpTokenMatcher(TokenPattern pattern, LookAheadReader input)
+        public RegExpTokenMatcher(TokenPattern pattern, ReaderBuffer buffer)
             throws RegExpException {
 
             this.pattern = pattern;
             this.regExp = new RegExp(pattern.getPattern(), ignoreCase);
-            this.matcher = regExp.matcher(input);
+            this.matcher = regExp.matcher(buffer);
         }
 
         /**
          * Resets the matcher for another character input stream. This
          * will clear the results of the last match.
          *
-         * @param input          the new input stream to check
+         * @param buffer         the new input buffer to check
          */
-        public void reset(LookAheadReader input) {
-            matcher.reset(input);
+        public void reset(ReaderBuffer buffer) {
+            matcher.reset(buffer);
         }
 
         /**
@@ -604,16 +600,16 @@ public class Tokenizer {
          * Checks if the token pattern matches the input stream. This
          * method will also reset all flags in this matcher.
          *
-         * @param input           the input stream to check
+         * @param buffer         the input buffer to check
          *
          * @return true if a match was found, or
          *         false otherwise
          *
          * @throws IOException if an I/O error occurred
          */
-        public boolean match(LookAheadReader input) throws IOException {
+        public boolean match(ReaderBuffer buffer) throws IOException {
             reset();
-            match = (TokenPattern) start.matchFrom(input, 0, ignoreCase);
+            match = (TokenPattern) start.matchFrom(buffer, 0, ignoreCase);
             return match != null;
         }
 

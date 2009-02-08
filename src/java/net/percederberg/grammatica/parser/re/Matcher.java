@@ -16,16 +16,15 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 
-import net.percederberg.grammatica.parser.LookAheadReader;
+import net.percederberg.grammatica.parser.ReaderBuffer;
 
 /**
  * A regular expression string matcher. This class handles the
@@ -45,9 +44,9 @@ public class Matcher {
     private Element element;
 
     /**
-     * The input character stream to work with.
+     * The input character buffer to work with.
      */
-    private LookAheadReader input;
+    private ReaderBuffer buffer;
 
     /**
      * The character case ignore flag.
@@ -74,12 +73,12 @@ public class Matcher {
      * Creates a new matcher with the specified element.
      *
      * @param e              the base regular expression element
-     * @param input          the input character stream to work with
+     * @param buffer         the input character buffer to work with
      * @param ignoreCase     the character case ignore flag
      */
-    Matcher(Element e, LookAheadReader input, boolean ignoreCase) {
+    Matcher(Element e, ReaderBuffer buffer, boolean ignoreCase) {
         this.element = e;
-        this.input = input;
+        this.buffer = buffer;
         this.ignoreCase = ignoreCase;
         this.start = 0;
         reset();
@@ -116,49 +115,20 @@ public class Matcher {
      * @since 1.5
      */
     public void reset(String str) {
-        reset(new StringReader(str));
-    }
-
-    /**
-     * Resets the matcher for use with a new input string. This will
-     * clear all flags and set the match length to a negative value.
-     *
-     * @param str            the new string to work with
-     *
-     * @since 1.5
-     */
-    public void reset(StringBuffer str) {
-        reset(new StringReader(str.toString()));
-    }
-
-    /**
-     * Resets the matcher for use with a new character input stream.
-     * This will clear all flags and set the match length to a
-     * negative value.
-     *
-     * @param input           the character input stream
-     *
-     * @since 1.5
-     */
-    public void reset(Reader input) {
-        if (input instanceof LookAheadReader) {
-            reset((LookAheadReader) input);
-        } else {
-            reset(new LookAheadReader(input));
-        }
+        reset(new ReaderBuffer(new StringReader(str)));
     }
 
     /**
      * Resets the matcher for use with a new look-ahead character
-     * input stream. This will clear all flags and set the match
+     * input buffer. This will clear all flags and set the match
      * length to a negative value.
      *
-     * @param input           the character input stream
+     * @param buffer          the character input stream
      *
      * @since 1.5
      */
-    private void reset(LookAheadReader input) {
-        this.input = input;
+    public void reset(ReaderBuffer buffer) {
+        this.buffer = buffer;
         reset();
     }
 
@@ -247,7 +217,7 @@ public class Matcher {
     public boolean matchFrom(int pos) throws IOException {
         reset();
         start = pos;
-        length = element.match(this, input, start, 0);
+        length = element.match(this, buffer, start, 0);
         return length >= 0;
     }
 
@@ -261,11 +231,8 @@ public class Matcher {
         if (length <= 0) {
             return "";
         } else {
-            try {
-                return input.peekString(start, length);
-            } catch (IOException ignore) {
-                return "";
-            }
+            int pos = buffer.position();
+            return buffer.subSequence(pos, pos + length).toString();
         }
     }
 }

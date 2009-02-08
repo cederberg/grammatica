@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -80,7 +80,7 @@ class Automaton {
      * comparison can be done either in case-sensitive or
      * case-insensitive mode.
      *
-     * @param input            the input stream to check
+     * @param buffer           the input buffer to check
      * @param pos              the starting position
      * @param caseInsensitive  the case-insensitive match flag
      *
@@ -89,7 +89,7 @@ class Automaton {
      *
      * @throws IOException if an I/O error occurred
      */
-    public Object matchFrom(LookAheadReader input,
+    public Object matchFrom(ReaderBuffer buffer,
                             int pos,
                             boolean caseInsensitive)
         throws IOException {
@@ -98,11 +98,11 @@ class Automaton {
         Automaton  state;
         int        c;
 
-        c = input.peek(pos);
+        c = buffer.peek(pos);
         if (tree != null && c >= 0) {
             state = tree.find((char) c, caseInsensitive);
             if (state != null) {
-                result = state.matchFrom(input, pos + 1, caseInsensitive);
+                result = state.matchFrom(buffer, pos + 1, caseInsensitive);
             }
         }
         return (result == null) ? value : result;

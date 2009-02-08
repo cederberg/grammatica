@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-import net.percederberg.grammatica.parser.LookAheadReader;
+import net.percederberg.grammatica.parser.ReaderBuffer;
 
 /**
  * A regular expression element. This is the common base class for all
@@ -55,7 +55,7 @@ abstract class Element implements Cloneable {
      * elements.
      *
      * @param m              the matcher being used
-     * @param input          the input character stream to match
+     * @param buffer         the input character buffer to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
@@ -65,7 +65,7 @@ abstract class Element implements Cloneable {
      * @throws IOException if an I/O error occurred
      */
     public abstract int match(Matcher m,
-                              LookAheadReader input,
+                              ReaderBuffer buffer,
                               int start,
                               int skip)
         throws IOException;

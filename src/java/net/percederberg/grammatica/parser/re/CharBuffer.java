@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -30,7 +30,7 @@ package net.percederberg.grammatica.parser.re;
  * @version  1.5
  *
  * @deprecated The CharBuffer class has been deprecated in favor
- * of LookAheadReader as of version 1.5.
+ * of ReaderBuffer as of version 1.5.
  */
 public class CharBuffer {
 

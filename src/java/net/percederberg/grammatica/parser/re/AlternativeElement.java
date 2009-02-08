@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser.re;
@@ -24,7 +24,7 @@ package net.percederberg.grammatica.parser.re;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import net.percederberg.grammatica.parser.LookAheadReader;
+import net.percederberg.grammatica.parser.ReaderBuffer;
 
 /**
  * A regular expression alternative element. This element matches the
@@ -76,7 +76,7 @@ class AlternativeElement extends Element {
      * elements.
      *
      * @param m              the matcher being used
-     * @param input          the input character stream to match
+     * @param buffer         the input character buffer to match
      * @param start          the starting position
      * @param skip           the number of matches to skip
      *
@@ -85,7 +85,7 @@ class AlternativeElement extends Element {
      *
      * @throws IOException if a I/O error occurred
      */
-    public int match(Matcher m, LookAheadReader input, int start, int skip)
+    public int match(Matcher m, ReaderBuffer buffer, int start, int skip)
         throws IOException {
 
         int  length = 0;
@@ -95,8 +95,8 @@ class AlternativeElement extends Element {
         int  skip2 = 0;
 
         while (length >= 0 && skip1 + skip2 <= skip) {
-            length1 = elem1.match(m, input, start, skip1);
-            length2 = elem2.match(m, input, start, skip2);
+            length1 = elem1.match(m, buffer, start, skip1);
+            length2 = elem2.match(m, buffer, start, skip2);
             if (length1 >= length2) {
                 length = length1;
                 skip1++;
