@@ -18,7 +18,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica;
@@ -198,7 +198,7 @@ class GrammarTokenizer extends Tokenizer {
         pattern = new TokenPattern(GrammarConstants.MULTI_LINE_COMMENT,
                                    "MULTI_LINE_COMMENT",
                                    TokenPattern.REGEXP_TYPE,
-                                   "/\\*(.|\\n)*?\\*/");
+                                   "/\\*([^*]|\\*++[^\\/])*\\*++/");
         pattern.setIgnore();
         addPattern(pattern);
 

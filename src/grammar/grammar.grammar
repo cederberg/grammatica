@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 %header%
@@ -46,7 +46,7 @@ LICENSE     = "This library is free software; you can redistribute it and/or
                Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
                MA 02111-1307, USA."
 
-COPYRIGHT   = "Copyright (c) 2003-2005 Per Cederberg. All rights reserved."
+COPYRIGHT   = "Copyright (c) 2003-2009 Per Cederberg. All rights reserved."
 
 
 %tokens%
@@ -73,7 +73,7 @@ IDENTIFIER                   = <<[A-Za-z][A-Za-z0-9_]*>>
 QUOTED_STRING                = <<("[^"]*")|('[^']*')>>
 REGEXP                       = <<\<\<([^\\\>]|(\\.)|(\>[^\>]))*\>\>>>
 SINGLE_LINE_COMMENT          = <<//.*>> %ignore%
-MULTI_LINE_COMMENT           = <</\*(.|\n)*?\*/>> %ignore%
+MULTI_LINE_COMMENT           = <</\*([^*]|\*++[^\/])*\*++/>> %ignore%
 WHITESPACE                   = <<[ \t\n\r]+>> %ignore%
 
 
