@@ -69,9 +69,9 @@ public class Grammatica extends Object {
         "  --parse <file>\n" +
         "      Debugs the grammar by using it to parse the specified\n" +
         "      file. No code has to be generated for this.\n" +
-        "  --profile <file>\n" +
+        "  --profile <file(s)>\n" +
         "      Profiles the grammar by using it to parse the specified\n" +
-        "      file and printing a statistic summary.\n" +
+        "      file(s) and printing a statistic summary.\n" +
         "  --csoutput <dir>\n" +
         "      Creates a C# parser for the grammar (in source code).\n" +
         "      The specified directory will be used as output directory\n" +
@@ -176,7 +176,7 @@ public class Grammatica extends Object {
             } else if (args[1].equals("--parse")) {
                 parse(grammar, new File(args[2]));
             } else if (args[1].equals("--profile")) {
-                profile(grammar, new File(args[2]));
+                profile(grammar, args, 2);
             } else if (args[1].equals("--javaoutput")) {
                 writeJavaCode(args, grammar);
             } else if (args[1].equals("--csoutput")) {
@@ -504,23 +504,32 @@ public class Grammatica extends Object {
      * profiling information.
      *
      * @param grammar        the grammar to use
-     * @param file           the file to parse
+     * @param files          the files to parse
+     * @param first          the index of the first file
      */
-    private static void profile(Grammar grammar, File file) {
+    private static void profile(Grammar grammar, String[] files, int first) {
+        File       file = new File(files[first]);
         Tokenizer  tokenizer;
         Parser     parser;
         Node       node;
+        int        fileCount = files.length - first;
         long       time;
         int        counter;
 
         // Profile tokenizer
         try {
+            System.out.println("Tokenizing " + fileCount + " file(s)...");
             tokenizer = grammar.createTokenizer(new FileReader(file));
-            System.out.println("Tokenizing " + file);
             time = System.currentTimeMillis();
             counter = 0;
-            while (tokenizer.next() != null) {
-                counter++;
+            for (int i = first; i < files.length; i++) {
+                if (i > first) {
+                    file = new File(files[i]);
+                    tokenizer.reset(new FileReader(file));
+                }
+                while (tokenizer.next() != null) {
+                    counter++;
+                }
             }
             time = System.currentTimeMillis() - time + 1;
             System.out.println("  Time elapsed:  " + time + " millisec");
@@ -541,13 +550,22 @@ public class Grammatica extends Object {
 
         // Profile parser
         try {
+            System.out.println("Parsing " + fileCount + " file(s)...");
+            file = new File(files[first]);
             tokenizer = grammar.createTokenizer(new FileReader(file));
             parser = grammar.createParser(tokenizer);
-            System.out.println("Parsing " + file);
             time = System.currentTimeMillis();
-            node = parser.parse();
+            counter = 0;
+            for (int i = first; i < files.length; i++) {
+                if (i > first) {
+                    file = new File(files[i]);
+                    tokenizer.reset(new FileReader(file));
+                    parser.reset();
+                }
+                node = parser.parse();
+                counter += 1 + node.getDescendantCount();
+            }
             time = System.currentTimeMillis() - time + 1;
-            counter = 1 + node.getDescendantCount();
             System.out.println("  Time elapsed:  " + time + " millisec");
             System.out.println("  Nodes found:   " + counter);
             System.out.println("  Average speed: " + (counter / time) +
