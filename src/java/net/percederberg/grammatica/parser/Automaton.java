@@ -38,14 +38,14 @@ class Automaton {
     /**
      * The state value.
      */
-    private Object value = null;
+    Object value = null;
 
     /**
      * The automaton state transition tree. Each transition from this
      * state to another state is added to this tree with the
      * corresponding character.
      */
-    private AutomatonTree tree = new AutomatonTree();
+    AutomatonTree tree = new AutomatonTree();
 
     /**
      * Adds a string match to this automaton. New states and
@@ -108,6 +108,18 @@ class Automaton {
         return (result == null) ? value : result;
     }
 
+    /**
+     * Returns a detailed string representation of this automaton.
+     *
+     * @return a detailed string representation of this automaton
+     *
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        StringBuffer  buffer = new StringBuffer();
+        this.tree.printTo(buffer, "");
+        return buffer.toString();
+    }
 
     /**
      * An automaton state transition tree. This class contains a
@@ -188,6 +200,34 @@ class Automaton {
                 left.add(c, false, state);
             } else {
                 right.add(c, false, state);
+            }
+        }
+
+        /**
+         * Prints the automaton tree to the specified string buffer.
+         *
+         * @param buffer         the string buffer
+         * @param indent         the current indentation
+         */
+        public void printTo(StringBuffer buffer, String indent) {
+            if (this.left != null) {
+                this.left.printTo(buffer, indent);
+            }
+            if (this.value != '\0') {
+                if (buffer.length() > 0 &&
+                    buffer.charAt(buffer.length() - 1) == '\n') {
+                    buffer.append(indent);
+                }
+                buffer.append(this.value);
+                if (this.state.value != null) {
+                    buffer.append(": ");
+                    buffer.append(this.state.value);
+                    buffer.append("\n");
+                }
+                this.state.tree.printTo(buffer, indent + " ");
+            }
+            if (this.right != null) {
+                this.right.printTo(buffer, indent);
             }
         }
     }
