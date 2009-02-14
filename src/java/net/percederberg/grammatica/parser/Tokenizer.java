@@ -336,25 +336,30 @@ public class Tokenizer {
     private TokenMatcher findMatch() throws IOException {
         TokenMatcher        bestMatch = null;
         int                 bestLength = 0;
+        int                 bestId = Integer.MAX_VALUE;
         RegExpTokenMatcher  re;
-
-        // TODO: The regexp token patterns might not always be defined
-        //       last. We should check the ordering of the patterns in
-        //       case an automaton match had the same length as a
-        //       regexp match.
+        int                 reLength;
+        int                 reId;
 
         // Check string matches
         if (automatonMatcher.match(buffer)) {
             bestMatch = automatonMatcher;
             bestLength = bestMatch.getMatchedLength();
+            bestId = bestMatch.getMatchedPattern().getId();
         }
 
         // Check regular expression matches
         for (int i = 0; i < regexpMatchers.size(); i++) {
             re = (RegExpTokenMatcher) regexpMatchers.get(i);
-            if (re.match() && re.getMatchedLength() > bestLength) {
-                bestMatch = re;
-                bestLength = re.getMatchedLength();
+            if (re.match()) {
+                reLength = re.getMatchedLength();
+                reId = re.getMatchedPattern().getId();
+                if (reLength > bestLength ||
+                    (reId < bestId && reLength >= bestLength)) {
+
+                    bestMatch = re;
+                    bestLength = reLength;
+                }
             }
         }
         return bestMatch;

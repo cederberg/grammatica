@@ -88,6 +88,14 @@
         when a full look-ahead buffer couldn't be read. Thanks to 
         Jeremy M Stone for finding this. <ref bug="23818"/></text>
       </item>
+
+      <item>
+        <title>Fixed token match priority to use the grammar order</title>
+        <text>String tokens were previously always checked and considered
+        first, unless a regular expression token matched more characters.
+        This has now been changed to depend on the grammar file ordering
+        instead. <ref bug="13009"/></text>
+      </item>
     </list>
 
 

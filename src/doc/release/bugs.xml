@@ -27,19 +27,6 @@
       </item>
 
       <item>
-        <title>Tokenizer: String tokens are always considered first</title>
-        <text>When tokenizing an input string, the string token
-        patterns are always checked and considered first. This means
-        that if a regular expression and a string token pattern matches
-        the same input sequence, the string token will always be
-        returned. This is wrong, as the token pattern order should
-        determine which token is returned in cases where multiple
-        patterns match. In practice though, this only hides errors in
-        the grammars and does what the user expects.
-        <ref bug="13009"/></text>
-      </item>
-
-      <item>
         <title>Regular Expressions: Not fully JDK 1.4 compatible</title>
         <text>The regular expression library is still lacking in some
         ways compared to the implementation in JDK 1.4 (or Perl 5). 
