@@ -52,11 +52,12 @@ public class Tokenizer {
     private boolean useTokenList = false;
 
     /**
-     * The string token matcher. This token matcher is used for all
-     * string token patterns. This matcher implements a DFA to
-     * provide maximum performance.
+     * The automaton token matcher. This token matcher is used for
+     * all string token patterns. Internally the matcher implements a
+     * DFA to provide increased performance.
      */
-    private StringTokenMatcher stringMatcher = new StringTokenMatcher();
+    private AutomatonTokenMatcher automatonMatcher =
+        new AutomatonTokenMatcher();
 
     /**
      * The list of all regular expression token matchers. These
@@ -149,7 +150,7 @@ public class Tokenizer {
         TokenPattern        pattern;
         RegExpTokenMatcher  re;
 
-        pattern = stringMatcher.getPattern(id);
+        pattern = automatonMatcher.getPattern(id);
         if (pattern != null) {
             return pattern.toShortString();
         }
@@ -197,7 +198,7 @@ public class Tokenizer {
 
         switch (pattern.getType()) {
         case TokenPattern.STRING_TYPE:
-            stringMatcher.addPattern(pattern);
+            automatonMatcher.addPattern(pattern);
             break;
         case TokenPattern.REGEXP_TYPE:
             try {
@@ -233,7 +234,7 @@ public class Tokenizer {
         this.buffer.dispose();
         this.buffer = new ReaderBuffer(input);
         this.previousToken = null;
-        stringMatcher.reset();
+        this.automatonMatcher.reset();
         for (int i = 0; i < regexpMatchers.size(); i++) {
             ((RegExpTokenMatcher) regexpMatchers.get(i)).reset(this.buffer);
         }
@@ -339,12 +340,12 @@ public class Tokenizer {
 
         // TODO: The regexp token patterns might not always be defined
         //       last. We should check the ordering of the patterns in
-        //       case a string match had the same length as a regexp
-        //       match.
+        //       case an automaton match had the same length as a
+        //       regexp match.
 
         // Check string matches
-        if (stringMatcher.match(buffer)) {
-            bestMatch = stringMatcher;
+        if (automatonMatcher.match(buffer)) {
+            bestMatch = automatonMatcher;
             bestLength = bestMatch.getMatchedLength();
         }
 
@@ -369,7 +370,7 @@ public class Tokenizer {
     public String toString() {
         StringBuffer  buffer = new StringBuffer();
 
-        buffer.append(stringMatcher);
+        buffer.append(automatonMatcher);
         for (int i = 0; i < regexpMatchers.size(); i++) {
             buffer.append(regexpMatchers.get(i));
         }
@@ -511,12 +512,12 @@ public class Tokenizer {
 
 
     /**
-     * A string token pattern matcher. This class is used to match a
+     * Am automaton token pattern matcher. This class is used to match a
      * set of strings with an input stream. This class internally uses
      * a DFA for maximum performance. It also maintains the state of
      * the last match.
      */
-    class StringTokenMatcher extends TokenMatcher {
+    class AutomatonTokenMatcher extends TokenMatcher {
 
         /**
          * The list of string token patterns.
