@@ -213,12 +213,13 @@ public class ReaderBuffer implements CharSequence {
      * @throws IOException if an I/O error occurred
      */
     public int peek(int offset) throws IOException {
-        ensureBuffered(offset + 1);
-        if (pos + offset >= length) {
-            return -1;
-        } else {
-            return buffer[pos + offset];
+        int  index = pos + offset;
+
+        if (index >= length) {
+            ensureBuffered(offset + 1);
+            index = pos + offset;
         }
+        return (index >= length) ? -1 : buffer[index];
     }
 
     /**
