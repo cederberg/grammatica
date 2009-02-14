@@ -215,6 +215,9 @@ public class ReaderBuffer implements CharSequence {
     public int peek(int offset) throws IOException {
         int  index = pos + offset;
 
+        // Avoid most calls to ensureBuffered(), since we are in a
+        // performance hotspot here. This check is not exhaustive,
+        // but only present here to speed things up.
         if (index >= length) {
             ensureBuffered(offset + 1);
             index = pos + offset;
