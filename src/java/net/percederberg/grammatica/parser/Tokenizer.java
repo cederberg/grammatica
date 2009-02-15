@@ -327,7 +327,7 @@ public class Tokenizer {
      * or null if no match was found. As a side effect, this method
      * will also set the end of buffer flag.
      *
-     * @return the token mathcher with the longest match, or
+     * @return the token matcher with the longest match, or
      *         null if no match was found
      *
      * @throws IOException if an I/O error occurred
