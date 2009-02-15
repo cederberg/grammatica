@@ -187,9 +187,9 @@
       <item>
         <title>Improved tokenizer performance</title>
         <text>The tokenizer performance has been much improved for
-        string tokens. The speed improvement is about 100% on 
-        average,  meaning that the tokenizer will use half the time
-        for most input and grammars. <ref bug="3603"/></text>
+        string tokens. The tokenization speed is now about twice as fast
+        (on average), meaning that the tokenizer will use half as much
+        time for most input and grammars. <ref bug="3603"/></text>
       </item>
       
       <item>
