@@ -525,22 +525,21 @@ public class Tokenizer {
         private ArrayList patterns = new ArrayList();
 
         /**
-         * The deterministic finite state automaton used for
-         * matching.
+         * The deterministic finite state automaton used for matching.
          */
-        private TokenStringDFA start = new TokenStringDFA();
+        private TokenNFA automaton = new TokenNFA();
 
         /**
-         * The last token pattern match found.
+         * The last match length found.
          */
-        private TokenPattern match = null;
+        private int matchLength = 0;
 
         /**
          * Resets the matcher state. This will clear the results of
          * the last match.
          */
         public void reset() {
-            match = null;
+            matchLength = 0;
         }
 
         /**
@@ -550,7 +549,7 @@ public class Tokenizer {
          *         null if no match found
          */
         public TokenPattern getMatchedPattern() {
-            return match;
+            return (matchLength <= 0) ? null : automaton.matchedValue();
         }
 
         /**
@@ -560,7 +559,7 @@ public class Tokenizer {
          *         zero (0) if no match found
          */
         public int getMatchedLength() {
-            return (match == null) ? 0 : match.getPattern().length();
+            return matchLength;
         }
 
         /**
@@ -591,7 +590,7 @@ public class Tokenizer {
          */
         public void addPattern(TokenPattern pattern) {
             patterns.add(pattern);
-            start.addMatch(pattern.getPattern(), ignoreCase, pattern);
+            automaton.addTextMatch(pattern.getPattern(), ignoreCase, pattern);
         }
 
         /**
@@ -607,8 +606,8 @@ public class Tokenizer {
          */
         public boolean match(ReaderBuffer buffer) throws IOException {
             reset();
-            match = (TokenPattern) start.matchFrom(buffer, 0, ignoreCase);
-            return match != null;
+            matchLength = automaton.match(buffer);
+            return matchLength > 0;
         }
 
         /**
