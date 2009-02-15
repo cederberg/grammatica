@@ -258,23 +258,23 @@ public class Tokenizer {
 
         do {
             token = nextToken();
-            if (useTokenList && token != null) {
+            if (token == null) {
+                return null;
+            }
+            if (useTokenList) {
                 token.setPreviousToken(previousToken);
                 previousToken = token;
             }
-            if (token == null) {
-                return null;
+            if (token.getPattern().isIgnore()) {
+                token = null;
             } else if (token.getPattern().isError()) {
                 throw new ParseException(
                     ParseException.INVALID_TOKEN_ERROR,
                     token.getPattern().getErrorMessage(),
                     token.getStartLine(),
                     token.getStartColumn());
-            } else if (token.getPattern().isIgnore()) {
-                token = null;
             }
         } while (token == null);
-
         return token;
     }
 
@@ -473,11 +473,7 @@ public class Tokenizer {
          *         null if no match found
          */
         public TokenPattern getMatchedPattern() {
-            if (matcher.length() <= 0) {
-                return null;
-            } else {
-                return pattern;
-            }
+            return (matcher.length() <= 0) ? null : pattern;
         }
 
         /**
@@ -564,11 +560,7 @@ public class Tokenizer {
          *         zero (0) if no match found
          */
         public int getMatchedLength() {
-            if (match == null) {
-                return 0;
-            } else {
-                return match.getPattern().length();
-            }
+            return (match == null) ? 0 : match.getPattern().length();
         }
 
         /**
