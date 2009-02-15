@@ -23,7 +23,6 @@ package net.percederberg.grammatica.parser.re;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import net.percederberg.grammatica.parser.ReaderBuffer;
 
@@ -182,7 +181,7 @@ class CharacterSetElement extends Element {
      * The character set content. This array may contain either
      * range objects or Character objects.
      */
-    private ArrayList contents = new ArrayList();
+    private Object[] contents = new Object[0];
 
     /**
      * Creates a new character set element. If the inverted character
@@ -200,7 +199,7 @@ class CharacterSetElement extends Element {
      * @param c              the character to add
      */
     public void addCharacter(char c) {
-        contents.add(new Character(c));
+        addContent(new Character(c));
     }
 
     /**
@@ -230,7 +229,7 @@ class CharacterSetElement extends Element {
      * @param max            the maximum character value
      */
     public void addRange(char min, char max) {
-        contents.add(new Range(min, max));
+        addContent(new Range(min, max));
     }
 
     /**
@@ -239,7 +238,20 @@ class CharacterSetElement extends Element {
      * @param elem           the character set to add
      */
     public void addCharacterSet(CharacterSetElement elem) {
-        contents.add(elem);
+        addContent(elem);
+    }
+
+    /**
+     * Adds an object to the character set content array.
+     *
+     * @param obj            the object to add
+     */
+    private void addContent(Object obj) {
+        Object[]  temp = contents;
+
+        contents = new Object[temp.length + 1];
+        System.arraycopy(temp, 0, contents, 0, temp.length);
+        contents[temp.length] = obj;
     }
 
     /**
@@ -305,8 +317,8 @@ class CharacterSetElement extends Element {
         Range                r;
         CharacterSetElement  e;
 
-        for (int i = 0; i < contents.size(); i++) {
-            obj = contents.get(i);
+        for (int i = 0; i < contents.length; i++) {
+            obj = contents[i];
             if (obj instanceof Character) {
                 c = (Character) obj;
                 if (c.charValue() == value) {
@@ -350,11 +362,10 @@ class CharacterSetElement extends Element {
         } else {
             buffer.append("[");
         }
-        for (int i = 0; i < contents.size(); i++) {
-            buffer.append(contents.get(i));
+        for (int i = 0; i < contents.length; i++) {
+            buffer.append(contents[i]);
         }
         buffer.append("]");
-
         return buffer.toString();
     }
 
