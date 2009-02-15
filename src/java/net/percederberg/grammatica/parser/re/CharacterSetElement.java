@@ -44,49 +44,134 @@ class CharacterSetElement extends Element {
      * character that is not equal to a newline character.
      */
     public static final CharacterSetElement DOT =
-        new CharacterSetElement(false);
+        new CharacterSetElement(false) {
+            protected boolean inSet(char value) {
+                switch (value) {
+                case '\n':
+                case '\r':
+                case '\u0085':
+                case '\u2028':
+                case '\u2029':
+                    return false;
+                default:
+                    return true;
+                }
+            }
+            public String toString() {
+                return ".";
+            }
+        };
 
     /**
      * The digit character set. This element matches a single
      * numeric character.
      */
     public static final CharacterSetElement DIGIT =
-        new CharacterSetElement(false);
+        new CharacterSetElement(false) {
+            protected boolean inSet(char value) {
+                return '0' <= value && value <= '9';
+            }
+            public String toString() {
+                return "\\d";
+            }
+        };
 
     /**
      * The non-digit character set. This element matches a single
      * non-numeric character.
      */
     public static final CharacterSetElement NON_DIGIT =
-        new CharacterSetElement(true);
+        new CharacterSetElement(true) {
+            protected boolean inSet(char value) {
+                return value < '0' || '9' < value;
+            }
+            public String toString() {
+                return "\\D";
+            }
+        };
 
     /**
      * The whitespace character set. This element matches a single
      * whitespace character.
      */
     public static final CharacterSetElement WHITESPACE =
-        new CharacterSetElement(false);
+        new CharacterSetElement(false) {
+            protected boolean inSet(char value) {
+                switch (value) {
+                case ' ':
+                case '\t':
+                case '\n':
+                case '\f':
+                case '\r':
+                case 11:
+                    return true;
+                default:
+                    return false;
+                }
+            }
+            public String toString() {
+                return "\\s";
+            }
+        };
 
     /**
      * The non-whitespace character set. This element matches a single
      * non-whitespace character.
      */
     public static final CharacterSetElement NON_WHITESPACE =
-        new CharacterSetElement(true);
+        new CharacterSetElement(true) {
+            protected boolean inSet(char value) {
+                switch (value) {
+                case ' ':
+                case '\t':
+                case '\n':
+                case '\f':
+                case '\r':
+                case 11:
+                    return false;
+                default:
+                    return true;
+                }
+            }
+            public String toString() {
+                return "\\S";
+            }
+        };
 
     /**
      * The word character set. This element matches a single word
      * character.
      */
     public static final CharacterSetElement WORD =
-        new CharacterSetElement(false);
+        new CharacterSetElement(false) {
+            protected boolean inSet(char value) {
+                return ('a' <= value && value <= 'z')
+                    || ('A' <= value && value <= 'Z')
+                    || ('0' <= value && value <= '9')
+                    || value == '_';
+            }
+            public String toString() {
+                return "\\w";
+            }
+        };
 
     /**
      * The non-word character set. This element matches a single
      * non-word character.
      */
     public static final CharacterSetElement NON_WORD =
-        new CharacterSetElement(true);
+        new CharacterSetElement(true) {
+            protected boolean inSet(char value) {
+                boolean word = ('a' <= value && value <= 'z')
+                            || ('A' <= value && value <= 'Z')
+                            || ('0' <= value && value <= '9')
+                            || value == '_';
+                return !word;
+            }
+            public String toString() {
+                return "\\W";
+            }
+        };
 
     /**
      * The inverted character set flag.
@@ -214,104 +299,7 @@ class CharacterSetElement extends Element {
      * @return true if the character matches, or
      *         false otherwise
      */
-    private boolean inSet(char value) {
-        if (this == DOT) {
-            return inDotSet(value);
-        } else if (this == DIGIT || this == NON_DIGIT) {
-            return inDigitSet(value) != inverted;
-        } else if (this == WHITESPACE || this == NON_WHITESPACE) {
-            return inWhitespaceSet(value) != inverted;
-        } else if (this == WORD || this == NON_WORD) {
-            return inWordSet(value) != inverted;
-        } else {
-            return inUserSet(value) != inverted;
-        }
-    }
-
-    /**
-     * Checks if the specified character is present in the 'dot'  set.
-     * This method does not consider the inverted flag.
-     *
-     * @param value          the character to check
-     *
-     * @return true if the character is present, or
-     *         false otherwise
-     */
-    private boolean inDotSet(char value) {
-        switch (value) {
-        case '\n':
-        case '\r':
-        case '\u0085':
-        case '\u2028':
-        case '\u2029':
-            return false;
-        default:
-            return true;
-        }
-    }
-
-    /**
-     * Checks if the specified character is a digit. This method does
-     * not consider the inverted flag.
-     *
-     * @param value          the character to check
-     *
-     * @return true if the character is a digit, or
-     *         false otherwise
-     */
-    private boolean inDigitSet(char value) {
-        return '0' <= value && value <= '9';
-    }
-
-    /**
-     * Checks if the specified character is a whitespace character.
-     * This method does not consider the inverted flag.
-     *
-     * @param value          the character to check
-     *
-     * @return true if the character is a whitespace character, or
-     *         false otherwise
-     */
-    private boolean inWhitespaceSet(char value) {
-        switch (value) {
-        case ' ':
-        case '\t':
-        case '\n':
-        case '\f':
-        case '\r':
-        case 11:
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    /**
-     * Checks if the specified character is a word character. This
-     * method does not consider the inverted flag.
-     *
-     * @param value          the character to check
-     *
-     * @return true if the character is a word character, or
-     *         false otherwise
-     */
-    private boolean inWordSet(char value) {
-        return ('a' <= value && value <= 'z')
-            || ('A' <= value && value <= 'Z')
-            || ('0' <= value && value <= '9')
-            || value == '_';
-    }
-
-    /**
-     * Checks if the specified character is present in the user-
-     * defined set. This method does not consider the inverted flag.
-     *
-     * @param value          the character to check
-     *
-     * @return true if the character is present, or
-     *         false otherwise
-     */
-    private boolean inUserSet(char value) {
+    protected boolean inSet(char value) {
         Object               obj;
         Character            c;
         Range                r;
@@ -322,21 +310,21 @@ class CharacterSetElement extends Element {
             if (obj instanceof Character) {
                 c = (Character) obj;
                 if (c.charValue() == value) {
-                    return true;
+                    return !inverted;
                 }
             } else if (obj instanceof Range) {
                 r = (Range) obj;
                 if (r.inside(value)) {
-                    return true;
+                    return !inverted;
                 }
             } else if (obj instanceof CharacterSetElement) {
                 e = (CharacterSetElement) obj;
                 if (e.inSet(value)) {
-                    return true;
+                    return !inverted;
                 }
             }
         }
-        return false;
+        return inverted;
     }
 
     /**
@@ -355,29 +343,10 @@ class CharacterSetElement extends Element {
      * @return a string description of this character set
      */
     public String toString() {
-        StringBuffer  buffer;
+        StringBuffer  buffer = new StringBuffer();
 
-        // Handle predefined character sets
-        if (this == DOT) {
-            return ".";
-        } else if (this == DIGIT) {
-            return "\\d";
-        } else if (this == NON_DIGIT) {
-            return "\\D";
-        } else if (this == WHITESPACE) {
-            return "\\s";
-        } else if (this == NON_WHITESPACE) {
-            return "\\S";
-        } else if (this == WORD) {
-            return "\\w";
-        } else if (this == NON_WORD) {
-            return "\\W";
-        }
-
-        // Handle user-defined character sets
-        buffer = new StringBuffer();
         if (inverted) {
-            buffer.append("^[");
+            buffer.append("[^");
         } else {
             buffer.append("[");
         }
