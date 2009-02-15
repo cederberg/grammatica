@@ -1,5 +1,5 @@
 /*
- * Automaton.java
+ * TokenStringDFA.java
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -24,16 +24,17 @@ package net.percederberg.grammatica.parser;
 import java.io.IOException;
 
 /**
- * A deterministic finite state automaton. This is a simple automaton
- * for character sequences, currently used for string token patterns.
- * It only handles single character transitions between states, but
- * supports running in an all case-insensitive mode.
+ * A deterministic finite state automaton for matching exact strings.
+ * It uses a sorted binary tree representation of the state
+ * transitions in order to enable quick matches with a minimal memory
+ * footprint. It only supports a single character transition between
+ * states, but may be run in an all case-insensitive mode.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.5
  * @since    1.5
  */
-class Automaton {
+class TokenStringDFA {
 
     /**
      * The state value.
@@ -41,11 +42,11 @@ class Automaton {
     Object value = null;
 
     /**
-     * The automaton state transition tree. Each transition from this
-     * state to another state is added to this tree with the
-     * corresponding character.
+     * The automaton state transition tree. Each transition from one
+     * state to another is added to the tree with the corresponding
+     * character.
      */
-    AutomatonTree tree = new AutomatonTree();
+    TransitionTree tree = new TransitionTree();
 
     /**
      * Adds a string match to this automaton. New states and
@@ -57,14 +58,14 @@ class Automaton {
      * @param value            the match value
      */
     public void addMatch(String str, boolean caseInsensitive, Object value) {
-        Automaton  state;
+        TokenStringDFA  state;
 
         if (str.equals("")) {
             this.value = value;
         } else {
             state = tree.find(str.charAt(0), caseInsensitive);
             if (state == null) {
-                state = new Automaton();
+                state = new TokenStringDFA();
                 state.addMatch(str.substring(1), caseInsensitive, value);
                 tree.add(str.charAt(0), caseInsensitive, state);
             } else {
@@ -95,7 +96,7 @@ class Automaton {
         throws IOException {
 
         Object     result = null;
-        Automaton  state;
+        TokenStringDFA  state;
         int        c;
 
         c = buffer.peek(pos);
@@ -130,7 +131,7 @@ class Automaton {
      * @version  1.5
      * @since    1.5
      */
-    class AutomatonTree {
+    class TransitionTree {
 
         /**
          * The transition character. If this value is set to the zero
@@ -141,17 +142,17 @@ class Automaton {
         /**
          * The transition state.
          */
-        private Automaton state = null;
+        private TokenStringDFA state = null;
 
         /**
          * The left subtree.
          */
-        private AutomatonTree left = null;
+        private TransitionTree left = null;
 
         /**
          * The right subtree.
          */
-        private AutomatonTree right = null;
+        private TransitionTree right = null;
 
         /**
          * Finds an automaton state from the specified transition
@@ -165,7 +166,7 @@ class Automaton {
          * @return the automaton state found, or
          *         null if no transition exists
          */
-        public Automaton find(char c, boolean lowerCase) {
+        public TokenStringDFA find(char c, boolean lowerCase) {
             if (lowerCase) {
                 c = Character.toLowerCase(c);
             }
@@ -187,15 +188,15 @@ class Automaton {
          * @param lowerCase      the lower-case conversion flag
          * @param state          the state to transition to
          */
-        public void add(char c, boolean lowerCase, Automaton state) {
+        public void add(char c, boolean lowerCase, TokenStringDFA state) {
             if (lowerCase) {
                 c = Character.toLowerCase(c);
             }
             if (value == '\0') {
                 this.value = c;
                 this.state = state;
-                this.left = new AutomatonTree();
-                this.right = new AutomatonTree();
+                this.left = new TransitionTree();
+                this.right = new TransitionTree();
             } else if (value > c) {
                 left.add(c, false, state);
             } else {
