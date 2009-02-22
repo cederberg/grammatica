@@ -37,16 +37,18 @@ import java.io.IOException;
 class TokenStringDFA {
 
     /**
-     * The state value.
+     * The lookup table for root states, indexed by the first ASCII
+     * character. This array is used to for speed optimizing the
+     * first step in the match.
      */
-    Object value = null;
+    private State[] ascii = new State[128];
 
     /**
-     * The automaton state transition tree. Each transition from one
-     * state to another is added to the tree with the corresponding
-     * character.
+     * The automaton state transition tree for non-ASCII characters.
+     * Each transition from one state to another is added to the tree
+     * with the corresponding character.
      */
-    TransitionTree tree = new TransitionTree();
+    private State nonAscii = new State();
 
     /**
      * Adds a string match to this automaton. New states and
@@ -57,21 +59,33 @@ class TokenStringDFA {
      * @param caseInsensitive  the case-insensitive match flag
      * @param value            the match value
      */
-    public void addMatch(String str, boolean caseInsensitive, Object value) {
-        TokenStringDFA  state;
+    public void addMatch(String str, boolean caseInsensitive, TokenPattern value) {
+        State  state;
+        State  next;
+        char   c = str.charAt(0);
+        int    start = 0;
 
-        if (str.equals("")) {
-            this.value = value;
-        } else {
-            state = tree.find(str.charAt(0), caseInsensitive);
-            if (state == null) {
-                state = new TokenStringDFA();
-                state.addMatch(str.substring(1), caseInsensitive, value);
-                tree.add(str.charAt(0), caseInsensitive, state);
-            } else {
-                state.addMatch(str.substring(1), caseInsensitive, value);
-            }
+        if (caseInsensitive) {
+            c = Character.toLowerCase(c);
         }
+        if (c < 128) {
+            state = ascii[c];
+            if (state == null) {
+                state = ascii[c] = new State();
+            }
+            start++;
+        } else {
+            state = nonAscii;
+        }
+        for (int i = start; i < str.length(); i++) {
+            next = state.tree.find(str.charAt(i), caseInsensitive);
+            if (next == null) {
+                next = new State();
+                state.tree.add(str.charAt(i), caseInsensitive, next);
+            }
+            state = next;
+        }
+        state.value = value;
     }
 
     /**
@@ -82,7 +96,6 @@ class TokenStringDFA {
      * case-insensitive mode.
      *
      * @param buffer           the input buffer to check
-     * @param pos              the starting position
      * @param caseInsensitive  the case-insensitive match flag
      *
      * @return the match value, or
@@ -90,23 +103,42 @@ class TokenStringDFA {
      *
      * @throws IOException if an I/O error occurred
      */
-    public Object matchFrom(ReaderBuffer buffer,
-                            int pos,
-                            boolean caseInsensitive)
+    public TokenPattern match(ReaderBuffer buffer, boolean caseInsensitive)
         throws IOException {
 
-        Object     result = null;
-        TokenStringDFA  state;
-        int        c;
+        TokenPattern  result = null;
+        State         state;
+        int           pos = 0;
+        int           c;
 
-        c = buffer.peek(pos);
-        if (tree != null && c >= 0) {
-            state = tree.find((char) c, caseInsensitive);
-            if (state != null) {
-                result = state.matchFrom(buffer, pos + 1, caseInsensitive);
-            }
+        c = buffer.peek(0);
+        if (c < 0) {
+            return null;
         }
-        return (result == null) ? value : result;
+        if (caseInsensitive) {
+            c = Character.toLowerCase(c);
+        }
+        if (c < 128) {
+            state = ascii[c];
+            if (state == null) {
+                return null;
+            } else if (state.value != null) {
+                result = state.value;
+            }
+            pos++;
+        } else {
+            state = nonAscii;
+        }
+        while ((c = buffer.peek(pos)) >= 0) {
+            state = state.tree.find((char) c, caseInsensitive);
+            if (state == null) {
+                break;
+            } else if (state.value != null) {
+                result = state.value;
+            }
+            pos++;
+        }
+        return result;
     }
 
     /**
@@ -118,14 +150,52 @@ class TokenStringDFA {
      */
     public String toString() {
         StringBuffer  buffer = new StringBuffer();
-        this.tree.printTo(buffer, "");
+
+        for (int i = 0; i < ascii.length; i++) {
+            if (ascii[i] != null) {
+                buffer.append((char) i);
+                if (ascii[i].value != null) {
+                    buffer.append(": ");
+                    buffer.append(ascii[i].value);
+                    buffer.append("\n");
+                }
+                ascii[i].tree.printTo(buffer, " ");
+            }
+        }
+        nonAscii.tree.printTo(buffer, "");
         return buffer.toString();
     }
 
+
+    /**
+     * An automaton state. This class represents a state in the DFA
+     * graph.
+     *
+     * @author   Per Cederberg, <per at percederberg dot net>
+     * @version  1.5
+     * @since    1.5
+     */
+    class State {
+
+        /**
+         * The token pattern matched at this state.
+         */
+        protected TokenPattern value = null;
+
+        /**
+         * The automaton state transition tree. Each transition from one
+         * state to another is added to the tree with the corresponding
+         * character.
+         */
+        protected TransitionTree tree = new TransitionTree();
+    }
+
+
     /**
      * An automaton state transition tree. This class contains a
-     * binary search tree for the automaton transitions from one state
-     * to another. All transitions are linked to a single character.
+     * binary search tree for the automaton transitions from one
+     * state to another. All transitions are linked to a single
+     * character.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
      * @version  1.5
@@ -140,9 +210,9 @@ class TokenStringDFA {
         private char value = '\0';
 
         /**
-         * The transition state.
+         * The transition target state.
          */
-        private TokenStringDFA state = null;
+        private State state = null;
 
         /**
          * The left subtree.
@@ -166,7 +236,7 @@ class TokenStringDFA {
          * @return the automaton state found, or
          *         null if no transition exists
          */
-        public TokenStringDFA find(char c, boolean lowerCase) {
+        public State find(char c, boolean lowerCase) {
             if (lowerCase) {
                 c = Character.toLowerCase(c);
             }
@@ -188,7 +258,7 @@ class TokenStringDFA {
          * @param lowerCase      the lower-case conversion flag
          * @param state          the state to transition to
          */
-        public void add(char c, boolean lowerCase, TokenStringDFA state) {
+        public void add(char c, boolean lowerCase, State state) {
             if (lowerCase) {
                 c = Character.toLowerCase(c);
             }

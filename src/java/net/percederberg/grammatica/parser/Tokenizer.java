@@ -607,7 +607,7 @@ public class Tokenizer {
          */
         public boolean match(ReaderBuffer buffer) throws IOException {
             reset();
-            match = (TokenPattern) start.matchFrom(buffer, 0, ignoreCase);
+            match = start.match(buffer, ignoreCase);
             return match != null;
         }
 
