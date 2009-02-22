@@ -525,21 +525,22 @@ public class Tokenizer {
         private ArrayList patterns = new ArrayList();
 
         /**
-         * The deterministic finite state automaton used for matching.
+         * The deterministic finite state automaton used for
+         * matching.
          */
-        private TokenNFA automaton = new TokenNFA();
+        private TokenStringDFA start = new TokenStringDFA();
 
         /**
-         * The last match length found.
+         * The last token pattern match found.
          */
-        private int matchLength = 0;
+        private TokenPattern match = null;
 
         /**
          * Resets the matcher state. This will clear the results of
          * the last match.
          */
         public void reset() {
-            matchLength = 0;
+            match = null;
         }
 
         /**
@@ -549,7 +550,7 @@ public class Tokenizer {
          *         null if no match found
          */
         public TokenPattern getMatchedPattern() {
-            return (matchLength <= 0) ? null : automaton.matchedValue();
+            return match;
         }
 
         /**
@@ -559,7 +560,7 @@ public class Tokenizer {
          *         zero (0) if no match found
          */
         public int getMatchedLength() {
-            return matchLength;
+            return (match == null) ? 0 : match.getPattern().length();
         }
 
         /**
@@ -590,7 +591,7 @@ public class Tokenizer {
          */
         public void addPattern(TokenPattern pattern) {
             patterns.add(pattern);
-            automaton.addTextMatch(pattern.getPattern(), ignoreCase, pattern);
+            start.addMatch(pattern.getPattern(), ignoreCase, pattern);
         }
 
         /**
@@ -606,8 +607,8 @@ public class Tokenizer {
          */
         public boolean match(ReaderBuffer buffer) throws IOException {
             reset();
-            matchLength = automaton.match(buffer);
-            return matchLength > 0;
+            match = (TokenPattern) start.matchFrom(buffer, 0, ignoreCase);
+            return match != null;
         }
 
         /**
