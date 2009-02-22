@@ -23,6 +23,8 @@ package net.percederberg.grammatica.parser;
 
 import java.io.IOException;
 
+import net.percederberg.grammatica.parser.re.RegExpException;
+
 /**
  * A non-deterministic finite state automaton (NFA) for matching
  * tokens. It supports both fixed strings and simple regular
@@ -39,12 +41,12 @@ import java.io.IOException;
 class TokenNFA {
 
     /**
-     * The initial text states, indexed by the first ASCII character.
-     * This array is used to for speed optimizing the first step in
-     * the match, since the initial state would otherwise have a long
-     * list of transitions without any searchable index.
+     * The initial state lookup table, indexed by the first ASCII
+     * character. This array is used to for speed optimizing the
+     * first step in the match, since the initial state would
+     * otherwise have a long list of transitions to consider.
      */
-    private State[] textStates = new State[128];
+    private State[] initialChar = new State[128];
 
     /**
      * The initial state. This state contains any transitions not
@@ -68,41 +70,81 @@ class TokenNFA {
      * transitions will be added to extend this automaton to support
      * the specified string.
      *
-     * @param str              the string to match
-     * @param caseInsensitive  the case-insensitive match flag
-     * @param value            the match value
+     * @param str            the string to match
+     * @param ignoreCase     the case-insensitive match flag
+     * @param value          the match value
      */
-    public void addTextMatch(String str, boolean caseInsensitive, TokenPattern value) {
+    public void addTextMatch(String str, boolean ignoreCase, TokenPattern value) {
         State  state;
-        State  next;
         char   ch = str.charAt(0);
 
-        if (ch < 128 && !caseInsensitive && initial.transitions.length == 0) {
-            state = textStates[ch];
+        if (ch < 128 && !ignoreCase && initial.outgoing.length == 0) {
+            state = initialChar[ch];
             if (state == null) {
-                state = textStates[ch] = new State();
+                state = initialChar[ch] = new State();
             }
         } else {
-            if (caseInsensitive) {
-                state = new State();
-                initial.add(Character.toLowerCase(ch), state);
-                initial.add(Character.toUpperCase(ch), state);
-            } else {
-                state = initial.add(ch, null);
-            }
+            state = initial.addOut(ch, ignoreCase, null);
         }
         for (int i = 1; i < str.length(); i++) {
-            ch = str.charAt(i);
-            if (caseInsensitive) {
-                next = new State();
-                state.add(Character.toLowerCase(ch), next);
-                state.add(Character.toUpperCase(ch), next);
-                state = next;
-            } else {
-                state = state.add(ch, null);
-            }
+            state = state.addOut(str.charAt(i), ignoreCase, null);
         }
         state.value = value;
+    }
+
+    /**
+     * Adds a regular expression match to this automaton. New states
+     * and transitions will be added to extend this automaton to
+     * support the specified string. Note that this method only
+     * supports a subset of the full regular expression syntax, so
+     * a more complete regular expression library must also be
+     * provided.
+     *
+     * @param pattern        the regular expression string
+     * @param ignoreCase     the case-insensitive match flag
+     * @param value          the match value
+     *
+     * @throws RegExpException if the regular expression parsing
+     *             failed
+     */
+    public void addRegExpMatch(String pattern,
+                               boolean ignoreCase,
+                               TokenPattern value)
+    throws RegExpException {
+
+        TokenRegExpParser  parser = new TokenRegExpParser(pattern, ignoreCase);
+        boolean            isAscii;
+
+        isAscii = parser.start.isAsciiOutgoing();
+        for (int i = 0; isAscii && i < 128; i++) {
+            boolean  match = false;
+            for (int j = 0; j < parser.start.outgoing.length; j++) {
+                if (parser.start.outgoing[j].match((char) i)) {
+                    if (match) {
+                        isAscii = false;
+                        break;
+                    }
+                    match = true;
+                }
+            }
+            if (match && initialChar[i] != null) {
+                isAscii = false;
+            }
+        }
+        if (parser.start.incoming.length > 0) {
+            initial.addOut(new EpsilonTransition(parser.start));
+        } else if (isAscii && !ignoreCase) {
+            for (int i = 0; isAscii && i < 128; i++) {
+                for (int j = 0; j < parser.start.outgoing.length; j++) {
+                    if (parser.start.outgoing[j].match((char) i)) {
+                        initialChar[i] = parser.start.outgoing[j].state;
+                    }
+                }
+            }
+        } else {
+            parser.start.mergeInto(initial);
+        }
+        parser.end.value = value;
     }
 
     /**
@@ -130,13 +172,13 @@ class TokenNFA {
         this.queue.clear();
         peekChar = buffer.peek(0);
         if (0 <= peekChar && peekChar < 128) {
-            state = this.textStates[peekChar];
+            state = this.initialChar[peekChar];
             if (state != null) {
                 this.queue.addLast(state);
             }
         }
         if (peekChar >= 0) {
-            this.initial.matchTransitions((char) peekChar, this.queue);
+            this.initial.matchTransitions((char) peekChar, this.queue, true);
         }
         this.queue.markEnd();
         peekChar = buffer.peek(1);
@@ -149,12 +191,13 @@ class TokenNFA {
                 this.queue.markEnd();
             }
             state = this.queue.removeFirst();
+            // TODO: compare token pattern id:s also...
             if (state.value != null && offset > matchLength) {
                 matchLength = offset;
                 this.lastMatch = state.value;
             }
             if (peekChar >= 0) {
-                state.matchTransitions((char) peekChar, this.queue);
+                state.matchTransitions((char) peekChar, this.queue, false);
             }
         }
         return matchLength;
@@ -183,45 +226,115 @@ class TokenNFA {
         protected TokenPattern value = null;
 
         /**
-         * The transitions from this state.
+         * The incoming transitions to this state.
          */
-        protected Transition[] transitions = new Transition[0];
+        protected Transition[] incoming = new Transition[0];
 
         /**
-         * Adds a new character transition from this state. If the
-         * target state specified was null and an identical
-         * transition already existed, it will be returned instead.
-         *
-         * @param ch         the character to match
-         * @param state      the target state, or null
-         *
-         * @return the transition target state
+         * The outgoing transitions from this state.
          */
-        public State add(char ch, State state) {
-            if (state == null) {
-                state = findUniqueCharTransition(ch);
-                if (state != null) {
-                    return state;
+        protected Transition[] outgoing = new Transition[0];
+
+        /**
+         * The outgoing epsilon transitions flag.
+         */
+        protected boolean epsilonOut = false;
+
+        /**
+         * Checks if all outgoing transitions only match ASCII
+         * characters.
+         *
+         * @return true if all transitions are ASCII-only, or
+         *         false otherwise
+         */
+        public boolean isAsciiOutgoing() {
+            for (int i = 0; i < outgoing.length; i++) {
+                if (!outgoing[i].isAscii()) {
+                    return false;
                 }
-                state = new State();
             }
-            return add(new CharTransition(ch, state));
+            return true;
         }
 
         /**
-         * Adds a new transition from this state.
+         * Adds a new incoming transition.
+         *
+         * @param trans          the transition to add
+         */
+        public void addIn(Transition trans) {
+            Transition[]  temp = incoming;
+
+            incoming = new Transition[temp.length + 1];
+            System.arraycopy(temp, 0, incoming, 0, temp.length);
+            incoming[temp.length] = trans;
+        }
+
+        /**
+         * Adds a new outgoing character transition. If the target
+         * state specified was null and an identical transition
+         * already exists, it will be reused and its target returned.
+         *
+         * @param ch             he character to match
+         * @param ignoreCase     the case-insensitive flag
+         * @param state          the target state, or null
+         *
+         * @return the transition target state
+         */
+        public State addOut(char ch, boolean ignoreCase, State state) {
+            if (ignoreCase) {
+                if (state == null) {
+                    state = new State();
+                }
+                addOut(new CharTransition(Character.toLowerCase(ch), state));
+                addOut(new CharTransition(Character.toUpperCase(ch), state));
+                return state;
+            } else { 
+                if (state == null) {
+                    state = findUniqueCharTransition(ch);
+                    if (state != null) {
+                        return state;
+                    }
+                    state = new State();
+                }
+                return addOut(new CharTransition(ch, state));
+            }
+        }
+
+        /**
+         * Adds a new outgoing transition.
          *
          * @param trans          the transition to add
          *
          * @return the transition target state
          */
-        public State add(Transition trans) {
-            Transition[]  temp = transitions;
+        public State addOut(Transition trans) {
+            Transition[]  temp = outgoing;
 
-            transitions = new Transition[temp.length + 1];
-            System.arraycopy(temp, 0, transitions, 0, temp.length);
-            transitions[temp.length] = trans;
+            outgoing = new Transition[temp.length + 1];
+            System.arraycopy(temp, 0, outgoing, 0, temp.length);
+            outgoing[temp.length] = trans;
+            if (trans instanceof EpsilonTransition) {
+                epsilonOut = true;
+            }
             return trans.state;
+        }
+
+        /**
+         * Merges all the transitions in this state into another
+         * state.
+         *
+         * @param state      the state to merge into
+         */
+        public void mergeInto(State state) {
+            for (int i = 0; i < incoming.length; i++) {
+                state.addIn(incoming[i]);
+                incoming[i].state = state;
+            }
+            incoming = null;
+            for (int i = 0; i < outgoing.length; i++) {
+                state.addOut(outgoing[i]);
+            }
+            outgoing = null;
         }
 
         /**
@@ -239,8 +352,8 @@ class TokenNFA {
             Transition  res = null;
             Transition  trans;
 
-            for (int i = 0; i < transitions.length; i++) {
-                trans = transitions[i];
+            for (int i = 0; i < outgoing.length; i++) {
+                trans = outgoing[i];
                 if (trans.match(ch) && trans instanceof CharTransition) {
                     if (res != null) {
                         return null;
@@ -248,8 +361,8 @@ class TokenNFA {
                     res = trans;
                 }
             }
-            for (int i = 0; res != null && i < transitions.length; i++) {
-                trans = transitions[i];
+            for (int i = 0; res != null && i < outgoing.length; i++) {
+                trans = outgoing[i];
                 if (trans != res && trans.state == res.state) {
                     return null;
                 }
@@ -260,15 +373,50 @@ class TokenNFA {
         /**
          * Attempts a match on each of the transitions leading from
          * this state. If a match is found, its state will be added
-         * to the queue.
+         * to the queue. If the initial match flag is set, epsilon
+         * transitions will also be matched (and their targets called
+         * recursively).
          *
          * @param ch         the character to match
          * @param queue      the state queue
+         * @param initial    the initial match flag
          */
-        public void matchTransitions(char ch, StateQueue queue) {
-            for (int i = 0; i < transitions.length; i++) {
-                if (transitions[i].match(ch)) {
-                    queue.addLast(transitions[i].state);
+        public void matchTransitions(char ch, StateQueue queue, boolean initial) {
+            Transition  trans;
+            State       target;
+
+            for (int i = 0; i < outgoing.length; i++) {
+                trans = outgoing[i];
+                target = trans.state;
+                if (initial && trans instanceof EpsilonTransition) {
+                    target.matchTransitions(ch, queue, true);
+                } else if (trans.match(ch)) {
+                    queue.addLast(target);
+                    if (target.epsilonOut) {
+                        target.matchEmpty(queue);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Adds all the epsilon transition targets to the specified
+         * queue.
+         *
+         * @param queue      the state queue
+         */
+        public void matchEmpty(StateQueue queue) {
+            Transition  trans;
+            State       target;
+
+            for (int i = 0; i < outgoing.length; i++) {
+                trans = outgoing[i];
+                if (trans instanceof EpsilonTransition) {
+                    target = trans.state;
+                    queue.addLast(target);
+                    if (target.epsilonOut) {
+                        target.matchEmpty(queue);
+                    }
                 }
             }
         }
@@ -289,6 +437,25 @@ class TokenNFA {
         protected State state;
 
         /**
+         * Creates a new state transition.
+         *
+         * @param state          the target state
+         */
+        public Transition(State state) {
+            this.state = state;
+            this.state.addIn(this);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public abstract boolean isAscii();
+
+        /**
          * Checks if the specified character matches the transition.
          *
          * @param ch             the character to check
@@ -297,6 +464,70 @@ class TokenNFA {
          *         false otherwise
          */
         public abstract boolean match(char ch);
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public abstract Transition copy(State state);
+    }
+
+
+    /**
+     * The special epsilon transition. This transition matches the
+     * empty input, i.e. it is an automatic transition that doesn't
+     * read any input. As such, it returns false in the match method
+     * and is handled specially everywhere.
+     */
+    protected static class EpsilonTransition extends Transition {
+
+        /**
+         * Creates a new epsilon transition.
+         *
+         * @param state          the target state
+         */
+        public EpsilonTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return false;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            return false;
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new EpsilonTransition(state);
+        }
     }
 
 
@@ -317,8 +548,19 @@ class TokenNFA {
          * @param state          the target state
          */
         public CharTransition(char match, State state) {
+            super(state);
             this.match = match;
-            this.state = state;
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return 0 <= match && match < 128;
         }
 
         /**
@@ -331,6 +573,624 @@ class TokenNFA {
          */
         public boolean match(char ch) {
             return this.match == ch;
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new CharTransition(match, state);
+        }
+    }
+
+
+    /**
+     * A character range match transition. Used for user-defined
+     * character sets in regular expressions.
+     */
+    protected static class CharRangeTransition extends Transition {
+
+        /**
+         * The inverse match flag.
+         */
+        protected boolean inverse;
+
+        /**
+         * The case-insensitive match flag.
+         */
+        protected boolean ignoreCase;
+
+        /**
+         * The character set content. This array may contain either
+         * range objects or Character objects.
+         */
+        private Object[] contents = new Object[0];
+
+        /**
+         * Creates a new character range transition.
+         *
+         * @param inverse        the inverse match flag
+         * @param ignoreCase     the case-insensitive match flag
+         * @param state          the target state
+         */
+        public CharRangeTransition(boolean inverse, boolean ignoreCase, State state) {
+            super(state);
+            this.inverse = inverse;
+            this.ignoreCase = ignoreCase;
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            Object     obj;
+            Character  c;
+
+            if (inverse) {
+                return false;
+            }
+            for (int i = 0; i < contents.length; i++) {
+                obj = contents[i];
+                if (obj instanceof Character) {
+                    c = (Character) obj;
+                    if (c.charValue() < 0 || 128 <= c.charValue()) {
+                        return false;
+                    }
+                } else if (obj instanceof Range) {
+                    if (!((Range) obj).isAscii()) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /**
+         * Adds a single character to this character set.
+         *
+         * @param c              the character to add
+         */
+        public void addCharacter(char c) {
+            if (ignoreCase) {
+                c = Character.toLowerCase(c);
+            }
+            addContent(new Character(c));
+        }
+
+        /**
+         * Adds a character range to this character set.
+         *
+         * @param min            the minimum character value
+         * @param max            the maximum character value
+         */
+        public void addRange(char min, char max) {
+            if (ignoreCase) {
+                min = Character.toLowerCase(min);
+                max = Character.toLowerCase(max);
+            }
+            addContent(new Range(min, max));
+        }
+
+        /**
+         * Adds an object to the character set content array.
+         *
+         * @param obj            the object to add
+         */
+        private void addContent(Object obj) {
+            Object[]  temp = contents;
+
+            contents = new Object[temp.length + 1];
+            System.arraycopy(temp, 0, contents, 0, temp.length);
+            contents[temp.length] = obj;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            Object     obj;
+            Character  c;
+            Range      r;
+
+            if (ignoreCase) {
+                ch = Character.toLowerCase(ch);
+            }
+            for (int i = 0; i < contents.length; i++) {
+                obj = contents[i];
+                if (obj instanceof Character) {
+                    c = (Character) obj;
+                    if (c.charValue() == ch) {
+                        return !inverse;
+                    }
+                } else if (obj instanceof Range) {
+                    r = (Range) obj;
+                    if (r.inside(ch)) {
+                        return !inverse;
+                    }
+                }
+            }
+            return inverse;
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            CharRangeTransition  copy;
+
+            copy = new CharRangeTransition(inverse, ignoreCase, state);
+            copy.contents = contents;
+            return copy;
+        }
+
+        /**
+         * A character range class.
+         */
+        private class Range {
+
+            /**
+             * The minimum character value.
+             */
+            private char min;
+
+            /**
+             * The maximum character value.
+             */
+            private char max;
+
+            /**
+             * Creates a new character range.
+             *
+             * @param min        the minimum character value
+             * @param max        the maximum character value
+             */
+            public Range(char min, char max) {
+                this.min = min;
+                this.max = max;
+            }
+
+            /**
+             * Checks if this range only matches ASCII characters
+             *
+             * @return true if this range only matches ASCII, or
+             *         false otherwise
+             */
+            public boolean isAscii() {
+                return 0 <= min && min < 128 &&
+                       0 <= max && max < 128;
+            }
+
+            /**
+             * Checks if the specified character is inside the range.
+             *
+             * @param c          the character to check
+             *
+             * @return true if the character is in the range, or
+             *         false otherwise
+             */
+            public boolean inside(char c) {
+                return min <= c && c <= max;
+            }
+        }
+    }
+
+
+    /**
+     * The dot ('.') character set transition. This transition
+     * matches a single character that is not equal to a newline
+     * character.
+     */
+    protected static class DotTransition extends Transition {
+
+        /**
+         * Creates a new dot character set transition.
+         *
+         * @param state          the target state
+         */
+        public DotTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return false;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            switch (ch) {
+            case '\n':
+            case '\r':
+            case '\u0085':
+            case '\u2028':
+            case '\u2029':
+                return false;
+            default:
+                return true;
+            }
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new DotTransition(state);
+        }
+    }
+
+
+    /**
+     * The digit character set transition. This transition matches a
+     * single numeric character.
+     */
+    protected static class DigitTransition extends Transition {
+
+        /**
+         * Creates a new digit character set transition.
+         *
+         * @param state          the target state
+         */
+        public DigitTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return true;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            return '0' <= ch && ch <= '9';
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new DigitTransition(state);
+        }
+    }
+
+
+    /**
+     * The non-digit character set transition. This transition
+     * matches a single non-numeric character.
+     */
+    protected static class NonDigitTransition extends Transition {
+
+        /**
+         * Creates a new non-digit character set transition.
+         *
+         * @param state          the target state
+         */
+        public NonDigitTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return false;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            return ch < '0' || '9' < ch;
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new NonDigitTransition(state);
+        }
+    }
+
+
+    /**
+     * The whitespace character set transition. This transition
+     * matches a single whitespace character.
+     */
+    protected static class WhitespaceTransition extends Transition {
+
+        /**
+         * Creates a new whitespace character set transition.
+         *
+         * @param state          the target state
+         */
+        public WhitespaceTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return true;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            switch (ch) {
+            case ' ':
+            case '\t':
+            case '\n':
+            case '\f':
+            case '\r':
+            case 11:
+                return true;
+            default:
+                return false;
+            }
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new WhitespaceTransition(state);
+        }
+    }
+
+
+    /**
+     * The non-whitespace character set transition. This transition
+     * matches a single non-whitespace character.
+     */
+    protected static class NonWhitespaceTransition extends Transition {
+
+        /**
+         * Creates a new non-whitespace character set transition.
+         *
+         * @param state          the target state
+         */
+        public NonWhitespaceTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return false;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            switch (ch) {
+            case ' ':
+            case '\t':
+            case '\n':
+            case '\f':
+            case '\r':
+            case 11:
+                return false;
+            default:
+                return true;
+            }
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new NonWhitespaceTransition(state);
+        }
+    }
+
+
+    /**
+     * The word character set transition. This transition matches a
+     * single word character.
+     */
+    protected static class WordTransition extends Transition {
+
+        /**
+         * Creates a new word character set transition.
+         *
+         * @param state          the target state
+         */
+        public WordTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return true;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            return ('a' <= ch && ch <= 'z')
+                || ('A' <= ch && ch <= 'Z')
+                || ('0' <= ch && ch <= '9')
+                || ch == '_';
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new WordTransition(state);
+        }
+    }
+
+
+    /**
+     * The non-word character set transition. This transition matches
+     * a single non-word character.
+     */
+    protected static class NonWordTransition extends Transition {
+
+        /**
+         * Creates a new non-word character set transition.
+         *
+         * @param state          the target state
+         */
+        public NonWordTransition(State state) {
+            super(state);
+        }
+
+        /**
+         * Checks if this transition only matches ASCII characters.
+         * I.e. characters with numeric values between 0 and 127.
+         *
+         * @return true if this transition only matches ASCII, or
+         *         false otherwise
+         */
+        public boolean isAscii() {
+            return false;
+        }
+
+        /**
+         * Checks if the specified character matches the transition.
+         *
+         * @param ch             the character to check
+         *
+         * @return true if the character matches, or
+         *         false otherwise
+         */
+        public boolean match(char ch) {
+            boolean word = ('a' <= ch && ch <= 'z')
+                        || ('A' <= ch && ch <= 'Z')
+                        || ('0' <= ch && ch <= '9')
+                        || ch == '_';
+            return !word;
+        }
+
+        /**
+         * Creates a copy of this transition but with another target
+         * state.
+         *
+         * @param state          the new target state
+         *
+         * @return an identical copy of this transition
+         */
+        public Transition copy(State state) {
+            return new NonWordTransition(state);
         }
     }
 
