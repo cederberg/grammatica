@@ -52,11 +52,11 @@ public class Tokenizer {
     private boolean useTokenList = false;
 
     /**
-     * The string token matcher. This token matcher is used for all
-     * the fixed string token patterns. Internally the matcher
-     * implements a DFA to provide increased performance.
+     * The standard automaton token matcher. This token matcher is
+     * used for the majority of all token patterns, since it provides
+     * high performance while avoiding stack-based recursion.
      */
-    private StringTokenMatcher stringMatcher = new StringTokenMatcher();
+    private StringDFAMatcher standardMatcher = new StringDFAMatcher();
 
     /**
      * The list of all regular expression token matchers. These
@@ -149,7 +149,7 @@ public class Tokenizer {
         TokenPattern        pattern;
         RegExpTokenMatcher  re;
 
-        pattern = stringMatcher.getPattern(id);
+        pattern = standardMatcher.getPattern(id);
         if (pattern != null) {
             return pattern.toShortString();
         }
@@ -197,7 +197,7 @@ public class Tokenizer {
 
         switch (pattern.getType()) {
         case TokenPattern.STRING_TYPE:
-            stringMatcher.addPattern(pattern);
+            standardMatcher.addPattern(pattern);
             break;
         case TokenPattern.REGEXP_TYPE:
             try {
@@ -233,7 +233,7 @@ public class Tokenizer {
         this.buffer.dispose();
         this.buffer = new ReaderBuffer(input);
         this.previousToken = null;
-        this.stringMatcher.reset();
+        this.standardMatcher.reset();
         for (int i = 0; i < regexpMatchers.size(); i++) {
             ((RegExpTokenMatcher) regexpMatchers.get(i)).reset(this.buffer);
         }
@@ -341,8 +341,8 @@ public class Tokenizer {
         int                 reId;
 
         // Check string matches
-        if (stringMatcher.match(buffer)) {
-            bestMatch = stringMatcher;
+        if (standardMatcher.match(buffer)) {
+            bestMatch = standardMatcher;
             bestLength = bestMatch.getMatchedLength();
             bestId = bestMatch.getMatchedPattern().getId();
         }
@@ -374,7 +374,7 @@ public class Tokenizer {
     public String toString() {
         StringBuffer  buffer = new StringBuffer();
 
-        buffer.append(stringMatcher);
+        buffer.append(standardMatcher);
         for (int i = 0; i < regexpMatchers.size(); i++) {
             buffer.append(regexpMatchers.get(i));
         }
@@ -512,12 +512,12 @@ public class Tokenizer {
 
 
     /**
-     * A string token pattern matcher. This class is used to match a
-     * set of strings against an input stream. Internally it uses a
-     * DFA for increased performance. It also maintains the state of
-     * the last match.
+     * A token pattern matcher using a DFA for string tokens. This
+     * class only supports string tokens and must be complemented
+     * with another matcher for regular expressions. Internally it
+     * uses a DFA to provide high performance.
      */
-    class StringTokenMatcher extends TokenMatcher {
+    class StringDFAMatcher extends TokenMatcher {
 
         /**
          * The list of string token patterns.
