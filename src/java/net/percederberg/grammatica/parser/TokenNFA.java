@@ -161,10 +161,11 @@ class TokenNFA {
      * @throws IOException if an I/O error occurred
      */
     public int match(ReaderBuffer buffer) throws IOException {
-        State  state;
-        int    offset = 1;
-        int    peekChar;
-        int    matchLength = 0;
+        int           length = 0;
+        int           pos = 1;
+        int           peekChar;
+        State         state;
+        TokenPattern  value;
 
         // The first step of the match loop has been unrolled and
         // optimized for performance below.
@@ -186,21 +187,25 @@ class TokenNFA {
         // The remaining match loop processes all subsequent states
         while (!this.queue.isEmpty()) {
             if (this.queue.isMarked()) {
-                offset++;
-                peekChar = buffer.peek(offset);
+                pos++;
+                peekChar = buffer.peek(pos);
                 this.queue.markEnd();
             }
             state = this.queue.removeFirst();
-            // TODO: compare token pattern id:s also...
-            if (state.value != null && offset > matchLength) {
-                matchLength = offset;
-                this.lastMatch = state.value;
+            value = state.value;
+            if (value != null) {
+                if (pos > length ||
+                    (pos == length && value.getId() < this.lastMatch.getId())) {
+
+                    length = pos;
+                    this.lastMatch = value;
+                }
             }
             if (peekChar >= 0) {
                 state.matchTransitions((char) peekChar, this.queue, false);
             }
         }
-        return matchLength;
+        return length;
     }
 
     /**
