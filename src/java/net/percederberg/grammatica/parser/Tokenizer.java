@@ -23,11 +23,9 @@ package net.percederberg.grammatica.parser;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 
 import net.percederberg.grammatica.parser.re.RegExp;
 import net.percederberg.grammatica.parser.re.Matcher;
-import net.percederberg.grammatica.parser.re.RegExpException;
 
 /**
  * A character stream tokenizer. This class groups the characters read
@@ -52,17 +50,32 @@ public class Tokenizer {
     private boolean useTokenList = false;
 
     /**
-     * The standard automaton token matcher. This token matcher is
-     * used for the majority of all token patterns, since it provides
-     * high performance while avoiding stack-based recursion.
+     * The string DFA token matcher. This token matcher uses a
+     * deterministic finite automaton (DFA) implementation and is
+     * used for all string token patterns. It has a slight speed
+     * advantage to the NFA implementation, but should be equivalent
+     * on memory usage.
      */
-    private StringDFAMatcher standardMatcher = new StringDFAMatcher();
+    private StringDFAMatcher stringDfaMatcher = new StringDFAMatcher();
 
     /**
-     * The list of all regular expression token matchers. These
-     * matchers each test matches for a single regular expression.
+     * The regular expression NFA token matcher. This token matcher
+     * uses a non-deterministic finite automaton (DFA) implementation
+     * and is used for most regular expression token patterns. It is
+     * somewhat faster than the other recursive regular expression
+     * implementations available, but doesn't support the full
+     * syntax. It conserves memory by using a fast queue instead of
+     * the stack during processing (no stack overflow).
      */
-    private ArrayList regexpMatchers = new ArrayList();
+    private NFAMatcher nfaMatcher = new NFAMatcher();
+
+    /**
+     * The regular expression token matcher. This token matcher is
+     * used for complex regular expressions, but should be avoided
+     * due to possibly degraded speed and memory usage compared to
+     * the automaton implementations.
+     */
+    private RegExpMatcher regExpMatcher = new RegExpMatcher();
 
     /**
      * The character stream reader buffer.
@@ -146,20 +159,16 @@ public class Tokenizer {
      *         null if not present
      */
     public String getPatternDescription(int id) {
-        TokenPattern        pattern;
-        RegExpTokenMatcher  re;
+        TokenPattern  pattern;
 
-        pattern = standardMatcher.getPattern(id);
-        if (pattern != null) {
-            return pattern.toShortString();
+        pattern = stringDfaMatcher.getPattern(id);
+        if (pattern == null) {
+            pattern = nfaMatcher.getPattern(id);
         }
-        for (int i = 0; i < regexpMatchers.size(); i++) {
-            re = (RegExpTokenMatcher) regexpMatchers.get(i);
-            if (re.getPattern().getId() == id) {
-                return re.getPattern().toShortString();
-            }
+        if (pattern == null) {
+            pattern = regExpMatcher.getPattern(id);
         }
-        return null;
+        return (pattern == null) ? null : pattern.toShortString();
     }
 
     /**
@@ -197,17 +206,29 @@ public class Tokenizer {
 
         switch (pattern.getType()) {
         case TokenPattern.STRING_TYPE:
-            standardMatcher.addPattern(pattern);
-            break;
-        case TokenPattern.REGEXP_TYPE:
             try {
-                regexpMatchers.add(new RegExpTokenMatcher(pattern, buffer));
-            } catch (RegExpException e) {
+                stringDfaMatcher.addPattern(pattern);
+            } catch (Exception e) {
                 throw new ParserCreationException(
                     ParserCreationException.INVALID_TOKEN_ERROR,
                     pattern.getName(),
-                    "regular expression contains error(s): " +
+                    "error adding string token: " +
                     e.getMessage());
+            }
+            break;
+        case TokenPattern.REGEXP_TYPE:
+            try {
+                nfaMatcher.addPattern(pattern);
+            } catch (Exception ignore) {
+                try {
+                    regExpMatcher.addPattern(pattern);
+                } catch (Exception e) {
+                    throw new ParserCreationException(
+                        ParserCreationException.INVALID_TOKEN_ERROR,
+                        pattern.getName(),
+                        "regular expression contains error(s): " +
+                        e.getMessage());
+                }
             }
             break;
         default:
@@ -233,10 +254,9 @@ public class Tokenizer {
         this.buffer.dispose();
         this.buffer = new ReaderBuffer(input);
         this.previousToken = null;
-        this.standardMatcher.reset();
-        for (int i = 0; i < regexpMatchers.size(); i++) {
-            ((RegExpTokenMatcher) regexpMatchers.get(i)).reset(this.buffer);
-        }
+        this.stringDfaMatcher.reset();
+        this.nfaMatcher.reset();
+        this.regExpMatcher.reset();
     }
 
     /**
@@ -300,8 +320,8 @@ public class Tokenizer {
             if (m != null) {
                 line = buffer.lineNumber();
                 column = buffer.columnNumber();
-                str = buffer.read(m.getMatchedLength());
-                return new Token(m.getMatchedPattern(), str, line, column);
+                str = buffer.read(m.matchedLength);
+                return new Token(m.matchedPattern, str, line, column);
             } else if (buffer.peek(0) < 0) {
                 return null;
             } else {
@@ -333,32 +353,34 @@ public class Tokenizer {
      * @throws IOException if an I/O error occurred
      */
     private TokenMatcher findMatch() throws IOException {
-        TokenMatcher        bestMatch = null;
-        int                 bestLength = 0;
-        int                 bestId = Integer.MAX_VALUE;
-        RegExpTokenMatcher  re;
-        int                 reLength;
-        int                 reId;
+        TokenMatcher  bestMatch = null;
+        int           bestLength = 0;
+        int           bestId = Integer.MAX_VALUE;
+        int           len;
+        int           id;
 
-        // Check string matches
-        if (standardMatcher.match(buffer)) {
-            bestMatch = standardMatcher;
-            bestLength = bestMatch.getMatchedLength();
-            bestId = bestMatch.getMatchedPattern().getId();
+        // Check standard matches
+        if (stringDfaMatcher.match(buffer)) {
+            bestMatch = stringDfaMatcher;
+            bestLength = bestMatch.matchedLength;
+            bestId = bestMatch.matchedPattern.getId();
         }
 
-        // Check regular expression matches
-        for (int i = 0; i < regexpMatchers.size(); i++) {
-            re = (RegExpTokenMatcher) regexpMatchers.get(i);
-            if (re.match()) {
-                reLength = re.getMatchedLength();
-                reId = re.getMatchedPattern().getId();
-                if (reLength > bestLength ||
-                    (reId < bestId && reLength >= bestLength)) {
+        // Check NFA regular expression matches
+        if (nfaMatcher.match(buffer)) {
+            len = nfaMatcher.matchedLength;
+            id = nfaMatcher.matchedPattern.getId();
+            if (len > bestLength || (id < bestId && len >= bestLength)) {
+                bestMatch = nfaMatcher;
+            }
+        }
 
-                    bestMatch = re;
-                    bestLength = reLength;
-                }
+        // Check other regular expression matches
+        if (regExpMatcher.match(buffer)) {
+            len = regExpMatcher.matchedLength;
+            id = regExpMatcher.matchedPattern.getId();
+            if (len > bestLength || (id < bestId && len >= bestLength)) {
+                bestMatch = regExpMatcher;
             }
         }
         return bestMatch;
@@ -374,10 +396,9 @@ public class Tokenizer {
     public String toString() {
         StringBuffer  buffer = new StringBuffer();
 
-        buffer.append(standardMatcher);
-        for (int i = 0; i < regexpMatchers.size(); i++) {
-            buffer.append(regexpMatchers.get(i));
-        }
+        buffer.append(stringDfaMatcher);
+        buffer.append(nfaMatcher);
+        buffer.append(regExpMatcher);
         return buffer.toString();
     }
 
@@ -391,122 +412,92 @@ public class Tokenizer {
     abstract class TokenMatcher {
 
         /**
-         * Returns the latest matched token pattern.
+         * The latest token pattern match found. Will be null when no
+         * match has been found.
+         */
+        protected TokenPattern matchedPattern = null;
+
+        /**
+         * The length of the latest match. Will be zero (0) when no
+         * match has been found.
+         */
+        protected int matchedLength = 0;
+
+        /**
+         * The array of token patterns.
+         */
+        protected TokenPattern[] patterns = new TokenPattern[0];
+
+        /**
+         * Resets the matcher state. This will clear the results of
+         * the last match. This function is automatically called
+         * when a new match is attempted.
+         */
+        public void reset() {
+            matchedPattern = null;
+            matchedLength = 0;
+        }
+
+        /**
+         * Checks if a token pattern matches the input stream. This
+         * method will also reset any previous match.
          *
-         * @return the latest matched token pattern, or
-         *         null if no match found
-         */
-        public abstract TokenPattern getMatchedPattern();
-
-        /**
-         * Returns the length of the latest match.
-         *
-         * @return the length of the latest match, or
-         *         zero (0) if no match found
-         */
-        public abstract int getMatchedLength();
-    }
-
-
-    /**
-     * A regular expression token pattern matcher. This class is used
-     * to match a single regular expression with an input stream. This
-     * class also maintains the state of the last match.
-     */
-    class RegExpTokenMatcher extends TokenMatcher {
-
-        /**
-         * The token pattern to match with.
-         */
-        private TokenPattern pattern;
-
-        /**
-         * The regular expression to use.
-         */
-        private RegExp regExp;
-
-        /**
-         * The regular expression matcher to use.
-         */
-        private Matcher matcher;
-
-        /**
-         * Creates a new regular expression token matcher.
-         *
-         * @param pattern        the pattern to match
          * @param buffer         the input buffer to check
-         *
-         * @throws RegExpException if the regular expression couldn't
-         *             be created properly
-         */
-        public RegExpTokenMatcher(TokenPattern pattern, ReaderBuffer buffer)
-            throws RegExpException {
-
-            this.pattern = pattern;
-            this.regExp = new RegExp(pattern.getPattern(), ignoreCase);
-            this.matcher = regExp.matcher(buffer);
-        }
-
-        /**
-         * Resets the matcher for another character input stream. This
-         * will clear the results of the last match.
-         *
-         * @param buffer         the new input buffer to check
-         */
-        public void reset(ReaderBuffer buffer) {
-            matcher.reset(buffer);
-        }
-
-        /**
-         * Returns the token pattern.
-         *
-         * @return the token pattern
-         */
-        public TokenPattern getPattern() {
-            return pattern;
-        }
-
-        /**
-         * Returns the latest matched token pattern.
-         *
-         * @return the latest matched token pattern, or
-         *         null if no match found
-         */
-        public TokenPattern getMatchedPattern() {
-            return (matcher.length() <= 0) ? null : pattern;
-        }
-
-        /**
-         * Returns the length of the latest match.
-         *
-         * @return the length of the latest match, or
-         *         zero (0) if no match found
-         */
-        public int getMatchedLength() {
-            return matcher.length();
-        }
-
-        /**
-         * Checks if the token pattern matches the input stream. This
-         * method will also reset all flags in this matcher.
          *
          * @return true if a match was found, or
          *         false otherwise
          *
          * @throws IOException if an I/O error occurred
          */
-        public boolean match() throws IOException {
-            return matcher.matchFromBeginning();
+        public abstract boolean match(ReaderBuffer buffer) throws IOException;
+
+        /**
+         * Returns the token pattern with the specified id. Only
+         * token patterns handled by this matcher can be returned.
+         *
+         * @param id         the token pattern id
+         *
+         * @return the token pattern found, or
+         *         null if not found
+         */
+        public TokenPattern getPattern(int id) {
+            for (int i = 0; i < patterns.length; i++) {
+                if (patterns[i].getId() == id) {
+                    return patterns[i];
+                }
+            }
+            return null;
         }
 
         /**
-         * Returns a string representation of this token matcher.
+         * Adds a string token pattern to this matcher.
+         *
+         * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
+         */
+        public void addPattern(TokenPattern pattern) throws Exception {
+            TokenPattern[]  temp = patterns;
+
+            patterns = new TokenPattern[temp.length + 1];
+            System.arraycopy(temp, 0, patterns, 0, temp.length);
+            patterns[temp.length] = pattern;
+        }
+
+        /**
+         * Returns a string representation of this matcher. This will
+         * contain all the token patterns.
          *
          * @return a detailed string representation of this matcher
          */
         public String toString() {
-            return pattern.toString() + "\n" +
-                   regExp.toString() + "\n";
+            StringBuffer  buffer = new StringBuffer();
+
+            for (int i = 0; i < patterns.length; i++) {
+                buffer.append(patterns[i]);
+                buffer.append("\n\n");
+            }
+            return buffer.toString();
         }
     }
 
@@ -520,78 +511,21 @@ public class Tokenizer {
     class StringDFAMatcher extends TokenMatcher {
 
         /**
-         * The list of string token patterns.
-         */
-        private ArrayList patterns = new ArrayList();
-
-        /**
          * The deterministic finite state automaton used for
          * matching.
          */
-        private TokenStringDFA start = new TokenStringDFA();
-
-        /**
-         * The last token pattern match found.
-         */
-        private TokenPattern match = null;
-
-        /**
-         * Resets the matcher state. This will clear the results of
-         * the last match.
-         */
-        public void reset() {
-            match = null;
-        }
-
-        /**
-         * Returns the latest matched token pattern.
-         *
-         * @return the latest matched token pattern, or
-         *         null if no match found
-         */
-        public TokenPattern getMatchedPattern() {
-            return match;
-        }
-
-        /**
-         * Returns the length of the latest match.
-         *
-         * @return the length of the latest match, or
-         *         zero (0) if no match found
-         */
-        public int getMatchedLength() {
-            return (match == null) ? 0 : match.getPattern().length();
-        }
-
-        /**
-         * Returns the token pattern with the specified id. Only
-         * token patterns handled by this matcher can be returned.
-         *
-         * @param id         the token pattern id
-         *
-         * @return the token pattern found, or
-         *         null if not found
-         */
-        public TokenPattern getPattern(int id) {
-            TokenPattern  pattern;
-
-            for (int i = 0; i < patterns.size(); i++) {
-                pattern = (TokenPattern) patterns.get(i);
-                if (pattern.getId() == id) {
-                    return pattern;
-                }
-            }
-            return null;
-        }
+        private TokenStringDFA automaton = new TokenStringDFA();
 
         /**
          * Adds a string token pattern to this matcher.
          *
          * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
          */
-        public void addPattern(TokenPattern pattern) {
-            patterns.add(pattern);
-            start.addMatch(pattern.getPattern(), ignoreCase, pattern);
+        public void addPattern(TokenPattern pattern) throws Exception {
+            super.addPattern(pattern);
+            automaton.addMatch(pattern.getPattern(), ignoreCase, pattern);
         }
 
         /**
@@ -607,21 +541,152 @@ public class Tokenizer {
          */
         public boolean match(ReaderBuffer buffer) throws IOException {
             reset();
-            match = start.match(buffer, ignoreCase);
-            return match != null;
+            matchedPattern = automaton.match(buffer, ignoreCase);
+            if (matchedPattern != null) {
+                matchedLength = matchedPattern.getPattern().length();
+            }
+            return matchedPattern != null;
+        }
+    }
+
+
+    /**
+     * A token pattern matcher using a NFA for both string and
+     * regular expression tokens. This class has limited support for
+     * regular expressions and must be complemented with another
+     * matcher providing full regular expression support. Internally
+     * it uses a NFA to provide high performance and low memory
+     * usage.
+     */
+    class NFAMatcher extends TokenMatcher {
+
+        /**
+         * The non-deterministic finite state automaton used for
+         * matching.
+         */
+        private TokenNFA automaton = new TokenNFA();
+
+        /**
+         * Adds a token pattern to this matcher.
+         *
+         * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
+         */
+        public void addPattern(TokenPattern pattern) throws Exception {
+            if (pattern.getType() == TokenPattern.STRING_TYPE) {
+                automaton.addTextMatch(pattern.getPattern(), ignoreCase, pattern);
+            } else {
+                automaton.addRegExpMatch(pattern.getPattern(), ignoreCase, pattern);
+            }
+            super.addPattern(pattern);
         }
 
         /**
-         * Returns a string representation of this matcher. This will
-         * contain all the token patterns.
+         * Checks if the token pattern matches the input stream. This
+         * method will also reset all flags in this matcher.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return true if a match was found, or
+         *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public boolean match(ReaderBuffer buffer) throws IOException {
+            reset();
+            matchedLength = automaton.match(buffer);
+            if (matchedLength > 0) {
+                matchedPattern = automaton.matchedValue();
+            }
+            return matchedLength > 0;
+        }
+    }
+
+
+    /**
+     * A token pattern matcher for complex regular expressions. This
+     * class only supports regular expression tokens and must be
+     * complemented with another matcher for string tokens.
+     * Internally it uses the Grammatica RE package for high
+     * performance or the native java.util.regex package for maximum
+     * compatibility.
+     */
+    class RegExpMatcher extends TokenMatcher {
+
+        /**
+         * The regular expression to use.
+         */
+        private RegExp[] regExps = new RegExp[0];
+
+        /**
+         * The regular expression matchers to use.
+         */
+        private Matcher[] matchers = new Matcher[0];
+
+        /**
+         * Adds a regular expression token pattern to this matcher.
+         *
+         * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
+         */
+        public void addPattern(TokenPattern pattern) throws Exception {
+            Object[]  temp = regExps;
+
+            super.addPattern(pattern);
+            regExps = new RegExp[temp.length + 1];
+            System.arraycopy(temp, 0, regExps, 0, temp.length);
+            regExps[temp.length] = new RegExp(pattern.getPattern(), ignoreCase);
+            temp = matchers;
+            matchers = new Matcher[temp.length + 1];
+            System.arraycopy(temp, 0, matchers, 0, temp.length);
+            matchers[temp.length] = null;
+        }
+
+        /**
+         * Checks if the token pattern matches the input stream. This
+         * method will also reset all flags in this matcher.
+         *
+         * @return true if a match was found, or
+         *         false otherwise
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public boolean match(ReaderBuffer buffer) throws IOException {
+            Matcher  m;
+
+            reset();
+            for (int i = 0; i < matchers.length; i++) {
+                m = matchers[i];
+                if (m == null) {
+                    matchers[i] = m = regExps[i].matcher(buffer);
+                } else {
+                    m.reset(buffer);
+                }
+                if (m.matchFromBeginning()) {
+                    if (m.length() > matchedLength) {
+                        matchedPattern = patterns[i];
+                        matchedLength = m.length();
+                    }
+                }
+            }
+            return matchedLength > 0;
+        }
+
+        /**
+         * Returns a string representation of this token matcher.
          *
          * @return a detailed string representation of this matcher
          */
         public String toString() {
             StringBuffer  buffer = new StringBuffer();
 
-            for (int i = 0; i < patterns.size(); i++) {
-                buffer.append(patterns.get(i));
+            for (int i = 0; i < patterns.length; i++) {
+                buffer.append(patterns[i]);
+                buffer.append("\n");
+                // TODO: replace this with a pattern debugInfo field
+                buffer.append(regExps[i]);
                 buffer.append("\n\n");
             }
             return buffer.toString();
