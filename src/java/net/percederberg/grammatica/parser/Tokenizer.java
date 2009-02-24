@@ -23,6 +23,7 @@ package net.percederberg.grammatica.parser;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.regex.Pattern;
 
 import net.percederberg.grammatica.parser.re.RegExp;
 import net.percederberg.grammatica.parser.re.Matcher;
@@ -547,14 +548,9 @@ public class Tokenizer {
     class RegExpMatcher extends TokenMatcher {
 
         /**
-         * The regular expression to use.
+         * The regular expression handlers.
          */
-        private RegExp[] regExps = new RegExp[0];
-
-        /**
-         * The regular expression matchers to use.
-         */
-        private Matcher[] matchers = new Matcher[0];
+        private RE[] regExps = new RE[0];
 
         /**
          * Adds a regular expression token pattern to this matcher.
@@ -565,16 +561,14 @@ public class Tokenizer {
          */
         public void addPattern(TokenPattern pattern) throws Exception {
             Object[]  temp = regExps;
+            RE        re;
 
-            super.addPattern(pattern);
-            regExps = new RegExp[temp.length + 1];
+            re = new JavaRE(pattern.getPattern());
+            regExps = new RE[temp.length + 1];
             System.arraycopy(temp, 0, regExps, 0, temp.length);
-            regExps[temp.length] = new RegExp(pattern.getPattern(), ignoreCase);
-            temp = matchers;
-            matchers = new Matcher[temp.length + 1];
-            System.arraycopy(temp, 0, matchers, 0, temp.length);
-            matchers[temp.length] = null;
-            pattern.setDebugInfo("built-in regexp; " + regExps[temp.length]);
+            regExps[temp.length] = re;
+            pattern.setDebugInfo("native Java regexp");
+            super.addPattern(pattern);
         }
 
         /**
@@ -589,19 +583,148 @@ public class Tokenizer {
          */
         public void match(ReaderBuffer buffer, TokenMatch match)
         throws IOException {
-            Matcher  m;
 
-            for (int i = 0; i < matchers.length; i++) {
-                m = matchers[i];
-                if (m == null) {
-                    matchers[i] = m = regExps[i].matcher(buffer);
-                } else {
-                    m.reset(buffer);
-                }
-                if (m.matchFromBeginning()) {
-                    match.update(m.length(), patterns[i]);
+            for (int i = 0; i < regExps.length; i++) {
+                int length = regExps[i].match(buffer);
+                if (length > 0) {
+                    match.update(length, patterns[i]);
                 }
             }
+        }
+    }
+
+
+    /**
+     * The regular expression handler base class.
+     */
+    abstract class RE {
+
+        /**
+         * Checks if the start of the input stream matches this
+         * regular expression.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return the longest match found, or
+         *         zero (0) if no match was found
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public abstract int match(ReaderBuffer buffer) throws IOException;
+    }
+
+
+    /**
+     * The Grammatica built-in regular expression handler.
+     */
+    class GrammaticaRE extends RE {
+
+        /**
+         * The compiled regular expression.
+         */
+        private RegExp regExp;
+
+        /**
+         * The regular expression matcher to use.
+         */
+        private Matcher matcher = null;
+
+        /**
+         * Creates a new Grammatica regular expression handler.
+         *
+         * @param regex          the regular expression text
+         *
+         * @throws Exception if the regular expression contained
+         *             invalid syntax
+         */
+        public GrammaticaRE(String regex) throws Exception {
+            regExp = new RegExp(regex, ignoreCase);
+        }
+
+        /**
+         * Checks if the start of the input stream matches this
+         * regular expression.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return the longest match found, or
+         *         zero (0) if no match was found
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public int match(ReaderBuffer buffer) throws IOException {
+            if (matcher == null) {
+                matcher = regExp.matcher(buffer);
+            } else {
+                matcher.reset(buffer);
+            }
+            return matcher.matchFromBeginning() ? matcher.length() : 0;
+        }
+    }
+
+
+    /**
+     * A native Java regular expression handler.
+     */
+    class JavaRE extends RE {
+
+        /**
+         * The compiled regular expression pattern.
+         */
+        Pattern  pattern;
+
+        /**
+         * The regular expression matcher used.
+         */
+        java.util.regex.Matcher  matcher = null;
+
+        /**
+         * Creates a new native regular expression handler.
+         *
+         * @param regex          the regular expression text
+         *
+         * @throws Exception if the regular expression contained
+         *             invalid syntax
+         */
+        public JavaRE(String regex) throws Exception {
+            if (ignoreCase) {
+                pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            } else {
+                pattern = Pattern.compile(regex);
+            }
+        }
+
+        /**
+         * Checks if the start of the input stream matches this
+         * regular expression.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return the longest match found, or
+         *         zero (0) if no match was found
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public int match(ReaderBuffer buffer) throws IOException {
+            int      minSize = ReaderBuffer.BLOCK_SIZE;
+            boolean  match;
+            int      c;
+
+            if (matcher == null) {
+                matcher = pattern.matcher(buffer);
+            } else {
+                matcher.reset(buffer);
+            }
+            matcher.useTransparentBounds(true);
+            do {
+                c = buffer.peek(minSize);
+                matcher.region(buffer.position(), buffer.length());
+                match = matcher.lookingAt();
+                if (matcher.hitEnd()) {
+                    minSize *= 2;
+                }
+            } while (c >= 0 && matcher.hitEnd());
+            return match ? matcher.end() - matcher.start() : 0;
         }
     }
 }
