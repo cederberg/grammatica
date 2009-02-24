@@ -43,11 +43,29 @@
       </item>
 
       <item>
+        <title>Improved the tokenizer processing speed</title>
+        <text>The tokenizer speed has been improved by using a custom
+        DFA implementation for regular expressions. The tokenization
+        phase now runs some 20-30% faster in the general case.
+        <ref bug="3603"/> &amp; <ref bug="8202"/></text>
+      </item>
+
+      <item>
+        <title>Changed to use native Java regular expressions</title>
+        <text>Since the built-in regular expression library is not used
+        as frequently after the implementation of DFA regular expression
+        handling, the native Java regular expression classes are now
+        used. This implies improved support for advanced regular
+        expression syntax (at a performance penalty).
+        <ref bug="3597"/> &amp; <ref bug="17189"/></text>
+      </item>
+
+      <item>
         <title>Changed .NET parser namespace for C# 2.0</title>
-	<text>The C# parser namespace has been modified from
-	<code>PerCederberg.Grammatica.Parser</code> to
-	<code>PerCederberg.Grammatica.Runtime</code> due to the new
-	C# 2.0 compiler strictness. <ref bug="14302"/></text>
+        <text>The C# parser namespace has been modified from
+        <code>PerCederberg.Grammatica.Parser</code> to
+        <code>PerCederberg.Grammatica.Runtime</code> due to the new
+        C# 2.0 compiler strictness. <ref bug="14302"/></text>
       </item>
 
       <item>
@@ -60,11 +78,11 @@
       </item>
 
       <item>
-        <title>Changed regular expression API subtly</title>
+        <title>Changed built-in regular expression API subtly</title>
         <text>Due to fixes required to be able to reuse tokenizers,
-        the regular expression class API had to be changed subtly. In
-        essence, all the methods can now throw IOException which
-        breaks a Java compile. <ref bug="4500"/></text>
+        the built-in regular expression class API had to be changed
+        subtly. In essence, all the methods can now throw IOException
+        which breaks a Java compile. <ref bug="4500"/></text>
       </item>
 
       <item>

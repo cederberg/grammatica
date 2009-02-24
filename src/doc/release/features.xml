@@ -64,6 +64,13 @@
       </item>
 
       <item>
+        <title>Full Unicode and regular expression support</title>
+        <text>The generated parsers use the Java or .NET platform
+        support for Unicode and regular expressions to provide
+        optimal integration and compatibility.</text>
+      </item>
+
+      <item>
         <title>Readable and commented output source code</title>
         <text>The source code generated is fully readable, being
         correctly indented and commented.</text>

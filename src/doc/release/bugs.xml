@@ -25,14 +25,6 @@
         tokens. This error is present in all versions of Grammatica,
         but occurs infrequently. <ref bug="4117"/></text>
       </item>
-
-      <item>
-        <title>Regular Expressions: Not fully JDK 1.4 compatible</title>
-        <text>The regular expression library is still lacking in some
-        ways compared to the implementation in JDK 1.4 (or Perl 5). 
-        The library should be extended to support as many constructs 
-        as possible. <ref bug="3597"/></text>
-      </item>
     </list>
     
 
@@ -79,15 +71,6 @@
         case. This will cause problems for LR parsers, and is 
         generally inefficient. Identical syntetic productions should 
         be unified. <ref bug="3602"/></text>
-      </item>
-
-      <item>
-        <title>Tokenizer: Improve processing speed</title>
-        <text>There are probably still substantial parsing speed 
-        improvements to gain by improving the tokenizer performance. 
-        All the obvious optimizations have already been done, however. 
-        The next step is probably to create a DFA.
-        <ref bug="3603"/></text>
       </item>
 
       <item>
