@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -28,7 +28,7 @@ package net.percederberg.grammatica.parser;
  * that must be provided upon creation.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.1
+ * @version  1.5
  */
 public class TokenPattern {
 
@@ -99,6 +99,12 @@ public class TokenPattern {
      * @see #ignore
      */
     private String ignoreMessage = null;
+
+    /**
+     * The optional debug information message. This is normally set
+     * when the token pattern is analyzed by the tokenizer.
+     */
+    private String debugInfo = null;
 
     /**
      * Creates a new token pattern.
@@ -199,6 +205,18 @@ public class TokenPattern {
     }
 
     /**
+     * Returns the token debug info message. This is normally set
+     * when the token pattern is analyzed by the tokenizer.
+     *
+     * @return the token debug info message
+     *
+     * @since 1.5
+     */
+    public String getDebugInfo() {
+        return debugInfo;
+    }
+
+    /**
      * Sets the token error flag and assigns a default error message.
      */
     public void setError() {
@@ -235,6 +253,18 @@ public class TokenPattern {
     }
 
     /**
+     * Sets the token debug info message. This is normally set when
+     * the token pattern is analyzed by the tokenizer.
+     *
+     * @param info           the token debug info message
+     *
+     * @since 1.5
+     */
+    public void setDebugInfo(String info) {
+        debugInfo = info;
+    }
+
+    /**
      * Returns a detailed string representation of this object.
      *
      * @return a detailed string representation of this object
@@ -268,7 +298,10 @@ public class TokenPattern {
                 buffer.append("\"");
             }
         }
-
+        if (debugInfo != null) {
+            buffer.append("\n  ");
+            buffer.append(debugInfo);
+        }
         return buffer.toString();
     }
 

@@ -21,6 +21,8 @@
 
 package net.percederberg.grammatica.parser;
 
+import java.util.HashMap;
+
 import net.percederberg.grammatica.parser.re.RegExpException;
 
 /**
@@ -60,6 +62,21 @@ class TokenRegExpParser {
     protected TokenNFA.State end = null;
 
     /**
+     * The number of states found.
+     */
+    private int stateCount = 0;
+
+    /**
+     * The number of transitions found.
+     */
+    private int transitionCount = 0;
+
+    /**
+     * The number of epsilon transitions found.
+     */
+    private int epsilonCount = 0;
+
+    /**
      * Creates a new case-sensitive regular expression parser. Note
      * that this will trigger the parsing of the regular expression.
      *
@@ -96,6 +113,40 @@ class TokenRegExpParser {
                 RegExpException.UNEXPECTED_CHARACTER,
                 pos,
                 pattern);
+        }
+    }
+
+    /**
+     * Returns the debug information for the generated NFA.
+     *
+     * @return the debug information for the generated NFA
+     */
+    public String getDebugInfo() {
+        if (stateCount == 0) {
+            updateStats(start, new HashMap());
+        }
+        return stateCount + " states, " +
+               transitionCount + " transitions, " +
+               epsilonCount + " epsilons";
+    }
+
+    /**
+     * Updates the statistical counters for the NFA generated.
+     *
+     * @param state          the current state to visit
+     * @param visited        the lookup map of visited states
+     */
+    private void updateStats(TokenNFA.State state, HashMap visited) {
+        if (!visited.containsKey(state)) {
+            visited.put(state, null);
+            stateCount++;
+            for (int i = 0; i < state.outgoing.length; i++) {
+                transitionCount++;
+                if (state.outgoing[i] instanceof TokenNFA.EpsilonTransition) {
+                    epsilonCount++;
+                }
+                updateStats(state.outgoing[i].state, visited);
+            }
         }
     }
 

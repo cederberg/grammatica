@@ -78,7 +78,7 @@ class TokenNFA {
         State  state;
         char   ch = str.charAt(0);
 
-        if (ch < 128 && !ignoreCase && initial.outgoing.length == 0) {
+        if (ch < 128 && !ignoreCase) {
             state = initialChar[ch];
             if (state == null) {
                 state = initialChar[ch] = new State();
@@ -113,6 +113,7 @@ class TokenNFA {
     throws RegExpException {
 
         TokenRegExpParser  parser = new TokenRegExpParser(pattern, ignoreCase);
+        String             debug = "DFA regexp; " + parser.getDebugInfo();
         boolean            isAscii;
 
         isAscii = parser.start.isAsciiOutgoing();
@@ -133,6 +134,7 @@ class TokenNFA {
         }
         if (parser.start.incoming.length > 0) {
             initial.addOut(new EpsilonTransition(parser.start));
+            debug += ", uses initial epsilon";
         } else if (isAscii && !ignoreCase) {
             for (int i = 0; isAscii && i < 128; i++) {
                 for (int j = 0; j < parser.start.outgoing.length; j++) {
@@ -141,10 +143,13 @@ class TokenNFA {
                     }
                 }
             }
+            debug += ", uses ASCII lookup";
         } else {
             parser.start.mergeInto(initial);
+            debug += ", uses initial state";
         }
         parser.end.value = value;
+        value.setDebugInfo(debug);
     }
 
     /**

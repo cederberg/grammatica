@@ -642,6 +642,7 @@ public class Tokenizer {
             matchers = new Matcher[temp.length + 1];
             System.arraycopy(temp, 0, matchers, 0, temp.length);
             matchers[temp.length] = null;
+            pattern.setDebugInfo("built-in regexp; " + regExps[temp.length]);
         }
 
         /**
@@ -672,24 +673,6 @@ public class Tokenizer {
                 }
             }
             return matchedLength > 0;
-        }
-
-        /**
-         * Returns a string representation of this token matcher.
-         *
-         * @return a detailed string representation of this matcher
-         */
-        public String toString() {
-            StringBuffer  buffer = new StringBuffer();
-
-            for (int i = 0; i < patterns.length; i++) {
-                buffer.append(patterns[i]);
-                buffer.append("\n");
-                // TODO: replace this with a pattern debugInfo field
-                buffer.append(regExps[i]);
-                buffer.append("\n\n");
-            }
-            return buffer.toString();
         }
     }
 }
