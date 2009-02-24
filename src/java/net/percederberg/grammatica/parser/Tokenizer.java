@@ -83,6 +83,11 @@ public class Tokenizer {
     private ReaderBuffer buffer = null;
 
     /**
+     * The last token match found.
+     */
+    private TokenMatch lastMatch = new TokenMatch();
+
+    /**
      * The previous token in the token list.
      */
     private Token previousToken = null;
@@ -254,9 +259,7 @@ public class Tokenizer {
         this.buffer.dispose();
         this.buffer = new ReaderBuffer(input);
         this.previousToken = null;
-        this.stringDfaMatcher.reset();
-        this.nfaMatcher.reset();
-        this.regExpMatcher.reset();
+        this.lastMatch.clear();
     }
 
     /**
@@ -310,18 +313,20 @@ public class Tokenizer {
      *             parsed correctly
      */
     private Token nextToken() throws ParseException {
-        TokenMatcher  m;
-        String        str;
-        int           line;
-        int           column;
+        String  str;
+        int     line;
+        int     column;
 
         try {
-            m = findMatch();
-            if (m != null) {
+            lastMatch.clear();
+            stringDfaMatcher.match(buffer, lastMatch);
+            nfaMatcher.match(buffer, lastMatch);
+            regExpMatcher.match(buffer, lastMatch);
+            if (lastMatch.length() > 0) {
                 line = buffer.lineNumber();
                 column = buffer.columnNumber();
-                str = buffer.read(m.matchedLength);
-                return new Token(m.matchedPattern, str, line, column);
+                str = buffer.read(lastMatch.length());
+                return new Token(lastMatch.pattern(), str, line, column);
             } else if (buffer.peek(0) < 0) {
                 return null;
             } else {
@@ -339,51 +344,6 @@ public class Tokenizer {
                                      -1);
         }
 
-    }
-
-    /**
-     * Finds the longest token match from the current buffer position.
-     * This method will return the token matcher for the best match,
-     * or null if no match was found. As a side effect, this method
-     * will also set the end of buffer flag.
-     *
-     * @return the token matcher with the longest match, or
-     *         null if no match was found
-     *
-     * @throws IOException if an I/O error occurred
-     */
-    private TokenMatcher findMatch() throws IOException {
-        TokenMatcher  bestMatch = null;
-        int           bestLength = 0;
-        int           bestId = Integer.MAX_VALUE;
-        int           len;
-        int           id;
-
-        // Check standard matches
-        if (stringDfaMatcher.match(buffer)) {
-            bestMatch = stringDfaMatcher;
-            bestLength = bestMatch.matchedLength;
-            bestId = bestMatch.matchedPattern.getId();
-        }
-
-        // Check NFA regular expression matches
-        if (nfaMatcher.match(buffer)) {
-            len = nfaMatcher.matchedLength;
-            id = nfaMatcher.matchedPattern.getId();
-            if (len > bestLength || (id < bestId && len >= bestLength)) {
-                bestMatch = nfaMatcher;
-            }
-        }
-
-        // Check other regular expression matches
-        if (regExpMatcher.match(buffer)) {
-            len = regExpMatcher.matchedLength;
-            id = regExpMatcher.matchedPattern.getId();
-            if (len > bestLength || (id < bestId && len >= bestLength)) {
-                bestMatch = regExpMatcher;
-            }
-        }
-        return bestMatch;
     }
 
     /**
@@ -412,44 +372,22 @@ public class Tokenizer {
     abstract class TokenMatcher {
 
         /**
-         * The latest token pattern match found. Will be null when no
-         * match has been found.
-         */
-        protected TokenPattern matchedPattern = null;
-
-        /**
-         * The length of the latest match. Will be zero (0) when no
-         * match has been found.
-         */
-        protected int matchedLength = 0;
-
-        /**
          * The array of token patterns.
          */
         protected TokenPattern[] patterns = new TokenPattern[0];
 
         /**
-         * Resets the matcher state. This will clear the results of
-         * the last match. This function is automatically called
-         * when a new match is attempted.
-         */
-        public void reset() {
-            matchedPattern = null;
-            matchedLength = 0;
-        }
-
-        /**
-         * Checks if a token pattern matches the input stream. This
-         * method will also reset any previous match.
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
          *
          * @param buffer         the input buffer to check
-         *
-         * @return true if a match was found, or
-         *         false otherwise
+         * @param match          the token match to update
          *
          * @throws IOException if an I/O error occurred
          */
-        public abstract boolean match(ReaderBuffer buffer) throws IOException;
+        public abstract void match(ReaderBuffer buffer, TokenMatch match)
+        throws IOException;
 
         /**
          * Returns the token pattern with the specified id. Only
@@ -529,23 +467,22 @@ public class Tokenizer {
         }
 
         /**
-         * Checks if the token pattern matches the input stream. This
-         * method will also reset all flags in this matcher.
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
          *
          * @param buffer         the input buffer to check
-         *
-         * @return true if a match was found, or
-         *         false otherwise
+         * @param match          the token match to update
          *
          * @throws IOException if an I/O error occurred
          */
-        public boolean match(ReaderBuffer buffer) throws IOException {
-            reset();
-            matchedPattern = automaton.match(buffer, ignoreCase);
-            if (matchedPattern != null) {
-                matchedLength = matchedPattern.getPattern().length();
+        public void match(ReaderBuffer buffer, TokenMatch match)
+        throws IOException {
+            TokenPattern  res = automaton.match(buffer, ignoreCase);
+
+            if (res != null) {
+                match.update(res.getPattern().length(), res);
             }
-            return matchedPattern != null;
         }
     }
 
@@ -583,23 +520,18 @@ public class Tokenizer {
         }
 
         /**
-         * Checks if the token pattern matches the input stream. This
-         * method will also reset all flags in this matcher.
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
          *
          * @param buffer         the input buffer to check
-         *
-         * @return true if a match was found, or
-         *         false otherwise
+         * @param match          the token match to update
          *
          * @throws IOException if an I/O error occurred
          */
-        public boolean match(ReaderBuffer buffer) throws IOException {
-            reset();
-            matchedLength = automaton.match(buffer);
-            if (matchedLength > 0) {
-                matchedPattern = automaton.matchedValue();
-            }
-            return matchedLength > 0;
+        public void match(ReaderBuffer buffer, TokenMatch match)
+        throws IOException {
+            automaton.match(buffer, match);
         }
     }
 
@@ -646,18 +578,19 @@ public class Tokenizer {
         }
 
         /**
-         * Checks if the token pattern matches the input stream. This
-         * method will also reset all flags in this matcher.
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
          *
-         * @return true if a match was found, or
-         *         false otherwise
+         * @param buffer         the input buffer to check
+         * @param match          the token match to update
          *
          * @throws IOException if an I/O error occurred
          */
-        public boolean match(ReaderBuffer buffer) throws IOException {
+        public void match(ReaderBuffer buffer, TokenMatch match)
+        throws IOException {
             Matcher  m;
 
-            reset();
             for (int i = 0; i < matchers.length; i++) {
                 m = matchers[i];
                 if (m == null) {
@@ -666,13 +599,9 @@ public class Tokenizer {
                     m.reset(buffer);
                 }
                 if (m.matchFromBeginning()) {
-                    if (m.length() > matchedLength) {
-                        matchedPattern = patterns[i];
-                        matchedLength = m.length();
-                    }
+                    match.update(m.length(), patterns[i]);
                 }
             }
-            return matchedLength > 0;
         }
     }
 }

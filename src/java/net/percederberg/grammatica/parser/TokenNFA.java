@@ -61,11 +61,6 @@ class TokenNFA {
     private StateQueue queue = new StateQueue();
 
     /**
-     * The last match found, or null for none.
-     */
-    private TokenPattern lastMatch = null;
-
-    /**
      * Adds a string match to this automaton. New states and
      * transitions will be added to extend this automaton to support
      * the specified string.
@@ -159,22 +154,21 @@ class TokenNFA {
      * stream, just peek ahead.
      *
      * @param buffer         the input buffer to check
+     * @param match          the token match to update
      *
      * @return the number of characters matched, or
      *         zero (0) if no match was found
      *
      * @throws IOException if an I/O error occurred
      */
-    public int match(ReaderBuffer buffer) throws IOException {
+    public int match(ReaderBuffer buffer, TokenMatch match) throws IOException {
         int           length = 0;
         int           pos = 1;
         int           peekChar;
         State         state;
-        TokenPattern  value;
 
         // The first step of the match loop has been unrolled and
         // optimized for performance below.
-        this.lastMatch = null;
         this.queue.clear();
         peekChar = buffer.peek(0);
         if (0 <= peekChar && peekChar < 128) {
@@ -197,30 +191,14 @@ class TokenNFA {
                 this.queue.markEnd();
             }
             state = this.queue.removeFirst();
-            value = state.value;
-            if (value != null) {
-                if (pos > length ||
-                    (pos == length && value.getId() < this.lastMatch.getId())) {
-
-                    length = pos;
-                    this.lastMatch = value;
-                }
+            if (state.value != null) {
+                match.update(pos, state.value);
             }
             if (peekChar >= 0) {
                 state.matchTransitions((char) peekChar, this.queue, false);
             }
         }
         return length;
-    }
-
-    /**
-     * Returns the last matched token pattern.
-     *
-     * @return the last matched token pattern, or
-     *         null if no match has been found
-     */
-    public TokenPattern matchedValue() {
-        return this.lastMatch;
     }
 
 
