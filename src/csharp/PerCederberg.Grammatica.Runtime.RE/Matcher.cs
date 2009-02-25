@@ -243,7 +243,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
             } else {
                 try {
                     return input.PeekString(start, length);
-                } catch (IOException ignore) {
+                } catch (IOException) {
                     return "";
                 }
             }

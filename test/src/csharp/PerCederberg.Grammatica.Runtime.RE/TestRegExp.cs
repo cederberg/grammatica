@@ -512,7 +512,7 @@ public class TestRegExp {
             new RegExp(pattern, false);
             Fail("regular expression '" + pattern + "' could be " +
                  "created although it isn't valid");
-        } catch (RegExpException e) {
+        } catch (RegExpException) {
             // Failure was expected
         }
     }

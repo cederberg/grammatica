@@ -156,7 +156,7 @@ public class TestProductionPattern {
         try {
             pattern.AddAlternative(alt);
             Fail("could add alternative to " + pattern.Name);
-        } catch (ParserCreationException e) {
+        } catch (ParserCreationException) {
             // Failure was expected
         }
     }

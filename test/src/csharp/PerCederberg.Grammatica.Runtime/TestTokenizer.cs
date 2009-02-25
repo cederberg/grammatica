@@ -281,7 +281,7 @@ public class TestTokenizer {
         try {
             tokenizer.AddPattern(pattern);
             Fail("could add pattern " + pattern.Name);
-        } catch (ParserCreationException e) {
+        } catch (ParserCreationException) {
             // Failure was expected
         }
     }
@@ -341,7 +341,7 @@ public class TestTokenizer {
         try {
             token = tokenizer.Next();
             Fail("could read token " + token.ToString());
-        } catch (ParseException e) {
+        } catch (ParseException) {
             // Failure was expected
         }
     }

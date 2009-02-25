@@ -502,7 +502,7 @@ public class TestRecursiveDescentParser {
         try {
             parser.Prepare();
             Fail("succeeded in preparing parser");
-        } catch (ParserCreationException e) {
+        } catch (ParserCreationException) {
             // Failure was expected
         }
     }
@@ -534,7 +534,7 @@ public class TestRecursiveDescentParser {
         try {
             parser.AddPattern(pattern);
             Fail("could add pattern " + pattern.Name);
-        } catch (ParserCreationException e) {
+        } catch (ParserCreationException) {
             // Failure was expected
         }
     }
