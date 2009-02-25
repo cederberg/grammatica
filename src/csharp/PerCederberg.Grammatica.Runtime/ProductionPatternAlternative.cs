@@ -360,6 +360,15 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
+         * Returns a hash code for this object.
+         *
+         * @return a hash code for this object
+         */
+        public override int GetHashCode() {
+            return elements.Count.GetHashCode();
+        }
+
+        /**
          * Returns a string representation of this object.
          *
          * @return a token string representation

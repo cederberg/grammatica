@@ -174,6 +174,15 @@ public class ProductionPatternElement {
     }
 
     /**
+     * Returns a hash code for this object.
+     *
+     * @return a hash code for this object
+     */
+    public int hashCode() {
+        return this.id * 37;
+    }
+
+    /**
      * Returns a string representation of this object.
      *
      * @return a string representation of this object

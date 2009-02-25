@@ -271,6 +271,15 @@ public class ProductionPatternAlternative {
     }
 
     /**
+     * Returns a hash code for this object.
+     *
+     * @return a hash code for this object
+     */
+    public int hashCode() {
+        return elements.hashCode();
+    }
+
+    /**
      * Returns a string representation of this object.
      *
      * @return a token string representation

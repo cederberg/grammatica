@@ -711,6 +711,15 @@ namespace PerCederberg.Grammatica.Runtime {
             }
 
             /**
+             * Returns a hash code for this object.
+             *
+             * @return a hash code for this object
+             */
+            public override int GetHashCode() {
+                return tokens.Count.GetHashCode();
+            }
+
+            /**
              * Checks if this token sequence starts with the tokens from
              * another sequence. If the other sequence is longer than this
              * sequence, this method will always return false.
