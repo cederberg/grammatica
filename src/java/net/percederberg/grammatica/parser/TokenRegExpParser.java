@@ -177,7 +177,8 @@ class TokenRegExpParser {
             } else {
                 start.addOut(new TokenNFA.EpsilonTransition(subStart));
             }
-            if (subEnd.outgoing.length == 0 || peekChar(0) != '|') {
+            if (subEnd.outgoing.length == 0 ||
+                (!end.hasTransitions() && peekChar(0) != '|')) {
                 subEnd.mergeInto(end);
             } else {
                 subEnd.addOut(new TokenNFA.EpsilonTransition(end));
@@ -230,17 +231,24 @@ class TokenRegExpParser {
      *             pattern string
      */
     private TokenNFA.State parseFact(TokenNFA.State start) throws RegExpException {
+        TokenNFA.State  placeholder = new TokenNFA.State();
         TokenNFA.State  end;
 
-        end = parseAtom(start);
+        end = parseAtom(placeholder);
         switch (peekChar(0)) {
         case '?':
         case '*':
         case '+':
         case '{':
-            return parseAtomModifier(start, end);
-        default:
+            end = parseAtomModifier(placeholder, end);
+            break;
+        }
+        if (placeholder.incoming.length > 0 && start.outgoing.length > 0) {
+            start.addOut(new TokenNFA.EpsilonTransition(placeholder));
             return end;
+        } else {
+            placeholder.mergeInto(start);
+            return (end == placeholder) ? start : end;
         }
     }
 

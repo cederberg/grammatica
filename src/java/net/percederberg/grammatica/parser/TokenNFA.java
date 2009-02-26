@@ -229,6 +229,17 @@ class TokenNFA {
         protected boolean epsilonOut = false;
 
         /**
+         * Checks if this state has any incoming or outgoing
+         * transitions.
+         *
+         * @return true if this state has transitions, or
+         *         false otherwise
+         */
+        public boolean hasTransitions() {
+            return incoming.length > 0 || outgoing.length > 0;
+        }
+
+        /**
          * Checks if all outgoing transitions only match ASCII
          * characters.
          *
