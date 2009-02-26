@@ -80,8 +80,8 @@
     <javac srcdir="src/java"
            destdir="classes"
            classpathref="project.class.path"
-           source="1.2"
-           target="1.2"
+           source="1.4"
+           target="1.5"
            debug="on"
            deprecation="on" />
   	<copy todir="classes">
@@ -125,8 +125,8 @@
     <javac srcdir="test/src/java"
            destdir="classes"
            classpathref="project.class.path"
-           source="1.2"
-           target="1.2"
+           source="1.4"
+           target="1.5"
            debug="on"
            deprecation="on" />
     <junit haltonfailure="on">
@@ -145,7 +145,7 @@
     <csc destfile="lib/cstestall.exe"
          targettype="exe"
          mainclass="TestAll"
-         debug="on"
+         debug="off"
          warnlevel="4"
          failonerror="true">
       <src dir="test/src/csharp"
