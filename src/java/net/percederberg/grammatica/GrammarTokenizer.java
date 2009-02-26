@@ -198,7 +198,7 @@ class GrammarTokenizer extends Tokenizer {
         pattern = new TokenPattern(GrammarConstants.MULTI_LINE_COMMENT,
                                    "MULTI_LINE_COMMENT",
                                    TokenPattern.REGEXP_TYPE,
-                                   "/\\*([^*]|\\*++[^\\/])*\\*++/");
+                                   "/\\*([^*]|\\*+[^\\/])*\\*+/");
         pattern.setIgnore();
         addPattern(pattern);
 
