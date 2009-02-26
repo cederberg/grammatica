@@ -70,10 +70,10 @@ ASTERISK                     = "*"
 VERTICAL_BAR                 = "|"
 SEMICOLON                    = ";"
 IDENTIFIER                   = <<[A-Za-z][A-Za-z0-9_]*>>
-QUOTED_STRING                = <<("[^"]*")|('[^']*')>>
+QUOTED_STRING                = <<"[^"]*"|'[^']*'>>
 REGEXP                       = <<\<\<([^\\\>]|(\\.)|(\>[^\>]))*\>\>>>
 SINGLE_LINE_COMMENT          = <<//.*>> %ignore%
-MULTI_LINE_COMMENT           = <</\*([^*]|\*+[^\/])*\*+/>> %ignore%
+MULTI_LINE_COMMENT           = <</\*([^*]|\*+[^*/])*\*+/>> %ignore%
 WHITESPACE                   = <<[ \t\n\r]+>> %ignore%
 
 
