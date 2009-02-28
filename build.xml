@@ -28,11 +28,7 @@
   <tstamp>
     <format property="build.printdate" pattern="yyyy-MM-dd" />
   </tstamp>
-  <condition property="build.version" value="${DSTAMP}">
-    <not>
-      <isset property="build.version" />
-    </not>
-  </condition>
+  <property name="build.version" value="${DSTAMP}" />
   <property name="build.date" value="${DSTAMP}" />
   <path id="project.class.path">
     <fileset dir="lib" includes="**/*.jar" />
