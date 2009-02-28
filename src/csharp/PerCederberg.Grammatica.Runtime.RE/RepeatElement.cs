@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -137,7 +137,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * specified.
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
@@ -147,7 +147,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         public override int Match(Matcher m,
-                                  LookAheadReader input,
+                                  ReaderBuffer buffer,
                                   int start,
                                   int skip) {
 
@@ -157,12 +157,12 @@ namespace PerCederberg.Grammatica.Runtime.RE {
             }
             switch (type) {
             case RepeatType.GREEDY:
-                return MatchGreedy(m, input, start, skip);
+                return MatchGreedy(m, buffer, start, skip);
             case RepeatType.RELUCTANT:
-                return MatchReluctant(m, input, start, skip);
+                return MatchReluctant(m, buffer, start, skip);
             case RepeatType.POSSESSIVE:
                 if (skip == 0) {
-                    return MatchPossessive(m, input, start, 0);
+                    return MatchPossessive(m, buffer, start, 0);
                 }
                 break;
             }
@@ -175,7 +175,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * to skip can also be specified.
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
@@ -185,20 +185,20 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         private int MatchGreedy(Matcher m,
-                                LookAheadReader input,
+                                ReaderBuffer buffer,
                                 int start,
                                 int skip) {
 
             // Check for simple case
             if (skip == 0) {
-                return MatchPossessive(m, input, start, 0);
+                return MatchPossessive(m, buffer, start, 0);
             }
 
             // Find all matches
             if (matchStart != start) {
                 matchStart = start;
                 matches = new BitArray(10);
-                FindMatches(m, input, start, 0, 0, 0);
+                FindMatches(m, buffer, start, 0, 0, 0);
             }
 
             // Find first non-skipped match
@@ -219,7 +219,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * skip can also be specified.
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
@@ -229,7 +229,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         private int MatchReluctant(Matcher m,
-                                   LookAheadReader input,
+                                   ReaderBuffer buffer,
                                    int start,
                                    int skip) {
 
@@ -237,7 +237,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
             if (matchStart != start) {
                 matchStart = start;
                 matches = new BitArray(10);
-                FindMatches(m, input, start, 0, 0, 0);
+                FindMatches(m, buffer, start, 0, 0, 0);
             }
 
             // Find first non-skipped match
@@ -258,7 +258,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * allows no backtracking, i.e. no skips..
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param count          the start count, normally zero (0)
          *
@@ -268,7 +268,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         private int MatchPossessive(Matcher m,
-                                    LookAheadReader input,
+                                    ReaderBuffer buffer,
                                     int start,
                                     int count) {
 
@@ -277,7 +277,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
 
             // Match as many elements as possible
             while (subLength > 0 && count < max) {
-                subLength = elem.Match(m, input, start + length, 0);
+                subLength = elem.Match(m, buffer, start + length, 0);
                 if (subLength >= 0) {
                     count++;
                     length += subLength;
@@ -296,7 +296,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * Finds all matches and adds the lengths to the matches set.
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param length         the match length at the start position
          * @param count          the number of sub-elements matched
@@ -305,7 +305,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         private void FindMatches(Matcher m,
-                                 LookAheadReader input,
+                                 ReaderBuffer buffer,
                                  int start,
                                  int length,
                                  int count,
@@ -325,7 +325,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
             }
 
             // Check element match
-            subLength = elem.Match(m, input, start, attempt);
+            subLength = elem.Match(m, buffer, start, attempt);
             if (subLength < 0) {
                 return;
             } else if (subLength == 0) {
@@ -339,9 +339,9 @@ namespace PerCederberg.Grammatica.Runtime.RE {
             }
 
             // Find alternative and subsequent matches
-            FindMatches(m, input, start, length, count, attempt + 1);
+            FindMatches(m, buffer, start, length, count, attempt + 1);
             FindMatches(m,
-                        input,
+                        buffer,
                         start + subLength,
                         length + subLength,
                         count + 1,

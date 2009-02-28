@@ -16,9 +16,10 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -39,32 +40,36 @@ namespace PerCederberg.Grammatica.Runtime {
     public class Tokenizer {
 
         /**
-         * The ignore character case flag.
-         */
-        private bool ignoreCase = false;
-
-        /**
          * The token list feature flag.
          */
         private bool useTokenList = false;
 
         /**
-         * The string token matcher. This token matcher is used for all
-         * string token patterns. This matcher implements a DFA to
-         * provide maximum performance.
+         * The string DFA token matcher. This token matcher uses a
+         * deterministic finite automaton (DFA) implementation and is
+         * used for all string token patterns. It has a slight speed
+         * advantage to the NFA implementation, but should be equivalent
+         * on memory usage.
          */
-        private StringTokenMatcher stringMatcher;
+        private StringDFAMatcher stringDfaMatcher;
 
         /**
-         * The list of all regular expression token matchers. These
-         * matchers each test matches for a single regular expression.
+         * The regular expression token matcher. This token matcher is
+         * used for complex regular expressions, but should be avoided
+         * due to possibly degraded speed and memory usage compared to
+         * the automaton implementations.
          */
-        private ArrayList regexpMatchers = new ArrayList();
+        private RegExpMatcher regExpMatcher;
 
         /**
-         * The look-ahead character stream reader.
-         */
-        private LookAheadReader input = null;
+        * The character stream reader buffer.
+        */
+        private ReaderBuffer buffer = null;
+
+        /**
+        * The last token match found.
+        */
+        private TokenMatch lastMatch = new TokenMatch();
 
         /**
          * The previous token in the token list.
@@ -92,9 +97,9 @@ namespace PerCederberg.Grammatica.Runtime {
          * @since 1.5
          */
         public Tokenizer(TextReader input, bool ignoreCase) {
-            this.stringMatcher = new StringTokenMatcher(ignoreCase);
-            this.input = new LookAheadReader(input);
-            this.ignoreCase = ignoreCase;
+            this.stringDfaMatcher = new StringDFAMatcher(ignoreCase);
+            this.regExpMatcher = new RegExpMatcher(ignoreCase);
+            this.buffer = new ReaderBuffer(input);
         }
 
         /**
@@ -170,20 +175,13 @@ namespace PerCederberg.Grammatica.Runtime {
          *         null if not present
          */
         public string GetPatternDescription(int id) {
-            TokenPattern        pattern;
-            RegExpTokenMatcher  re;
+            TokenPattern  pattern;
 
-            pattern = stringMatcher.GetPattern(id);
-            if (pattern != null) {
-                return pattern.ToShortString();
+            pattern = stringDfaMatcher.GetPattern(id);
+            if (pattern == null) {
+                pattern = regExpMatcher.GetPattern(id);
             }
-            for (int i = 0; i < regexpMatchers.Count; i++) {
-                re = (RegExpTokenMatcher) regexpMatchers[i];
-                if (re.GetPattern().Id == id) {
-                    return re.GetPattern().ToShortString();
-                }
-            }
-            return null;
+            return (pattern == null) ? null : pattern.ToShortString();
         }
 
         /**
@@ -193,7 +191,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * @return the current line number
          */
         public int GetCurrentLine() {
-            return input.LineNumber;
+            return buffer.LineNumber;
         }
 
         /**
@@ -203,7 +201,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * @return the current column number
          */
         public int GetCurrentColumn() {
-            return input.ColumnNumber;
+            return buffer.ColumnNumber;
         }
 
         /**
@@ -219,13 +217,19 @@ namespace PerCederberg.Grammatica.Runtime {
         public void AddPattern(TokenPattern pattern) {
             switch (pattern.Type) {
             case TokenPattern.PatternType.STRING:
-                stringMatcher.AddPattern(pattern);
+                try {
+                    stringDfaMatcher.AddPattern(pattern);
+                } catch (Exception e) {
+                    throw new ParserCreationException(
+                        ParserCreationException.ErrorType.INVALID_TOKEN,
+                        pattern.Name,
+                        "error adding string token: " +
+                        e.Message);
+                }
                 break;
             case TokenPattern.PatternType.REGEXP:
                 try {
-                    regexpMatchers.Add(new RegExpTokenMatcher(pattern,
-                                                              ignoreCase,
-                                                              input));
+                    regExpMatcher.AddPattern(pattern);
                 } catch (RegExpException e) {
                     throw new ParserCreationException(
                         ParserCreationException.ErrorType.INVALID_TOKEN,
@@ -255,13 +259,10 @@ namespace PerCederberg.Grammatica.Runtime {
          * @since 1.5
          */
         public void Reset(TextReader input) {
-            this.input.Close();
-            this.input = new LookAheadReader(input);
+            this.buffer.Dispose();
+            this.buffer = new ReaderBuffer(input);
             this.previousToken = null;
-            stringMatcher.Reset();
-            for (int i = 0; i < regexpMatchers.Count; i++) {
-                ((RegExpTokenMatcher) regexpMatchers[i]).Reset(this.input);
-            }
+            this.lastMatch.Clear();
         }
 
         /**
@@ -283,23 +284,23 @@ namespace PerCederberg.Grammatica.Runtime {
 
             do {
                 token = NextToken();
-                if (useTokenList && token != null) {
+                if (token == null) {
+                    return null;
+                }
+                if (useTokenList) {
                     token.Previous = previousToken;
                     previousToken = token;
                 }
-                if (token == null) {
-                    return null;
+                if (token.Pattern.Ignore) {
+                    token = null;
                 } else if (token.Pattern.Error) {
                     throw new ParseException(
                         ParseException.ErrorType.INVALID_TOKEN,
                         token.Pattern.ErrorMessage,
                         token.StartLine,
                         token.StartColumn);
-                } else if (token.Pattern.Ignore) {
-                    token = null;
                 }
             } while (token == null);
-
             return token;
         }
 
@@ -315,26 +316,27 @@ namespace PerCederberg.Grammatica.Runtime {
          *             parsed correctly
          */
         private Token NextToken() {
-            TokenMatcher  m;
-            string        str;
-            int           line;
-            int           column;
+            string  str;
+            int     line;
+            int     column;
 
             try {
-                m = FindMatch();
-                if (m != null) {
-                    line = input.LineNumber;
-                    column = input.ColumnNumber;
-                    str = input.ReadString(m.GetMatchedLength());
-                    return new Token(m.GetMatchedPattern(), str, line, column);
-                } else if (input.Peek() < 0) {
+                lastMatch.Clear();
+                stringDfaMatcher.Match(buffer, lastMatch);
+                regExpMatcher.Match(buffer, lastMatch);
+                if (lastMatch.Length > 0) {
+                    line = buffer.LineNumber;
+                    column = buffer.ColumnNumber;
+                    str = buffer.Read(lastMatch.Length);
+                    return new Token(lastMatch.Pattern, str, line, column);
+                } else if (buffer.Peek(0) < 0) {
                     return null;
                 } else {
-                    line = input.LineNumber;
-                    column = input.ColumnNumber;
+                    line = buffer.LineNumber;
+                    column = buffer.ColumnNumber;
                     throw new ParseException(
                         ParseException.ErrorType.UNEXPECTED_CHAR,
-                        input.ReadString(1),
+                        buffer.Read(1),
                         line,
                         column);
                 }
@@ -347,39 +349,6 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
-         * Finds the longest token match from the current buffer
-         * position. This method will return the token matcher for the
-         * best match, or null if no match was found. As a side
-         * effect, this method will also set the end of buffer flag.
-         *
-         * @return the token mathcher with the longest match, or
-         *         null if no match was found
-         *
-         * @throws IOException if an I/O error occurred
-         */
-        private TokenMatcher FindMatch() {
-            TokenMatcher        bestMatch = null;
-            int                 bestLength = 0;
-            RegExpTokenMatcher  re;
-
-            // Check string matches
-            if (stringMatcher.Match(input)) {
-                bestMatch = stringMatcher;
-                bestLength = bestMatch.GetMatchedLength();
-            }
-
-            // Check regular expression matches
-            for (int i = 0; i < regexpMatchers.Count; i++) {
-                re = (RegExpTokenMatcher) regexpMatchers[i];
-                if (re.Match() && re.GetMatchedLength() > bestLength) {
-                    bestMatch = re;
-                    bestLength = re.GetMatchedLength();
-                }
-            }
-            return bestMatch;
-        }
-
-        /**
          * Returns a string representation of this object. The returned
          * string will contain the details of all the token patterns
          * contained in this tokenizer.
@@ -389,10 +358,8 @@ namespace PerCederberg.Grammatica.Runtime {
         public override string ToString() {
             StringBuilder  buffer = new StringBuilder();
 
-            buffer.Append(stringMatcher);
-            for (int i = 0; i < regexpMatchers.Count; i++) {
-                buffer.Append(regexpMatchers[i]);
-            }
+            buffer.Append(stringDfaMatcher);
+            buffer.Append(regExpMatcher);
             return buffer.ToString();
         }
     }
@@ -400,210 +367,42 @@ namespace PerCederberg.Grammatica.Runtime {
 
     /**
      * A token pattern matcher. This class is the base class for the
-     * two types of token matchers that exist. The token matcher
+     * various types of token matchers that exist. The token matcher
      * checks for matches with the tokenizer buffer, and maintains the
      * state of the last match.
      */
     internal abstract class TokenMatcher {
 
         /**
-         * Returns the latest matched token pattern.
-         *
-         * @return the latest matched token pattern, or
-         *         null if no match found
+         * The array of token patterns.
          */
-        public abstract TokenPattern GetMatchedPattern();
-
-        /**
-         * Returns the length of the latest match.
-         *
-         * @return the length of the latest match, or
-         *         zero (0) if no match found
-         */
-        public abstract int GetMatchedLength();
-    }
-
-
-    /**
-     * A regular expression token pattern matcher. This class is used
-     * to match a single regular expression with an input stream. This
-     * class also maintains the state of the last match.
-     */
-    internal class RegExpTokenMatcher : TokenMatcher {
-
-        /**
-         * The token pattern to match with.
-         */
-        private TokenPattern pattern;
-
-        /**
-         * The regular expression to use.
-         */
-        private RegExp regExp;
-
-        /**
-         * The regular expression matcher to use.
-         */
-        private Matcher matcher = null;
-
-        /**
-         * Creates a new regular expression token matcher.
-         *
-         * @param pattern        the pattern to match
-         * @param ignoreCase     the character case ignore flag
-         * @param input          the input stream to check
-         *
-         * @throws RegExpException if the regular expression couldn't
-         *             be created properly
-         */
-        public RegExpTokenMatcher(TokenPattern pattern,
-                                  bool ignoreCase,
-                                  LookAheadReader input) {
-
-            this.pattern = pattern;
-            this.regExp = new RegExp(pattern.Pattern, ignoreCase);
-            this.matcher = regExp.Matcher(input);
-        }
-
-        /**
-         * Resets the matcher for another character input stream. This
-         * will clear the results of the last match.
-         *
-         * @param input           the new input stream to check
-         */
-        public void Reset(LookAheadReader input) {
-            matcher.Reset(input);
-        }
-
-        /**
-         * Returns the token pattern.
-         *
-         * @return the token pattern
-         */
-        public TokenPattern GetPattern() {
-            return pattern;
-        }
-
-        /**
-         * Returns the latest matched token pattern.
-         *
-         * @return the latest matched token pattern, or
-         *         null if no match found
-         */
-        public override TokenPattern GetMatchedPattern() {
-            if (matcher == null || matcher.Length() <= 0) {
-                return null;
-            } else {
-                return pattern;
-            }
-        }
-
-        /**
-         * Returns the length of the latest match.
-         *
-         * @return the length of the latest match, or
-         *         zero (0) if no match found
-         */
-        public override int GetMatchedLength() {
-            return (matcher == null) ? 0 : matcher.Length();
-        }
-
-        /**
-         * Checks if the token pattern matches the input stream. This
-         * method will also reset all flags in this matcher.
-         *
-         * @param str            the string to match
-         * @param pos            the starting position
-         *
-         * @return true if a match was found, or
-         *         false otherwise
-         *
-         * @throws IOException if an I/O error occurred
-         */
-        public bool Match() {
-            return matcher.MatchFromBeginning();
-        }
-
-        /**
-         * Returns a string representation of this token matcher.
-         *
-         * @return a detailed string representation of this matcher
-         */
-        public override string ToString() {
-            return pattern.ToString() + "\n" +
-                   regExp.ToString() + "\n";
-        }
-    }
-
-
-    /**
-     * A string token pattern matcher. This class is used to match a
-     * set of strings with an input stream. This class internally uses
-     * a DFA for maximum performance. It also maintains the state of
-     * the last match.
-     */
-    internal class StringTokenMatcher : TokenMatcher {
-
-        /**
-         * The list of string token patterns.
-         */
-        private ArrayList patterns = new ArrayList();
-
-        /**
-         * The finite automaton to use for matching.
-         */
-        private Automaton start = new Automaton();
-
-        /**
-         * The last token pattern match found.
-         */
-        private TokenPattern match = null;
+        protected TokenPattern[] patterns = new TokenPattern[0];
 
         /**
          * The ignore character case flag.
          */
-        private bool ignoreCase = false;
+        protected bool ignoreCase = false;
 
         /**
-         * Creates a new string token matcher.
+         * Creates a new token matcher.
          *
          * @param ignoreCase      the character case ignore flag
          */
-        public StringTokenMatcher(bool ignoreCase) {
+        public TokenMatcher(bool ignoreCase) {
             this.ignoreCase = ignoreCase;
         }
 
         /**
-         * Resets the matcher state. This will clear the results of
-         * the last match.
-         */
-        public void Reset() {
-            match = null;
-        }
-
-        /**
-         * Returns the latest matched token pattern.
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
          *
-         * @return the latest matched token pattern, or
-         *         null if no match found
-         */
-        public override TokenPattern GetMatchedPattern() {
-            return match;
-        }
-
-        /**
-         * Returns the length of the latest match.
+         * @param buffer         the input buffer to check
+         * @param match          the token match to update
          *
-         * @return the length of the latest match, or
-         *         zero (0) if no match found
+         * @throws IOException if an I/O error occurred
          */
-        public override int GetMatchedLength() {
-            if (match == null) {
-                return 0;
-            } else {
-                return match.Pattern.Length;
-            }
-        }
+        public abstract void Match(ReaderBuffer buffer, TokenMatch match);
 
         /**
          * Returns the token pattern with the specified id. Only
@@ -615,12 +414,9 @@ namespace PerCederberg.Grammatica.Runtime {
          *         null if not found
          */
         public TokenPattern GetPattern(int id) {
-            TokenPattern  pattern;
-
-            for (int i = 0; i < patterns.Count; i++) {
-                pattern = (TokenPattern) patterns[i];
-                if (pattern.Id == id) {
-                    return pattern;
+            for (int i = 0; i < patterns.Length; i++) {
+                if (patterns[i].Id == id) {
+                    return patterns[i];
                 }
             }
             return null;
@@ -630,27 +426,15 @@ namespace PerCederberg.Grammatica.Runtime {
          * Adds a string token pattern to this matcher.
          *
          * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
          */
-        public void AddPattern(TokenPattern pattern) {
-            patterns.Add(pattern);
-            start.AddMatch(pattern.Pattern, ignoreCase, pattern);
-        }
+        public virtual void AddPattern(TokenPattern pattern) {
+            TokenPattern[]  temp = patterns;
 
-        /**
-         * Checks if the token pattern matches the input stream. This
-         * method will also reset all flags in this matcher.
-         *
-         * @param input          the input stream to match
-         *
-         * @return true if a match was found, or
-         *         false otherwise
-         *
-         * @throws IOException if an I/O error occurred
-         */
-        public bool Match(LookAheadReader input) {
-            Reset();
-            match = (TokenPattern) start.MatchFrom(input, 0, ignoreCase);
-            return match != null;
+            patterns = new TokenPattern[temp.Length + 1];
+            Array.Copy(temp, 0, patterns, 0, temp.Length);
+            patterns[temp.Length] = pattern;
         }
 
         /**
@@ -662,11 +446,197 @@ namespace PerCederberg.Grammatica.Runtime {
         public override string ToString() {
             StringBuilder  buffer = new StringBuilder();
 
-            for (int i = 0; i < patterns.Count; i++) {
+            for (int i = 0; i < patterns.Length; i++) {
                 buffer.Append(patterns[i]);
                 buffer.Append("\n\n");
             }
             return buffer.ToString();
+        }
+    }
+
+
+    /**
+     * A token pattern matcher using a DFA for string tokens. This
+     * class only supports string tokens and must be complemented
+     * with another matcher for regular expressions. Internally it
+     * uses a DFA to provide high performance.
+     */
+    internal class StringDFAMatcher : TokenMatcher {
+
+        /**
+         * The deterministic finite state automaton used for
+         * matching.
+         */
+        private TokenStringDFA automaton = new TokenStringDFA();
+
+        /**
+         * Creates a new string token matcher.
+         *
+         * @param ignoreCase      the character case ignore flag
+         */
+        public StringDFAMatcher(bool ignoreCase)
+            : base(ignoreCase) {
+        }
+
+        /**
+         * Adds a string token pattern to this matcher.
+         *
+         * @param pattern        the pattern to add
+         */
+        public override void AddPattern(TokenPattern pattern) {
+            automaton.AddMatch(pattern.Pattern, ignoreCase, pattern);
+            base.AddPattern(pattern);
+        }
+
+        /**
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
+         *
+         * @param buffer         the input buffer to check
+         * @param match          the token match to update
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public override void Match(ReaderBuffer buffer, TokenMatch match) {
+            TokenPattern  res = automaton.Match(buffer, ignoreCase);
+
+            if (res != null) {
+                match.Update(res.Pattern.Length, res);
+            }
+        }
+    }
+
+
+    /**
+     * A token pattern matcher for complex regular expressions. This
+     * class only supports regular expression tokens and must be
+     * complemented with another matcher for string tokens.
+     * Internally it uses the Grammatica RE package for high
+     * performance or the native java.util.regex package for maximum
+     * compatibility.
+     */
+    internal class RegExpMatcher : TokenMatcher {
+
+        /**
+         * The regular expression handlers.
+         */
+        private REHandler[] regExps = new REHandler[0];
+
+        /**
+         * Creates a new regular expression token matcher.
+         *
+         * @param ignoreCase      the character case ignore flag
+         */
+        public RegExpMatcher(bool ignoreCase)
+            : base(ignoreCase) {
+        }
+
+        /**
+         * Adds a regular expression token pattern to this matcher.
+         *
+         * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
+         */
+        public override void AddPattern(TokenPattern pattern) {
+            REHandler[]  temp = regExps;
+            REHandler    re;
+
+            re = new GrammaticaRE(pattern.Pattern, ignoreCase);
+            regExps = new REHandler[temp.Length + 1];
+            Array.Copy(temp, 0, regExps, 0, temp.Length);
+            regExps[temp.Length] = re;
+            // TODO: pattern.DebugInfo = "Grammatica regexp";
+            base.AddPattern(pattern);
+        }
+
+        /**
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
+         *
+         * @param buffer         the input buffer to check
+         * @param match          the token match to update
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public override void Match(ReaderBuffer buffer, TokenMatch match) {
+            for (int i = 0; i < regExps.Length; i++) {
+                int length = regExps[i].Match(buffer);
+                if (length > 0) {
+                    match.Update(length, patterns[i]);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * The regular expression handler base class.
+     */
+    internal abstract class REHandler {
+
+        /**
+         * Checks if the start of the input stream matches this
+         * regular expression.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return the longest match found, or
+         *         zero (0) if no match was found
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public abstract int Match(ReaderBuffer buffer);
+    }
+
+
+    /**
+     * The Grammatica built-in regular expression handler.
+     */
+    internal class GrammaticaRE : REHandler {
+
+        /**
+         * The compiled regular expression.
+         */
+        private RegExp regExp;
+
+        /**
+         * The regular expression matcher to use.
+         */
+        private Matcher matcher = null;
+
+        /**
+         * Creates a new Grammatica regular expression handler.
+         *
+         * @param regex          the regular expression text
+         *
+         * @throws Exception if the regular expression contained
+         *             invalid syntax
+         */
+        public GrammaticaRE(string regex, bool ignoreCase) {
+            regExp = new RegExp(regex, ignoreCase);
+        }
+
+        /**
+         * Checks if the start of the input stream matches this
+         * regular expression.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return the longest match found, or
+         *         zero (0) if no match was found
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public override int Match(ReaderBuffer buffer) {
+            if (matcher == null) {
+                matcher = regExp.Matcher(buffer);
+            } else {
+                matcher.Reset(buffer);
+            }
+            return matcher.MatchFromBeginning() ? matcher.Length() : 0;
         }
     }
 }

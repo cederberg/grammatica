@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -84,7 +84,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * combine other elements.
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
@@ -94,7 +94,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         public override int Match(Matcher m,
-                                  LookAheadReader input,
+                                  ReaderBuffer buffer,
                                   int start,
                                   int skip) {
 
@@ -104,7 +104,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
                 return -1;
             }
             for (int i = 0; i < value.Length; i++) {
-                c = input.Peek(start + i);
+                c = buffer.Peek(start + i);
                 if (c < 0) {
                     m.SetReadEndOfString();
                     return -1;

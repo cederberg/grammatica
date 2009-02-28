@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -32,7 +32,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * expression.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     internal abstract class Element : ICloneable {
 
@@ -55,7 +55,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * combine other elements.
          *
          * @param m              the matcher being used
-         * @param input          the input character stream to match
+         * @param buffer         the input character buffer to match
          * @param start          the starting position
          * @param skip           the number of matches to skip
          *
@@ -65,7 +65,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @throws IOException if an I/O error occurred
          */
         public abstract int Match(Matcher m,
-                                  LookAheadReader input,
+                                  ReaderBuffer buffer,
                                   int start,
                                   int skip);
 

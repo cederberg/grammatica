@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System.IO;
@@ -43,9 +43,9 @@ namespace PerCederberg.Grammatica.Runtime.RE {
         private Element element;
 
         /**
-         * The input character stream to work with.
+         * The input character buffer to work with.
          */
-        private LookAheadReader input;
+        private ReaderBuffer buffer;
 
         /**
          * The character case ignore flag.
@@ -72,12 +72,12 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * Creates a new matcher with the specified element.
          *
          * @param e              the base regular expression element
-         * @param input          the input character stream to work with
+         * @param buffer         the input character buffer to work with
          * @param ignoreCase     the character case ignore flag
          */
-        internal Matcher(Element e, LookAheadReader input, bool ignoreCase) {
+        internal Matcher(Element e, ReaderBuffer buffer, bool ignoreCase) {
             this.element = e;
-            this.input = input;
+            this.buffer = buffer;
             this.ignoreCase = ignoreCase;
             this.start = 0;
             Reset();
@@ -116,24 +116,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @since 1.5
          */
         public void Reset(string str) {
-            Reset(new StringReader(str));
-        }
-
-        /**
-         * Resets the matcher for use with a new character input
-         * stream. This will clear all flags and set the match length
-         * to a negative value.
-         *
-         * @param input           the character input stream
-         *
-         * @since 1.5
-         */
-        public void Reset(TextReader input) {
-            if (input is LookAheadReader) {
-                Reset((LookAheadReader) input);
-            } else {
-                Reset(new LookAheadReader(input));
-            }
+            Reset(new ReaderBuffer(new StringReader(str)));
         }
 
         /**
@@ -141,12 +124,12 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * input stream. This will clear all flags and set the match
          * length to a negative value.
          *
-         * @param input           the character input stream
+         * @param buffer          the character input buffer
          *
          * @since 1.5
          */
-        private void Reset(LookAheadReader input) {
-            this.input = input;
+        public void Reset(ReaderBuffer buffer) {
+            this.buffer = buffer;
             Reset();
         }
 
@@ -227,7 +210,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
         public bool MatchFrom(int pos) {
             Reset();
             start = pos;
-            length = element.Match(this, input, start, 0);
+            length = element.Match(this, buffer, start, 0);
             return length >= 0;
         }
 
@@ -241,11 +224,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
             if (length <= 0) {
                 return "";
             } else {
-                try {
-                    return input.PeekString(start, length);
-                } catch (IOException) {
-                    return "";
-                }
+                return buffer.Substring(buffer.Position, length);
             }
         }
 

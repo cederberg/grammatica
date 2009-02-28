@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -107,39 +107,21 @@ namespace PerCederberg.Grammatica.Runtime.RE {
          * @return the regular expresion matcher
          */
         public Matcher Matcher(string str) {
-            return Matcher(new StringReader(str));
-        }
-
-        /**
-         * Creates a new matcher for the specified character input
-         * stream.
-         *
-         * @param input          the character input stream
-         *
-         * @return the regular expresion matcher
-         *
-         * @since 1.5
-         */
-        public Matcher Matcher(TextReader input) {
-            if (input is LookAheadReader) {
-                return Matcher((LookAheadReader) input);
-            } else {
-                return Matcher(new LookAheadReader(input));
-            }
+            return Matcher(new ReaderBuffer(new StringReader(str)));
         }
 
         /**
          * Creates a new matcher for the specified look-ahead
          * character input stream.
          *
-         * @param input          the character input stream
+         * @param buffer         the character input buffer
          *
          * @return the regular expresion matcher
          *
          * @since 1.5
          */
-        private Matcher Matcher(LookAheadReader input) {
-            return new Matcher((Element) element.Clone(), input, ignoreCase);
+        public Matcher Matcher(ReaderBuffer buffer) {
+            return new Matcher((Element) element.Clone(), buffer, ignoreCase);
         }
 
         /**
