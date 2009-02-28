@@ -325,17 +325,13 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param size           the minimum buffer size
          */
         private void EnsureCapacity(int size) {
-            char[]  newbuf;
-
             if (buffer.Length >= size) {
                 return;
             }
             if (size % BLOCK_SIZE != 0) {
                 size = (1 + size / BLOCK_SIZE) * BLOCK_SIZE;
             }
-            newbuf = new char[size];
-            Array.Copy(buffer, 0, newbuf, 0, length);
-            buffer = newbuf;
+            Array.Resize(ref buffer, size);
         }
     }
 }
