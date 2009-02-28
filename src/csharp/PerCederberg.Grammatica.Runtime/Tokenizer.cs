@@ -54,6 +54,17 @@ namespace PerCederberg.Grammatica.Runtime {
         private StringDFAMatcher stringDfaMatcher;
 
         /**
+         * The regular expression NFA token matcher. This token matcher
+         * uses a non-deterministic finite automaton (DFA) implementation
+         * and is used for most regular expression token patterns. It is
+         * somewhat faster than the other recursive regular expression
+         * implementations available, but doesn't support the full
+         * syntax. It conserves memory by using a fast queue instead of
+         * the stack during processing (no stack overflow).
+         */
+        private NFAMatcher nfaMatcher;
+
+        /**
          * The regular expression token matcher. This token matcher is
          * used for complex regular expressions, but should be avoided
          * due to possibly degraded speed and memory usage compared to
@@ -98,6 +109,7 @@ namespace PerCederberg.Grammatica.Runtime {
          */
         public Tokenizer(TextReader input, bool ignoreCase) {
             this.stringDfaMatcher = new StringDFAMatcher(ignoreCase);
+            this.nfaMatcher = new NFAMatcher(ignoreCase);
             this.regExpMatcher = new RegExpMatcher(ignoreCase);
             this.buffer = new ReaderBuffer(input);
         }
@@ -179,6 +191,9 @@ namespace PerCederberg.Grammatica.Runtime {
 
             pattern = stringDfaMatcher.GetPattern(id);
             if (pattern == null) {
+                pattern = nfaMatcher.GetPattern(id);
+            }
+            if (pattern == null) {
                 pattern = regExpMatcher.GetPattern(id);
             }
             return (pattern == null) ? null : pattern.ToShortString();
@@ -229,13 +244,17 @@ namespace PerCederberg.Grammatica.Runtime {
                 break;
             case TokenPattern.PatternType.REGEXP:
                 try {
-                    regExpMatcher.AddPattern(pattern);
-                } catch (RegExpException e) {
-                    throw new ParserCreationException(
-                        ParserCreationException.ErrorType.INVALID_TOKEN,
-                        pattern.Name,
-                        "regular expression contains error(s): " +
-                        e.Message);
+                    nfaMatcher.AddPattern(pattern);
+                } catch (Exception) {
+                    try {
+                        regExpMatcher.AddPattern(pattern);
+                    } catch (RegExpException e) {
+                        throw new ParserCreationException(
+                            ParserCreationException.ErrorType.INVALID_TOKEN,
+                            pattern.Name,
+                            "regular expression contains error(s): " +
+                            e.Message);
+                    }
                 }
                 break;
             default:
@@ -323,6 +342,7 @@ namespace PerCederberg.Grammatica.Runtime {
             try {
                 lastMatch.Clear();
                 stringDfaMatcher.Match(buffer, lastMatch);
+                nfaMatcher.Match(buffer, lastMatch);
                 regExpMatcher.Match(buffer, lastMatch);
                 if (lastMatch.Length > 0) {
                     line = buffer.LineNumber;
@@ -359,6 +379,7 @@ namespace PerCederberg.Grammatica.Runtime {
             StringBuilder  buffer = new StringBuilder();
 
             buffer.Append(stringDfaMatcher);
+            buffer.Append(nfaMatcher);
             buffer.Append(regExpMatcher);
             return buffer.ToString();
         }
@@ -471,8 +492,7 @@ namespace PerCederberg.Grammatica.Runtime {
          *
          * @param ignoreCase      the character case ignore flag
          */
-        public StringDFAMatcher(bool ignoreCase)
-            : base(ignoreCase) {
+        public StringDFAMatcher(bool ignoreCase) : base(ignoreCase) {
         }
 
         /**
@@ -506,6 +526,62 @@ namespace PerCederberg.Grammatica.Runtime {
 
 
     /**
+     * A token pattern matcher using a NFA for both string and
+     * regular expression tokens. This class has limited support for
+     * regular expressions and must be complemented with another
+     * matcher providing full regular expression support. Internally
+     * it uses a NFA to provide high performance and low memory
+     * usage.
+     */
+    internal class NFAMatcher : TokenMatcher {
+
+        /**
+         * The non-deterministic finite state automaton used for
+         * matching.
+         */
+        private TokenNFA automaton = new TokenNFA();
+
+        /**
+         * Creates a new NFA token matcher.
+         *
+         * @param ignoreCase      the character case ignore flag
+         */
+        public NFAMatcher(bool ignoreCase) : base(ignoreCase) {
+        }
+
+        /**
+         * Adds a token pattern to this matcher.
+         *
+         * @param pattern        the pattern to add
+         *
+         * @throws Exception if the pattern couldn't be added to the matcher
+         */
+        public override void AddPattern(TokenPattern pattern) {
+            if (pattern.Type == TokenPattern.PatternType.STRING) {
+                automaton.AddTextMatch(pattern.Pattern, ignoreCase, pattern);
+            } else {
+                automaton.AddRegExpMatch(pattern.Pattern, ignoreCase, pattern);
+            }
+            base.AddPattern(pattern);
+        }
+
+        /**
+         * Searches for matching token patterns at the start of the
+         * input stream. If a match is found, the token match object
+         * is updated.
+         *
+         * @param buffer         the input buffer to check
+         * @param match          the token match to update
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public override void Match(ReaderBuffer buffer, TokenMatch match) {
+            automaton.Match(buffer, match);
+        }
+    }
+
+
+    /**
      * A token pattern matcher for complex regular expressions. This
      * class only supports regular expression tokens and must be
      * complemented with another matcher for string tokens.
@@ -525,8 +601,7 @@ namespace PerCederberg.Grammatica.Runtime {
          *
          * @param ignoreCase      the character case ignore flag
          */
-        public RegExpMatcher(bool ignoreCase)
-            : base(ignoreCase) {
+        public RegExpMatcher(bool ignoreCase) : base(ignoreCase) {
         }
 
         /**
