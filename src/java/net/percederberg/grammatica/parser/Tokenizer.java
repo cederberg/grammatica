@@ -344,7 +344,6 @@ public class Tokenizer {
                                      -1,
                                      -1);
         }
-
     }
 
     /**
@@ -366,7 +365,7 @@ public class Tokenizer {
 
     /**
      * A token pattern matcher. This class is the base class for the
-     * two types of token matchers that exist. The token matcher
+     * various types of token matchers that exist. The token matcher
      * checks for matches with the tokenizer buffer, and maintains the
      * state of the last match.
      */
@@ -409,7 +408,7 @@ public class Tokenizer {
         }
 
         /**
-         * Adds a string token pattern to this matcher.
+         * Adds a token pattern to this matcher.
          *
          * @param pattern        the pattern to add
          *
@@ -463,8 +462,8 @@ public class Tokenizer {
          * @throws Exception if the pattern couldn't be added to the matcher
          */
         public void addPattern(TokenPattern pattern) throws Exception {
-            super.addPattern(pattern);
             automaton.addMatch(pattern.getPattern(), ignoreCase, pattern);
+            super.addPattern(pattern);
         }
 
         /**
@@ -560,8 +559,8 @@ public class Tokenizer {
          * @throws Exception if the pattern couldn't be added to the matcher
          */
         public void addPattern(TokenPattern pattern) throws Exception {
-            Object[]  temp = regExps;
-            RE        re;
+            RE[]  temp = regExps;
+            RE    re;
 
             re = new JavaRE(pattern.getPattern());
             regExps = new RE[temp.length + 1];
