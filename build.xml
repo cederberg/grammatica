@@ -25,6 +25,7 @@
 <!-- INITIALIZATION -->
   <property name="build.name" value="${ant.project.name}" />
   <property name="build.title" value="Grammatica" />
+  <property name="build.java.package" value="net.percederberg.grammatica" />
   <tstamp>
     <format property="build.printdate" pattern="yyyy-MM-dd" />
   </tstamp>
@@ -41,7 +42,7 @@
     <antcall target="compile-java" />
     <taskdef resource="ant-grammatica.properties" classpath="classes" />
     <grammatica grammar="src/grammar/grammar.grammar">
-      <java dir="src/java" package="net.percederberg.grammatica" />
+      <java dir="src/java" package="${build.java.package}" />
     </grammatica>
   </target>
 
@@ -51,8 +52,7 @@
           depends="codegen,compile-clean,compile-info,compile-java,compile-csharp">
     <jar jarfile="lib/${build.name}-${build.version}.jar">
       <manifest>
-        <attribute name="Main-Class"
-                   value="net.percederberg.grammatica.Grammatica" />
+        <attribute name="Main-Class" value="${build.java.package}.Grammatica" />
       </manifest>
       <fileset dir="." includes="LICENSE.txt" />
       <fileset dir="classes" />
@@ -103,13 +103,13 @@
   <target name="test-codegen">
     <grammatica grammar="test/src/grammar/arithmetic.grammar">
       <java dir="test/src/java"
-            package="net.percederberg.grammatica.test" />
+            package="${build.java.package}.test" />
       <csharp dir="test/src/csharp/PerCederberg.Grammatica.Test"
               namespace="PerCederberg.Grammatica.Test" />
     </grammatica>
     <grammatica grammar="test/src/grammar/regexp.grammar">
       <java dir="test/src/java"
-            package="net.percederberg.grammatica.test" />
+            package="${build.java.package}.test" />
       <csharp dir="test/src/csharp/PerCederberg.Grammatica.Test"
               namespace="PerCederberg.Grammatica.Test" />
     </grammatica>
@@ -201,7 +201,7 @@
   </target>
 
   <target name="doc-java">
-    <javadoc packagenames="net.percederberg.grammatica.parser.*"
+    <javadoc packagenames="${build.java.package}.parser.*"
              sourcepath="src/java"
              destdir="doc/api/java"
              classpath="classes"
