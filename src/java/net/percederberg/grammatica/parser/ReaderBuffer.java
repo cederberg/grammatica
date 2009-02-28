@@ -179,7 +179,7 @@ public class ReaderBuffer implements CharSequence {
     public CharSequence subSequence(int start, int end)
         throws IndexOutOfBoundsException {
 
-        return new String(buffer, start, end);
+        return new String(buffer, start, end - start);
     }
 
     /**
