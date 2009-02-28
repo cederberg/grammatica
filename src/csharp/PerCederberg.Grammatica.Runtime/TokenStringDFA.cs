@@ -42,14 +42,14 @@ namespace PerCederberg.Grammatica.Runtime {
          * character. This array is used to for speed optimizing the
          * first step in the match.
          */
-        private State[] ascii = new State[128];
+        private DFAState[] ascii = new DFAState[128];
 
         /**
          * The automaton state transition tree for non-ASCII characters.
          * Each transition from one state to another is added to the tree
          * with the corresponding character.
          */
-        private State nonAscii = new State();
+        private DFAState nonAscii = new DFAState();
 
         /**
          * Creates a new empty string automaton.
@@ -67,10 +67,10 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param value            the match value
          */
         public void AddMatch(string str, bool caseInsensitive, TokenPattern value) {
-            State  state;
-            State  next;
-            char   c = str[0];
-            int    start = 0;
+            DFAState  state;
+            DFAState  next;
+            char      c = str[0];
+            int       start = 0;
 
             if (caseInsensitive) {
                 c = Char.ToLower(c);
@@ -78,7 +78,7 @@ namespace PerCederberg.Grammatica.Runtime {
             if (c < 128) {
                 state = ascii[c];
                 if (state == null) {
-                    state = ascii[c] = new State();
+                    state = ascii[c] = new DFAState();
                 }
                 start++;
             } else {
@@ -87,7 +87,7 @@ namespace PerCederberg.Grammatica.Runtime {
             for (int i = start; i < str.Length; i++) {
                 next = state.tree.Find(str[i], caseInsensitive);
                 if (next == null) {
-                    next = new State();
+                    next = new DFAState();
                     state.tree.Add(str[i], caseInsensitive, next);
                 }
                 state = next;
@@ -113,7 +113,7 @@ namespace PerCederberg.Grammatica.Runtime {
          */
         public TokenPattern Match(ReaderBuffer buffer, bool caseInsensitive) {
             TokenPattern  result = null;
-            State         state;
+            DFAState      state;
             int           pos = 0;
             int           c;
 
@@ -180,7 +180,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * @version  1.5
      * @since    1.5
      */
-    internal class State {
+    internal class DFAState {
 
         /**
          * The token pattern matched at this state.
@@ -217,7 +217,7 @@ namespace PerCederberg.Grammatica.Runtime {
         /**
          * The transition target state.
          */
-        private State state = null;
+        private DFAState state = null;
 
         /**
          * The left subtree.
@@ -247,7 +247,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * @return the automaton state found, or
          *         null if no transition exists
          */
-        public State Find(char c, bool lowerCase) {
+        public DFAState Find(char c, bool lowerCase) {
             if (lowerCase) {
                 c = Char.ToLower(c);
             }
@@ -269,7 +269,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param lowerCase      the lower-case conversion flag
          * @param state          the state to transition to
          */
-        public void Add(char c, bool lowerCase, State state) {
+        public void Add(char c, bool lowerCase, DFAState state) {
             if (lowerCase) {
                 c = Char.ToLower(c);
             }
