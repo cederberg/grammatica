@@ -23,6 +23,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using PerCederberg.Grammatica.Runtime.RE;
 
 namespace PerCederberg.Grammatica.Runtime {
@@ -248,7 +249,7 @@ namespace PerCederberg.Grammatica.Runtime {
                 } catch (Exception) {
                     try {
                         regExpMatcher.AddPattern(pattern);
-                    } catch (RegExpException e) {
+                    } catch (Exception e) {
                         throw new ParserCreationException(
                             ParserCreationException.ErrorType.INVALID_TOKEN,
                             pattern.Name,
@@ -614,10 +615,15 @@ namespace PerCederberg.Grammatica.Runtime {
         public override void AddPattern(TokenPattern pattern) {
             REHandler  re;
 
-            re = new GrammaticaRE(pattern.Pattern, ignoreCase);
+            try {
+                re = new GrammaticaRE(pattern.Pattern, ignoreCase);
+                pattern.DebugInfo = "Grammatica regexp\n" + re;
+            } catch (Exception) {
+                re = new SystemRE(pattern.Pattern, ignoreCase);
+                pattern.DebugInfo = "native .NET regexp";
+            }
             Array.Resize(ref regExps, regExps.Length + 1);
             regExps[regExps.Length - 1] = re;
-            pattern.DebugInfo = "Grammatica regexp\n" + re;
             base.AddPattern(pattern);
         }
 
@@ -681,6 +687,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * Creates a new Grammatica regular expression handler.
          *
          * @param regex          the regular expression text
+         * @param ignoreCase      the character case ignore flag
          *
          * @throws Exception if the regular expression contained
          *             invalid syntax
@@ -707,6 +714,62 @@ namespace PerCederberg.Grammatica.Runtime {
                 matcher.Reset(buffer);
             }
             return matcher.MatchFromBeginning() ? matcher.Length() : 0;
+        }
+    }
+
+
+    /**
+     * The .NET system regular expression handler.
+     */
+    internal class SystemRE : REHandler {
+
+        /**
+         * The parsed regular expression.
+         */
+        private Regex reg;
+
+        /**
+         * Creates a new .NET system regular expression handler.
+         *
+         * @param regex          the regular expression text
+         * @param ignoreCase      the character case ignore flag
+         *
+         * @throws Exception if the regular expression contained
+         *             invalid syntax
+         */
+        public SystemRE(string regex, bool ignoreCase) {
+            if (ignoreCase) {
+                reg = new Regex(regex, RegexOptions.IgnoreCase);
+            } else {
+                reg = new Regex(regex);
+            }
+        }
+
+        /**
+         * Checks if the start of the input stream matches this
+         * regular expression.
+         *
+         * @param buffer         the input buffer to check
+         *
+         * @return the longest match found, or
+         *         zero (0) if no match was found
+         *
+         * @throws IOException if an I/O error occurred
+         */
+        public override int Match(ReaderBuffer buffer) {
+            Match  m;
+
+            // Ugly hack since .NET doesn't have a flag for when the
+            // end of the input string was encountered...
+            buffer.Peek(1024 * 16);
+            // Also, there is no API to limit the search to the specified
+            // position, so we double-check the index afterwards instead.
+            m = reg.Match(buffer.ToString(), buffer.Position);
+            if (m.Success && m.Index == buffer.Position) {
+                return m.Length;
+            } else {
+                return 0;
+            }
         }
     }
 }
