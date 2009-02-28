@@ -430,11 +430,8 @@ namespace PerCederberg.Grammatica.Runtime {
          * @throws Exception if the pattern couldn't be added to the matcher
          */
         public virtual void AddPattern(TokenPattern pattern) {
-            TokenPattern[]  temp = patterns;
-
-            patterns = new TokenPattern[temp.Length + 1];
-            Array.Copy(temp, 0, patterns, 0, temp.Length);
-            patterns[temp.Length] = pattern;
+            Array.Resize(ref patterns, patterns.Length + 1);
+            patterns[patterns.Length - 1] = pattern;
         }
 
         /**
@@ -540,14 +537,12 @@ namespace PerCederberg.Grammatica.Runtime {
          * @throws Exception if the pattern couldn't be added to the matcher
          */
         public override void AddPattern(TokenPattern pattern) {
-            REHandler[]  temp = regExps;
-            REHandler    re;
+            REHandler  re;
 
             re = new GrammaticaRE(pattern.Pattern, ignoreCase);
-            regExps = new REHandler[temp.Length + 1];
-            Array.Copy(temp, 0, regExps, 0, temp.Length);
-            regExps[temp.Length] = re;
-            // TODO: pattern.DebugInfo = "Grammatica regexp";
+            Array.Resize(ref regExps, regExps.Length + 1);
+            regExps[regExps.Length - 1] = re;
+            pattern.DebugInfo = "Grammatica regexp\n" + re;
             base.AddPattern(pattern);
         }
 

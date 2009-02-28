@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -108,6 +108,12 @@ namespace PerCederberg.Grammatica.Runtime {
          * @see #ignore
          */
         private string ignoreMessage = null;
+
+        /**
+         * The optional debug information message. This is normally set
+         * when the token pattern is analyzed by the tokenizer.
+         */
+        private string debugInfo = null;
 
         /**
          * Creates a new token pattern.
@@ -412,6 +418,21 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
+         * The token debug info message property. This is normally be
+         * set when the token pattern is analyzed by the tokenizer.
+         *
+         * @since 1.5
+         */
+        public string DebugInfo {
+            get {
+                return debugInfo;
+            }
+            set {
+                debugInfo = value;
+            }
+        }
+
+        /**
          * Returns a string representation of this object.
          *
          * @return a token pattern string representation
@@ -448,7 +469,10 @@ namespace PerCederberg.Grammatica.Runtime {
                     buffer.Append("\"");
                 }
             }
-
+            if (debugInfo != null) {
+                buffer.Append("\n  ");
+                buffer.Append(debugInfo);
+            }
             return buffer.ToString();
         }
 
