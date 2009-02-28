@@ -227,7 +227,7 @@
           failonerror="true">
       <arg value="-classdir=." />
       <arg value="-title=${build.title} ${build.version} Documentation" />
-      <arg value="src/csharp" />
+      <arg value="${basedir}/src/csharp" />
     </exec>
   </target>
 
