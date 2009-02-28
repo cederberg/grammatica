@@ -27,8 +27,8 @@
       </item>
 
       <item>
-        <text>Mono 0.26 (or another .NET 1.0 compatible), for C#
-        parsers.</text>
+        <text>Mono 2.0 (or another .NET 2.0 compatible), for C#
+        or VisualBasic parsers.</text>
       </item>
     </list>
 
@@ -77,7 +77,7 @@
 
       <item>
         <text><code>grammatica-<param name="version"/>.dll</code>
-        for C# parsers</text>
+        for C# or VisualBasic parsers</text>
       </item>
     </list>
     

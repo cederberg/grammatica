@@ -90,14 +90,12 @@
   </target>
 
   <target name="compile-csharp" if="build.dotnet">
-    <csc destfile="lib/${build.name}-${build.version}.dll"
-         targettype="library"
-         debug="on"
-         warnlevel="4"
-         failonerror="true">
-      <src dir="src/csharp"
-           includes="**/*.cs" />
-    </csc>
+    <exec executable="gmcs" dir="src/csharp" failonerror="true">
+      <arg value="-target:library" />
+      <arg value="-out:${basedir}/lib/${build.name}-${build.version}.dll" />
+      <arg value="-debug" />
+      <arg value="-recurse:*.cs" />
+    </exec>
   </target>
 
 
@@ -142,16 +140,14 @@
   </target>
 
   <target name="test-csharp" if="build.dotnet">
-    <csc destfile="lib/cstestall.exe"
-         targettype="exe"
-         mainclass="TestAll"
-         debug="off"
-         warnlevel="4"
-         failonerror="true">
-      <src dir="test/src/csharp"
-           includes="**/*.cs" />
-      <reference dir="lib" includes="*.dll" />
-    </csc>
+    <exec executable="gmcs" dir="test/src/csharp" failonerror="true">
+      <arg value="-target:exe" />
+      <arg value="-out:${basedir}/lib/cstestall.exe" />
+      <arg value="-main:TestAll" />
+      <arg value="-reference:${basedir}/lib/${build.name}-${build.version}.dll" />
+      <arg value="-debug-" />
+      <arg value="-recurse:*.cs" />
+    </exec>
     <echo level="info" message="running C# test cases with Mono..." />
     <exec executable="mono"
           failonerror="true">
