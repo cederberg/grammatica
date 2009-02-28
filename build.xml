@@ -232,12 +232,10 @@
   <target name="package" description="Builds a complete distribution package"
   	      depends="codegen,compile,test,doc">
     <delete quiet="true">
-      <fileset dir="." includes="${build.name}-*.tar.gz" />
+      <fileset dir="." includes="${build.name}-*.zip" />
     </delete>
-    <tar tarfile="${build.name}-${build.version}.tar.gz"
-         longfile="gnu"
-         compression="gzip">
-      <tarfileset dir="." prefix="${build.name}-${build.version}">
+    <zip destfile="${build.name}-${build.version}.zip">
+      <zipfileset dir="." prefix="${build.name}-${build.version}">
         <include name="LICENSE.txt" />
         <include name="README.txt" />
         <include name="*.xml" />
@@ -245,8 +243,8 @@
         <include name="src/**" />
         <include name="test/**" />
         <include name="doc/**" />
-      </tarfileset>
-    </tar>
+      </zipfileset>
+    </zip>
   </target>
 
 </project>
