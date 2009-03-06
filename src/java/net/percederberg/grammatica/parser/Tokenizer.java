@@ -330,7 +330,7 @@ public class Tokenizer {
                 line = buffer.lineNumber();
                 column = buffer.columnNumber();
                 str = buffer.read(lastMatch.length());
-                return new Token(lastMatch.pattern(), str, line, column);
+                return newToken(lastMatch.pattern(), str, line, column);
             } else if (buffer.peek(0) < 0) {
                 return null;
             } else {
@@ -347,6 +347,28 @@ public class Tokenizer {
                                      -1,
                                      -1);
         }
+    }
+
+    /**
+     * Factory method for creating a new token. This method can be
+     * overridden to provide other token implementations than the
+     * default one.
+     *
+     * @param pattern        the token pattern
+     * @param image          the token image (i.e. characters)
+     * @param line           the line number of the first character
+     * @param column         the column number of the first character
+     *
+     * @return the token created
+     *
+     * @since 1.5
+     */
+    protected Token newToken(TokenPattern pattern,
+                             String image,
+                             int line,
+                             int column) {
+
+        return new Token(pattern, image, line, column);
     }
 
     /**

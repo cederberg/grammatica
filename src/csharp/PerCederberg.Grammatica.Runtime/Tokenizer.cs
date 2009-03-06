@@ -352,7 +352,7 @@ namespace PerCederberg.Grammatica.Runtime {
                     line = buffer.LineNumber;
                     column = buffer.ColumnNumber;
                     str = buffer.Read(lastMatch.Length);
-                    return new Token(lastMatch.Pattern, str, line, column);
+                    return NewToken(lastMatch.Pattern, str, line, column);
                 } else if (buffer.Peek(0) < 0) {
                     return null;
                 } else {
@@ -372,6 +372,28 @@ namespace PerCederberg.Grammatica.Runtime {
             }
         }
 
+        /**
+         * Factory method for creating a new token. This method can be
+         * overridden to provide other token implementations than the
+         * default one.
+         *
+         * @param pattern        the token pattern
+         * @param image          the token image (i.e. characters)
+         * @param line           the line number of the first character
+         * @param column         the column number of the first character
+         *
+         * @return the token created
+         *
+         * @since 1.5
+         */
+        protected virtual Token NewToken(TokenPattern pattern,
+                                         string image,
+                                         int line,
+                                         int column) {
+
+            return new Token(pattern, image, line, column);
+        }
+        
         /**
          * Returns a string representation of this object. The returned
          * string will contain the details of all the token patterns
