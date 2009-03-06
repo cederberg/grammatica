@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -188,7 +188,7 @@ public class RecursiveDescentParser extends Parser {
 
         Production  node;
 
-        node = new Production(alt.getPattern());
+        node = newProduction(alt.getPattern());
         enterNode(node);
         for (int i = 0; i < alt.getElementCount(); i++) {
             try {

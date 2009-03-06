@@ -56,7 +56,7 @@ namespace PerCederberg.Grammatica.Runtime {
          *
          * @since 1.5
          */
-        public void Reset() {
+        public virtual void Reset() {
             // Default implementation does nothing
         }
 
@@ -107,7 +107,7 @@ namespace PerCederberg.Grammatica.Runtime {
             errorCount = log.Count;
             if (node is Production) {
                 prod = (Production) node;
-                prod = new Production(prod.Pattern);
+                prod = NewProduction(prod.Pattern);
                 try {
                     Enter(prod);
                 } catch (ParseException e) {
@@ -143,6 +143,21 @@ namespace PerCederberg.Grammatica.Runtime {
                 }
             }
             return null;
+        }
+
+        /**
+         * Factory method to create a new production node. This method
+         * can be overridden to provide other production implementations
+         * than the default one.
+         *
+         * @param pattern        the production pattern
+         *
+         * @return the new production node
+         *
+         * @since 1.5
+         */
+        public virtual Production NewProduction(ProductionPattern pattern) {
+            return new Production(pattern);
         }
 
         /**

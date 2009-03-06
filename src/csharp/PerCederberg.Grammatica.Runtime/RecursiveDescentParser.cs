@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System;
@@ -31,7 +31,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * that is has to consider.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.0
+     * @version  1.5
      */
     public class RecursiveDescentParser : Parser {
 
@@ -186,7 +186,7 @@ namespace PerCederberg.Grammatica.Runtime {
         private Node ParseAlternative(ProductionPatternAlternative alt) {
             Production  node;
 
-            node = new Production(alt.Pattern);
+            node = NewProduction(alt.Pattern);
             EnterNode(node);
             for (int i = 0; i < alt.Count; i++) {
                 try {

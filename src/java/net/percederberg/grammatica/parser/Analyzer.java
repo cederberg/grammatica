@@ -101,7 +101,7 @@ public class Analyzer {
         errorCount = log.getErrorCount();
         if (node instanceof Production) {
             prod = (Production) node;
-            prod = new Production(prod.getPattern());
+            prod = newProduction(prod.getPattern());
             try {
                 enter(prod);
             } catch (ParseException e) {
@@ -137,6 +137,21 @@ public class Analyzer {
             }
         }
         return null;
+    }
+
+    /**
+     * Factory method to create a new production node. This method
+     * can be overridden to provide other production implementations
+     * than the default one.
+     *
+     * @param pattern        the production pattern
+     *
+     * @return the new production node
+     *
+     * @since 1.5
+     */
+    protected Production newProduction(ProductionPattern pattern) {
+        return new Production(pattern);
     }
 
     /**

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.parser;
@@ -333,6 +333,21 @@ public abstract class Parser {
      *             correctly
      */
     protected abstract Node parseStart() throws ParseException;
+
+    /**
+     * Factory method to create a new production node. This method
+     * can be overridden to provide other production implementations
+     * than the default one.
+     *
+     * @param pattern        the production pattern
+     *
+     * @return the new production node
+     *
+     * @since 1.5
+     */
+    protected Production newProduction(ProductionPattern pattern) {
+        return analyzer.newProduction(pattern);
+    }
 
     /**
      * Adds an error to the error log. If the parser is in error
