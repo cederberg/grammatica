@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using System.IO;
 using System.Text;
 
 namespace PerCederberg.Grammatica.Runtime {
@@ -282,20 +283,23 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
-         * Resets this parser. This method will clear all the internal
-         * state and error log in the parser, but will not reset the
-         * tokenizer. In order to parse multiple input streams with
-         * the same parser, the Tokenizer.reset() method must also be
-         * called.
+         * Resets this parser for usage with another input stream. The
+         * associated tokenizer and analyzer will also be reset. This
+         * method will clear all the internal state and the error log in
+         * the parser. It is normally called in order to reuse a parser
+         * and tokenizer pair with multiple input streams, thereby
+         * avoiding the cost of re-analyzing the grammar structures.
+         *
+         * @param input          the new input stream to read
          *
          * @see Tokenizer#Reset
+         * @see Analyzer#Reset
          *
          * @since 1.5
          */
-        public void Reset() {
-            this.tokens.Clear();
-            this.errorLog = new ParserLogException();
-            this.errorRecovery = -1;
+        public void Reset(TextReader input) {
+            this.tokenizer.Reset(input);
+            this.analyzer.Reset();
         }
 
         /**
@@ -326,7 +330,9 @@ namespace PerCederberg.Grammatica.Runtime {
             if (!initialized) {
                 Prepare();
             }
-            Reset();
+            this.tokens.Clear();
+            this.errorLog = new ParserLogException();
+            this.errorRecovery = -1;
 
             // Parse input
             try {

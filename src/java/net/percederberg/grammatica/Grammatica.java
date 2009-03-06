@@ -559,8 +559,7 @@ public class Grammatica extends Object {
             for (int i = first; i < files.length; i++) {
                 if (i > first) {
                     file = new File(files[i]);
-                    tokenizer.reset(new FileReader(file));
-                    parser.reset();
+                    parser.reset(new FileReader(file));
                 }
                 node = parser.parse();
                 counter += 1 + node.getDescendantCount();

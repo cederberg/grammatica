@@ -249,10 +249,13 @@ public class Tokenizer {
      * Resets this tokenizer for usage with another input stream. This
      * method will clear all the internal state in the tokenizer as
      * well as close the previous input stream. It is normally called
-     * in order to reuse a parser and tokenizer pair for parsing
-     * another input stream.
+     * in order to reuse a parser and tokenizer pair with multiple
+     * input streams, thereby avoiding the cost of re-analyzing the
+     * grammar structures.
      *
      * @param input          the new input stream to read
+     *
+     * @see Parser#reset(Reader)
      *
      * @since 1.5
      */

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 using System.Collections;
@@ -39,7 +39,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * right as child nodes are added (to the right).
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.1
+     * @version  1.5
      */
     public class Analyzer {
 
@@ -47,6 +47,17 @@ namespace PerCederberg.Grammatica.Runtime {
          * Creates a new parse tree analyzer.
          */
         public Analyzer() {
+        }
+
+        /**
+         * Resets this analyzer when the parser is reset for another
+         * input stream. The default implementation of this method does
+         * nothing.
+         *
+         * @since 1.5
+         */
+        public void Reset() {
+            // Default implementation does nothing
         }
 
         /**

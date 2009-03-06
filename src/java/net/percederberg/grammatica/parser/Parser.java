@@ -21,6 +21,7 @@
 
 package net.percederberg.grammatica.parser;
 
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -257,19 +258,23 @@ public abstract class Parser {
     }
 
     /**
-     * Resets this parser. This method will clear all the internal
-     * state and error log in the parser, but will not reset the
-     * tokenizer. In order to parse multiple input streams with the
-     * same parser, the Tokenizer.reset() method must also be called.
+     * Resets this parser for usage with another input stream. The
+     * associated tokenizer and analyzer will also be reset. This
+     * method will clear all the internal state and the error log in
+     * the parser. It is normally called in order to reuse a parser
+     * and tokenizer pair with multiple input streams, thereby
+     * avoiding the cost of re-analyzing the grammar structures.
      *
-     * @see Tokenizer#reset
+     * @param input          the new input stream to read
+     *
+     * @see Tokenizer#reset(java.io.Reader)
+     * @see Analyzer#reset()
      *
      * @since 1.5
      */
-    public void reset() {
-        this.tokens.clear();
-        this.errorLog = new ParserLogException();
-        this.errorRecovery = -1;
+    public void reset(Reader input) {
+        this.tokenizer.reset(input);
+        this.analyzer.reset();
     }
 
     /**
@@ -300,7 +305,9 @@ public abstract class Parser {
         if (!initialized) {
             prepare();
         }
-        reset();
+        this.tokens.clear();
+        this.errorLog = new ParserLogException();
+        this.errorRecovery = -1;
 
         // Parse input
         try {
