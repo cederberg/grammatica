@@ -1,16 +1,7 @@
-Grammatica 1.5:
-===============
-* BUG: Check DLL assembly info bug
-* API: change C# GetXCount() and GetX(pos) to property/indexer model
-* General: fix C# and VB code generated for new token pattern API
-* Parser: add new look-ahead tree implementation
-
 Grammatica 2.0:
 ===============
+* Parser: add new look-ahead tree implementation
 * General: add support for modular grammars and tokenizers
 * General: add support for parsing fixed-size or delimited records
 * General: change to require simpler LL(k) grammar format
 * General: change to generate nice parse tree classes
-* External: report cppdoc bug with internal members being printed
-* External: report cppdoc bug with Analyzer Analyzer field
-* External: request cppdoc fix for "Project" to "Namespace"
