@@ -40,7 +40,7 @@ namespace PerCederberg.Grammatica.Test {
         }
 
         /**
-         * <summary>Creates a new parser.</summary>
+         * <summary>Creates a new parser with a default analyzer.</summary>
          *
          * <param name='input'>the input stream to read from</param>
          *
@@ -48,7 +48,7 @@ namespace PerCederberg.Grammatica.Test {
          * couldn't be initialized correctly</exception>
          */
         public ArithmeticParser(TextReader input)
-            : base(new ArithmeticTokenizer(input)) {
+            : base(input) {
 
             CreatePatterns();
         }
@@ -63,10 +63,25 @@ namespace PerCederberg.Grammatica.Test {
          * <exception cref='ParserCreationException'>if the parser
          * couldn't be initialized correctly</exception>
          */
-        public ArithmeticParser(TextReader input, Analyzer analyzer)
-            : base(new ArithmeticTokenizer(input), analyzer) {
+        public ArithmeticParser(TextReader input, ArithmeticAnalyzer analyzer)
+            : base(input, analyzer) {
 
             CreatePatterns();
+        }
+
+        /**
+         * <summary>Creates a new tokenizer for this parser. Can be overridden
+         * by a subclass to provide a custom implementation.</summary>
+         *
+         * <param name='input'>the input stream to read from</param>
+         *
+         * <returns>the tokenizer created</returns>
+         *
+         * <exception cref='ParserCreationException'>if the tokenizer
+         * couldn't be initialized correctly</exception>
+         */
+        protected override Tokenizer NewTokenizer(TextReader input) {
+            return new ArithmeticTokenizer(input);
         }
 
         /**

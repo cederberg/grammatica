@@ -17,7 +17,7 @@
  * MA 02111-1307, USA.
  *
  * Copyright (c) 2004 Adrian Moore. All rights reserved.
- * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -65,7 +65,7 @@ class VisualBasicParserFile {
      * The first constructor comment.
      */
     private static final String CONSTRUCTOR1_COMMENT =
-        "<summary>Creates a new parser.</summary>\n\n" +
+        "<summary>Creates a new parser with a default analyzer.</summary>\n\n" +
         "<param name='input'>the input stream to read from</param>\n\n" +
         "<exception cref='ParserCreationException'>if the parser\n" +
         "couldn't be initialized correctly</exception>";
@@ -81,6 +81,17 @@ class VisualBasicParserFile {
         "couldn't be initialized correctly</exception>";
 
     /**
+     * The tokenizer factory method comment.
+     */
+    private static final String FACTORY_COMMENT =
+        "<summary>Creates a new tokenizer for this parser. Can be overridden\n" +
+        "by a subclass to provide a custom implementation.</summary>\n\n" +
+        "<param name='input'>the input stream to read from</param>\n\n" +
+        "<returns>the tokenizer created</returns>\n\n" +
+        "<exception cref='ParserCreationException'>if the tokenizer\n" +
+        "couldn't be initialized correctly</exception>";
+
+    /**
      * The init method comment.
      */
     private static final String INIT_METHOD_COMMENT =
@@ -93,11 +104,6 @@ class VisualBasicParserFile {
      * The parser generator.
      */
     private VisualBasicParserGenerator gen;
-
-    /**
-     * The tokenizer file generator.
-     */
-    private VisualBasicTokenizerFile tokenizer;
 
     /**
      * The file to write.
@@ -136,15 +142,16 @@ class VisualBasicParserFile {
      *
      * @param gen            the parser generator to use
      * @param tokenizer      the tokenizer file generator
+     * @param analyzer       the analyzer file generator
      */
     public VisualBasicParserFile(VisualBasicParserGenerator gen,
-                                 VisualBasicTokenizerFile tokenizer) {
+                                 VisualBasicTokenizerFile tokenizer,
+                                 VisualBasicAnalyzerFile analyzer) {
 
         String  name = gen.getBaseName() + "Parser";
         int     modifiers;
 
         this.gen = gen;
-        this.tokenizer = tokenizer;
         this.file = new VisualBasicFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
             modifiers = VisualBasicClass.PUBLIC;
@@ -160,14 +167,19 @@ class VisualBasicParserFile {
                                                 "CreatePatterns",
                                                 "",
                                                 "");
-        initializeCode();
+        initializeCode(tokenizer, analyzer);
     }
 
     /**
      * Initializes the source code objects.
+     *
+     * @param tokenizer      the tokenizer file generator
+     * @param analyzer       the analyzer file generator
      */
-    private void initializeCode() {
+    private void initializeCode(VisualBasicTokenizerFile tokenizer,
+                                VisualBasicAnalyzerFile analyzer) {
         VisualBasicConstructor  constr;
+        VisualBasicMethod       method;
         VisualBasicNamespace    n;
         String                  str;
 
@@ -200,18 +212,26 @@ class VisualBasicParserFile {
         constr = new VisualBasicConstructor("ByVal input As TextReader");
         cls.addConstructor(constr);
         constr.addComment(new VisualBasicComment(CONSTRUCTOR1_COMMENT));
-        constr.addCode("MyBase.New(" + tokenizer.getConstructorCall("input") +
-                       ")");
+        constr.addCode("MyBase.New(input)");
         constr.addCode("CreatePatterns()");
 
         // Add constructor
         constr = new VisualBasicConstructor("ByVal input As TextReader, " +
-                                            "ByVal analyzer As Analyzer");
+                                            "ByVal analyzer As " +
+                                            analyzer.getClassName());
         cls.addConstructor(constr);
         constr.addComment(new VisualBasicComment(CONSTRUCTOR2_COMMENT));
-        constr.addCode("MyBase.New(" + tokenizer.getConstructorCall("input") +
-                       ", analyzer)");
+        constr.addCode("MyBase.New(input, analyzer)");
         constr.addCode("CreatePatterns()");
+
+        // Add tokenizer factory method
+        method = new VisualBasicMethod(VisualBasicMethod.PROTECTED + VisualBasicMethod.OVERRIDES,
+                                      "NewTokenizer",
+                                      "ByVal input As TextReader",
+                                      "Tokenizer");
+        method.addComment(new VisualBasicComment(FACTORY_COMMENT));
+        method.addCode("Return New " + tokenizer.getClassName() + "(input);");
+        cls.addMethod(method);
 
         // Add init method
         cls.addMethod(initMethod);

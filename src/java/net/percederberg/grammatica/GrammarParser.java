@@ -25,11 +25,11 @@ package net.percederberg.grammatica;
 
 import java.io.Reader;
 
-import net.percederberg.grammatica.parser.Analyzer;
 import net.percederberg.grammatica.parser.ParserCreationException;
 import net.percederberg.grammatica.parser.ProductionPattern;
 import net.percederberg.grammatica.parser.ProductionPatternAlternative;
 import net.percederberg.grammatica.parser.RecursiveDescentParser;
+import net.percederberg.grammatica.parser.Tokenizer;
 
 /**
  * A token stream parser.
@@ -60,7 +60,7 @@ class GrammarParser extends RecursiveDescentParser {
     private static final int SUBPRODUCTION_4 = 3004;
 
     /**
-     * Creates a new parser.
+     * Creates a new parser with a default analyzer.
      *
      * @param in             the input stream to read from
      *
@@ -68,7 +68,7 @@ class GrammarParser extends RecursiveDescentParser {
      *             initialized correctly
      */
     public GrammarParser(Reader in) throws ParserCreationException {
-        super(new GrammarTokenizer(in));
+        super(in);
         createPatterns();
     }
 
@@ -81,11 +81,28 @@ class GrammarParser extends RecursiveDescentParser {
      * @throws ParserCreationException if the parser couldn't be
      *             initialized correctly
      */
-    public GrammarParser(Reader in, Analyzer analyzer)
+    public GrammarParser(Reader in, GrammarAnalyzer analyzer)
         throws ParserCreationException {
 
-        super(new GrammarTokenizer(in), analyzer);
+        super(in, analyzer);
         createPatterns();
+    }
+
+    /**
+     * Creates a new tokenizer for this parser. Can be overridden by a
+     * subclass to provide a custom implementation.
+     *
+     * @param in             the input stream to read from
+     *
+     * @return the tokenizer created
+     *
+     * @throws ParserCreationException if the tokenizer couldn't be
+     *             initialized correctly
+     */
+    protected Tokenizer newTokenizer(Reader in)
+        throws ParserCreationException {
+
+        return new GrammarTokenizer(in);
     }
 
     /**

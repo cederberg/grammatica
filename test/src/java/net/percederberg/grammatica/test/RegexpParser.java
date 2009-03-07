@@ -25,11 +25,11 @@ package net.percederberg.grammatica.test;
 
 import java.io.Reader;
 
-import net.percederberg.grammatica.parser.Analyzer;
 import net.percederberg.grammatica.parser.ParserCreationException;
 import net.percederberg.grammatica.parser.ProductionPattern;
 import net.percederberg.grammatica.parser.ProductionPatternAlternative;
 import net.percederberg.grammatica.parser.RecursiveDescentParser;
+import net.percederberg.grammatica.parser.Tokenizer;
 
 /**
  * A token stream parser.
@@ -50,7 +50,7 @@ class RegexpParser extends RecursiveDescentParser {
     private static final int SUBPRODUCTION_2 = 3002;
 
     /**
-     * Creates a new parser.
+     * Creates a new parser with a default analyzer.
      *
      * @param in             the input stream to read from
      *
@@ -58,7 +58,7 @@ class RegexpParser extends RecursiveDescentParser {
      *             initialized correctly
      */
     public RegexpParser(Reader in) throws ParserCreationException {
-        super(new RegexpTokenizer(in));
+        super(in);
         createPatterns();
     }
 
@@ -71,11 +71,28 @@ class RegexpParser extends RecursiveDescentParser {
      * @throws ParserCreationException if the parser couldn't be
      *             initialized correctly
      */
-    public RegexpParser(Reader in, Analyzer analyzer)
+    public RegexpParser(Reader in, RegexpAnalyzer analyzer)
         throws ParserCreationException {
 
-        super(new RegexpTokenizer(in), analyzer);
+        super(in, analyzer);
         createPatterns();
+    }
+
+    /**
+     * Creates a new tokenizer for this parser. Can be overridden by a
+     * subclass to provide a custom implementation.
+     *
+     * @param in             the input stream to read from
+     *
+     * @return the tokenizer created
+     *
+     * @throws ParserCreationException if the tokenizer couldn't be
+     *             initialized correctly
+     */
+    protected Tokenizer newTokenizer(Reader in)
+        throws ParserCreationException {
+
+        return new RegexpTokenizer(in);
     }
 
     /**

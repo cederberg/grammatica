@@ -17,7 +17,7 @@
  * MA 02111-1307, USA.
  *
  * Copyright (c) 2004 Adrian Moore. All rights reserved.
- * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -171,8 +171,8 @@ public class VisualBasicParserGenerator extends ParserGenerator {
         // Create output files
         constants = new VisualBasicConstantsFile(this);
         tokenizer = new VisualBasicTokenizerFile(this);
-        parser = new VisualBasicParserFile(this, tokenizer);
         analyzer = new VisualBasicAnalyzerFile(this);
+        parser = new VisualBasicParserFile(this, tokenizer, analyzer);
 
         // Create token declarations
         for (i = 0; i < grammar.getTokenPatternCount(); i++) {

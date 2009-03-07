@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -315,6 +315,15 @@ class CSharpAnalyzerFile {
         m.addComment(new CSharpComment(CHILD_COMMENT));
         m.addCode("node.AddChild(child);");
         cls.addMethod(m);
+    }
+
+    /**
+     * Returns the class name for this analyzer.
+     *
+     * @return the class name for this analyzer
+     */
+    protected String getClassName() {
+        return cls.toString();
     }
 
     /**

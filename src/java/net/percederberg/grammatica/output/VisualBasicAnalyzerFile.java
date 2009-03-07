@@ -17,7 +17,7 @@
  * MA 02111-1307, USA.
  *
  * Copyright (c) 2004 Adrian Moore. All rights reserved.
- * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -329,6 +329,15 @@ class VisualBasicAnalyzerFile {
         m.addComment(new VisualBasicComment(CHILD_COMMENT));
         m.addCode("node.AddChild(child)");
         cls.addMethod(m);
+    }
+
+    /**
+     * Returns the class name for this analyzer.
+     *
+     * @return the class name for this analyzer
+     */
+    protected String getClassName() {
+        return cls.toString();
     }
 
     /**

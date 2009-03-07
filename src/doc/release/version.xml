@@ -43,6 +43,13 @@
       </item>
 
       <item>
+        <title>Added factory methods for creating various objects</title>
+        <text>New factory methods for creating tokens, productions,
+        tokenizers and analyzers have been added. These can be overridden
+        in subclasses to provide more specific classes if desired.</text>
+      </item>
+
+      <item>
         <title>Improved the tokenizer processing speed</title>
         <text>The tokenizer speed has been improved by using a custom
         DFA implementation for regular expressions. The tokenization

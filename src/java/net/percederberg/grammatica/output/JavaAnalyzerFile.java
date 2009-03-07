@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -36,7 +36,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * Java code necessary for creating a analyzer class file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class JavaAnalyzerFile {
 
@@ -322,6 +322,15 @@ class JavaAnalyzerFile {
         m.addThrows("ParseException");
         m.addCode("node.addChild(child);");
         cls.addMethod(m);
+    }
+
+    /**
+     * Returns the class name for this analyzer.
+     *
+     * @return the class name for this analyzer
+     */
+    protected String getClassName() {
+        return cls.toString();
     }
 
     /**

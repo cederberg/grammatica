@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -40,7 +40,7 @@ import net.percederberg.grammatica.parser.ProductionPatternElement;
  * Java code necessary for creating a parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 class JavaParserFile {
 
@@ -60,7 +60,7 @@ class JavaParserFile {
      * The first constructor comment.
      */
     private static final String CONSTRUCTOR1_COMMENT =
-        "Creates a new parser.\n\n" +
+        "Creates a new parser with a default analyzer.\n\n" +
         "@param in             the input stream to read from\n\n" +
         "@throws ParserCreationException if the parser couldn't be\n" +
         "            initialized correctly";
@@ -76,6 +76,17 @@ class JavaParserFile {
         "            initialized correctly";
 
     /**
+     * The tokenizer factory method comment.
+     */
+    private static final String FACTORY_COMMENT =
+        "Creates a new tokenizer for this parser. Can be overridden by a\n" +
+        "subclass to provide a custom implementation.\n\n" +
+        "@param in             the input stream to read from\n\n" +
+        "@return the tokenizer created\n\n" +
+        "@throws ParserCreationException if the tokenizer couldn't be\n" +
+        "            initialized correctly";
+
+    /**
      * The init method comment.
      */
     private static final String INIT_METHOD_COMMENT =
@@ -87,11 +98,6 @@ class JavaParserFile {
      * The Java parser generator.
      */
     private JavaParserGenerator gen;
-
-    /**
-     * The tokenizer file generator.
-     */
-    private JavaTokenizerFile tokenizer;
 
     /**
      * The Java file to write.
@@ -125,14 +131,15 @@ class JavaParserFile {
      *
      * @param gen            the parser generator to use
      * @param tokenizer      the tokenizer file generator
+     * @param analyzer       the analyzer file generator
      */
     public JavaParserFile(JavaParserGenerator gen,
-                          JavaTokenizerFile tokenizer) {
+                          JavaTokenizerFile tokenizer,
+                          JavaAnalyzerFile analyzer) {
 
         int  modifiers;
 
         this.gen = gen;
-        this.tokenizer = tokenizer;
         this.file = gen.createJavaFile();
         if (gen.getPublicAccess()) {
             modifiers = JavaClass.PUBLIC;
@@ -146,20 +153,24 @@ class JavaParserFile {
                                          "createPatterns",
                                          "",
                                          "void");
-        initializeCode();
+        initializeCode(tokenizer, analyzer);
     }
 
     /**
      * Initializes the source code objects.
+     *
+     * @param tokenizer      the tokenizer file generator
+     * @param analyzer       the analyzer file generator
      */
-    private void initializeCode() {
+    private void initializeCode(JavaTokenizerFile tokenizer,
+                                JavaAnalyzerFile analyzer) {
+
         JavaConstructor  constr;
+        JavaMethod       method;
         String           str;
 
         // Add imports
         file.addImport(new JavaImport("java.io", "Reader"));
-        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
-                                      "Analyzer"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ParserCreationException"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
@@ -168,6 +179,8 @@ class JavaParserFile {
                                       "ProductionPatternAlternative"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "RecursiveDescentParser"));
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
+                                      "Tokenizer"));
 
         // Add class
         file.addClass(cls);
@@ -186,17 +199,27 @@ class JavaParserFile {
         cls.addConstructor(constr);
         constr.addComment(new JavaComment(CONSTRUCTOR1_COMMENT));
         constr.addThrows("ParserCreationException");
-        constr.addCode("super(" + tokenizer.getConstructorCall("in") + ");");
+        constr.addCode("super(in);");
         constr.addCode("createPatterns();");
 
         // Add constructor
-        constr = new JavaConstructor("Reader in, Analyzer analyzer");
+        constr = new JavaConstructor("Reader in, " + analyzer.getClassName() +
+                                     " analyzer");
         cls.addConstructor(constr);
         constr.addComment(new JavaComment(CONSTRUCTOR2_COMMENT));
         constr.addThrows("ParserCreationException");
-        constr.addCode("super(" + tokenizer.getConstructorCall("in") +
-                       ", analyzer);");
+        constr.addCode("super(in, analyzer);");
         constr.addCode("createPatterns();");
+
+        // Add tokenizer factory method
+        method = new JavaMethod(JavaMethod.PROTECTED,
+                                "newTokenizer",
+                                "Reader in",
+                                "Tokenizer");
+        method.addThrows("ParserCreationException");
+        method.addComment(new JavaComment(FACTORY_COMMENT));
+        method.addCode("return new " + tokenizer.getClassName() + "(in);");
+        cls.addMethod(method);
 
         // Add init method
         cls.addMethod(initMethod);

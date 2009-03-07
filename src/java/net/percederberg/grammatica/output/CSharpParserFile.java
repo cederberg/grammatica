@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -62,7 +62,7 @@ class CSharpParserFile {
      * The first constructor comment.
      */
     private static final String CONSTRUCTOR1_COMMENT =
-        "<summary>Creates a new parser.</summary>\n\n" +
+        "<summary>Creates a new parser with a default analyzer.</summary>\n\n" +
         "<param name='input'>the input stream to read from</param>\n\n" +
         "<exception cref='ParserCreationException'>if the parser\n" +
         "couldn't be initialized correctly</exception>";
@@ -78,6 +78,17 @@ class CSharpParserFile {
         "couldn't be initialized correctly</exception>";
 
     /**
+     * The tokenizer factory method comment.
+     */
+    private static final String FACTORY_COMMENT =
+        "<summary>Creates a new tokenizer for this parser. Can be overridden\n" +
+        "by a subclass to provide a custom implementation.</summary>\n\n" +
+        "<param name='input'>the input stream to read from</param>\n\n" +
+        "<returns>the tokenizer created</returns>\n\n" +
+        "<exception cref='ParserCreationException'>if the tokenizer\n" +
+        "couldn't be initialized correctly</exception>";
+
+    /**
      * The init method comment.
      */
     private static final String INIT_METHOD_COMMENT =
@@ -90,11 +101,6 @@ class CSharpParserFile {
      * The parser generator.
      */
     private CSharpParserGenerator gen;
-
-    /**
-     * The tokenizer file generator.
-     */
-    private CSharpTokenizerFile tokenizer;
 
     /**
      * The file to write.
@@ -133,15 +139,16 @@ class CSharpParserFile {
      *
      * @param gen            the parser generator to use
      * @param tokenizer      the tokenizer file generator
+     * @param analyzer       the analyzer file generator
      */
     public CSharpParserFile(CSharpParserGenerator gen,
-                            CSharpTokenizerFile tokenizer) {
+                            CSharpTokenizerFile tokenizer,
+                            CSharpAnalyzerFile analyzer) {
 
         String  name = gen.getBaseName() + "Parser";
         int     modifiers;
 
         this.gen = gen;
-        this.tokenizer = tokenizer;
         this.file = new CSharpFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
             modifiers = CSharpClass.PUBLIC;
@@ -157,14 +164,19 @@ class CSharpParserFile {
                                            "CreatePatterns",
                                            "",
                                            "void");
-        initializeCode();
+        initializeCode(tokenizer, analyzer);
     }
 
     /**
      * Initializes the source code objects.
+     *
+     * @param tokenizer      the tokenizer file generator
+     * @param analyzer       the analyzer file generator
      */
-    private void initializeCode() {
+    private void initializeCode(CSharpTokenizerFile tokenizer,
+                                CSharpAnalyzerFile analyzer) {
         CSharpConstructor  constr;
+        CSharpMethod       method;
         String             str;
 
         // Add using
@@ -195,20 +207,25 @@ class CSharpParserFile {
         constr = new CSharpConstructor("TextReader input");
         cls.addConstructor(constr);
         constr.addComment(new CSharpComment(CONSTRUCTOR1_COMMENT));
-        constr.addInitializer("base(" +
-                              tokenizer.getConstructorCall("input") +
-                              ")");
+        constr.addInitializer("base(input)");
         constr.addCode("CreatePatterns();");
 
         // Add constructor
         constr = new CSharpConstructor("TextReader input, " +
-                                       "Analyzer analyzer");
+                                       analyzer.getClassName() + " analyzer");
         cls.addConstructor(constr);
         constr.addComment(new CSharpComment(CONSTRUCTOR2_COMMENT));
-        constr.addInitializer("base(" +
-                              tokenizer.getConstructorCall("input") +
-                              ", analyzer)");
+        constr.addInitializer("base(input, analyzer)");
         constr.addCode("CreatePatterns();");
+
+        // Add tokenizer factory method
+        method = new CSharpMethod(CSharpMethod.PROTECTED + CSharpMethod.OVERRIDE,
+                                  "NewTokenizer",
+                                  "TextReader input",
+                                  "Tokenizer");
+        method.addComment(new CSharpComment(FACTORY_COMMENT));
+        method.addCode("return new " + tokenizer.getClassName() + "(input);");
+        cls.addMethod(method);
 
         // Add init method
         cls.addMethod(initMethod);

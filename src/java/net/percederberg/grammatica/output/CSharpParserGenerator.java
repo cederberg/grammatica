@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307, USA.
  *
- * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2003-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -33,7 +33,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * needed for a C# parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.5
  */
 public class CSharpParserGenerator extends ParserGenerator {
 
@@ -159,8 +159,8 @@ public class CSharpParserGenerator extends ParserGenerator {
         Grammar              grammar = getGrammar();
         CSharpConstantsFile  constants = new CSharpConstantsFile(this);
         CSharpTokenizerFile  tokenizer = new CSharpTokenizerFile(this);
-        CSharpParserFile     parser = new CSharpParserFile(this, tokenizer);
         CSharpAnalyzerFile   analyzer = new CSharpAnalyzerFile(this);
+        CSharpParserFile     parser = new CSharpParserFile(this, tokenizer, analyzer);
         TokenPattern         token;
         ProductionPattern    production;
         int                  i;

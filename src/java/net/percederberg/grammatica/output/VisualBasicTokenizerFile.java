@@ -17,7 +17,7 @@
  * MA 02111-1307, USA.
  *
  * Copyright (c) 2004 Adrian Moore. All rights reserved.
- * Copyright (c) 2004-2005 Per Cederberg. All rights reserved.
+ * Copyright (c) 2004-2009 Per Cederberg. All rights reserved.
  */
 
 package net.percederberg.grammatica.output;
@@ -217,15 +217,12 @@ class VisualBasicTokenizerFile {
     }
 
     /**
-     * Creates source code performing a call to the constructor for
-     * the tokenizer.
+     * Returns the class name for this tokenizer.
      *
-     * @param param          the input parameters
-     *
-     * @return the source code for the call
+     * @return the class name for this tokenizer
      */
-    protected String getConstructorCall(String param) {
-        return "New " + gen.getBaseName() + "Tokenizer(" + param + ")";
+    protected String getClassName() {
+        return cls.toString();
     }
 
     /**
