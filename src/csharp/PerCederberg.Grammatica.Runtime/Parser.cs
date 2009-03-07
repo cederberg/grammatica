@@ -109,8 +109,8 @@ namespace PerCederberg.Grammatica.Runtime {
          * @since 1.5
          */
         internal Parser(TextReader input, Analyzer analyzer) {
-            this.tokenizer = newTokenizer(input);
-            this.analyzer = (analyzer == null) ? newAnalyzer() : analyzer;
+            this.tokenizer = NewTokenizer(input);
+            this.analyzer = (analyzer == null) ? NewAnalyzer() : analyzer;
         }
 
         /**
@@ -129,7 +129,7 @@ namespace PerCederberg.Grammatica.Runtime {
          */
         internal Parser(Tokenizer tokenizer, Analyzer analyzer) {
             this.tokenizer = tokenizer;
-            this.analyzer = (analyzer == null) ? newAnalyzer() : analyzer;
+            this.analyzer = (analyzer == null) ? NewAnalyzer() : analyzer;
         }
 
         /**
@@ -145,7 +145,7 @@ namespace PerCederberg.Grammatica.Runtime {
          *
          * @since 1.5
          */
-        protected virtual Tokenizer newTokenizer(TextReader input) {
+        protected virtual Tokenizer NewTokenizer(TextReader input) {
             // TODO: This method should really be abstract, but it isn't in this
             //       version due to backwards compatibility requirements.
             return new Tokenizer(input);
@@ -159,7 +159,7 @@ namespace PerCederberg.Grammatica.Runtime {
          *
          * @since 1.5
          */
-        protected virtual Analyzer newAnalyzer() {
+        protected virtual Analyzer NewAnalyzer() {
             // TODO: This method should really be abstract, but it isn't in this
             //       version due to backwards compatibility requirements.
             return new Analyzer();
