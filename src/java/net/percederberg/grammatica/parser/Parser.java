@@ -87,6 +87,36 @@ public abstract class Parser {
     /**
      * Creates a new parser.
      *
+     * @param input          the input stream to read from
+     *
+     * @throws ParserCreationException if the tokenizer couldn't be
+     *             initialized correctly
+     *
+     * @since 1.5
+     */
+    Parser(Reader input) throws ParserCreationException {
+        this(input, null);
+    }
+
+    /**
+     * Creates a new parser.
+     *
+     * @param input          the input stream to read from
+     * @param analyzer       the analyzer callback to use
+     *
+     * @throws ParserCreationException if the tokenizer couldn't be
+     *             initialized correctly
+     *
+     * @since 1.5
+     */
+    Parser(Reader input, Analyzer analyzer) throws ParserCreationException {
+        this.tokenizer = newTokenizer(input);
+        this.analyzer = (analyzer == null) ? newAnalyzer() : analyzer;
+    }
+
+    /**
+     * Creates a new parser.
+     *
      * @param tokenizer      the tokenizer to use
      */
     Parser(Tokenizer tokenizer) {
@@ -101,11 +131,40 @@ public abstract class Parser {
      */
     Parser(Tokenizer tokenizer, Analyzer analyzer) {
         this.tokenizer = tokenizer;
-        if (analyzer == null) {
-            this.analyzer = new Analyzer();
-        } else {
-            this.analyzer = analyzer;
-        }
+        this.analyzer = (analyzer == null) ? newAnalyzer() : analyzer;
+    }
+
+    /**
+     * Creates a new tokenizer for this parser. Can be overridden by
+     * a subclass to provide a custom implementation.
+     *
+     * @param input          the input stream to read from
+     *
+     * @return the tokenizer created
+     *
+     * @throws ParserCreationException if the tokenizer couldn't be
+     *             initialized correctly
+     *
+     * @since 1.5
+     */
+    protected Tokenizer newTokenizer(Reader input) throws ParserCreationException {
+        // TODO: This method should really be abstract, but it isn't in this
+        //       version due to backwards compatibility requirements.
+        return new Tokenizer(input);
+    }
+
+    /**
+     * Creates a new analyzer for this parser. Can be overridden by a
+     * subclass to provide a custom implementation.
+     *
+     * @return the analyzer created
+     *
+     * @since 1.5
+     */
+    protected Analyzer newAnalyzer() {
+        // TODO: This method should really be abstract, but it isn't in this
+        //       version due to backwards compatibility requirements.
+        return new Analyzer();
     }
 
     /**

@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using System.IO;
 
 namespace PerCederberg.Grammatica.Runtime {
 
@@ -34,6 +35,34 @@ namespace PerCederberg.Grammatica.Runtime {
      * @version  1.5
      */
     public class RecursiveDescentParser : Parser {
+
+        /**
+         * Creates a new parser.
+         *
+         * @param input          the input stream to read from
+         *
+         * @throws ParserCreationException if the tokenizer couldn't be
+         *             initialized correctly
+         *
+         * @since 1.5
+         */
+        public RecursiveDescentParser(TextReader input) : base(input) {
+        }
+
+        /**
+         * Creates a new parser.
+         *
+         * @param input          the input stream to read from
+         * @param analyzer       the analyzer callback to use
+         *
+         * @throws ParserCreationException if the tokenizer couldn't be
+         *             initialized correctly
+         *
+         * @since 1.5
+         */
+        public RecursiveDescentParser(TextReader input, Analyzer analyzer)
+            : base(input, analyzer) {
+        }
 
         /**
          * Creates a new parser.

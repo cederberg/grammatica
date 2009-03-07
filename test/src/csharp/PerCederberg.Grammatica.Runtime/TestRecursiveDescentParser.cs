@@ -477,7 +477,7 @@ public class TestRecursiveDescentParser {
      * @return a new parser
      */
     private Parser CreateParser() {
-        return new RecursiveDescentParser(null);
+        return new RecursiveDescentParser((Tokenizer) null);
     }
 
     /**
