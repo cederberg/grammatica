@@ -31,7 +31,7 @@ import java.util.HashMap;
  * interface, as well as token handling.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public abstract class Parser {
 
@@ -334,6 +334,27 @@ public abstract class Parser {
     public void reset(Reader input) {
         this.tokenizer.reset(input);
         this.analyzer.reset();
+    }
+
+    /**
+     * Resets this parser for usage with another input stream. The
+     * associated tokenizer will also be reset and the analyzer
+     * replaced. This method will clear all the internal state and
+     * the error log in the parser. It is normally called in order to
+     * reuse a parser and tokenizer pair with multiple input streams,
+     * thereby avoiding the cost of re-analyzing the grammar
+     * structures.
+     *
+     * @param input          the new input stream to read
+     * @param analyzer       the new analyzer callback to use
+     *
+     * @see Tokenizer#reset(java.io.Reader)
+     *
+     * @since 1.6
+     */
+    public void reset(Reader input, Analyzer analyzer) {
+        this.tokenizer.reset(input);
+        this.analyzer = analyzer;
     }
 
     /**

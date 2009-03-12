@@ -31,7 +31,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * interface, as well as token handling.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.5
+     * @version  1.6
      */
     public abstract class Parser {
 
@@ -357,6 +357,27 @@ namespace PerCederberg.Grammatica.Runtime {
         public void Reset(TextReader input) {
             this.tokenizer.Reset(input);
             this.analyzer.Reset();
+        }
+
+        /**
+         * Resets this parser for usage with another input stream. The
+         * associated tokenizer will also be reset and the analyzer
+         * replaced. This method will clear all the internal state and
+         * the error log in the parser. It is normally called in order
+         * to reuse a parser and tokenizer pair with multiple input
+         * streams, thereby avoiding the cost of re-analyzing the
+         * grammar structures.
+         *
+         * @param input          the new input stream to read
+         * @param analyzer       the new analyzer callback to use
+         *
+         * @see Tokenizer#Reset
+         *
+         * @since 1.6
+         */
+        public void Reset(TextReader input, Analyzer analyzer) {
+            this.tokenizer.Reset(input);
+            this.analyzer = analyzer;
         }
 
         /**
