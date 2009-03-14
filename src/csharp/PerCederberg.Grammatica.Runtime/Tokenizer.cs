@@ -308,6 +308,7 @@ namespace PerCederberg.Grammatica.Runtime {
             do {
                 token = NextToken();
                 if (token == null) {
+                    previousToken = null;
                     return null;
                 }
                 if (useTokenList) {

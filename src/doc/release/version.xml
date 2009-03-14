@@ -9,6 +9,20 @@
 
     <list>
       <item>
+        <title>Fixed minor API issues for reusing parsers</title>
+        <text>The <code>Parser.reset</code> method is now available
+        in a new flavor that allows replacing the <code>Analyzer</code>
+        being used. Also the <code>Tokenizer</code> now disposes the
+        input buffer and references to parsed tokens already when the
+        end of file is encountered.</text>
+      </item>
+    </list>
+
+
+    <h1>Version 1.5 (2009-03-07):</h1>
+
+    <list>
+      <item>
         <title>License modified to GNU LGPL version 3</title>
         <text>The license agreement for this library has been changed
         to <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL,

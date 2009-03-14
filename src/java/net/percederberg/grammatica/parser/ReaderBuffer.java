@@ -256,6 +256,9 @@ public class ReaderBuffer implements CharSequence {
             updateLineColumnNumbers(count);
             result = new String(buffer, pos, count);
             pos += count;
+            if (input == null && pos >= length) {
+                dispose();
+            }
             return result;
         }
     }

@@ -286,6 +286,7 @@ public class Tokenizer {
         do {
             token = nextToken();
             if (token == null) {
+                previousToken = null;
                 return null;
             }
             if (useTokenList) {

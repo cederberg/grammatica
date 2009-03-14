@@ -241,6 +241,9 @@ namespace PerCederberg.Grammatica.Runtime {
                 UpdateLineColumnNumbers(count);
                 result = new string(buffer, pos, count);
                 pos += count;
+                if (input == null && pos >= length) {
+                    Dispose();
+                }
                 return result;
             }
         }
