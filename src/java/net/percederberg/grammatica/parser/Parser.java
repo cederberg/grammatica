@@ -46,7 +46,7 @@ public abstract class Parser {
     private Tokenizer tokenizer;
 
     /**
-     * The analyzer to use for callbacks.
+     * The analyzer to use for call-backs.
      */
     private Analyzer analyzer;
 
@@ -102,7 +102,7 @@ public abstract class Parser {
      * Creates a new parser.
      *
      * @param input          the input stream to read from
-     * @param analyzer       the analyzer callback to use
+     * @param analyzer       the analyzer call-back to use
      *
      * @throws ParserCreationException if the tokenizer couldn't be
      *             initialized correctly
@@ -346,7 +346,7 @@ public abstract class Parser {
      * structures.
      *
      * @param input          the new input stream to read
-     * @param analyzer       the new analyzer callback to use
+     * @param analyzer       the new analyzer call-back to use
      *
      * @see Tokenizer#reset(java.io.Reader)
      *
@@ -488,9 +488,9 @@ public abstract class Parser {
 
     /**
      * Handles the parser entering a production. This method calls the
-     * appropriate analyzer callback if the node is not hidden. Note
-     * that this method will not call any callback if an error
-     * requiring recovery has ocurred.
+     * appropriate analyzer call-back if the node is not hidden. Note
+     * that this method will not call any call-back if an error
+     * requiring recovery has occurred.
      *
      * @param node           the parse tree node
      */
@@ -506,9 +506,9 @@ public abstract class Parser {
 
     /**
      * Handles the parser leaving a production. This method calls the
-     * appropriate analyzer callback if the node is not hidden, and
+     * appropriate analyzer call-back if the node is not hidden, and
      * returns the result. Note that this method will not call any
-     * callback if an error requiring recovery has ocurred.
+     * call-back if an error requiring recovery has occurred.
      *
      * @param node           the parse tree node
      *
@@ -528,9 +528,9 @@ public abstract class Parser {
 
     /**
      * Handles the parser adding a child node to a production. This
-     * method calls the appropriate analyzer callback. Note that this
-     * method will not call any callback if an error requiring
-     * recovery has ocurred.
+     * method calls the appropriate analyzer call-back. Note that this
+     * method will not call any call-back if an error requiring
+     * recovery has occurred.
      *
      * @param node           the parent parse tree node
      * @param child          the child parse tree node, or null
@@ -555,7 +555,7 @@ public abstract class Parser {
 
     /**
      * Reads and consumes the next token in the queue. If no token was
-     * available for consumation, a parse error will be thrown.
+     * available for consumption, a parse error will be thrown.
      *
      * @return the token consumed
      *
@@ -579,7 +579,7 @@ public abstract class Parser {
 
     /**
      * Reads and consumes the next token in the queue. If no token was
-     * available for consumation, a parse error will be thrown. A
+     * available for consumption, a parse error will be thrown. A
      * parse error will also be thrown if the token id didn't match
      * the specified one.
      *
