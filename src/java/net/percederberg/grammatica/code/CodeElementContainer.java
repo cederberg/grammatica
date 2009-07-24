@@ -44,7 +44,7 @@ import java.util.LinkedList;
  * element containers contains other code elements.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public abstract class CodeElementContainer extends CodeElement {
 
@@ -52,7 +52,7 @@ public abstract class CodeElementContainer extends CodeElement {
      * The code element contents. This list contains the code elements
      * contained inside this element.
      */
-    private LinkedList contents = new LinkedList();
+    private LinkedList<CodeElement> contents = new LinkedList();
 
     /**
      * Adds a code element to this container.

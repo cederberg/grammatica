@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * right as child nodes are added (to the right).
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public class Analyzer {
 
@@ -101,7 +101,7 @@ public class Analyzer {
         errorCount = log.getErrorCount();
         if (node instanceof Production) {
             prod = (Production) node;
-            prod = newProduction(prod.getPattern());
+            prod = newProduction(prod.getAlternative());
             try {
                 enter(prod);
             } catch (ParseException e) {
@@ -144,14 +144,14 @@ public class Analyzer {
      * can be overridden to provide other production implementations
      * than the default one.
      *
-     * @param pattern        the production pattern
+     * @param alt               the production pattern alternative
      *
      * @return the new production node
      *
      * @since 1.5
      */
-    protected Production newProduction(ProductionPattern pattern) {
-        return new Production(pattern);
+    protected Production newProduction(ProductionPatternAlternative alt) {
+        return new Production(alt);
     }
 
     /**

@@ -34,66 +34,25 @@
 package net.percederberg.grammatica.code.java;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import net.percederberg.grammatica.code.CodeElement;
-import net.percederberg.grammatica.code.CodeElementContainer;
-import net.percederberg.grammatica.code.CodeStyle;
+import net.percederberg.grammatica.code.CodeFile;
 
 /**
  * A class generating a Java code file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
-public class JavaFile extends CodeElementContainer {
-
-    /**
-     * The directory to write to.
-     */
-    private File dir;
-
-    /**
-     * The first class or interface added.
-     */
-    private CodeElement first = null;
+public class JavaFile extends CodeFile {
 
     /**
      * Creates a new Java code file in the specified file.
      *
      * @param basedir        the base output directory
+     * @param basename       the base file name (without extension)
      */
-    public JavaFile(File basedir) {
-        this.dir = basedir;
-    }
-
-    /**
-     * Creates a new Java code file in the specified base directory
-     * and package.  The file name will be retrieved from the first
-     * class or interface added to this file.
-     *
-     * @param basedir        the base output directory
-     * @param filePackage    the package the file belongs to
-     */
-    public JavaFile(File basedir, JavaPackage filePackage) {
-        this.dir = filePackage.toFile(basedir);
-        addElement(filePackage);
-    }
-
-    /**
-     * Returns the file name. Note that if no class has been added to
-     * the file, a default file name will be returned.
-     *
-     * @return the file name
-     */
-    public String toString() {
-        if (first == null) {
-            return "UnknownFileName.java";
-        } else {
-            return first.toString() + ".java";
-        }
+    public JavaFile(File basedir, String basename) {
+        super(basedir, basename, ".java");
     }
 
     /**
@@ -120,9 +79,6 @@ public class JavaFile extends CodeElementContainer {
      * @param cls            the class to add
      */
     public void addClass(JavaClass cls) {
-        if (first == null) {
-            first = cls;
-        }
         addElement(cls);
     }
 
@@ -132,50 +88,15 @@ public class JavaFile extends CodeElementContainer {
      * @param ifc            the interface to add
      */
     public void addInterface(JavaInterface ifc) {
-        if (first == null) {
-            first = ifc;
-        }
         addElement(ifc);
     }
 
     /**
-     * Returns a numeric category number for the code element. A lower
-     * category number implies that the code element should be placed
-     * before code elements with a higher category number within a
-     * declaration.
+     * Adds a package to the file.
      *
-     * @return the category number
+     * @param pkg            the package to add
      */
-    public int category() {
-        return 0;
-    }
-
-    /**
-     * Writes the source code for this file. Any previous file with
-     * this name will be overwritten.
-     *
-     * @param style          the code style to use
-     *
-     * @throws IOException if the file could not be written properly
-     */
-    public void writeCode(CodeStyle style) throws IOException {
-        File         file = new File(dir, toString());
-        PrintWriter  out;
-
-        createFile(file);
-        out = new PrintWriter(new FileWriter(file));
-        print(out, style, 0);
-        out.close();
-    }
-
-    /**
-     * Prints the file contents to the specified output stream.
-     *
-     * @param out            the output stream
-     * @param style          the code style to use
-     * @param indent         the indentation level
-     */
-    public void print(PrintWriter out, CodeStyle style, int indent) {
-        printContents(out, style, indent);
+    public void addPackage(JavaPackage pkg) {
+        addElement(pkg);
     }
 }

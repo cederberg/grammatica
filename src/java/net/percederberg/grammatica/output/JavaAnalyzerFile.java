@@ -28,7 +28,9 @@ import net.percederberg.grammatica.code.java.JavaComment;
 import net.percederberg.grammatica.code.java.JavaFile;
 import net.percederberg.grammatica.code.java.JavaImport;
 import net.percederberg.grammatica.code.java.JavaMethod;
+import net.percederberg.grammatica.code.java.JavaPackage;
 import net.percederberg.grammatica.parser.ProductionPattern;
+import net.percederberg.grammatica.parser.ProductionPatternAlternative;
 import net.percederberg.grammatica.parser.TokenPattern;
 
 /**
@@ -36,7 +38,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * Java code necessary for creating a analyzer class file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 class JavaAnalyzerFile {
 
@@ -45,6 +47,16 @@ class JavaAnalyzerFile {
      */
     private static final String TYPE_COMMENT =
         "A class providing callback methods for the parser.";
+
+    /**
+     * The newProduction method comment.
+     */
+    private static final String NP_COMMENT =
+        "Factory method to create a new production node. This method\n" +
+        "has been overridden to return the correct node class, since the\n" +
+        "'--specialize' flag was used to generate this code.\n\n" +
+        "@param alt               the production pattern alternative\n" +
+        "@return the new production node";
 
     /**
      * The enter method comment.
@@ -104,15 +116,42 @@ class JavaAnalyzerFile {
     private JavaMethod child;
 
     /**
-     * Creates a new analyzer file.
+     * The Java newProduction method.
+     */
+    private JavaMethod newProduction;
+
+    /**
+     * The JavaNodeClassesDir, for getting specialized node information iff the
+     * '--specialize' flag is set.
+     */
+    private JavaNodeClassesDir dir;
+
+    /**
+     * Creates a new analyzer file.  Note: DO NOT use this constructor if this
+     * is a specialized node; instead, use
+     * {@link #JavaAnalyzerFile(JavaParserGenerator, JavaNodeClassesDir)}.
      *
      * @param gen            the parser generator to use
      */
     public JavaAnalyzerFile(JavaParserGenerator gen) {
-        int  modifiers;
+        this (gen, null);
+    }
 
+    /**
+     * Creates a new analyzer file for java output.  Use this constructor only
+     * if the '--specialize' flag is set.
+     *
+     * @param gen            the parser generator to use
+     * @param dir            the NodeClassesDir object to use to extract
+     *                       production information
+     */
+    public JavaAnalyzerFile(JavaParserGenerator gen, JavaNodeClassesDir dir) {
+        String  name = gen.getBaseName() + "Analyzer";
+        int     modifiers;
+
+        this.dir = dir;
         this.gen = gen;
-        this.file = gen.createJavaFile();
+        this.file = new JavaFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
             modifiers = JavaClass.PUBLIC + JavaClass.ABSTRACT;
         } else {
@@ -121,6 +160,12 @@ class JavaAnalyzerFile {
         this.cls = new JavaClass(modifiers,
                                  gen.getBaseName() + "Analyzer",
                                  "Analyzer");
+        if (gen.specialize() && (dir != null)) {
+            this.newProduction = new JavaMethod(JavaMethod.PROTECTED,
+                                                "newProduction",
+                                                "ProductionPatternAlternative alt",
+                                                "Production");
+        }
         this.enter = new JavaMethod(JavaMethod.PROTECTED,
                                     "enter",
                                     "Node node",
@@ -142,12 +187,19 @@ class JavaAnalyzerFile {
     private void initializeCode() {
         String  str;
 
-        // Add class
-        file.addClass(cls);
-
         // Add file comment
         str = file.toString() + "\n\n" + gen.getFileComment();
         file.addComment(new JavaComment(JavaComment.BLOCK, str));
+
+        // Add package
+        if (gen.getBasePackage() != null) {
+            JavaPackage p = new JavaPackage(gen.getBasePackage());
+            file.addPackage(p);
+            if (gen.specialize() && (dir != null)) {
+                file.addImport(new JavaImport(gen.getBasePackage() + ".nodes"));
+            }
+        }
+        file.addClass(cls);
 
         // Add imports
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
@@ -158,6 +210,10 @@ class JavaAnalyzerFile {
                                       "ParseException"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Production"));
+        if (gen.specialize() && (dir != null)) {
+            file.addImport(new JavaImport("net.percederberg.grammatica.parser",
+                                          "ProductionPatternAlternative"));
+        }
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Token"));
 
@@ -167,6 +223,13 @@ class JavaAnalyzerFile {
             str += "\n\n" + gen.getClassComment();
         }
         cls.addComment(new JavaComment(str));
+
+        // Add the newProduction method
+        if (gen.specialize() && (dir != null)) {
+            newProduction.addComment(new JavaComment(NP_COMMENT));
+            newProduction.addCode("switch (alt.getPattern().getId()) {");
+            cls.addMethod(newProduction);
+        }
 
         // Add enter method
         enter.addComment(new JavaComment(ENTER_COMMENT));
@@ -218,17 +281,55 @@ class JavaAnalyzerFile {
                               JavaConstantsFile constants) {
 
         String   constant = constants.getConstant(pattern.getId());
-        String   name;
+        String   name = gen.getCodeStyle().getMixedCase(pattern.getName(), true);
+
+        if (gen.specialize() && (dir != null)) {
+            addNewProductionCase(constant, pattern);
+        }
 
         if (!pattern.isSynthetic()) {
-            name = gen.getCodeStyle().getMixedCase(pattern.getName(),
-                                                   true);
             addEnterCase(constant, name, "Production");
             addEnterMethod(name, "Production");
             addExitCase(constant, name, "Production");
             addExitMethod(name, "Production");
             addChildCase(constant, name);
             addChildMethod(name);
+        }
+    }
+
+    /**
+     * Add a newProduction method switch case.
+     *
+     * @param constant       the node constant
+     * @param name           the name of the pattern
+     * @param pattern        the node pattern
+     */
+    public void addNewProductionCase(String constant, ProductionPattern pattern) {
+        newProduction.addCode("case " + constant + ":");
+
+        // If this only has one alternative, the calss is the trivial pattern name.
+        if (pattern.getAlternativeCount() == 1) {
+            ProductionPatternAlternative alt = pattern.getAlternative(0);
+            if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
+                String name = dir.getAltDescriptors().get(pattern.getAlternative(0)).name;
+                newProduction.addCode("    return new " + name + "(alt);");
+            } else {
+                newProduction.addCode("    return new Production(alt);");
+            }
+        } else {
+            // Switch on the alterative to find out which it is.
+            newProduction.addCode("    switch (alt.getPattern().getAlternativeIndex(alt)) {");
+            for (int i = 0; i < pattern.getAlternativeCount(); i++) {
+                ProductionPatternAlternative alt = pattern.getAlternative(i);
+                    newProduction.addCode("    case " + i + ":");
+                if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
+                    String name = dir.getAltDescriptors().get(alt).name;
+                    newProduction.addCode("        return new " + name + "(alt);");
+                } else {
+                    newProduction.addCode("        return new Production(alt);");
+                }
+            }
+            newProduction.addCode("    }");
         }
     }
 
@@ -320,7 +421,15 @@ class JavaAnalyzerFile {
                            "void");
         m.addComment(new JavaComment(CHILD_COMMENT));
         m.addThrows("ParseException");
-        m.addCode("node.addChild(child);");
+        if (gen.specialize() && (dir != null)) {
+            m.addCode("if ((child != null) && (child.getChildCount() == 1)) {");
+            m.addCode("    node.addChild(child.getChildAt(0));");
+            m.addCode("} else {");
+            m.addCode("    node.addChild(child);");
+            m.addCode("}");
+        } else {
+            m.addCode("node.addChild(child);");
+        }
         cls.addMethod(m);
     }
 
@@ -340,6 +449,10 @@ class JavaAnalyzerFile {
      *             correctly
      */
     public void writeCode() throws IOException {
+        if (gen.specialize() && (dir != null)) {
+            newProduction.addCode("}");
+            newProduction.addCode("return new Production(alt);");
+        }
         enter.addCode("}");
         exit.addCode("}");
         exit.addCode("return node;");

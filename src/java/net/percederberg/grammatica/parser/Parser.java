@@ -419,14 +419,14 @@ public abstract class Parser {
      * can be overridden to provide other production implementations
      * than the default one.
      *
-     * @param pattern        the production pattern
+     * @param alt            the production pattern alternative
      *
      * @return the new production node
      *
      * @since 1.5
      */
-    protected Production newProduction(ProductionPattern pattern) {
-        return analyzer.newProduction(pattern);
+    protected Production newProduction(ProductionPatternAlternative alt) {
+        return analyzer.newProduction(alt);
     }
 
     /**
@@ -538,17 +538,25 @@ public abstract class Parser {
     void addNode(Production node, Node child) {
         if (errorRecovery >= 0) {
             // Do nothing
-        } else if (node.isHidden()) {
-            node.addChild(child);
-        } else if (child != null && child.isHidden()) {
-            for (int i = 0; i < child.getChildCount(); i++) {
-                addNode(node, child.getChildAt(i));
-            }
-        } else {
+        } else if (node instanceof SpecializedProduction) {
             try {
                 analyzer.child(node, child);
             } catch (ParseException e) {
                 addError(e, false);
+            }
+        } else {
+            if (node.isHidden()) {
+                node.addChild(child);
+            } else if (child != null && child.isHidden()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    addNode(node, child.getChildAt(i));
+                }
+            } else {
+                try {
+                    analyzer.child(node, child);
+                } catch (ParseException e) {
+                    addError(e, false);
+                }
             }
         }
     }

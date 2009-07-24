@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * within a production pattern.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.1
  */
 public class ProductionPatternAlternative {
 
@@ -44,7 +44,7 @@ public class ProductionPatternAlternative {
     /**
      * The element list.
      */
-    private ArrayList elements = new ArrayList();
+    private ArrayList<ProductionPatternElement> elements = new ArrayList();
 
     /**
      * The look-ahead set associated with this alternative.
@@ -117,6 +117,16 @@ public class ProductionPatternAlternative {
     }
 
     /**
+     * Returns whether this alternative has a single element
+     *
+     * @return true if there is a single element that can appear once, false
+     *         otherwise
+     */
+    public boolean isSingleElement() {
+        return ((getElementCount() == 1) && getElement(0).getMaxCount() == 1);
+    }
+
+    /**
      * Changes the production pattern containing this alternative.
      * This method should only be called by the production pattern
      * class.
@@ -185,6 +195,15 @@ public class ProductionPatternAlternative {
      */
     public ProductionPatternElement getElement(int pos) {
         return (ProductionPatternElement) elements.get(pos);
+    }
+
+    /**
+     * Returns the list of elements.
+     * 
+     * @return the list of elements
+     */
+    public ArrayList<ProductionPatternElement> getElements() {
+        return elements;
     }
 
     /**

@@ -34,25 +34,16 @@
 package net.percederberg.grammatica.code.csharp;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import net.percederberg.grammatica.code.CodeElementContainer;
-import net.percederberg.grammatica.code.CodeStyle;
+import net.percederberg.grammatica.code.CodeFile;
 
 /**
  * A class generating a C# source code file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
-public class CSharpFile extends CodeElementContainer {
-
-    /**
-     * The file to write to.
-     */
-    private File file;
+public class CSharpFile extends CodeFile {
 
     /**
      * Creates a new C# source code file.
@@ -61,28 +52,7 @@ public class CSharpFile extends CodeElementContainer {
      * @param basename       the base file name (without extension)
      */
     public CSharpFile(File basedir, String basename) {
-        this.file = new File(basedir, basename + ".cs");
-    }
-
-    /**
-     * Returns the file name.
-     *
-     * @return the file name.
-     */
-    public String toString() {
-        return file.getName();
-    }
-
-    /**
-     * Returns a numeric category number for the code element. A lower
-     * category number implies that the code element should be placed
-     * before code elements with a higher category number within a
-     * declaration.
-     *
-     * @return the category number
-     */
-    public int category() {
-        return 0;
+        super(basedir, basename, ".cs");
     }
 
     /**
@@ -128,33 +98,5 @@ public class CSharpFile extends CodeElementContainer {
      */
     public void addEnumeration(CSharpEnumeration e) {
         addElement(e);
-    }
-
-    /**
-     * Writes the source code for this file. Any previous file with
-     * this name will be overwritten.
-     *
-     * @param style          the code style to use
-     *
-     * @throws IOException if the file could not be written properly
-     */
-    public void writeCode(CodeStyle style) throws IOException {
-        PrintWriter  out;
-
-        createFile(file);
-        out = new PrintWriter(new FileWriter(file));
-        print(out, style, 0);
-        out.close();
-    }
-
-    /**
-     * Prints the file contents to the specified output stream.
-     *
-     * @param out            the output stream
-     * @param style          the code style to use
-     * @param indent         the indentation level
-     */
-    public void print(PrintWriter out, CodeStyle style, int indent) {
-        printContents(out, style, indent);
     }
 }

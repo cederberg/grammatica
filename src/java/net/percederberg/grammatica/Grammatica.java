@@ -45,7 +45,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * for information on usage and command-line parameters.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public class Grammatica extends Object {
 
@@ -106,6 +106,11 @@ public class Grammatica extends Object {
         "  --javapublic\n" +
         "      Sets public access for all Java types. By default type\n" +
         "      access is package local.\n" +
+        "  --specialize\n" +
+        "      Builds a class for each production, and makes the parser\n" +
+        "      build a parse tree that has specialized node types with\n" +
+        "      well-named accessors.  The standard method for accessing\n" +
+        "      the tree nodes is still available with this option.\n" +
         "\n" +
         "Visual Basic Output Options:\n" +
         "  --vbnamespace <package>\n" +
@@ -600,11 +605,15 @@ public class Grammatica extends Object {
             if (args[i].equals("--javaoutput")) {
                 gen.setBaseDir(new File(args[++i]));
             } else if (args[i].equals("--javapackage")) {
-                gen.setBasePackage(args[++i]);
+                String append = args[++i].replace(".", System.getProperty("file.separator"));
+                gen.setBaseDir(new File(gen.getBaseDir(), append));
+                gen.setBasePackage(args[i]);
             } else if (args[i].equals("--javaclassname")) {
                 gen.setBaseName(args[++i]);
             } else if (args[i].equals("--javapublic")) {
                 gen.setPublicAccess(true);
+            } else if (args[i].equals("--specialize")) {
+                gen.setSpecialization(true);
             } else {
                 printHelp("unrecognized option: " + args[i]);
                 System.exit(1);

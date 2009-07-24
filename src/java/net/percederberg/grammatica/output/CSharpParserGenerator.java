@@ -33,14 +33,9 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * needed for a C# parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public class CSharpParserGenerator extends ParserGenerator {
-
-    /**
-     * The class name prefix.
-     */
-    private String baseName = null;
 
     /**
      * The namespace to use.
@@ -82,7 +77,7 @@ public class CSharpParserGenerator extends ParserGenerator {
         if (Character.isLowerCase(str.charAt(0))) {
             str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
         }
-        baseName = str;
+        setBaseName(str);
     }
 
     /**
@@ -102,24 +97,6 @@ public class CSharpParserGenerator extends ParserGenerator {
      */
     public void setNamespace(String namespace) {
         this.namespace = namespace;
-    }
-
-    /**
-     * Returns the class name prefix.
-     *
-     * @return the class name prefix
-     */
-    public String getBaseName() {
-        return baseName;
-    }
-
-    /**
-     * Sets the class name prefix.
-     *
-     * @param name           the class name prefix
-     */
-    public void setBaseName(String name) {
-        this.baseName = name;
     }
 
     /**
@@ -146,6 +123,7 @@ public class CSharpParserGenerator extends ParserGenerator {
      *
      * @return the code style to use
      */
+    @Override
     public CodeStyle getCodeStyle() {
         return CodeStyle.CSHARP;
     }
@@ -155,6 +133,7 @@ public class CSharpParserGenerator extends ParserGenerator {
      *
      * @throws IOException if the files couldn't be written correctly
      */
+    @Override
     public void write() throws IOException {
         Grammar              grammar = getGrammar();
         CSharpConstantsFile  constants = new CSharpConstantsFile(this);

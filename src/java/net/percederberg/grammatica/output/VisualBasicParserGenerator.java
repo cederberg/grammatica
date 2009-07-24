@@ -35,15 +35,10 @@ import net.percederberg.grammatica.parser.TokenPattern;
  *
  * @author   Adrian Moore, <adrianrob at hotmail dot com>
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  * @since    1.5
  */
 public class VisualBasicParserGenerator extends ParserGenerator {
-
-    /**
-     * The class name prefix.
-     */
-    private String baseName = null;
 
     /**
      * The namespace to use.
@@ -85,7 +80,7 @@ public class VisualBasicParserGenerator extends ParserGenerator {
         if (Character.isLowerCase(str.charAt(0))) {
             str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
         }
-        baseName = str;
+        setBaseName(str);
     }
 
     /**
@@ -105,24 +100,6 @@ public class VisualBasicParserGenerator extends ParserGenerator {
      */
     public void setNamespace(String namespace) {
         this.namespace = namespace;
-    }
-
-    /**
-     * Returns the class name prefix.
-     *
-     * @return the class name prefix
-     */
-    public String getBaseName() {
-        return baseName;
-    }
-
-    /**
-     * Sets the class name prefix.
-     *
-     * @param name           the class name prefix
-     */
-    public void setBaseName(String name) {
-        this.baseName = name;
     }
 
     /**

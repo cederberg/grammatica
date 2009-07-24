@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * production pattern from production pattern elements.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.1
  */
 public class ProductionPattern {
 
@@ -55,7 +55,7 @@ public class ProductionPattern {
     /**
      * The list of production pattern alternatives.
      */
-    private ArrayList alternatives;
+    private ArrayList<ProductionPatternAlternative> alternatives;
 
     /**
      * The default production pattern alternative. This alternative
@@ -82,6 +82,26 @@ public class ProductionPattern {
         this.alternatives = new ArrayList();
         this.defaultAlt = -1;
         this.lookAhead = null;
+    }
+
+    /**
+     * Returns whether this is a single alternative.
+     *
+     * @return true if there is only a single alternative, false otherwise
+     */
+    public boolean isSingleAlt() {
+        return (getAlternativeCount() == 1);
+    }
+
+    /**
+     * Tests for whether or not this pattern is something like "pattern = token"
+     * or "pattern = pattern2".
+     * 
+     * @return true if the pattern is a single alternative with a single
+     *         element, false otherwise.
+     */
+    public boolean isSingleElement() {
+        return (isSingleAlt() && getAlternative(0).isSingleElement());
     }
 
     /**
@@ -234,6 +254,15 @@ public class ProductionPattern {
     }
 
     /**
+     * Get the list of alternatives in this pattern.
+     *
+     * @return the list of alternatives in this pattern.
+     */
+    public ArrayList<ProductionPatternAlternative> getAlternatives() {
+        return alternatives;
+    }
+
+    /**
      * Returns an alternative in this pattern.
      *
      * @param pos            the alternative position, 0 <= pos < count
@@ -241,7 +270,17 @@ public class ProductionPattern {
      * @return the alternative found
      */
     public ProductionPatternAlternative getAlternative(int pos) {
-        return (ProductionPatternAlternative) alternatives.get(pos);
+        return alternatives.get(pos);
+    }
+
+    /**
+     * Returns the index of an alternative.
+     * 
+     * @param alt            the alternative to find
+     * @return the index of alt
+     */
+    public int getAlternativeIndex(ProductionPatternAlternative alt) {
+        return alternatives.indexOf(alt);
     }
 
     /**

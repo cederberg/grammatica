@@ -29,6 +29,7 @@ import net.percederberg.grammatica.code.java.JavaConstructor;
 import net.percederberg.grammatica.code.java.JavaFile;
 import net.percederberg.grammatica.code.java.JavaImport;
 import net.percederberg.grammatica.code.java.JavaMethod;
+import net.percederberg.grammatica.code.java.JavaPackage;
 import net.percederberg.grammatica.parser.TokenPattern;
 
 /**
@@ -36,7 +37,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * Java code necessary for creating a tokenizer.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 class JavaTokenizerFile {
 
@@ -54,6 +55,19 @@ class JavaTokenizerFile {
         "@param input          the input stream to read\n\n" +
         "@throws ParserCreationException if the tokenizer couldn't be\n" +
         "            initialized correctly";
+
+    /**
+     * The newToken method comment.
+     */
+    private static final String NT_COMMENT =
+        "Factory method to create a new token node. This method has\n" +
+        "been overridden to return the correct node class, since the\n" +
+        "'--specialize' flag was used to generate this code.\n\n" +
+        "@param pattern        the token pattern\n" +
+        "@param image          the token image (i.e. characters)\n" +
+        "@param line           the line number of the first character\n" +
+        "@param column         the column number of the first character\n" +
+        "@return the token created";
 
     /**
      * The init method comment.
@@ -84,15 +98,42 @@ class JavaTokenizerFile {
     private JavaMethod initMethod;
 
     /**
-     * Creates a new tokenizer file.
+     * The Java newToken method.
+     */
+    private JavaMethod newToken;
+
+    /**
+     * The JavaNodeClassesDir, for getting specialized node information iff the
+     * '--specialize' flag is set.
+     */
+    private JavaNodeClassesDir dir;
+
+    /**
+     * Creates a new tokenizer file.  Note: DO NOT use this constructor if this
+     * is a specialized node; instead, use
+     * {@link #JavaTokenizerFile(JavaParserGenerator, JavaNodeClassesDir)}.
      *
      * @param gen            the parser generator to use
      */
     public JavaTokenizerFile(JavaParserGenerator gen) {
+        this (gen, null);
+    }
+
+    /**
+     * Creates a new tokenizer file for java output.  Use this constructor only
+     * if the '--specialize' flag is set.
+     *
+     * @param gen            the parser generator to use
+     * @param dir            the NodeClassesDir object to use to extract
+     *                       production information
+     */
+    public JavaTokenizerFile(JavaParserGenerator gen, JavaNodeClassesDir dir) {
+        String  name = gen.getBaseName() + "Tokenizer";
         int  modifiers;
 
+        this.dir = dir;
         this.gen = gen;
-        this.file = gen.createJavaFile();
+        this.file = new JavaFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
             modifiers = JavaClass.PUBLIC;
         } else {
@@ -101,6 +142,13 @@ class JavaTokenizerFile {
         this.cls = new JavaClass(modifiers,
                                  gen.getBaseName() + "Tokenizer",
                                  "Tokenizer");
+        if (gen.specialize() && (dir != null)) {
+            this.newToken = new JavaMethod(JavaMethod.PROTECTED,
+                                           "newToken",
+                                           "TokenPattern pattern, String image, " +
+                                               "int line, int column",
+                                           "Token");
+        }
         this.initMethod = new JavaMethod(JavaMethod.PRIVATE,
                                          "createPatterns",
                                          "",
@@ -113,16 +161,29 @@ class JavaTokenizerFile {
      */
     private void initializeCode() {
         JavaConstructor  constr;
-        String           str;
+        String  str;
 
         // Add imports
         file.addImport(new JavaImport("java.io", "Reader"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ParserCreationException"));
+        if (gen.specialize() && (dir != null)) {
+            file.addImport(new JavaImport("net.percederberg.grammatica.parser",
+                                          "Token"));
+        }
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "TokenPattern"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Tokenizer"));
+
+        // Add package
+        if (gen.getBasePackage() != null) {
+            JavaPackage p = new JavaPackage(gen.getBasePackage());
+            file.addPackage(p);
+            if (gen.specialize() && (dir != null)) {
+                file.addImport(new JavaImport(gen.getBasePackage() + ".nodes"));
+            }
+        }
 
         // Add class
         file.addClass(cls);
@@ -146,6 +207,13 @@ class JavaTokenizerFile {
                        ");");
         constr.addCode("createPatterns();");
 
+        // Add the newToken method
+        if (gen.specialize() && (dir != null)) {
+            newToken.addComment(new JavaComment(NT_COMMENT));
+            newToken.addCode("switch (pattern.getId()) {");
+            cls.addMethod(newToken);
+        }
+
         // Add init method
         cls.addMethod(initMethod);
         initMethod.addComment(new JavaComment(INIT_METHOD_COMMENT));
@@ -161,11 +229,16 @@ class JavaTokenizerFile {
      */
     public void addToken(TokenPattern pattern, JavaConstantsFile constants) {
         StringBuffer  code = new StringBuffer();
+        String        constant = constants.getConstant(pattern.getId());
         String        str;
+
+        if (gen.specialize() && (dir != null)) {
+            addNewTokenCase(constant, pattern);
+        }
 
         // Create new pattern
         code.append("pattern = new TokenPattern(");
-        code.append(constants.getConstant(pattern.getId()));
+        code.append(constant);
         code.append(",\n");
         code.append("                           \"");
         code.append(pattern.getName());
@@ -210,6 +283,18 @@ class JavaTokenizerFile {
     }
 
     /**
+     * Add a newToken method switch case.
+     *
+     * @param constant       the node constant
+     * @param pattern        the node pattern
+     */
+    public void addNewTokenCase(String constant, TokenPattern pattern) {
+        String name = dir.getTokenDescriptors().get(pattern).name;
+        newToken.addCode("case " + constant + ":");
+        newToken.addCode("    return new " + name + "(pattern, image, line, column);");
+    }
+
+    /**
      * Returns the class name for this tokenizer.
      *
      * @return the class name for this tokenizer
@@ -225,6 +310,10 @@ class JavaTokenizerFile {
      *             correctly
      */
     public void writeCode() throws IOException {
+        if (gen.specialize() && (dir != null)) {
+            newToken.addCode("}");
+            newToken.addCode("return new Token(pattern, image, line, column);");
+        }
         file.writeCode(gen.getCodeStyle());
     }
 }

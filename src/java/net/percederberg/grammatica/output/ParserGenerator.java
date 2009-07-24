@@ -25,12 +25,13 @@ import java.io.File;
 import java.io.IOException;
 
 import net.percederberg.grammatica.Grammar;
+import net.percederberg.grammatica.code.CodeStyle;
 
 /**
  * The grammar parser generator base class.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.1
  */
 public abstract class ParserGenerator {
 
@@ -54,6 +55,16 @@ public abstract class ParserGenerator {
      * The file comment.
      */
     private String fileComment = null;
+
+    /**
+     * The class name prefix.
+     */
+    private String baseName = null;
+
+    /**
+     * Should the classes be specialized?
+     */
+    private boolean specialize = false;
 
     /**
      * Creates a new parser generator.
@@ -124,6 +135,24 @@ public abstract class ParserGenerator {
     }
 
     /**
+     * Returns the class name prefix.
+     *
+     * @return the class name prefix
+     */
+    public String getBaseName() {
+        return baseName;
+    }
+
+    /**
+     * Sets the class name prefix.
+     *
+     * @param name           the class name prefix
+     */
+    public void setBaseName(String name) {
+        this.baseName = name;
+    }
+
+    /**
      * Returns the file comment.
      *
      * @return the file comment
@@ -138,4 +167,29 @@ public abstract class ParserGenerator {
      * @throws IOException if the files couldn't be written correctly
      */
     public abstract void write() throws IOException;
+
+    /**
+     * Returns the code style to use.
+     *
+     * @return the code style to use
+     */
+    public abstract CodeStyle getCodeStyle();
+
+    /**
+     * Set whether or not the output should have specialized classes.
+     *
+     * @param                true or false, should the output specialize?
+     */
+    public void setSpecialization(boolean specialize) {
+        this.specialize = specialize;
+    }
+
+    /**
+     * Returns the value of the specialize boolean.
+     *
+     * @return boolean specialize
+     */
+    public boolean specialize() {
+        return specialize;
+    }
 }

@@ -35,27 +35,18 @@
 package net.percederberg.grammatica.code.visualbasic;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import net.percederberg.grammatica.code.CodeElementContainer;
-import net.percederberg.grammatica.code.CodeStyle;
+import net.percederberg.grammatica.code.CodeFile;
 
 /**
  * A class generating a Visual Basic source code file.
  *
  * @author   Adrian Moore, <adrianrob at hotmail dot com>
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  * @since    1.5
  */
-public class VisualBasicFile extends CodeElementContainer {
-
-    /**
-     * The file to write to.
-     */
-    private File file;
+public class VisualBasicFile extends CodeFile {
 
     /**
      * Creates a new Visual Basic source code file.
@@ -64,28 +55,7 @@ public class VisualBasicFile extends CodeElementContainer {
      * @param basename       the base file name (without extension)
      */
     public VisualBasicFile(File basedir, String basename) {
-        this.file = new File(basedir, basename + ".vb");
-    }
-
-    /**
-     * Returns the file name.
-     *
-     * @return the file name.
-     */
-    public String toString() {
-        return file.getName();
-    }
-
-    /**
-     * Returns a numeric category number for the code element. A lower
-     * category number implies that the code element should be placed
-     * before code elements with a higher category number within a
-     * declaration.
-     *
-     * @return the category number
-     */
-    public int category() {
-        return 0;
+        super(basedir, basename, ".vb");
     }
 
     /**
@@ -131,33 +101,5 @@ public class VisualBasicFile extends CodeElementContainer {
      */
     public void addEnumeration(VisualBasicEnumeration e) {
         addElement(e);
-    }
-
-    /**
-     * Writes the source code for this file. Any previous file with
-     * this name will be overwritten.
-     *
-     * @param style          the code style to use
-     *
-     * @throws IOException if the file could not be written properly
-     */
-    public void writeCode(CodeStyle style) throws IOException {
-        PrintWriter  out;
-
-        createFile(file);
-        out = new PrintWriter(new FileWriter(file));
-        print(out, style, 0);
-        out.close();
-    }
-
-    /**
-     * Prints the file contents to the specified output stream.
-     *
-     * @param out            the output stream
-     * @param style          the code style to use
-     * @param indent         the indentation level
-     */
-    public void print(PrintWriter out, CodeStyle style, int indent) {
-        printContents(out, style, indent);
     }
 }

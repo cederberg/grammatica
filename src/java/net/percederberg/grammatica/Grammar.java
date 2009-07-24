@@ -42,7 +42,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * file and create a lexical analyzer (tokenizer) for the grammar.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public class Grammar extends Object {
 
@@ -102,7 +102,7 @@ public class Grammar extends Object {
     /**
      * The tokens found in the processing.
      */
-    private LinkedList tokens = new LinkedList();
+    private LinkedList<TokenPattern> tokens = new LinkedList();
 
     /**
      * The token id map. This is a map from the token pattern id to
@@ -125,7 +125,7 @@ public class Grammar extends Object {
     /**
      * The productions found in the processing.
      */
-    private LinkedList productions = new LinkedList();
+    private LinkedList<ProductionPattern> productions = new LinkedList();
 
     /**
      * The production id map. This is a map from the production
@@ -341,6 +341,15 @@ public class Grammar extends Object {
     }
 
     /**
+     * Returns the list of token patterns.
+     * 
+     * @return the list of token patterns
+     */
+    public LinkedList<TokenPattern> getTokenPatterns() {
+        return tokens;
+    }
+
+    /**
      * Returns a specific token pattern.
      *
      * @param pos            the pattern position, 0 <= pos < count
@@ -392,6 +401,15 @@ public class Grammar extends Object {
      */
     public int getProductionPatternCount() {
         return productions.size();
+    }
+
+    /**
+     * Return the production pattern list.
+     * 
+     * @return               the producitions array
+     */
+    public LinkedList<ProductionPattern> getProductionPatterns() {
+        return productions;
     }
 
     /**

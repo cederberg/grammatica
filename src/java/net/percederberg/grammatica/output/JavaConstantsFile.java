@@ -27,6 +27,7 @@ import java.util.HashMap;
 import net.percederberg.grammatica.code.java.JavaComment;
 import net.percederberg.grammatica.code.java.JavaFile;
 import net.percederberg.grammatica.code.java.JavaInterface;
+import net.percederberg.grammatica.code.java.JavaPackage;
 import net.percederberg.grammatica.code.java.JavaVariable;
 import net.percederberg.grammatica.parser.ProductionPattern;
 import net.percederberg.grammatica.parser.TokenPattern;
@@ -36,7 +37,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * Java code necessary for creating a constants interface file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.1
  */
 class JavaConstantsFile {
 
@@ -85,10 +86,11 @@ class JavaConstantsFile {
      * @param gen            the parser generator to use
      */
     public JavaConstantsFile(JavaParserGenerator gen) {
-        int  modifiers;
+        String  name = gen.getBaseName() + "Constants";
+        int     modifiers;
 
         this.gen = gen;
-        this.file = gen.createJavaFile();
+        this.file = new JavaFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
             modifiers = JavaInterface.PUBLIC;
         } else {
@@ -104,6 +106,12 @@ class JavaConstantsFile {
      */
     private void initializeCode() {
         String  str;
+
+        // Add package
+        if (gen.getBasePackage() != null) {
+            JavaPackage p = new JavaPackage(gen.getBasePackage());
+            file.addPackage(p);
+        }
 
         // Add interface
         file.addInterface(ifc);
@@ -153,7 +161,7 @@ class JavaConstantsFile {
         JavaVariable  var;
         int           modifiers;
 
-        if (!pattern.isSynthetic()) {
+        if (gen.specialize() || !pattern.isSynthetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             modifiers = JavaVariable.PUBLIC + JavaVariable.STATIC +
                         JavaVariable.FINAL;

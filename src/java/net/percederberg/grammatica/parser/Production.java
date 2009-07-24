@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * patterns (i.e. grammar rules).
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.1
+ * @version  1.2
  */
 public class Production extends Node {
 
@@ -40,17 +40,23 @@ public class Production extends Node {
     private ProductionPattern pattern;
 
     /**
+     * The alternative used for this node.
+     */
+    private ProductionPatternAlternative alt;
+
+    /**
      * The child nodes.
      */
-    private ArrayList children;
+    protected ArrayList<Node> children;
 
     /**
      * Creates a new production node.
      *
      * @param pattern        the production pattern
      */
-    public Production(ProductionPattern pattern) {
-        this.pattern = pattern;
+    public Production(ProductionPatternAlternative alt) {
+        this.alt = alt;
+        this.pattern = alt.getPattern();
         this.children = new ArrayList();
     }
 
@@ -61,8 +67,18 @@ public class Production extends Node {
      * @return true if the node should be hidden, or
      *         false otherwise
      */
+    @Override
     boolean isHidden() {
         return pattern.isSynthetic();
+    }
+
+    /**
+     * Returns the production pattern alternative for this node.
+     *
+     * @return the production pattern alternative
+     */
+    public ProductionPatternAlternative getAlternative() {
+        return alt;
     }
 
     /**
@@ -99,6 +115,7 @@ public class Production extends Node {
      *
      * @return the number of child nodes
      */
+    @Override
     public int getChildCount() {
         return children.size();
     }
@@ -111,6 +128,7 @@ public class Production extends Node {
      * @return the child node found, or
      *         null if index out of bounds
      */
+    @Override
     public Node getChildAt(int index) {
         if (index < 0 || index >= children.size()) {
             return null;

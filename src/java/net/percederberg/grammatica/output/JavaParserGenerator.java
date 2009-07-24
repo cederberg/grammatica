@@ -25,8 +25,6 @@ import java.io.IOException;
 
 import net.percederberg.grammatica.Grammar;
 import net.percederberg.grammatica.code.CodeStyle;
-import net.percederberg.grammatica.code.java.JavaFile;
-import net.percederberg.grammatica.code.java.JavaPackage;
 import net.percederberg.grammatica.parser.ProductionPattern;
 import net.percederberg.grammatica.parser.TokenPattern;
 
@@ -35,7 +33,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * needed for a Java parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public class JavaParserGenerator extends ParserGenerator {
 
@@ -43,11 +41,6 @@ public class JavaParserGenerator extends ParserGenerator {
      * The fully qualified Java package name.
      */
     private String basePackage = null;
-
-    /**
-     * The Java class name prefix.
-     */
-    private String baseName = null;
 
     /**
      * The public class and interface access flag.
@@ -90,7 +83,7 @@ public class JavaParserGenerator extends ParserGenerator {
         if (Character.isLowerCase(str.charAt(0))) {
             str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
         }
-        baseName = str;
+        setBaseName(str);
 
         // Create class comment
         buffer = new StringBuffer();
@@ -126,24 +119,6 @@ public class JavaParserGenerator extends ParserGenerator {
      */
     public void setBasePackage(String pkg) {
         this.basePackage = pkg;
-    }
-
-    /**
-     * Returns the Java class name prefix.
-     *
-     * @return the Java class name prefix
-     */
-    public String getBaseName() {
-        return baseName;
-    }
-
-    /**
-     * Sets the Java class name prefix.
-     *
-     * @param name           the Java class name prefix
-     */
-    public void setBaseName(String name) {
-        this.baseName = name;
     }
 
     /**
@@ -191,12 +166,24 @@ public class JavaParserGenerator extends ParserGenerator {
     public void write() throws IOException {
         Grammar            grammar = getGrammar();
         JavaConstantsFile  constants = new JavaConstantsFile(this);
-        JavaTokenizerFile  tokenizer = new JavaTokenizerFile(this);
-        JavaAnalyzerFile   analyzer = new JavaAnalyzerFile(this);
-        JavaParserFile     parser = new JavaParserFile(this, tokenizer, analyzer);
+        JavaAnalyzerFile   analyzer;
+        JavaTokenizerFile  tokenizer;
         TokenPattern       token;
         ProductionPattern  production;
         int                i;
+
+        // Create node classes
+        if (specialize()) {
+            JavaNodeClassesDir dir = new JavaNodeClassesDir(this);
+            dir.buildClasses();
+            dir.writeCode();
+            analyzer = new JavaAnalyzerFile(this, dir);
+            tokenizer = new JavaTokenizerFile(this, dir);
+        } else {
+            analyzer = new JavaAnalyzerFile(this);
+            tokenizer = new JavaTokenizerFile(this);
+        }
+        JavaParserFile parser = new JavaParserFile(this, tokenizer, analyzer);
 
         // Create token declarations
         for (i = 0; i < grammar.getTokenPatternCount(); i++) {
@@ -225,20 +212,5 @@ public class JavaParserGenerator extends ParserGenerator {
         tokenizer.writeCode();
         parser.writeCode();
         analyzer.writeCode();
-    }
-
-    /**
-     * Creates a Java file in the correct base directory. The package
-     * will be set if applicable.
-     *
-     * @return a new Java file
-     */
-    public JavaFile createJavaFile() {
-        if (basePackage == null) {
-            return new JavaFile(getBaseDir());
-        } else {
-            return new JavaFile(getBaseDir(),
-                                new JavaPackage(getBasePackage()));
-        }
     }
 }

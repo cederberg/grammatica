@@ -32,7 +32,7 @@ import java.util.Iterator;
  * that is has to consider.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 public class RecursiveDescentParser extends Parser {
 
@@ -220,11 +220,14 @@ public class RecursiveDescentParser extends Parser {
 
         Production  node;
 
-        node = newProduction(alt.getPattern());
+        node = newProduction(alt);
         enterNode(node);
         for (int i = 0; i < alt.getElementCount(); i++) {
             try {
                 parseElement(node, alt.getElement(i));
+                if (node instanceof SpecializedProduction) {
+                    ((SpecializedProduction) node).elementIndices.add(node.getChildCount());
+                }
             } catch (ParseException e) {
                 addError(e, true);
                 nextToken();
@@ -250,9 +253,11 @@ public class RecursiveDescentParser extends Parser {
         throws ParseException {
 
         Node  child;
+        boolean found = false;
 
         for (int i = 0; i < elem.getMaxCount(); i++) {
             if (i < elem.getMinCount() || isNext(elem)) {
+                found = true;
                 if (elem.isToken()) {
                     child = nextToken(elem.getId());
                     enterNode(child);
@@ -265,6 +270,10 @@ public class RecursiveDescentParser extends Parser {
                 break;
             }
         }
+        if(!found && (elem.getMinCount() == 0) && (node instanceof SpecializedProduction)) {
+            addNode(node, null);
+        }
+
     }
 
     /**

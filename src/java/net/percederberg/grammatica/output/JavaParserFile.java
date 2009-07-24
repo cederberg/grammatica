@@ -30,6 +30,7 @@ import net.percederberg.grammatica.code.java.JavaConstructor;
 import net.percederberg.grammatica.code.java.JavaFile;
 import net.percederberg.grammatica.code.java.JavaImport;
 import net.percederberg.grammatica.code.java.JavaMethod;
+import net.percederberg.grammatica.code.java.JavaPackage;
 import net.percederberg.grammatica.code.java.JavaVariable;
 import net.percederberg.grammatica.parser.ProductionPattern;
 import net.percederberg.grammatica.parser.ProductionPatternAlternative;
@@ -40,7 +41,7 @@ import net.percederberg.grammatica.parser.ProductionPatternElement;
  * Java code necessary for creating a parser.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 class JavaParserFile {
 
@@ -137,10 +138,11 @@ class JavaParserFile {
                           JavaTokenizerFile tokenizer,
                           JavaAnalyzerFile analyzer) {
 
-        int  modifiers;
+        String  name = gen.getBaseName() + "Parser";
+        int     modifiers;
 
         this.gen = gen;
-        this.file = gen.createJavaFile();
+        this.file = new JavaFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
             modifiers = JavaClass.PUBLIC;
         } else {
@@ -168,6 +170,12 @@ class JavaParserFile {
         JavaConstructor  constr;
         JavaMethod       method;
         String           str;
+
+        // Add package
+        if (gen.getBasePackage() != null) {
+            JavaPackage p = new JavaPackage(gen.getBasePackage());
+            file.addPackage(p);
+        }
 
         // Add imports
         file.addImport(new JavaImport("java.io", "Reader"));

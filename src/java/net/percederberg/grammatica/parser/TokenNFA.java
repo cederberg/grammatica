@@ -35,7 +35,7 @@ import net.percederberg.grammatica.parser.re.RegExpException;
  * does not use recursion, but iterates in a loop instead.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  * @since    1.5
  */
 class TokenNFA {
@@ -175,6 +175,9 @@ class TokenNFA {
             state = this.initialChar[peekChar];
             if (state != null) {
                 this.queue.addLast(state);
+                if (state.epsilonOut) {
+                    state.matchEmpty(queue);
+                }
             }
         }
         if (peekChar >= 0) {
