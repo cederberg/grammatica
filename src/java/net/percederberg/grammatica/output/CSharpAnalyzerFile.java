@@ -30,6 +30,7 @@ import net.percederberg.grammatica.code.csharp.CSharpMethod;
 import net.percederberg.grammatica.code.csharp.CSharpNamespace;
 import net.percederberg.grammatica.code.csharp.CSharpUsing;
 import net.percederberg.grammatica.parser.ProductionPattern;
+import net.percederberg.grammatica.parser.ProductionPatternAlternative;
 import net.percederberg.grammatica.parser.TokenPattern;
 
 /**
@@ -37,7 +38,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * C# code necessary for creating a analyzer class file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 class CSharpAnalyzerFile {
 
@@ -47,6 +48,16 @@ class CSharpAnalyzerFile {
     private static final String TYPE_COMMENT =
         "<remarks>A class providing callback methods for the\n" +
         "parser.</remarks>";
+
+    /**
+     * The newProduction method comment.
+     */
+    private static final String NP_COMMENT =
+        "Factory method to create a new production node. This method\n" +
+        "has been overridden to return the correct node class, since the\n" +
+        "'--specialize' flag was used to generate this code.\n\n" +
+        "@param alt               the production pattern alternative\n" +
+        "@return the new production node";
 
     /**
      * The enter method comment.
@@ -110,14 +121,40 @@ class CSharpAnalyzerFile {
     private CSharpMethod child;
 
     /**
-     * Creates a new analyzer file.
+     * The newProduction method.
+     */
+    private CSharpMethod newProduction;
+
+    /**
+     * The NodeClassesDir, for getting specialized node information iff the
+     * '--specialize' flag is set.
+     */
+    private CSharpNodeClassesDir dir;
+
+    /**
+     * Creates a new analyzer file.  Note: DO NOT use this constructor if this
+     * is a specialized node; instead, use
+     * {@link #CSharpAnalyzerFile(CSharpParserGenerator, CSharpNodeClassesDir)}.
      *
      * @param gen            the parser generator to use
      */
     public CSharpAnalyzerFile(CSharpParserGenerator gen) {
+        this (gen, null);
+    }
+
+    /**
+     * Creates a new analyzer file for C# output.  Use this constructor only
+     * if the '--specialize' flag is set.
+     *
+     * @param gen            the parser generator to use
+     * @param dir            the NodeClassesDir object to use to extract
+     *                       production information
+     */
+    public CSharpAnalyzerFile(CSharpParserGenerator gen, CSharpNodeClassesDir dir) {
         String  name = gen.getBaseName() + "Analyzer";
         int     modifiers;
 
+        this.dir = dir;
         this.gen = gen;
         this.file = new CSharpFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
@@ -127,6 +164,12 @@ class CSharpAnalyzerFile {
         }
         this.cls = new CSharpClass(modifiers, name, "Analyzer");
         modifiers = CSharpMethod.PUBLIC + CSharpMethod.OVERRIDE;
+        if (gen.specialize() && (dir != null)) {
+            this.newProduction = new CSharpMethod(modifiers,
+                                                "NewProduction",
+                                                "ProductionPatternAlternative alt",
+                                                "Production");
+        }
         this.enter = new CSharpMethod(modifiers,
                                       "Enter",
                                       "Node node",
@@ -158,6 +201,9 @@ class CSharpAnalyzerFile {
             CSharpNamespace n = new CSharpNamespace(gen.getNamespace());
             n.addClass(cls);
             file.addNamespace(n);
+            if (gen.specialize() && (dir != null)) {
+                file.addUsing(new CSharpUsing(gen.getNamespace() + ".Nodes"));
+            }
         }
 
         // Add file comment
@@ -166,6 +212,13 @@ class CSharpAnalyzerFile {
 
         // Add type comment
         cls.addComment(new CSharpComment(TYPE_COMMENT));
+
+        // Add the newProduction method
+        if (gen.specialize() && (dir != null)) {
+            newProduction.addComment(new CSharpComment(NP_COMMENT));
+            newProduction.addCode("switch (alt.Pattern.Id) {");
+            cls.addMethod(newProduction);
+        }
 
         // Add enter method
         enter.addComment(new CSharpComment(ENTER_COMMENT));
@@ -214,17 +267,58 @@ class CSharpAnalyzerFile {
                               CSharpConstantsFile constants) {
 
         String   constant = constants.getConstant(pattern.getId());
-        String   name;
+        String   name = gen.getCodeStyle().getMixedCase(pattern.getName(), true);
+
+        if (gen.specialize() && (dir != null)) {
+            addNewProductionCase(constant, pattern);
+        }
 
         if (!pattern.isSynthetic()) {
-            name = gen.getCodeStyle().getMixedCase(pattern.getName(),
-                                                   true);
             addEnterCase(constant, name, "Production");
             addEnterMethod(name, "Production");
             addExitCase(constant, name, "Production");
             addExitMethod(name, "Production");
             addChildCase(constant, name);
             addChildMethod(name);
+        }
+    }
+
+    /**
+     * Add a newProduction method switch case.
+     *
+     * @param constant       the node constant
+     * @param name           the name of the pattern
+     * @param pattern        the node pattern
+     */
+    public void addNewProductionCase(String constant, ProductionPattern pattern) {
+        // If this only has one alternative, the calss is the trivial pattern name.
+        if (pattern.getAlternativeCount() == 1) {
+            ProductionPatternAlternative alt = pattern.getAlternative(0);
+            if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
+                String name = dir.getAltDescriptors().get(pattern.getAlternative(0)).name;
+                newProduction.addCode("case (int)" + constant + ":");
+                newProduction.addCode("    return new " + name + "(alt);");
+            }
+        } else {
+            // Switch on the alterative to find out which it is.
+            boolean addedSwitch = false;
+            for (int i = 0; i < pattern.getAlternativeCount(); i++) {
+                ProductionPatternAlternative alt = pattern.getAlternative(i);
+                if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
+                    if (!addedSwitch) {
+                        newProduction.addCode("case (int)" + constant + ":");
+                        newProduction.addCode("    switch (alt.Pattern.getAlternativeIndex(alt)) {");
+                        addedSwitch = true;
+                    }
+                    newProduction.addCode("    case " + i + ":");
+                    String name = dir.getAltDescriptors().get(alt).name;
+                    newProduction.addCode("        return new " + name + "(alt);");
+                }
+            }
+            if (addedSwitch) {
+                newProduction.addCode("    }");
+                newProduction.addCode("    break;");
+            }
         }
     }
 
@@ -333,6 +427,10 @@ class CSharpAnalyzerFile {
      *             correctly
      */
     public void writeCode() throws IOException {
+        if (gen.specialize() && (dir != null)) {
+            newProduction.addCode("}");
+            newProduction.addCode("return new SpecializedProduction(alt);");
+        }
         enter.addCode("}");
         exit.addCode("}");
         exit.addCode("return node;");

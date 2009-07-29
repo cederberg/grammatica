@@ -36,7 +36,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * C# code necessary for creating a constants enumeration file.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.1
  */
 class CSharpConstantsFile {
 
@@ -133,7 +133,7 @@ class CSharpConstantsFile {
     public void addProduction(ProductionPattern pattern) {
         String  constant;
 
-        if (!pattern.isSynthetic()) {
+        if (gen.specialize() || !pattern.isSynthetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             enm.addConstant(constant, String.valueOf(pattern.getId()));
             constantNames.put(new Integer(pattern.getId()), constant);

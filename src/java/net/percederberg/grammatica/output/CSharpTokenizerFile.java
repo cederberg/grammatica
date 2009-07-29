@@ -37,7 +37,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * C# code necessary for creating a tokenizer.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.5
+ * @version  1.6
  */
 class CSharpTokenizerFile {
 
@@ -56,6 +56,19 @@ class CSharpTokenizerFile {
         "<param name='input'>the input stream to read</param>\n\n" +
         "<exception cref='ParserCreationException'>if the tokenizer\n" +
         "couldn't be initialized correctly</exception>";
+
+    /**
+     * The newToken method comment.
+     */
+    private static final String NT_COMMENT =
+        "<summary>Factory method to create a new token node. This\n" +
+        "method has been overridden to return the correct node class,\n" +
+        "since the '--specialize' flag was used to generate this code.</summary>\n\n" +
+        "@param pattern        the token pattern\n" +
+        "@param image          the token image (i.e. characters)\n" +
+        "@param line           the line number of the first character\n" +
+        "@param column         the column number of the first character\n" +
+        "@return the token created";
 
     /**
      * The init method comment.
@@ -87,14 +100,40 @@ class CSharpTokenizerFile {
     private CSharpMethod initMethod;
 
     /**
-     * Creates a new tokenizer file.
+     * The newToken method.
+     */
+    private CSharpMethod newToken;
+
+    /**
+     * The NodeClassesDir, for getting specialized node information iff the
+     * '--specialize' flag is set.
+     */
+    private CSharpNodeClassesDir dir;
+
+    /**
+     * Creates a new tokenizer file.  Note: DO NOT use this constructor if this
+     * is a specialized node; instead, use
+     * {@link #CSharpTokenizerFile(CSharpParserGenerator, CSharpNodeClassesDir)}.
      *
      * @param gen            the parser generator to use
      */
     public CSharpTokenizerFile(CSharpParserGenerator gen) {
+        this (gen, null);
+    }
+
+    /**
+     * Creates a new tokenizer file for C# output.  Use this constructor only
+     * if the '--specialize' flag is set.
+     *
+     * @param gen            the parser generator to use
+     * @param dir            the NodeClassesDir object to use to extract
+     *                       production information
+     */
+    public CSharpTokenizerFile(CSharpParserGenerator gen, CSharpNodeClassesDir dir) {
         String  name = gen.getBaseName() + "Tokenizer";
         int     modifiers;
 
+        this.dir = dir;
         this.gen = gen;
         this.file = new CSharpFile(gen.getBaseDir(), name);
         if (gen.getPublicAccess()) {
@@ -103,6 +142,13 @@ class CSharpTokenizerFile {
             modifiers = CSharpClass.INTERNAL;
         }
         this.cls = new CSharpClass(modifiers, name, "Tokenizer");
+        if (gen.specialize() && (dir != null)) {
+            this.newToken = new CSharpMethod(CSharpMethod.PROTECTED + CSharpMethod.OVERRIDE,
+                                           "NewToken",
+                                           "TokenPattern pattern, string image, " +
+                                               "int line, int column",
+                                           "Token");
+        }
         this.initMethod = new CSharpMethod(CSharpMethod.PRIVATE,
                                            "CreatePatterns",
                                            "",
@@ -128,6 +174,9 @@ class CSharpTokenizerFile {
             CSharpNamespace n = new CSharpNamespace(gen.getNamespace());
             n.addClass(cls);
             file.addNamespace(n);
+            if (gen.specialize() && (dir != null)) {
+                file.addUsing(new CSharpUsing(gen.getNamespace() + ".Nodes"));
+            }
         }
 
         // Add file comment
@@ -146,6 +195,13 @@ class CSharpTokenizerFile {
                               ")");
         constr.addCode("CreatePatterns();");
 
+        // Add the newToken method
+        if (gen.specialize() && (dir != null)) {
+            newToken.addComment(new CSharpComment(NT_COMMENT));
+            newToken.addCode("switch (pattern.Id) {");
+            cls.addMethod(newToken);
+        }
+
         // Add init method
         cls.addMethod(initMethod);
         initMethod.addComment(new CSharpComment(INIT_METHOD_COMMENT));
@@ -162,11 +218,16 @@ class CSharpTokenizerFile {
                          CSharpConstantsFile constants) {
 
         StringBuffer  code = new StringBuffer();
+        String        constant = constants.getConstant(pattern.getId());
         String        str;
+
+        if (gen.specialize() && (dir != null)) {
+            addNewTokenCase(constant, pattern);
+        }
 
         // Create new pattern
         code.append("pattern = new TokenPattern((int) ");
-        code.append(constants.getConstant(pattern.getId()));
+        code.append(constant);
         code.append(",\n");
         code.append("                           \"");
         code.append(pattern.getName());
@@ -215,6 +276,18 @@ class CSharpTokenizerFile {
     }
 
     /**
+     * Add a newToken method switch case.
+     *
+     * @param constant       the node constant
+     * @param pattern        the node pattern
+     */
+    public void addNewTokenCase(String constant, TokenPattern pattern) {
+        String name = dir.getTokenDescriptors().get(pattern).name;
+        newToken.addCode("case (int)" + constant + ":");
+        newToken.addCode("    return new " + name + "(pattern, image, line, column);");
+    }
+
+    /**
      * Returns the class name for this tokenizer.
      *
      * @return the class name for this tokenizer
@@ -230,6 +303,10 @@ class CSharpTokenizerFile {
      *             correctly
      */
     public void writeCode() throws IOException {
+        if (gen.specialize() && (dir != null)) {
+            newToken.addCode("}");
+            newToken.addCode("return new Token(pattern, image, line, column);");
+        }
         file.writeCode(gen.getCodeStyle());
     }
 }

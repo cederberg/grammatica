@@ -19,7 +19,7 @@
  * Copyright (c) 2003-2005 Per Cederberg. All rights reserved.
  */
 
-using System.Collections;
+using System.Collections.Generic;
 
 namespace PerCederberg.Grammatica.Runtime {
 
@@ -30,9 +30,14 @@ namespace PerCederberg.Grammatica.Runtime {
      * set of production patterns (i.e. grammar rules).
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.5
+     * @version  1.6
      */
     public class Production : Node {
+
+        /**
+         * The alternative used for this node.
+         */
+        private ProductionPatternAlternative alt;
 
         /**
          * The production pattern used for this production.
@@ -42,16 +47,17 @@ namespace PerCederberg.Grammatica.Runtime {
         /**
          * The child nodes.
          */
-        private ArrayList children;
+        protected List<Node> children;
 
         /**
          * Creates a new production node.
          *
-         * @param pattern        the production pattern
+         * @param alt        the production pattern alternative
          */
-        public Production(ProductionPattern pattern) {
-            this.pattern = pattern;
-            this.children = new ArrayList();
+        public Production(ProductionPatternAlternative alt) {
+            this.alt = alt;
+            this.pattern = alt.Pattern;
+            this.children = new List<Node>();
         }
 
         /**
@@ -119,6 +125,19 @@ namespace PerCederberg.Grammatica.Runtime {
             if (child != null) {
                 child.SetParent(this);
                 children.Add(child);
+            }
+        }
+
+        /**
+         * The production pattern alternative property (read-only).
+         * This property contains the production pattern alternative
+         * linked to this production.
+         *
+         * @since 1.6
+         */
+        public ProductionPatternAlternative Alternative {
+            get {
+                return alt;
             }
         }
 

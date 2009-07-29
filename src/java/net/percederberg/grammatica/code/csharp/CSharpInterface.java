@@ -1,5 +1,5 @@
 /*
- * CSharpClass.java
+ * CSharpInterface.java
  *
  * This work is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
@@ -35,16 +35,15 @@ package net.percederberg.grammatica.code.csharp;
 
 import java.io.PrintWriter;
 
-import net.percederberg.grammatica.code.CodeElement;
 import net.percederberg.grammatica.code.CodeStyle;
 
 /**
- * A class generating a C# class declaration.
+ * A class generating a C# interface declaration.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Connor Prussin, <cprussin at vt dot edu>
  * @version  1.0
  */
-public class CSharpClass extends CSharpType {
+public class CSharpInterface extends CSharpType {
 
     /**
      * The public access modifier constant.
@@ -92,23 +91,23 @@ public class CSharpClass extends CSharpType {
     public static final int NEW = CSharpModifier.NEW;
 
     /**
-     * Creates a new class code generator with a public access
+     * Creates a new interface code generator with a public access
      * modifier.
      *
      * @param name           the class name
      */
-    public CSharpClass(String name) {
+    public CSharpInterface(String name) {
         this(PUBLIC, name);
     }
 
     /**
-     * Creates a new class code generator with the specified
-     * modifiers.
+     * Creates a new interface code generator with the specified
+     * access modifier.
      *
-     * @param modifiers      the modifier flag constants
+     * @param modifiers      the modifier constant flags
      * @param name           the class name
      */
-    public CSharpClass(int modifiers, String name) {
+    public CSharpInterface(int modifiers, String name) {
         this(modifiers, name, "");
     }
 
@@ -116,25 +115,34 @@ public class CSharpClass extends CSharpType {
      * Creates a new class code generator with the specified access
      * modifier that extends the specified class.
      *
-     * @param modifiers      the modifier flag constants
+     * @param modifiers      the modifier constant flags
      * @param name           the class name
-     * @param extendsClass   the class to extend or implement
+     * @param extendType     the type to extend
      */
-    public CSharpClass(int modifiers, String name, String extendsClass) {
-        super(modifiers, name, extendsClass);
+    public CSharpInterface(int modifiers, String name, String extendType) {
+        super(modifiers, name, extendType);
     }
 
     /**
      * Creates a new class code generator with the specified access
-     * modifier that extends and implements the specified classes or
-     * interfaces.
+     * modifier that extends the specified class.
      *
-     * @param modifiers      the modifier flag constants
+     * @param modifiers      the modifier constant flags
      * @param name           the class name
-     * @param extendClasses  the classes to extend or implement
+     * @param extendTypes    the types to extend
      */
-    public CSharpClass(int modifiers, String name, String[] extendClasses) {
-        super(modifiers, name, extendClasses);
+    public CSharpInterface(int modifiers, String name, String[] extendType) {
+        super(modifiers, name, extendType);
+    }
+
+    /**
+     * Adds a method declaration to the interface.
+     *
+     * @param member         the member to add
+     */
+    public void addMethod(CSharpMethod member) {
+        member.setPrintCode(false);
+        addElement(member);
     }
 
     /**
@@ -146,83 +154,17 @@ public class CSharpClass extends CSharpType {
      * @return the category number
      */
     public int category() {
-        return 10;
+        return 9;
     }
 
     /**
-     * Adds an inner class as a member.
-     *
-     * @param member         the inner class to add
-     */
-    public void addClass(CSharpClass member) {
-        addElement(member);
-    }
-
-    /**
-     * Adds an enumeration as a member.
-     *
-     * @param member         the enumeration to add
-     */
-    public void addEnumeration(CSharpEnumeration member) {
-        addElement(member);
-    }
-
-    /**
-     * Adds a constructor to the class.
-     *
-     * @param member         the member to add
-     */
-    public void addConstructor(CSharpConstructor member) {
-        member.setCSharpClass(this);
-        addElement(member);
-    }
-
-    /**
-     * Adds a method to the class.
-     *
-     * @param member         the member to add
-     */
-    public void addMethod(CSharpMethod member) {
-        addElement(member);
-    }
-
-    /**
-     * Adds a property to the class.
-     *
-     * @param prop           the property to add
-     */
-    public void addProperty(CSharpProperty prop) {
-        addElement(prop);
-    }
-
-    /**
-     * Prints the class to the specified stream.
+     * Prints the code element to the specified output stream.
      *
      * @param out            the output stream
      * @param style          the code style to use
      * @param indent         the indentation level
      */
     public void print(PrintWriter out, CodeStyle style, int indent) {
-        print(out, style, indent, "class");
-    }
-
-    /**
-     * Prints the lines separating two elements.
-     *
-     * @param out            the output stream
-     * @param style          the code style to use
-     * @param prev           the previous element, or null if first
-     * @param next           the next element, or null if last
-     */
-    protected void printSeparator(PrintWriter out,
-                                  CodeStyle style,
-                                  CodeElement prev,
-                                  CodeElement next) {
-
-        if (next == null) {
-            // Do nothing
-        } else {
-            out.println();
-        }
+        super.print(out, style, indent, "interface");
     }
 }

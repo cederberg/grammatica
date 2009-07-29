@@ -39,7 +39,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * right as child nodes are added (to the right).
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.5
+     * @version  1.6
      */
     public class Analyzer {
 
@@ -107,7 +107,7 @@ namespace PerCederberg.Grammatica.Runtime {
             errorCount = log.Count;
             if (node is Production) {
                 prod = (Production) node;
-                prod = NewProduction(prod.Pattern);
+                prod = NewProduction(prod.Alternative);
                 try {
                     Enter(prod);
                 } catch (ParseException e) {
@@ -150,14 +150,14 @@ namespace PerCederberg.Grammatica.Runtime {
          * can be overridden to provide other production implementations
          * than the default one.
          *
-         * @param pattern        the production pattern
+         * @param alt               the production pattern alternative
          *
          * @return the new production node
          *
          * @since 1.5
          */
-        public virtual Production NewProduction(ProductionPattern pattern) {
-            return new Production(pattern);
+        public virtual Production NewProduction(ProductionPatternAlternative alt) {
+            return new Production(alt);
         }
 
         /**

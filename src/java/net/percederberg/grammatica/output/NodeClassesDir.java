@@ -108,20 +108,20 @@ abstract class NodeClassesDir extends File {
         }
         for (ProdDescriptor desc : prodDescriptors.values()) {
             for (ProductionPatternAlternative alt : desc.prod.getAlternatives()) {
-                if (alt.isSingleElement()) {
+                if (!alt.isSingleElement()) {
+                    altDescriptors.get(alt).inherits.add(desc);
+                } else {
                     if (alt.getElement(0).isProduction()) {
                         ProductionPattern pat = gen.getGrammar().getProductionPatternById(alt.getElement(0).getId());
                         if (pat.isSingleAlt() && !pat.isSingleElement()) {
                             altDescriptors.get(pat.getAlternative(0)).inherits.add(desc);
-                        } else {
+                         } else {
                             prodDescriptors.get(pat).inherits.add(desc);
                         }
                     } else {
                         TokenPattern pat = gen.getGrammar().getTokenPatternById(alt.getElement(0).getId());
                         tokenDescriptors.get(pat).inherits.add(desc);
                     }
-                } else {
-                    altDescriptors.get(alt).inherits.add(desc);
                 }
             }
             desc.setComment();
@@ -252,15 +252,6 @@ abstract class NodeClassesDir extends File {
             // prod = prod1 ;  =>  interface i_prod1 extends i_prod  // if prod1 has > 1 alternatives
             //                     class a_prod1 extends SpecializedProduction implements i_prod  // if prod1 has one alternative
             prodDescriptors.put(pat, new ProdDescriptor(pat, name));
-            if (!pat.isSingleAlt()) {
-                for (int i = 0; i < pat.getAlternativeCount(); i++) {
-                    ProductionPatternAlternative alt = pat.getAlternative(i);
-                    if (!alt.isSingleElement()) {
-                        // prod = prod2 prod3 | ... ;  =>  class a_prod_A1 extends SpecializedProduction implements i_prod
-                        altDescriptors.put(alt, new AltDescriptor(alt, i, name));
-                    }
-                }
-            }
         }
     }
 
@@ -352,6 +343,23 @@ abstract class NodeClassesDir extends File {
             } else {
                 this.name += name;
             }
+
+            // Add the alternatives as necessary
+            int num = 0;
+            for (int i = 0; i < pattern.getAlternativeCount(); i++) {
+                ProductionPatternAlternative alt = pattern.getAlternative(i);
+                if (!alt.isSingleElement()) {
+                    // prod = prod2 prod3 | ... ;  =>  class a_prod_A1 extends SpecializedProduction implements i_prod
+                    altDescriptors.put(alt, new AltDescriptor(alt, i, name));
+                } else if (alt.getElement(0).isProduction()) {
+                    ProductionPattern pat = gen.getGrammar().getProductionPatternById(alt.getElement(0).getId());
+                    if (pat.isSynthetic()) {
+                        populateProduction(pat, this.name.substring(2) + "_S" + num++);
+                    }
+                } else {
+                    // Token descriptors should already be fully populated.
+                }
+            }
         }
 
         /**
@@ -386,9 +394,9 @@ abstract class NodeClassesDir extends File {
                     header += desc.name.substring(2);
                     patterns += desc.name.substring(2) + " = \"" + desc.tok.getPattern() + "\"\n";
                 }
-                header += "\n        |";
+                header += "\n        | ";
             }
-            this.comment = header.substring(0, header.length() - 10) + " ;" + patterns.substring(0, patterns.length() - 1);
+            this.comment = header.substring(0, header.length() - 11) + " ;" + patterns.substring(0, patterns.length() - 1);
         }
     }
 
@@ -441,7 +449,7 @@ abstract class NodeClassesDir extends File {
             Grammar gram = gen.getGrammar();
             for (ProductionPatternElement e : alt.getElements()) {
                 if (e.isProduction() && gram.getProductionPatternById(e.getId()).isSynthetic()) {
-                    populateProduction(gram.getProductionPatternById(e.getId()), this.name.substring(2) + "_S" + (n++));
+                    populateProduction(gram.getProductionPatternById(e.getId()), this.name.substring(2) + "_S" + n++);
                 }
             }
         }

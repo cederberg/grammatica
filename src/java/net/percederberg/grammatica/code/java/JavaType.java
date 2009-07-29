@@ -44,7 +44,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * generators.
  *
  * @author   Per Cederberg, <per at percederberg dot net>
- * @version  1.0
+ * @version  1.1
  */
 abstract class JavaType extends CodeElementContainer {
 
@@ -59,9 +59,9 @@ abstract class JavaType extends CodeElementContainer {
     private String name;
 
     /**
-     * The name of the type that this type extends.
+     * The name of the types that this type extends.
      */
-    private String extendType;
+    private String[] extendTypes = null;
 
     /**
      * The set of classes or interfaces that this type implements.
@@ -88,7 +88,12 @@ abstract class JavaType extends CodeElementContainer {
 
         this.modifiers = modifiers;
         this.name = name;
-        this.extendType = extendsType;
+        if (extendsType == null || extendsType.equals("")) {
+            this.extendTypes = new String[0];
+        } else {
+            this.extendTypes = new String[1];
+            this.extendTypes[0] = extendsType;
+        }
         if (implementType == null || implementType.equals("")) {
             this.implementTypes = new String[0];
         } else {
@@ -112,7 +117,55 @@ abstract class JavaType extends CodeElementContainer {
 
         this.modifiers = modifiers;
         this.name = name;
-        this.extendType = extendsType;
+        if (extendsType == null || extendsType.equals("")) {
+            this.extendTypes = new String[0];
+        } else {
+            this.extendTypes = new String[1];
+            this.extendTypes[0] = extendsType;
+        }
+        this.implementTypes = implementTypes;
+    }
+
+    /**
+     * Creates a new type code generator.
+     *
+     * @param modifiers      the modifier constant flags
+     * @param name           the type name
+     * @param extendsTypes   the classes or interfaces to extend
+     * @param implementType  the class or interface to implement
+     */
+    protected JavaType(int modifiers,
+                       String name,
+                       String[] extendsTypes,
+                       String implementType) {
+
+        this.modifiers = modifiers;
+        this.name = name;
+        this.extendTypes = extendsTypes;
+        if (implementType == null || implementType.equals("")) {
+            this.implementTypes = new String[0];
+        } else {
+            this.implementTypes = new String[1];
+            this.implementTypes[0] = implementType;
+        }
+    }
+
+    /**
+     * Creates a new type code generator.
+     *
+     * @param modifiers      the modifier constant flags
+     * @param name           the type name
+     * @param extendsTypes   the classes or interfaces to extend
+     * @param implementTypes the classes or interfaces to implement
+     */
+    protected JavaType(int modifiers,
+                       String name,
+                       String[] extendsTypes,
+                       String[] implementTypes) {
+
+        this.modifiers = modifiers;
+        this.name = name;
+        this.extendTypes = extendsTypes;
         this.implementTypes = implementTypes;
     }
 
@@ -121,6 +174,7 @@ abstract class JavaType extends CodeElementContainer {
      *
      * @return the type name
      */
+    @Override
     public String toString() {
         return name;
     }
@@ -163,9 +217,15 @@ abstract class JavaType extends CodeElementContainer {
         buf.append(type);
         buf.append(" ");
         buf.append(name);
-        if (extendType != null && !extendType.equals("")) {
-            buf.append(" extends ");
-            buf.append(extendType);
+        str = createExtDecl();
+        if (str.length() > 0) {
+            if (buf.length() + str.length() > style.getMargin()) {
+                buf.append("\n");
+                buf.append(codeIndentStr);
+            } else {
+                buf.append(" ");
+            }
+            buf.append(str);
         }
         str = createImplDecl();
         if (str.length() > 0) {
@@ -196,6 +256,7 @@ abstract class JavaType extends CodeElementContainer {
      * @param prev           the previous element, or null if first
      * @param next           the next element, or null if last
      */
+    @Override
     protected void printSeparator(PrintWriter out,
                                   CodeStyle style,
                                   CodeElement prev,
@@ -223,6 +284,28 @@ abstract class JavaType extends CodeElementContainer {
         for (int i = 0; i < implementTypes.length; i++) {
             res.append(implementTypes[i]);
             if (i + 1 < implementTypes.length) {
+                res.append(", ");
+            }
+        }
+
+        return res.toString();
+    }
+
+    /**
+     * Creates a string with the extends declaration.
+     *
+     * @return a string with the extends declararation, or
+     *         null for no implement declaration
+     */
+    private String createExtDecl() {
+        StringBuffer  res = new StringBuffer("extends ");
+
+        if (extendTypes == null || extendTypes.length <= 0) {
+            return "";
+        }
+        for (int i = 0; i < extendTypes.length; i++) {
+            res.append(extendTypes[i]);
+            if (i + 1 < extendTypes.length) {
                 res.append(", ");
             }
         }

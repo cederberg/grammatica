@@ -121,8 +121,12 @@ class JavaNodeClassesDir extends NodeClassesDir {
             f.addPackage(new JavaPackage(((JavaParserGenerator)gen).getBasePackage() + ".nodes"));
         }
 
-        // Add the class with a comment and a constructor.
-        JavaInterface ifc = new JavaInterface(desc.name);
+        // Add the interface with a comment.
+        String[] implList = new String[desc.inherits.size()];
+        for (int i = 0; i < desc.inherits.size(); i++) {
+            implList[i] = desc.inherits.get(i).name;
+        }
+        JavaInterface ifc = new JavaInterface(JavaInterface.PUBLIC, desc.name, implList);
         f.addInterface(ifc);
         String comment = desc.comment.replace("/", "&#47;").replace("\n", "<br />\n");
         if (((JavaParserGenerator)gen).getClassComment() != null) {

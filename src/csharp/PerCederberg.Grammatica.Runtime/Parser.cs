@@ -442,14 +442,14 @@ namespace PerCederberg.Grammatica.Runtime {
          * can be overridden to provide other production implementations
          * than the default one.
          *
-         * @param pattern        the production pattern
+         * @param alt        the production pattern alternative
          *
          * @return the new production node
          *
          * @since 1.5
          */
-        protected virtual Production NewProduction(ProductionPattern pattern) {
-            return analyzer.NewProduction(pattern);
+        protected virtual Production NewProduction(ProductionPatternAlternative alt) {
+            return analyzer.NewProduction(alt);
         }
 
         /**
@@ -559,17 +559,29 @@ namespace PerCederberg.Grammatica.Runtime {
         internal void AddNode(Production node, Node child) {
             if (errorRecovery >= 0) {
                 // Do nothing
-            } else if (node.IsHidden()) {
-                node.AddChild(child);
-            } else if (child != null && child.IsHidden()) {
-                for (int i = 0; i < child.Count; i++) {
-                    AddNode(node, child[i]);
-                }
-            } else {
+            } else if (node is SpecializedProduction) {
                 try {
-                    analyzer.Child(node, child);
+                    if ((child != null) && (child.GetChildCount() == 1)) {
+                        analyzer.Child(node, child.GetChildAt(0));
+                    } else {
+                        analyzer.Child(node, child);
+                    }
                 } catch (ParseException e) {
                     AddError(e, false);
+                }
+            } else {
+                if (node.IsHidden()) {
+                    node.AddChild(child);
+                } else if (child != null && child.IsHidden()) {
+                    for (int i = 0; i < child.Count; i++) {
+                        AddNode(node, child[i]);
+                    }
+                } else {
+                    try {
+                        analyzer.Child(node, child);
+                    } catch (ParseException e) {
+                        AddError(e, false);
+                    }
                 }
             }
         }

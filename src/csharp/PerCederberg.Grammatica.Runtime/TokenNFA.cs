@@ -33,7 +33,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * does not use recursion, but iterates in a loop instead.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.5
+     * @version  1.6
      * @since    1.5
      */
     internal class TokenNFA {
@@ -172,6 +172,9 @@ namespace PerCederberg.Grammatica.Runtime {
                 state = this.initialChar[peekChar];
                 if (state != null) {
                     this.queue.AddLast(state);
+                    if (state.epsilonOut) {
+                        state.MatchEmpty(queue);
+                    }
                 }
             }
             if (peekChar >= 0) {

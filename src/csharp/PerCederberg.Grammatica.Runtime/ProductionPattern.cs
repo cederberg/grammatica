@@ -33,7 +33,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * elements.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.5
+     * @version  1.6
      */
     public class ProductionPattern {
 
@@ -278,6 +278,16 @@ namespace PerCederberg.Grammatica.Runtime {
          */
         public ProductionPatternAlternative GetAlternative(int pos) {
             return this[pos];
+        }
+
+        /**
+         * Returns the index of an alternative.
+         * 
+         * @param alt            the alternative to find
+         * @return the index of alt
+         */
+        public int getAlternativeIndex(ProductionPatternAlternative alt) {
+            return alternatives.IndexOf(alt);
         }
 
         /**

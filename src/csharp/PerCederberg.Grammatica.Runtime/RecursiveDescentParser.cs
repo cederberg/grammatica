@@ -32,7 +32,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * that is has to consider.
      *
      * @author   Per Cederberg, <per at percederberg dot net>
-     * @version  1.5
+     * @version  1.6
      */
     public class RecursiveDescentParser : Parser {
 
@@ -215,11 +215,14 @@ namespace PerCederberg.Grammatica.Runtime {
         private Node ParseAlternative(ProductionPatternAlternative alt) {
             Production  node;
 
-            node = NewProduction(alt.Pattern);
+            node = NewProduction(alt);
             EnterNode(node);
             for (int i = 0; i < alt.Count; i++) {
                 try {
                     ParseElement(node, alt[i]);
+                    if (node is SpecializedProduction) {
+                        ((SpecializedProduction) node).ElementIndices.Add(node.GetChildCount());
+                    }
                 } catch (ParseException e) {
                     AddError(e, true);
                     NextToken();
@@ -244,9 +247,11 @@ namespace PerCederberg.Grammatica.Runtime {
                                   ProductionPatternElement elem) {
 
             Node  child;
+            bool found = false;
 
             for (int i = 0; i < elem.MaxCount; i++) {
                 if (i < elem.MinCount || IsNext(elem)) {
+                    found = true;
                     if (elem.IsToken()) {
                         child = NextToken(elem.Id);
                         EnterNode(child);
@@ -258,6 +263,9 @@ namespace PerCederberg.Grammatica.Runtime {
                 } else {
                     break;
                 }
+            }
+            if(!found && (elem.GetMinCount() == 0) && (node is SpecializedProduction)) {
+                AddNode(node, null);
             }
         }
 

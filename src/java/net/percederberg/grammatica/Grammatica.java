@@ -95,6 +95,11 @@ public class Grammatica extends Object {
         "  --cspublic\n" +
         "      Sets public access for all C# types generated. By default\n" +
         "      type access is internal.\n" +
+        "  --specialize\n" +
+        "      Builds a class for each production, and makes the parser\n" +
+        "      build a parse tree that has specialized node types with\n" +
+        "      well-named accessors.  The standard method for accessing\n" +
+        "      the tree nodes is still available with this option.\n" +
         "\n" +
         "Java Output Options:\n" +
         "  --javapackage <package>\n" +
@@ -651,6 +656,8 @@ public class Grammatica extends Object {
                 gen.setBaseName(args[++i]);
             } else if (args[i].equals("--cspublic")) {
                 gen.setPublicAccess(true);
+            } else if (args[i].equals("--specialize")) {
+                gen.setSpecialization(true);
             } else {
                 printHelp("unrecognized option: " + args[i]);
                 System.exit(1);

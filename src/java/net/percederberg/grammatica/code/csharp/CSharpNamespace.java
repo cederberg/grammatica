@@ -81,6 +81,15 @@ public class CSharpNamespace extends CodeElementContainer {
     }
 
     /**
+     * Adds an interface declaration to the namespace.
+     *
+     * @param ifc            the interface to add
+     */
+    public void addInterface(CSharpInterface ifc) {
+        addElement(ifc);
+    }
+
+    /**
      * Adds an enumeration to the namespace.
      *
      * @param e              the enumeration to add

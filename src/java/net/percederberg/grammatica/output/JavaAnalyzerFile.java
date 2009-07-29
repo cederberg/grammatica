@@ -213,6 +213,8 @@ class JavaAnalyzerFile {
         if (gen.specialize() && (dir != null)) {
             file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                           "ProductionPatternAlternative"));
+            file.addImport(new JavaImport("net.percederberg.grammatica.parser",
+                                          "SpecializedProduction"));
         }
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "Token"));
@@ -305,31 +307,34 @@ class JavaAnalyzerFile {
      * @param pattern        the node pattern
      */
     public void addNewProductionCase(String constant, ProductionPattern pattern) {
-        newProduction.addCode("case " + constant + ":");
-
         // If this only has one alternative, the calss is the trivial pattern name.
         if (pattern.getAlternativeCount() == 1) {
             ProductionPatternAlternative alt = pattern.getAlternative(0);
             if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
                 String name = dir.getAltDescriptors().get(pattern.getAlternative(0)).name;
+                newProduction.addCode("case " + constant + ":");
                 newProduction.addCode("    return new " + name + "(alt);");
-            } else {
-                newProduction.addCode("    return new Production(alt);");
             }
         } else {
             // Switch on the alterative to find out which it is.
-            newProduction.addCode("    switch (alt.getPattern().getAlternativeIndex(alt)) {");
+            boolean addedSwitch = false;
             for (int i = 0; i < pattern.getAlternativeCount(); i++) {
                 ProductionPatternAlternative alt = pattern.getAlternative(i);
-                    newProduction.addCode("    case " + i + ":");
                 if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
+                    if (!addedSwitch) {
+                        newProduction.addCode("case " + constant + ":");
+                        newProduction.addCode("    switch (alt.getPattern().getAlternativeIndex(alt)) {");
+                        addedSwitch = true;
+                    }
+                    newProduction.addCode("    case " + i + ":");
                     String name = dir.getAltDescriptors().get(alt).name;
                     newProduction.addCode("        return new " + name + "(alt);");
-                } else {
-                    newProduction.addCode("        return new Production(alt);");
                 }
             }
-            newProduction.addCode("    }");
+            if (addedSwitch) {
+                newProduction.addCode("    }");
+                newProduction.addCode("    break;");
+            }
         }
     }
 
@@ -421,15 +426,7 @@ class JavaAnalyzerFile {
                            "void");
         m.addComment(new JavaComment(CHILD_COMMENT));
         m.addThrows("ParseException");
-        if (gen.specialize() && (dir != null)) {
-            m.addCode("if ((child != null) && (child.getChildCount() == 1)) {");
-            m.addCode("    node.addChild(child.getChildAt(0));");
-            m.addCode("} else {");
-            m.addCode("    node.addChild(child);");
-            m.addCode("}");
-        } else {
-            m.addCode("node.addChild(child);");
-        }
+        m.addCode("node.addChild(child);");
         cls.addMethod(m);
     }
 
@@ -451,7 +448,7 @@ class JavaAnalyzerFile {
     public void writeCode() throws IOException {
         if (gen.specialize() && (dir != null)) {
             newProduction.addCode("}");
-            newProduction.addCode("return new Production(alt);");
+            newProduction.addCode("return new SpecializedProduction(alt);");
         }
         enter.addCode("}");
         exit.addCode("}");

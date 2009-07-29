@@ -137,12 +137,24 @@ public class CSharpParserGenerator extends ParserGenerator {
     public void write() throws IOException {
         Grammar              grammar = getGrammar();
         CSharpConstantsFile  constants = new CSharpConstantsFile(this);
-        CSharpTokenizerFile  tokenizer = new CSharpTokenizerFile(this);
-        CSharpAnalyzerFile   analyzer = new CSharpAnalyzerFile(this);
-        CSharpParserFile     parser = new CSharpParserFile(this, tokenizer, analyzer);
+        CSharpAnalyzerFile   analyzer;
+        CSharpTokenizerFile  tokenizer;
         TokenPattern         token;
         ProductionPattern    production;
         int                  i;
+
+        // Create node classes
+        if (specialize()) {
+            CSharpNodeClassesDir dir = new CSharpNodeClassesDir(this);
+            dir.buildClasses();
+            dir.writeCode();
+            analyzer = new CSharpAnalyzerFile(this, dir);
+            tokenizer = new CSharpTokenizerFile(this, dir);
+        } else {
+            analyzer = new CSharpAnalyzerFile(this);
+            tokenizer = new CSharpTokenizerFile(this);
+        }
+        CSharpParserFile parser = new CSharpParserFile(this, tokenizer, analyzer);
 
         // Create token declarations
         for (i = 0; i < grammar.getTokenPatternCount(); i++) {

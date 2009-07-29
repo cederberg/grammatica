@@ -112,6 +112,18 @@ public class JavaInterface extends JavaType {
     }
 
     /**
+     * Creates a new class code generator with the specified access
+     * modifier that extends the specified class.
+     *
+     * @param modifiers      the modifier constant flags
+     * @param name           the class name
+     * @param extendTypes    the types to extend
+     */
+    public JavaInterface(int modifiers, String name, String[] extendTypes) {
+        super(modifiers, name, extendTypes, "");
+    }
+
+    /**
      * Adds a method declaration to the interface.
      *
      * @param member         the member to add

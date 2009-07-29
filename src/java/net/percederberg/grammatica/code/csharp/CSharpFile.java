@@ -92,6 +92,15 @@ public class CSharpFile extends CodeFile {
     }
 
     /**
+     * Adds an interface declaration to the file.
+     *
+     * @param ifc            the interface to add
+     */
+    public void addInterface(CSharpInterface ifc) {
+        addElement(ifc);
+    }
+
+    /**
      * Adds an enumeration declaration to the file.
      *
      * @param e              the enumeration to add
