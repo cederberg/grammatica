@@ -143,7 +143,7 @@ class CSharpParserFile {
      */
     public CSharpParserFile(CSharpParserGenerator gen,
                             CSharpTokenizerFile tokenizer,
-                            CSharpAnalyzerFile analyzer) {
+                            CSharpAnalyzer analyzer) {
 
         String  name = gen.getBaseName() + "Parser";
         int     modifiers;
@@ -174,7 +174,7 @@ class CSharpParserFile {
      * @param analyzer       the analyzer file generator
      */
     private void initializeCode(CSharpTokenizerFile tokenizer,
-                                CSharpAnalyzerFile analyzer) {
+                                CSharpAnalyzer analyzer) {
         CSharpConstructor  constr;
         CSharpMethod       method;
         String             str;

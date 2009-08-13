@@ -100,6 +100,12 @@ public class Grammatica extends Object {
         "      build a parse tree that has specialized node types with\n" +
         "      well-named accessors.  The standard method for accessing\n" +
         "      the tree nodes is still available with this option.\n" +
+        "  --newAnalyzers\n" +
+        "      Uses a new analyzer technique that gives users the option\n" +
+        "      between analyzer strategies.  Analyzers are automatically\n" +
+        "      written to rebuild the tree (default behaviour), leave the\n" +
+        "      tree as it is for simple analysis, and clear the tree of\n" +
+        "      added values." +
         "\n" +
         "Java Output Options:\n" +
         "  --javapackage <package>\n" +
@@ -116,6 +122,12 @@ public class Grammatica extends Object {
         "      build a parse tree that has specialized node types with\n" +
         "      well-named accessors.  The standard method for accessing\n" +
         "      the tree nodes is still available with this option.\n" +
+        "  --newAnalyzers\n" +
+        "      Uses a new analyzer technique that gives users the option\n" +
+        "      between analyzer strategies.  Analyzers are automatically\n" +
+        "      written to rebuild the tree (default behaviour), leave the\n" +
+        "      tree as it is for simple analysis, and clear the tree of\n" +
+        "      added values." +
         "\n" +
         "Visual Basic Output Options:\n" +
         "  --vbnamespace <package>\n" +
@@ -619,6 +631,8 @@ public class Grammatica extends Object {
                 gen.setPublicAccess(true);
             } else if (args[i].equals("--specialize")) {
                 gen.setSpecialization(true);
+            } else if (args[i].equals("--newAnalyzers")) {
+                gen.setNewAnalyzers(true);
             } else {
                 printHelp("unrecognized option: " + args[i]);
                 System.exit(1);
@@ -658,6 +672,8 @@ public class Grammatica extends Object {
                 gen.setPublicAccess(true);
             } else if (args[i].equals("--specialize")) {
                 gen.setSpecialization(true);
+            } else if (args[i].equals("--newAnalyzers")) {
+                gen.setNewAnalyzers(true);
             } else {
                 printHelp("unrecognized option: " + args[i]);
                 System.exit(1);

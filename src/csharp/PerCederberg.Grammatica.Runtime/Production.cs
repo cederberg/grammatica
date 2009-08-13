@@ -47,7 +47,7 @@ namespace PerCederberg.Grammatica.Runtime {
         /**
          * The child nodes.
          */
-        protected List<Node> children;
+        internal List<Node> children;
 
         /**
          * Creates a new production node.

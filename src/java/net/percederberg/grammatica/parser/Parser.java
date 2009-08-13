@@ -540,11 +540,7 @@ public abstract class Parser {
             // Do nothing
         } else if (node instanceof SpecializedProduction) {
             try {
-                if ((child != null) && (child.getChildCount() == 1)) {
-                    analyzer.child(node, child.getChildAt(0));
-                } else {
-                    analyzer.child(node, child);
-                }
+                analyzer.child(node, child);
             } catch (ParseException e) {
                 addError(e, false);
             }

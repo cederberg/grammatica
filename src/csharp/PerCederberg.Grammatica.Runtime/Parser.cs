@@ -561,11 +561,7 @@ namespace PerCederberg.Grammatica.Runtime {
                 // Do nothing
             } else if (node is SpecializedProduction) {
                 try {
-                    if ((child != null) && (child.GetChildCount() == 1)) {
-                        analyzer.Child(node, child.GetChildAt(0));
-                    } else {
-                        analyzer.Child(node, child);
-                    }
+                    analyzer.Child(node, child);
                 } catch (ParseException e) {
                     AddError(e, false);
                 }

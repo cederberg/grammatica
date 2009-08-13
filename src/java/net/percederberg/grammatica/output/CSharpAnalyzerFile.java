@@ -23,15 +23,6 @@ package net.percederberg.grammatica.output;
 
 import java.io.IOException;
 
-import net.percederberg.grammatica.code.csharp.CSharpClass;
-import net.percederberg.grammatica.code.csharp.CSharpComment;
-import net.percederberg.grammatica.code.csharp.CSharpFile;
-import net.percederberg.grammatica.code.csharp.CSharpMethod;
-import net.percederberg.grammatica.code.csharp.CSharpNamespace;
-import net.percederberg.grammatica.code.csharp.CSharpUsing;
-import net.percederberg.grammatica.parser.ProductionPattern;
-import net.percederberg.grammatica.parser.ProductionPatternAlternative;
-import net.percederberg.grammatica.parser.TokenPattern;
 
 /**
  * The C# analyzer file generator. This class encapsulates all the
@@ -40,96 +31,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.6
  */
-class CSharpAnalyzerFile {
-
-    /**
-     * The class comment.
-     */
-    private static final String TYPE_COMMENT =
-        "<remarks>A class providing callback methods for the\n" +
-        "parser.</remarks>";
-
-    /**
-     * The newProduction method comment.
-     */
-    private static final String NP_COMMENT =
-        "Factory method to create a new production node. This method\n" +
-        "has been overridden to return the correct node class, since the\n" +
-        "'--specialize' flag was used to generate this code.\n\n" +
-        "@param alt               the production pattern alternative\n" +
-        "@return the new production node";
-
-    /**
-     * The enter method comment.
-     */
-    private static final String ENTER_COMMENT =
-        "<summary>Called when entering a parse tree node.</summary>\n\n" +
-        "<param name='node'>the node being entered</param>\n\n" +
-        "<exception cref='ParseException'>if the node analysis\n" +
-        "discovered errors</exception>";
-
-    /**
-     * The exit method comment.
-     */
-    private static final String EXIT_COMMENT =
-        "<summary>Called when exiting a parse tree node.</summary>\n\n" +
-        "<param name='node'>the node being exited</param>\n\n" +
-        "<returns>the node to add to the parse tree, or\n" +
-        "         null if no parse tree should be created</returns>\n\n" +
-        "<exception cref='ParseException'>if the node analysis\n" +
-        "discovered errors</exception>";
-
-    /**
-     * The child method comment.
-     */
-    private static final String CHILD_COMMENT =
-        "<summary>Called when adding a child to a parse tree\n" +
-        "node.</summary>\n\n" +
-        "<param name='node'>the parent node</param>\n" +
-        "<param name='child'>the child node, or null</param>\n\n" +
-        "<exception cref='ParseException'>if the node analysis\n" +
-        "discovered errors</exception>";
-
-    /**
-     * The parser generator.
-     */
-    private CSharpParserGenerator gen;
-
-    /**
-     * The file to write.
-     */
-    private CSharpFile file;
-
-    /**
-     * The class.
-     */
-    private CSharpClass cls;
-
-    /**
-     * The enter method.
-     */
-    private CSharpMethod enter;
-
-    /**
-     * The exit method.
-     */
-    private CSharpMethod exit;
-
-    /**
-     * The child method.
-     */
-    private CSharpMethod child;
-
-    /**
-     * The newProduction method.
-     */
-    private CSharpMethod newProduction;
-
-    /**
-     * The NodeClassesDir, for getting specialized node information iff the
-     * '--specialize' flag is set.
-     */
-    private CSharpNodeClassesDir dir;
+class CSharpAnalyzerFile extends CSharpAnalyzer {
 
     /**
      * Creates a new analyzer file.  Note: DO NOT use this constructor if this
@@ -139,7 +41,7 @@ class CSharpAnalyzerFile {
      * @param gen            the parser generator to use
      */
     public CSharpAnalyzerFile(CSharpParserGenerator gen) {
-        this (gen, null);
+        super(gen);
     }
 
     /**
@@ -151,273 +53,74 @@ class CSharpAnalyzerFile {
      *                       production information
      */
     public CSharpAnalyzerFile(CSharpParserGenerator gen, CSharpNodeClassesDir dir) {
-        String  name = gen.getBaseName() + "Analyzer";
-        int     modifiers;
+        super(gen, dir);
+    }
 
-        this.dir = dir;
-        this.gen = gen;
-        this.file = new CSharpFile(gen.getBaseDir(), name);
-        if (gen.getPublicAccess()) {
-            modifiers = CSharpClass.PUBLIC + CSharpClass.ABSTRACT;
+    /**
+     * Adds all cases and methods necessary for a node.  Use if "--specialize."
+     *
+     * @param constant       the node constant
+     * @param type           the node type (get from descriptors).
+     * @param prefix         place this before each line (use "//" to comment
+     *                       the lines or "    " to indent them)
+     */
+    @Override
+    protected void addCasesSpecialized(String constant, String type,
+            boolean isProduction, String prefix) {
+        if (isProduction) {
+            addCase(newProduction, constant, "return new " + type + "(alt);",
+                    prefix, false);
+            addCase(child, constant, "Child((" + type + ") node, child);",
+                    prefix, true);
+            addMethod(CHILD_COMMENT, "Child", type + " node, Node child",
+                      "void",
+                      "if ((child is Production) &&\n" +
+                      "        (((Production)child).Alternative.IsSingleElement())) {\n" +
+                      "    node.AddChild(child.GetChildAt(0));\n" +
+                      "} else {\n" +
+                      "    node.AddChild(child);\n" +
+                      "}");
+        }
+        addCase(enter, constant, "Enter((" + type + ") node);",
+                prefix, true);
+        addCase(exit, constant, "return Exit((" + type + ") node);",
+                prefix, false);
+        addMethod(ENTER_COMMENT, "Enter", type + " node", "void",
+                "");
+        addMethod(EXIT_COMMENT, "Exit", type + " node", type,
+                "return node;");
+    }
+
+    /**
+     * Adds all cases and methods necessary for a node.  Use if not
+     * "--specialize."
+     *
+     * @param constant       the node constant
+     * @param name           the name of the pattern for this case
+     * @param type           true for "Production," else "Token"
+     * @param prefix         place this before each line (use "//" to comment
+     *                       the lines or "    " to indent them)
+     */
+    @Override
+    protected void addCasesUnspecialized(String constant, String name,
+            boolean type, String prefix) {
+        String t;
+        if (type) {
+            addCase(child, constant, "Child" + name + "(node, child);",
+                    prefix, true);
+            addMethod(CHILD_COMMENT, "Child" + name,
+                      "Production node, Node child", "void",
+                      "node.AddChild(child);");
+            t = "Production";
         } else {
-            modifiers = CSharpClass.INTERNAL + CSharpClass.ABSTRACT;
+            t = "Token";
         }
-        this.cls = new CSharpClass(modifiers, name, "Analyzer");
-        modifiers = CSharpMethod.PUBLIC + CSharpMethod.OVERRIDE;
-        if (gen.specialize() && (dir != null)) {
-            this.newProduction = new CSharpMethod(modifiers,
-                                                "NewProduction",
-                                                "ProductionPatternAlternative alt",
-                                                "Production");
-        }
-        this.enter = new CSharpMethod(modifiers,
-                                      "Enter",
-                                      "Node node",
-                                      "void");
-        this.exit = new CSharpMethod(modifiers,
-                                     "Exit",
-                                     "Node node",
-                                     "Node");
-        this.child = new CSharpMethod(modifiers,
-                                      "Child",
-                                      "Production node, Node child",
-                                      "void");
-        initializeCode();
-    }
-
-    /**
-     * Initializes the source code objects.
-     */
-    private void initializeCode() {
-        String  str;
-
-        // Add using
-        file.addUsing(new CSharpUsing("PerCederberg.Grammatica.Runtime"));
-
-        // Add namespace
-        if (gen.getNamespace() == null) {
-            file.addClass(cls);
-        } else {
-            CSharpNamespace n = new CSharpNamespace(gen.getNamespace());
-            n.addClass(cls);
-            file.addNamespace(n);
-            if (gen.specialize() && (dir != null)) {
-                file.addUsing(new CSharpUsing(gen.getNamespace() + ".Nodes"));
-            }
-        }
-
-        // Add file comment
-        str = file.toString() + "\n\n" + gen.getFileComment();
-        file.addComment(new CSharpComment(CSharpComment.BLOCK, str));
-
-        // Add type comment
-        cls.addComment(new CSharpComment(TYPE_COMMENT));
-
-        // Add the newProduction method
-        if (gen.specialize() && (dir != null)) {
-            newProduction.addComment(new CSharpComment(NP_COMMENT));
-            newProduction.addCode("switch (alt.Pattern.Id) {");
-            cls.addMethod(newProduction);
-        }
-
-        // Add enter method
-        enter.addComment(new CSharpComment(ENTER_COMMENT));
-        enter.addCode("switch (node.Id) {");
-        cls.addMethod(enter);
-
-        // Add exit method
-        exit.addComment(new CSharpComment(EXIT_COMMENT));
-        exit.addCode("switch (node.Id) {");
-        cls.addMethod(exit);
-
-        // Add child method
-        child.addComment(new CSharpComment(CHILD_COMMENT));
-        child.addCode("switch (node.Id) {");
-        cls.addMethod(child);
-    }
-
-    /**
-     * Adds the token analysis methods to this file.
-     *
-     * @param pattern        the token pattern
-     * @param constants      the constants file
-     */
-    public void addToken(TokenPattern pattern,
-                         CSharpConstantsFile constants) {
-
-        String  constant = constants.getConstant(pattern.getId());
-        String  name;
-
-        if (!pattern.isIgnore()) {
-            name = gen.getCodeStyle().getMixedCase(pattern.getName(), true);
-            addEnterCase(constant, name, "Token");
-            addEnterMethod(name, "Token");
-            addExitCase(constant, name, "Token");
-            addExitMethod(name, "Token");
-        }
-    }
-
-    /**
-     * Adds the production analysis methods to this file.
-     *
-     * @param pattern        the production pattern
-     * @param constants      the constants file
-     */
-    public void addProduction(ProductionPattern pattern,
-                              CSharpConstantsFile constants) {
-
-        String   constant = constants.getConstant(pattern.getId());
-        String   name = gen.getCodeStyle().getMixedCase(pattern.getName(), true);
-
-        if (gen.specialize() && (dir != null)) {
-            addNewProductionCase(constant, pattern);
-        }
-
-        if (!pattern.isSynthetic()) {
-            addEnterCase(constant, name, "Production");
-            addEnterMethod(name, "Production");
-            addExitCase(constant, name, "Production");
-            addExitMethod(name, "Production");
-            addChildCase(constant, name);
-            addChildMethod(name);
-        }
-    }
-
-    /**
-     * Add a newProduction method switch case.
-     *
-     * @param constant       the node constant
-     * @param name           the name of the pattern
-     * @param pattern        the node pattern
-     */
-    public void addNewProductionCase(String constant, ProductionPattern pattern) {
-        // If this only has one alternative, the calss is the trivial pattern name.
-        if (pattern.getAlternativeCount() == 1) {
-            ProductionPatternAlternative alt = pattern.getAlternative(0);
-            if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
-                String name = dir.getAltDescriptors().get(pattern.getAlternative(0)).name;
-                newProduction.addCode("case (int)" + constant + ":");
-                newProduction.addCode("    return new " + name + "(alt);");
-            }
-        } else {
-            // Switch on the alterative to find out which it is.
-            boolean addedSwitch = false;
-            for (int i = 0; i < pattern.getAlternativeCount(); i++) {
-                ProductionPatternAlternative alt = pattern.getAlternative(i);
-                if ((alt.getElementCount() > 1) || (alt.getElement(0).getMaxCount() > 1)) {
-                    if (!addedSwitch) {
-                        newProduction.addCode("case (int)" + constant + ":");
-                        newProduction.addCode("    switch (alt.Pattern.getAlternativeIndex(alt)) {");
-                        addedSwitch = true;
-                    }
-                    newProduction.addCode("    case " + i + ":");
-                    String name = dir.getAltDescriptors().get(alt).name;
-                    newProduction.addCode("        return new " + name + "(alt);");
-                }
-            }
-            if (addedSwitch) {
-                newProduction.addCode("    }");
-                newProduction.addCode("    break;");
-            }
-        }
-    }
-
-    /**
-     * Adds an enter method switch case.
-     *
-     * @param constant       the node constant
-     * @param name           the node name
-     * @param type           the node type
-     */
-    private void addEnterCase(String constant, String name, String type) {
-        enter.addCode("case (int) " + constant + ":");
-        enter.addCode("    Enter" + name + "((" + type + ") node);");
-        enter.addCode("    break;");
-    }
-
-    /**
-     * Adds an exit method switch case.
-     *
-     * @param constant       the node constant
-     * @param name           the node name
-     * @param type           the node type
-     */
-    private void addExitCase(String constant, String name, String type) {
-        exit.addCode("case (int) " + constant + ":");
-        exit.addCode("    return Exit" + name + "((" + type + ") node);");
-    }
-
-    /**
-     * Adds a child method switch case.
-     *
-     * @param constant       the node constant
-     * @param name           the node name
-     */
-    private void addChildCase(String constant, String name) {
-        child.addCode("case (int) " + constant + ":");
-        child.addCode("    Child" + name + "(node, child);");
-        child.addCode("    break;");
-    }
-
-    /**
-     * Adds an enter node method to this file.
-     *
-     * @param name           the node name
-     * @param type           the node type
-     */
-    private void addEnterMethod(String name, String type) {
-        CSharpMethod  m;
-
-        m = new CSharpMethod(CSharpMethod.PUBLIC + CSharpMethod.VIRTUAL,
-                             "Enter" + name,
-                             type + " node",
-                             "void");
-        m.addComment(new CSharpComment(ENTER_COMMENT));
-        cls.addMethod(m);
-    }
-
-    /**
-     * Adds an exit node method to this file.
-     *
-     * @param name           the node name
-     * @param type           the node type
-     */
-    private void addExitMethod(String name, String type) {
-        CSharpMethod  m;
-
-        m = new CSharpMethod(CSharpMethod.PUBLIC + CSharpMethod.VIRTUAL,
-                             "Exit" + name,
-                             type + " node",
-                             "Node");
-        m.addComment(new CSharpComment(EXIT_COMMENT));
-        m.addCode("return node;");
-        cls.addMethod(m);
-    }
-
-    /**
-     * Adds an add child method to this file.
-     *
-     * @param name           the node name
-     */
-    private void addChildMethod(String name) {
-        CSharpMethod  m;
-
-        m = new CSharpMethod(CSharpMethod.PUBLIC + CSharpMethod.VIRTUAL,
-                             "Child" + name,
-                             "Production node, Node child",
-                             "void");
-        m.addComment(new CSharpComment(CHILD_COMMENT));
-        m.addCode("node.AddChild(child);");
-        cls.addMethod(m);
-    }
-
-    /**
-     * Returns the class name for this analyzer.
-     *
-     * @return the class name for this analyzer
-     */
-    protected String getClassName() {
-        return cls.toString();
+        addCase(enter, constant, "Enter" + name + "((" + t + ")node);",
+                prefix, true);
+        addCase(exit, constant, "return Exit" + name + "((" + t + ")node);",
+                prefix, false);
+        addMethod(ENTER_COMMENT, "Enter" + name, t + " node", "void", "");
+        addMethod(EXIT_COMMENT, "Exit" + name, t + " node", t, "return node;");
     }
 
     /**
@@ -426,6 +129,7 @@ class CSharpAnalyzerFile {
      * @throws IOException if the output file couldn't be created
      *             correctly
      */
+    @Override
     public void writeCode() throws IOException {
         if (gen.specialize() && (dir != null)) {
             newProduction.addCode("}");
@@ -434,6 +138,9 @@ class CSharpAnalyzerFile {
         enter.addCode("}");
         exit.addCode("}");
         exit.addCode("return node;");
+        child.addCode("default:");
+        child.addCode("    node.AddChild(child);");
+        child.addCode("    break;");
         child.addCode("}");
         file.writeCode(gen.getCodeStyle());
     }

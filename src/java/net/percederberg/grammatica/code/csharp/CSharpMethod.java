@@ -203,6 +203,15 @@ public class CSharpMethod extends CodeElement {
     }
 
     /**
+     * Resets the modifiers on this method.
+     *
+     * @param modifiers     the new modifier flags to use.
+     */
+    public void setModifiers(int modifiers) {
+        this.modifiers = modifiers;
+    }
+
+    /**
      * Adds one or more lines of actual code.
      *
      * @param codeLines     the lines of Java code to add

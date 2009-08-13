@@ -137,7 +137,7 @@ public class CSharpParserGenerator extends ParserGenerator {
     public void write() throws IOException {
         Grammar              grammar = getGrammar();
         CSharpConstantsFile  constants = new CSharpConstantsFile(this);
-        CSharpAnalyzerFile   analyzer;
+        CSharpAnalyzer   analyzer;
         CSharpTokenizerFile  tokenizer;
         TokenPattern         token;
         ProductionPattern    production;
@@ -148,10 +148,18 @@ public class CSharpParserGenerator extends ParserGenerator {
             CSharpNodeClassesDir dir = new CSharpNodeClassesDir(this);
             dir.buildClasses();
             dir.writeCode();
-            analyzer = new CSharpAnalyzerFile(this, dir);
+            if (newAnalyzers()) {
+                analyzer = new CSharpExpAnalyzers(this, dir);
+            } else {
+                analyzer = new CSharpAnalyzerFile(this, dir);
+            }
             tokenizer = new CSharpTokenizerFile(this, dir);
         } else {
-            analyzer = new CSharpAnalyzerFile(this);
+            if (newAnalyzers()) {
+                analyzer = new CSharpExpAnalyzers(this);
+            } else {
+                analyzer = new CSharpAnalyzerFile(this);
+            }
             tokenizer = new CSharpTokenizerFile(this);
         }
         CSharpParserFile parser = new CSharpParserFile(this, tokenizer, analyzer);

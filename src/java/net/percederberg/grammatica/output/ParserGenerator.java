@@ -67,6 +67,11 @@ public abstract class ParserGenerator {
     private boolean specialize = false;
 
     /**
+     * Should the analyzers be the new type or old?
+     */
+    private boolean newAnalyzers = false;
+
+    /**
      * Creates a new parser generator.
      *
      * @param grammar        the grammar to use
@@ -178,7 +183,7 @@ public abstract class ParserGenerator {
     /**
      * Set whether or not the output should have specialized classes.
      *
-     * @param                true or false, should the output specialize?
+     * @param specialize        should the generated classes be specialized?
      */
     public void setSpecialization(boolean specialize) {
         this.specialize = specialize;
@@ -191,5 +196,24 @@ public abstract class ParserGenerator {
      */
     public boolean specialize() {
         return specialize;
+    }
+
+    /**
+     * Set whether or not the output should use the new analyzers
+     *
+     * @param newAnalyzers      should the generated analyzers be of the new
+     *                          type?
+     */
+    public void setNewAnalyzers(boolean newAnalyzers) {
+        this.newAnalyzers = newAnalyzers;
+    }
+
+    /**
+     * Returns the value of the newAnalyzers boolean.
+     *
+     * @return boolean newAnalyzers
+     */
+    public boolean newAnalyzers() {
+        return newAnalyzers;
     }
 }

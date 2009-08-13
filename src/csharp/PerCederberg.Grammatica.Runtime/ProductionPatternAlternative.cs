@@ -72,6 +72,16 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
+         * Returns whether this alternative has a single element
+         *
+         * @return true if there is a single element that can appear once, false
+         *         otherwise
+         */
+        public bool IsSingleElement() {
+            return ((GetElementCount() == 1) && GetElement(0).GetMaxCount() == 1);
+        }
+
+        /**
          * Returns the production pattern containing this alternative.
          *
          * @return the production pattern for this alternative

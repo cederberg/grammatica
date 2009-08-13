@@ -44,6 +44,43 @@ import java.util.ArrayList;
 public class Analyzer {
 
     /**
+     * The enumeration of analyzer strategies.
+     */
+    public enum AnalyzerStrategy {
+        BUILD, TRANSFORM, ANALYZE
+    }
+
+    /**
+     * The strategy of this analyzer.
+     */
+    private AnalyzerStrategy strategy;
+
+    /**
+     * Builds a new analyzer using the strategy BUILD.
+     */
+    public Analyzer() {
+        this(AnalyzerStrategy.BUILD);
+    }
+
+    /**
+     * Build a new analyzer using a given strategy.
+     *
+     * @param strategy          the strategy to use
+     */
+    public Analyzer(AnalyzerStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    /**
+     * Changes the strategy of this analyzer.
+     * 
+     * @param strategy          the new strategy to use
+     */
+    public void setStrategy(AnalyzerStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    /**
      * Resets this analyzer when the parser is reset for another
      * input stream. The default implementation of this method does
      * nothing.
@@ -101,15 +138,22 @@ public class Analyzer {
         errorCount = log.getErrorCount();
         if (node instanceof Production) {
             prod = (Production) node;
-            prod = newProduction(prod.getAlternative());
+            ArrayList<Node> children = prod.children;
+            if (strategy == AnalyzerStrategy.BUILD) {
+                prod = newProduction(prod.getAlternative());
+            } else if (strategy == AnalyzerStrategy.TRANSFORM) {
+                prod.children = new ArrayList<Node>();
+            }
             try {
                 enter(prod);
             } catch (ParseException e) {
                 log.addError(e);
             }
-            for (int i = 0; i < node.getChildCount(); i++) {
+            for (int i = 0; i < children.size(); i++) {
                 try {
-                    child(prod, analyze(node.getChildAt(i), log));
+                    // If the strategy indicates that nodes should not be replaced,
+                    // the generated analyzers will have child methods which don't add anything.
+                    child(prod, analyze(children.get(i), log));
                 } catch (ParseException e) {
                     log.addError(e);
                 }
@@ -122,7 +166,9 @@ public class Analyzer {
                 }
             }
         } else {
-            node.removeAllValues();
+            if (strategy == AnalyzerStrategy.BUILD) {
+                node.removeAllValues();
+            }
             try {
                 enter(node);
             } catch (ParseException e) {

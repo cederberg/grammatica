@@ -286,7 +286,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param alt            the alternative to find
          * @return the index of alt
          */
-        public int getAlternativeIndex(ProductionPatternAlternative alt) {
+        public int GetAlternativeIndex(ProductionPatternAlternative alt) {
             return alternatives.IndexOf(alt);
         }
 

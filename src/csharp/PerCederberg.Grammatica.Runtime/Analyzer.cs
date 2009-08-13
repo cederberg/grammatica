@@ -20,6 +20,7 @@
  */
 
 using System.Collections;
+using System.Collections.Generic;
 
 namespace PerCederberg.Grammatica.Runtime {
 
@@ -44,9 +45,39 @@ namespace PerCederberg.Grammatica.Runtime {
     public class Analyzer {
 
         /**
-         * Creates a new parse tree analyzer.
+         * The enumeration of analyzer strategies.
          */
-        public Analyzer() {
+        public enum AnalyzerStrategy {
+            BUILD, TRANSFORM, ANALYZE
+        }
+
+        /**
+         * The strategy of this analyzer.
+         */
+        private AnalyzerStrategy strategy;
+
+        /**
+         * Builds a new analyzer using the strategy BUILD.
+         */
+        public Analyzer() : this(AnalyzerStrategy.BUILD) {
+        }
+
+        /**
+         * Build a new analyzer using a given strategy.
+         *
+         * @param strategy          the strategy to use
+         */
+        public Analyzer(AnalyzerStrategy strategy) {
+            this.strategy = strategy;
+        }
+
+        /**
+         * Changes the strategy of this analyzer.
+         * 
+         * @param strategy          the new strategy to use
+         */
+        public void setStrategy(AnalyzerStrategy strategy) {
+            this.strategy = strategy;
         }
 
         /**
@@ -107,15 +138,22 @@ namespace PerCederberg.Grammatica.Runtime {
             errorCount = log.Count;
             if (node is Production) {
                 prod = (Production) node;
-                prod = NewProduction(prod.Alternative);
+                List<Node> children = prod.children;
+                if (strategy == AnalyzerStrategy.BUILD) {
+                    prod = NewProduction(prod.Alternative);
+                } else if (strategy == AnalyzerStrategy.TRANSFORM) {
+                    prod.children = new List<Node>();
+                }
                 try {
                     Enter(prod);
                 } catch (ParseException e) {
                     log.AddError(e);
                 }
-                for (int i = 0; i < node.Count; i++) {
+                for (int i = 0; i < children.Count; i++) {
                     try {
-                        Child(prod, Analyze(node[i], log));
+                        // If the strategy indicates that nodes should not be replaced,
+                        // the generated analyzers will have child methods which don't add anything.
+                        Child(prod, Analyze(children[i], log));
                     } catch (ParseException e) {
                         log.AddError(e);
                     }
@@ -128,7 +166,9 @@ namespace PerCederberg.Grammatica.Runtime {
                     }
                 }
             } else {
-                node.Values.Clear();
+                if (strategy == AnalyzerStrategy.BUILD) {
+                    node.Values.Clear();
+                }
                 try {
                     Enter(node);
                 } catch (ParseException e) {

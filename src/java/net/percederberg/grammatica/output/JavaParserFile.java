@@ -136,7 +136,7 @@ class JavaParserFile {
      */
     public JavaParserFile(JavaParserGenerator gen,
                           JavaTokenizerFile tokenizer,
-                          JavaAnalyzerFile analyzer) {
+                          JavaAnalyzer analyzer) {
 
         String  name = gen.getBaseName() + "Parser";
         int     modifiers;
@@ -165,7 +165,7 @@ class JavaParserFile {
      * @param analyzer       the analyzer file generator
      */
     private void initializeCode(JavaTokenizerFile tokenizer,
-                                JavaAnalyzerFile analyzer) {
+                                JavaAnalyzer analyzer) {
 
         JavaConstructor  constr;
         JavaMethod       method;

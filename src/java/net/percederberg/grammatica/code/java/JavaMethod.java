@@ -194,6 +194,15 @@ public class JavaMethod extends CodeElement {
     }
 
     /**
+     * Resets the modifiers on this method.
+     *
+     * @param modifiers     the new modifier flags to use.
+     */
+    public void setModifiers(int modifiers) {
+        this.modifiers = modifiers;
+    }
+
+    /**
      * Adds a class to the list of exceptions thrown.
      *
      * @param className     the name of the exception thrown

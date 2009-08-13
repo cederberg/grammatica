@@ -166,7 +166,7 @@ public class JavaParserGenerator extends ParserGenerator {
     public void write() throws IOException {
         Grammar            grammar = getGrammar();
         JavaConstantsFile  constants = new JavaConstantsFile(this);
-        JavaAnalyzerFile   analyzer;
+        JavaAnalyzer   analyzer;
         JavaTokenizerFile  tokenizer;
         TokenPattern       token;
         ProductionPattern  production;
@@ -177,10 +177,18 @@ public class JavaParserGenerator extends ParserGenerator {
             JavaNodeClassesDir dir = new JavaNodeClassesDir(this);
             dir.buildClasses();
             dir.writeCode();
-            analyzer = new JavaAnalyzerFile(this, dir);
+            if (newAnalyzers()) {
+                analyzer = new JavaExpAnalyzers(this, dir);
+            } else {
+                analyzer = new JavaAnalyzerFile(this, dir);
+            }
             tokenizer = new JavaTokenizerFile(this, dir);
         } else {
-            analyzer = new JavaAnalyzerFile(this);
+            if (newAnalyzers()) {
+                analyzer = new JavaExpAnalyzers(this);
+            } else {
+                analyzer = new JavaAnalyzerFile(this);
+            }
             tokenizer = new JavaTokenizerFile(this);
         }
         JavaParserFile parser = new JavaParserFile(this, tokenizer, analyzer);
