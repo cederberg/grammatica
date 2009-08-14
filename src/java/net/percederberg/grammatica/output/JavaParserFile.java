@@ -96,6 +96,14 @@ class JavaParserFile {
         "            initialized correctly";
 
     /**
+     * The newAnalyzer method comment.
+     */
+    private static final String NEW_ANALYZER_COMMENT =
+        "Creates a new analyzer for this parser. Can be overridden by a\n" +
+        "subclass to provide a custom implementation.\n\n" +
+        "@return the analyzer created";
+
+    /**
      * The Java parser generator.
      */
     private JavaParserGenerator gen;
@@ -180,6 +188,8 @@ class JavaParserFile {
         // Add imports
         file.addImport(new JavaImport("java.io", "Reader"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
+                                      "Analyzer"));
+        file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ParserCreationException"));
         file.addImport(new JavaImport("net.percederberg.grammatica.parser",
                                       "ProductionPattern"));
@@ -227,6 +237,19 @@ class JavaParserFile {
         method.addThrows("ParserCreationException");
         method.addComment(new JavaComment(FACTORY_COMMENT));
         method.addCode("return new " + tokenizer.getClassName() + "(in);");
+        cls.addMethod(method);
+
+        // Add the newAnalyzer factory method
+        method = new JavaMethod(JavaMethod.PROTECTED,
+                                "newAnalyzer",
+                                "",
+                                "Analyzer");
+        method.addComment(new JavaComment(NEW_ANALYZER_COMMENT));
+        if (gen.newAnalyzers()) {
+            method.addCode("return new " + gen.getBaseName() + "TreeBuilder();");
+        } else {
+            method.addCode("return new " + analyzer.getClassName() + "() {};");
+        }
         cls.addMethod(method);
 
         // Add init method

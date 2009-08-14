@@ -98,6 +98,24 @@ class CSharpParserFile {
         "couldn't be initialized correctly</exception>";
 
     /**
+     * The default analyzer class comment.
+     */
+    private static final String DEFAULT_ANALYZER_COMMENT =
+        "<remarks>The default implementation of the analyzer.  It\n" +
+        "is here simply to appease C# and is blank because by default\n" +
+        "it does nothing different from what is in the abstract\n" +
+        "generated class.</remarks>";
+
+    /**
+     * The newAnalyzer method comment.
+     */
+    private static final String NEW_ANALYZER_COMMENT =
+        "<summary>Creates a new analyzer for this parser. Can be\n" +
+        "overridden by a subclass to provide a custom\n" +
+        "implementation.</summary>\n\n" +
+        "<returns>the analyzer created</returns>";
+
+    /**
      * The parser generator.
      */
     private CSharpParserGenerator gen;
@@ -178,6 +196,7 @@ class CSharpParserFile {
         CSharpConstructor  constr;
         CSharpMethod       method;
         String             str;
+        CSharpNamespace    n = null;
 
         // Add using
         file.addUsing(new CSharpUsing("System.IO"));
@@ -187,7 +206,7 @@ class CSharpParserFile {
         if (gen.getNamespace() == null) {
             file.addClass(cls);
         } else {
-            CSharpNamespace n = new CSharpNamespace(gen.getNamespace());
+            n = new CSharpNamespace(gen.getNamespace());
             n.addClass(cls);
             file.addNamespace(n);
         }
@@ -225,6 +244,38 @@ class CSharpParserFile {
                                   "Tokenizer");
         method.addComment(new CSharpComment(FACTORY_COMMENT));
         method.addCode("return new " + tokenizer.getClassName() + "(input);");
+        cls.addMethod(method);
+
+        // Add the newAnalyzer factory method
+        method = new CSharpMethod(CSharpMethod.PROTECTED + CSharpMethod.OVERRIDE,
+                                  "NewAnalyzer",
+                                  "",
+                                  "Analyzer");
+        method.addComment(new CSharpComment(NEW_ANALYZER_COMMENT));
+        if (gen.newAnalyzers()) {
+            method.addCode("return new " + gen.getBaseName() + "TreeBuilder();");
+        } else {
+            // Set up the default analyzer implementation.
+            CSharpClass c = new CSharpClass(0,
+                                            "DefaultAnalyzer",
+                                            analyzer.getClassName());
+            c.addComment(new CSharpComment(DEFAULT_ANALYZER_COMMENT));
+
+            // Set up constructors.
+            CSharpConstructor cons = new CSharpConstructor();
+            cons.addComment(new CSharpComment(
+                    "Builds a new analyzer using the strategy BUILD."));
+            cons.addInitializer("base(AnalyzerStrategy.BUILD)");
+            c.addConstructor(cons);
+
+            // Add the class and call it from the factory method.
+            if (n != null) {
+                n.addClass(c);
+            } else {
+                file.addClass(c);
+            }
+            method.addCode("return new DefaultAnalyzer();");
+        }
         cls.addMethod(method);
 
         // Add init method
