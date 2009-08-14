@@ -61,14 +61,12 @@ public class Production extends Node {
     }
 
     /**
-     * Checks if this node is hidden, i.e. if it should not be visible
-     * outside the parser.
+     * Checks if this node is synthetic.
      *
-     * @return true if the node should be hidden, or
-     *         false otherwise
+     * @return true if the node is synthetic, or false otherwise
      */
     @Override
-    boolean isHidden() {
+    public boolean isSynthetic() {
         return pattern.isSynthetic();
     }
 
@@ -144,10 +142,13 @@ public class Production extends Node {
      * @param child          the child node to add
      */
     public void addChild(Node child) {
+        // Set the parent if the child is not null.
         if (child != null) {
             child.setParent(this);
-            children.add(child);
         }
+
+        // Add the child.
+        children.add(child);
     }
 
     /**

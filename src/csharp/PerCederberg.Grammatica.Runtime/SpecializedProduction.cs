@@ -50,22 +50,6 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
-         * Adds a child node. The node will be added last in the list of
-         * children.
-         *
-         * @param child          the child node to add
-         */
-        public void addChild(Node child) {
-            // Set the parent if the child is not null.
-            if (child != null) {
-                child.SetParent(this);
-            }
-
-            // Add the child.
-            children.Add(child);
-        }
-
-        /**
          * The elementIndices list property (read-only).
          */
         public List<int> ElementIndices {

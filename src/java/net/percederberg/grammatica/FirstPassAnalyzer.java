@@ -84,7 +84,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the token node
      */
-    protected Node exitIgnore(Token node) {
+    protected Token exitIgnore(Token node) {
         String  str = node.getImage();
 
         str = str.substring(7, str.length() - 1).trim();
@@ -102,7 +102,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the token node
      */
-    protected Node exitError(Token node) {
+    protected Token exitError(Token node) {
         String  str = node.getImage();
 
         str = str.substring(6, str.length() - 1).trim();
@@ -119,7 +119,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the token node
      */
-    protected Node exitIdentifier(Token node) {
+    protected Token exitIdentifier(Token node) {
         node.addValue(node.getImage());
         return node;
     }
@@ -133,7 +133,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the token node
      */
-    protected Node exitQuotedString(Token node) {
+    protected Token exitQuotedString(Token node) {
         String  str = node.getImage();
 
         node.addValue(str.substring(1, str.length() - 1));
@@ -150,7 +150,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the token node
      */
-    protected Node exitRegexp(Token node) {
+    protected Token exitRegexp(Token node) {
         String        str = node.getImage();
         StringBuffer  buf = new StringBuffer();
 
@@ -177,7 +177,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the new production node
      */
-    protected Node exitHeaderPart(Production node) {
+    protected Production exitHeaderPart(Production node) {
         return null;
     }
 
@@ -192,7 +192,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitHeaderDeclaration(Production node)
+    protected Production exitHeaderDeclaration(Production node)
         throws ParseException {
 
         String  name;
@@ -211,7 +211,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the new production node
      */
-    protected Node exitTokenPart(Production node) {
+    protected Production exitTokenPart(Production node) {
         return null;
     }
 
@@ -226,7 +226,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenDeclaration(Production node)
+    protected Production exitTokenDeclaration(Production node)
         throws ParseException {
 
         TokenPattern  pattern;
@@ -286,7 +286,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenValue(Production node) throws ParseException {
+    protected Production exitTokenValue(Production node) throws ParseException {
         switch (getChildAt(node, 0).getId()) {
         case GrammarConstants.QUOTED_STRING:
             node.addValue(new Integer(TokenPattern.STRING_TYPE));
@@ -309,7 +309,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenHandling(Production node)
+    protected Production exitTokenHandling(Production node)
         throws ParseException {
 
         Node  child = getChildAt(node, 0);
@@ -332,7 +332,7 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionDeclaration(Production node)
+    protected Production exitProductionDeclaration(Production node)
         throws ParseException {
 
         ProductionPattern  production;

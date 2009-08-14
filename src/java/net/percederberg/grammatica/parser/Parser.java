@@ -495,7 +495,7 @@ public abstract class Parser {
      * @param node           the parse tree node
      */
     void enterNode(Node node) {
-        if (!node.isHidden() && errorRecovery < 0) {
+        if (errorRecovery < 0) {
             try {
                 analyzer.enter(node);
             } catch (ParseException e) {
@@ -516,7 +516,7 @@ public abstract class Parser {
      *         null if no parse tree should be created
      */
     Node exitNode(Node node) {
-        if (!node.isHidden() && errorRecovery < 0) {
+        if (errorRecovery < 0) {
             try {
                 return analyzer.exit(node);
             } catch (ParseException e) {
@@ -536,27 +536,11 @@ public abstract class Parser {
      * @param child          the child parse tree node, or null
      */
     void addNode(Production node, Node child) {
-        if (errorRecovery >= 0) {
-            // Do nothing
-        } else if (node instanceof SpecializedProduction) {
+        if (errorRecovery < 0) {
             try {
                 analyzer.child(node, child);
             } catch (ParseException e) {
                 addError(e, false);
-            }
-        } else {
-            if (node.isHidden()) {
-                node.addChild(child);
-            } else if (child != null && child.isHidden()) {
-                for (int i = 0; i < child.getChildCount(); i++) {
-                    addNode(node, child.getChildAt(i));
-                }
-            } else {
-                try {
-                    analyzer.child(node, child);
-                } catch (ParseException e) {
-                    addError(e, false);
-                }
             }
         }
     }

@@ -146,9 +146,9 @@ class JavaExpAnalyzers extends JavaAnalyzer {
         } else {
             t = "Token";
         }
-        addCase(enter, constant, "node = enter" + name + "((" + t + ")node);",
+        addCase(enter, constant, "node = enter" + name + "((" + t + ") node);",
                 prefix, true);
-        addCase(exit, constant, "node = exit" + name + "((" + t + ")node);",
+        addCase(exit, constant, "node = exit" + name + "((" + t + ") node);",
                 prefix, true);
         addMethod(ENTER_COMMENT, "enter" + name, t + " node", t,
                 "return node;");
@@ -189,7 +189,15 @@ class JavaExpAnalyzers extends JavaAnalyzer {
                   "    node.addChild(child);\n" +
                   "}";
         } else {
-            str = "node.addChild(child);";
+            str = "if (child != null) {\n" +
+                  "    if (child.isSynthetic()) {\n" +
+                  "        for (int i = 0; i < child.getChildCount(); i++) {\n" +
+                  "            child(node, child.getChildAt(i));\n" +
+                  "        }\n" +
+                  "    } else {\n" +
+                  "        node.addChild(child);\n" +
+                  "    }\n" +
+                  "}";
         }
         writeAnalyzer("TreeBuilder", AnalyzerStrategy.BUILD, "",
                 "return node;", str);

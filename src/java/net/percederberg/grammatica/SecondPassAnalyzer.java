@@ -78,7 +78,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitIdentifier(Token node) throws ParseException {
+    protected Token exitIdentifier(Token node) throws ParseException {
         String             name = node.getImage();
         TokenPattern       token = grammar.getTokenPatternByName(name);
         ProductionPattern  prod = grammar.getProductionPatternByName(name);
@@ -107,7 +107,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitQuotedString(Token node) throws ParseException {
+    protected Token exitQuotedString(Token node) throws ParseException {
         String        str;
         TokenPattern  token;
 
@@ -133,7 +133,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the new production node
      */
-    protected Node exitGrammar(Production node) {
+    protected Production exitGrammar(Production node) {
         return null;
     }
 
@@ -145,7 +145,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @return the new production node
      */
-    protected Node exitProductionPart(Production node) {
+    protected Production exitProductionPart(Production node) {
         return null;
     }
 
@@ -179,7 +179,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionDeclaration(Production node)
+    protected Production exitProductionDeclaration(Production node)
         throws ParseException {
 
         ProductionPattern             pattern;
@@ -212,7 +212,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProduction(Production node) throws ParseException {
+    protected Production exitProduction(Production node) throws ParseException {
         ProductionPatternAlternative  alt;
         ProductionPatternElement      elem;
         Node                          child;
@@ -243,7 +243,7 @@ class SecondPassAnalyzer extends GrammarAnalyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionAtom(Production node)
+    protected Production exitProductionAtom(Production node)
         throws ParseException {
 
         Node     child;

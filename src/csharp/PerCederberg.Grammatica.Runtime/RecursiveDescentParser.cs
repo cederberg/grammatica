@@ -220,6 +220,10 @@ namespace PerCederberg.Grammatica.Runtime {
             for (int i = 0; i < alt.Count; i++) {
                 try {
                     ParseElement(node, alt[i]);
+                    // This logic would make more sense if it was in the generated
+                    // analyzer classes that use SpecializedProduction nodes;
+                    // however, if it's here the system doesn't have to run any
+                    // type checks and thus it is much better here.
                     if (node is SpecializedProduction) {
                         ((SpecializedProduction) node).ElementIndices.Add(node.GetChildCount());
                     }
@@ -264,7 +268,7 @@ namespace PerCederberg.Grammatica.Runtime {
                     break;
                 }
             }
-            if(!found && (elem.GetMinCount() == 0) && (node is SpecializedProduction)) {
+            if(!found) {
                 AddNode(node, null);
             }
         }

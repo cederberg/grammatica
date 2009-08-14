@@ -122,10 +122,13 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param child          the child node to add
          */
         public void AddChild(Node child) {
+            // Set the parent if the child is not null.
             if (child != null) {
                 child.SetParent(this);
-                children.Add(child);
             }
+
+            // Add the child.
+            children.Add(child);
         }
 
         /**
@@ -167,13 +170,11 @@ namespace PerCederberg.Grammatica.Runtime {
         }
 
         /**
-         * Checks if this node is hidden, i.e. if it should not be visible
-         * outside the parser.
+         * Checks if this node is synthetic.
          *
-         * @return true if the node should be hidden, or
-         *         false otherwise
+         * @return true if the node is synthetic, or false otherwise
          */
-        internal override bool IsHidden() {
+        public override bool IsSynthetic() {
             return pattern.Synthetic;
         }
 

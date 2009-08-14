@@ -225,6 +225,10 @@ public class RecursiveDescentParser extends Parser {
         for (int i = 0; i < alt.getElementCount(); i++) {
             try {
                 parseElement(node, alt.getElement(i));
+                // This logic would make more sense if it was in the generated
+                // analyzer classes that use SpecializedProduction nodes;
+                // however, if it's here the system doesn't have to run any
+                // type checks and thus it is much better here.
                 if (node instanceof SpecializedProduction) {
                     ((SpecializedProduction) node).elementIndices.add(node.getChildCount());
                 }
@@ -270,7 +274,7 @@ public class RecursiveDescentParser extends Parser {
                 break;
             }
         }
-        if(!found && (elem.getMinCount() == 0) && (node instanceof SpecializedProduction)) {
+        if(!found) {
             addNode(node, null);
         }
 

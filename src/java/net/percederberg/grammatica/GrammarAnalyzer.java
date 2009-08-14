@@ -35,7 +35,23 @@ import net.percederberg.grammatica.parser.Token;
  * @author   Per Cederberg, <per at percederberg dot net>
  * @version  1.5
  */
-abstract class GrammarAnalyzer extends Analyzer {
+public abstract class GrammarAnalyzer extends Analyzer {
+
+    /**
+     * Builds a new analyzer using the given strategy.
+     *
+     * @param strategy            the strategy to use
+     */
+    public GrammarAnalyzer(AnalyzerStrategy strategy) {
+        super(strategy);
+    }
+
+    /**
+     * Builds a new analyzer using the strategy BUILD.
+     */
+    public GrammarAnalyzer() {
+        super();
+    }
 
     /**
      * Called when entering a parse tree node.
@@ -270,6 +286,8 @@ abstract class GrammarAnalyzer extends Analyzer {
         case GrammarConstants.PRODUCTION_ATOM:
             childProductionAtom(node, child);
             break;
+        default:
+            node.addChild(child);
         }
     }
 
@@ -281,6 +299,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterHeader(Token node) throws ParseException {
+
     }
 
     /**
@@ -293,7 +312,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitHeader(Token node) throws ParseException {
+    protected Token exitHeader(Token node) throws ParseException {
         return node;
     }
 
@@ -305,6 +324,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterTokens(Token node) throws ParseException {
+
     }
 
     /**
@@ -317,7 +337,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokens(Token node) throws ParseException {
+    protected Token exitTokens(Token node) throws ParseException {
         return node;
     }
 
@@ -329,6 +349,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterProductions(Token node) throws ParseException {
+
     }
 
     /**
@@ -341,7 +362,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductions(Token node) throws ParseException {
+    protected Token exitProductions(Token node) throws ParseException {
         return node;
     }
 
@@ -353,6 +374,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterIgnore(Token node) throws ParseException {
+
     }
 
     /**
@@ -365,7 +387,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitIgnore(Token node) throws ParseException {
+    protected Token exitIgnore(Token node) throws ParseException {
         return node;
     }
 
@@ -377,6 +399,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterError(Token node) throws ParseException {
+
     }
 
     /**
@@ -389,7 +412,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitError(Token node) throws ParseException {
+    protected Token exitError(Token node) throws ParseException {
         return node;
     }
 
@@ -402,6 +425,8 @@ abstract class GrammarAnalyzer extends Analyzer {
      */
     protected void enterUnterminatedDirective(Token node)
         throws ParseException {
+
+
     }
 
     /**
@@ -414,7 +439,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitUnterminatedDirective(Token node)
+    protected Token exitUnterminatedDirective(Token node)
         throws ParseException {
 
         return node;
@@ -428,6 +453,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterEquals(Token node) throws ParseException {
+
     }
 
     /**
@@ -440,7 +466,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitEquals(Token node) throws ParseException {
+    protected Token exitEquals(Token node) throws ParseException {
         return node;
     }
 
@@ -452,6 +478,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftParen(Token node) throws ParseException {
+
     }
 
     /**
@@ -464,7 +491,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitLeftParen(Token node) throws ParseException {
+    protected Token exitLeftParen(Token node) throws ParseException {
         return node;
     }
 
@@ -476,6 +503,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightParen(Token node) throws ParseException {
+
     }
 
     /**
@@ -488,7 +516,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitRightParen(Token node) throws ParseException {
+    protected Token exitRightParen(Token node) throws ParseException {
         return node;
     }
 
@@ -500,6 +528,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftBrace(Token node) throws ParseException {
+
     }
 
     /**
@@ -512,7 +541,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitLeftBrace(Token node) throws ParseException {
+    protected Token exitLeftBrace(Token node) throws ParseException {
         return node;
     }
 
@@ -524,6 +553,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightBrace(Token node) throws ParseException {
+
     }
 
     /**
@@ -536,7 +566,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitRightBrace(Token node) throws ParseException {
+    protected Token exitRightBrace(Token node) throws ParseException {
         return node;
     }
 
@@ -548,6 +578,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterLeftBracket(Token node) throws ParseException {
+
     }
 
     /**
@@ -560,7 +591,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitLeftBracket(Token node) throws ParseException {
+    protected Token exitLeftBracket(Token node) throws ParseException {
         return node;
     }
 
@@ -572,6 +603,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRightBracket(Token node) throws ParseException {
+
     }
 
     /**
@@ -584,7 +616,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitRightBracket(Token node) throws ParseException {
+    protected Token exitRightBracket(Token node) throws ParseException {
         return node;
     }
 
@@ -596,6 +628,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterQuestionMark(Token node) throws ParseException {
+
     }
 
     /**
@@ -608,7 +641,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitQuestionMark(Token node) throws ParseException {
+    protected Token exitQuestionMark(Token node) throws ParseException {
         return node;
     }
 
@@ -620,6 +653,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterPlusSign(Token node) throws ParseException {
+
     }
 
     /**
@@ -632,7 +666,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitPlusSign(Token node) throws ParseException {
+    protected Token exitPlusSign(Token node) throws ParseException {
         return node;
     }
 
@@ -644,6 +678,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterAsterisk(Token node) throws ParseException {
+
     }
 
     /**
@@ -656,7 +691,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitAsterisk(Token node) throws ParseException {
+    protected Token exitAsterisk(Token node) throws ParseException {
         return node;
     }
 
@@ -668,6 +703,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterVerticalBar(Token node) throws ParseException {
+
     }
 
     /**
@@ -680,7 +716,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitVerticalBar(Token node) throws ParseException {
+    protected Token exitVerticalBar(Token node) throws ParseException {
         return node;
     }
 
@@ -692,6 +728,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterSemicolon(Token node) throws ParseException {
+
     }
 
     /**
@@ -704,7 +741,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitSemicolon(Token node) throws ParseException {
+    protected Token exitSemicolon(Token node) throws ParseException {
         return node;
     }
 
@@ -716,6 +753,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterIdentifier(Token node) throws ParseException {
+
     }
 
     /**
@@ -728,7 +766,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitIdentifier(Token node) throws ParseException {
+    protected Token exitIdentifier(Token node) throws ParseException {
         return node;
     }
 
@@ -740,6 +778,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterQuotedString(Token node) throws ParseException {
+
     }
 
     /**
@@ -752,7 +791,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitQuotedString(Token node) throws ParseException {
+    protected Token exitQuotedString(Token node) throws ParseException {
         return node;
     }
 
@@ -764,6 +803,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void enterRegexp(Token node) throws ParseException {
+
     }
 
     /**
@@ -776,31 +816,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitRegexp(Token node) throws ParseException {
-        return node;
-    }
-
-    /**
-     * Called when entering a parse tree node.
-     *
-     * @param node           the node being entered
-     *
-     * @throws ParseException if the node analysis discovered errors
-     */
-    protected void enterGrammar(Production node) throws ParseException {
-    }
-
-    /**
-     * Called when exiting a parse tree node.
-     *
-     * @param node           the node being exited
-     *
-     * @return the node to add to the parse tree, or
-     *         null if no parse tree should be created
-     *
-     * @throws ParseException if the node analysis discovered errors
-     */
-    protected Node exitGrammar(Production node) throws ParseException {
+    protected Token exitRegexp(Token node) throws ParseException {
         return node;
     }
 
@@ -815,7 +831,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childGrammar(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -825,8 +849,8 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterHeaderPart(Production node)
-        throws ParseException {
+    protected void enterGrammar(Production node) throws ParseException {
+
     }
 
     /**
@@ -839,7 +863,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitHeaderPart(Production node)
+    protected Production exitGrammar(Production node)
         throws ParseException {
 
         return node;
@@ -856,7 +880,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childHeaderPart(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -866,8 +898,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterHeaderDeclaration(Production node)
+    protected void enterHeaderPart(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -880,7 +914,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitHeaderDeclaration(Production node)
+    protected Production exitHeaderPart(Production node)
         throws ParseException {
 
         return node;
@@ -897,7 +931,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childHeaderDeclaration(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -907,8 +949,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterTokenPart(Production node)
+    protected void enterHeaderDeclaration(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -921,7 +965,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenPart(Production node)
+    protected Production exitHeaderDeclaration(Production node)
         throws ParseException {
 
         return node;
@@ -938,7 +982,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childTokenPart(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -948,8 +1000,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterTokenDeclaration(Production node)
+    protected void enterTokenPart(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -962,7 +1016,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenDeclaration(Production node)
+    protected Production exitTokenPart(Production node)
         throws ParseException {
 
         return node;
@@ -979,7 +1033,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childTokenDeclaration(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -989,8 +1051,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterTokenValue(Production node)
+    protected void enterTokenDeclaration(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -1003,7 +1067,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenValue(Production node)
+    protected Production exitTokenDeclaration(Production node)
         throws ParseException {
 
         return node;
@@ -1020,7 +1084,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childTokenValue(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -1030,8 +1102,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterTokenHandling(Production node)
+    protected void enterTokenValue(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -1044,7 +1118,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitTokenHandling(Production node)
+    protected Production exitTokenValue(Production node)
         throws ParseException {
 
         return node;
@@ -1061,7 +1135,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childTokenHandling(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -1071,8 +1153,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterProductionPart(Production node)
+    protected void enterTokenHandling(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -1085,7 +1169,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionPart(Production node)
+    protected Production exitTokenHandling(Production node)
         throws ParseException {
 
         return node;
@@ -1102,7 +1186,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childProductionPart(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -1112,8 +1204,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterProductionDeclaration(Production node)
+    protected void enterProductionPart(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -1126,7 +1220,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionDeclaration(Production node)
+    protected Production exitProductionPart(Production node)
         throws ParseException {
 
         return node;
@@ -1143,7 +1237,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childProductionDeclaration(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -1153,8 +1255,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterProduction(Production node)
+    protected void enterProductionDeclaration(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -1167,7 +1271,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProduction(Production node)
+    protected Production exitProductionDeclaration(Production node)
         throws ParseException {
 
         return node;
@@ -1184,7 +1288,15 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childProduction(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
     }
 
     /**
@@ -1194,8 +1306,10 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected void enterProductionAtom(Production node)
+    protected void enterProduction(Production node)
         throws ParseException {
+
+
     }
 
     /**
@@ -1208,7 +1322,7 @@ abstract class GrammarAnalyzer extends Analyzer {
      *
      * @throws ParseException if the node analysis discovered errors
      */
-    protected Node exitProductionAtom(Production node)
+    protected Production exitProduction(Production node)
         throws ParseException {
 
         return node;
@@ -1225,6 +1339,43 @@ abstract class GrammarAnalyzer extends Analyzer {
     protected void childProductionAtom(Production node, Node child)
         throws ParseException {
 
-        node.addChild(child);
+        if (child != null) {
+            if (child.isSynthetic()) {
+                for (int i = 0; i < child.getChildCount(); i++) {
+                    child(node, child.getChildAt(i));
+                }
+            } else {
+                node.addChild(child);
+            }
+        }
+    }
+
+    /**
+     * Called when entering a parse tree node.
+     *
+     * @param node           the node being entered
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void enterProductionAtom(Production node)
+        throws ParseException {
+
+
+    }
+
+    /**
+     * Called when exiting a parse tree node.
+     *
+     * @param node           the node being exited
+     *
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected Production exitProductionAtom(Production node)
+        throws ParseException {
+
+        return node;
     }
 }

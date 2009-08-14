@@ -45,13 +45,11 @@ namespace PerCederberg.Grammatica.Runtime {
         private ArrayList values = null;
 
         /**
-         * Checks if this node is hidden, i.e. if it should not be
-         * visible outside the parser.
+         * Checks if this node is synthetic.
          *
-         * @return true if the node should be hidden, or
-         *         false otherwise
+         * @return true if the node is synthetic, or false otherwise
          */
-        internal virtual bool IsHidden() {
+        public virtual bool IsSynthetic() {
             return false;
         }
 

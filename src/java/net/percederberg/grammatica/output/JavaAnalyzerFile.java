@@ -110,14 +110,22 @@ class JavaAnalyzerFile extends JavaAnalyzer {
                     prefix, true);
             addMethod(CHILD_COMMENT, "child" + name,
                       "Production node, Node child", "void",
-                      "node.addChild(child);");
+                      "if (child != null) {\n" +
+                      "    if (child.isSynthetic()) {\n" +
+                      "        for (int i = 0; i < child.getChildCount(); i++) {\n" +
+                      "            child(node, child.getChildAt(i));\n" +
+                      "        }\n" +
+                      "    } else {\n" +
+                      "        node.addChild(child);\n" +
+                      "    }\n" +
+                      "}");
             t = "Production";
         } else {
             t = "Token";
         }
-        addCase(enter, constant, "enter" + name + "((" + t + ")node);",
+        addCase(enter, constant, "enter" + name + "((" + t + ") node);",
                 prefix, true);
-        addCase(exit, constant, "return exit" + name + "((" + t + ")node);",
+        addCase(exit, constant, "return exit" + name + "((" + t + ") node);",
                 prefix, false);
         addMethod(ENTER_COMMENT, "enter" + name, t + " node", "void", "");
         addMethod(EXIT_COMMENT, "exit" + name, t + " node", t, "return node;");

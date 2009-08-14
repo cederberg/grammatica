@@ -516,7 +516,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param node           the parse tree node
          */
         internal void EnterNode(Node node) {
-            if (!node.IsHidden() && errorRecovery < 0) {
+            if (errorRecovery < 0) {
                 try {
                     analyzer.Enter(node);
                 } catch (ParseException e) {
@@ -537,7 +537,7 @@ namespace PerCederberg.Grammatica.Runtime {
          *         null if no parse tree should be created
          */
         internal Node ExitNode(Node node) {
-            if (!node.IsHidden() && errorRecovery < 0) {
+            if (errorRecovery < 0) {
                 try {
                     return analyzer.Exit(node);
                 } catch (ParseException e) {
@@ -557,27 +557,11 @@ namespace PerCederberg.Grammatica.Runtime {
          * @param child          the child parse tree node, or null
          */
         internal void AddNode(Production node, Node child) {
-            if (errorRecovery >= 0) {
-                // Do nothing
-            } else if (node is SpecializedProduction) {
+            if (errorRecovery < 0) {
                 try {
                     analyzer.Child(node, child);
                 } catch (ParseException e) {
                     AddError(e, false);
-                }
-            } else {
-                if (node.IsHidden()) {
-                    node.AddChild(child);
-                } else if (child != null && child.IsHidden()) {
-                    for (int i = 0; i < child.Count; i++) {
-                        AddNode(node, child[i]);
-                    }
-                } else {
-                    try {
-                        analyzer.Child(node, child);
-                    } catch (ParseException e) {
-                        AddError(e, false);
-                    }
                 }
             }
         }

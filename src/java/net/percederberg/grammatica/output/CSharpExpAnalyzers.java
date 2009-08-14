@@ -146,9 +146,9 @@ class CSharpExpAnalyzers extends CSharpAnalyzer {
         } else {
             t = "Token";
         }
-        addCase(enter, constant, "node = Enter" + name + "((" + t + ")node);",
+        addCase(enter, constant, "node = Enter" + name + "((" + t + ") node);",
                 prefix, true);
-        addCase(exit, constant, "node = Exit" + name + "((" + t + ")node);",
+        addCase(exit, constant, "node = Exit" + name + "((" + t + ") node);",
                 prefix, true);
         addMethod(ENTER_COMMENT, "Enter" + name, t + " node", t,
                 "return node;");
@@ -189,7 +189,15 @@ class CSharpExpAnalyzers extends CSharpAnalyzer {
                   "    node.AddChild(child);\n" +
                   "}";
         } else {
-            str = "node.AddChild(child);";
+            str = "if (child != null) {\n" +
+                  "    if (child.IsSynthetic()) {\n" +
+                  "        for (int i = 0; i < child.GetChildCount(); i++) {\n" +
+                  "            Child(node, child.GetChildAt(i));\n" +
+                  "        }\n" +
+                  "    } else {\n" +
+                  "        node.AddChild(child);\n" +
+                  "    }\n" +
+                  "}";
         }
         writeAnalyzer("TreeBuilder", AnalyzerStrategy.BUILD, "",
                 "return node;", str);

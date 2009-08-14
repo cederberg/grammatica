@@ -41,28 +41,11 @@ public class SpecializedProduction extends Production {
     /**
      * Creates a new specialized production node.
      *
-     * @param pattern        the production pattern
+     * @param alt           the production pattern alternative
      */
     public SpecializedProduction(ProductionPatternAlternative alt) {
         super(alt);
         elementIndices = new ArrayList<Integer>();
         elementIndices.add(0);
-    }
-
-    /**
-     * Adds a child node. The node will be added last in the list of
-     * children.
-     *
-     * @param child          the child node to add
-     */
-    @Override
-    public void addChild(Node child) {
-        // Set the parent if the child is not null.
-        if (child != null) {
-            child.setParent(this);
-        }
-
-        // Add the child.
-        children.add(child);
     }
 }

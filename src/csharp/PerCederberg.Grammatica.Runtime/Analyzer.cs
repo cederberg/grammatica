@@ -165,7 +165,7 @@ namespace PerCederberg.Grammatica.Runtime {
                         log.AddError(e);
                     }
                 }
-            } else {
+            } else if (node != null) {
                 if (strategy == AnalyzerStrategy.BUILD) {
                     node.Values.Clear();
                 }

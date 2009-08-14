@@ -165,7 +165,7 @@ public class Analyzer {
                     log.addError(e);
                 }
             }
-        } else {
+        } else if (node != null) {
             if (strategy == AnalyzerStrategy.BUILD) {
                 node.removeAllValues();
             }

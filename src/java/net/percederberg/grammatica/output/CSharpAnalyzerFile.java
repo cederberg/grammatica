@@ -110,14 +110,22 @@ class CSharpAnalyzerFile extends CSharpAnalyzer {
                     prefix, true);
             addMethod(CHILD_COMMENT, "Child" + name,
                       "Production node, Node child", "void",
-                      "node.AddChild(child);");
+                      "if (child != null) {\n" +
+                      "    if (child.IsSynthetic()) {\n" +
+                      "        for (int i = 0; i < child.GetChildCount(); i++) {\n" +
+                      "            Child(node, child.GetChildAt(i));\n" +
+                      "        }\n" +
+                      "    } else {\n" +
+                      "        node.AddChild(child);\n" +
+                      "    }\n" +
+                      "}");
             t = "Production";
         } else {
             t = "Token";
         }
-        addCase(enter, constant, "Enter" + name + "((" + t + ")node);",
+        addCase(enter, constant, "Enter" + name + "((" + t + ") node);",
                 prefix, true);
-        addCase(exit, constant, "return Exit" + name + "((" + t + ")node);",
+        addCase(exit, constant, "return Exit" + name + "((" + t + ") node);",
                 prefix, false);
         addMethod(ENTER_COMMENT, "Enter" + name, t + " node", "void", "");
         addMethod(EXIT_COMMENT, "Exit" + name, t + " node", t, "return node;");

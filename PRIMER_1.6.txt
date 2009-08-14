@@ -1,0 +1,152 @@
+Grammatica 1.6 Primer
+Connor Prussin
+
+I. '--specialize' Flag
+II. Old Analyzer Generation
+III. New Analyzer Generation
+    a. Constructing the Parse Tree
+    b. Transforming the Parse Tree
+    c. Analyzing the Parse Tree
+    d. Basic Use
+
+
+
+
+
+I. '--specialize' Flag
+    The '--specialize' flag is introduced in Grammatica 1.6.  It tells the program to write specialized nodes (see http://code.google.com/p/grammatica/wiki/FeatureProductionSubclasses).  These specialized classes are named in camel case based off the production names in the grammar.  The classes are given one of three prefixes:
+
+        * 't_<class name>': These classes are tokens.  They all inherit from the base library class 'Token'.
+        * 'a_<class name>_A<alternative number>': These classes are alternatives.  They correspond to the alternatives of a production in the grammar.  They contain either one element that can repeat, or two or more elements.  An element can be either an interface (see below) or a token (see above).  Note that if an alternative contains only one element that does not repeat, it will not be created as a class--instead, the single element's class will inherit from the alternative's production's interface class.  Also note that the alternative number starts from 0, and increases with each alternative--whether or not a class is created for that alternative.  Finally, note that every 'a_' class inherits from the base library class 'SpecializedProduction'.
+        * 'i_<class name>': These classes are interfaces.  They correspond to a production in the grammar.  Note that if the production has only one alternative, it will not be created as an 'i_' class.  Any class that inherits from an 'i_' class is a valid alternative for the corresponding production.  Note also that in the case of alternatives with single elements, 'a_' classes or other 'i_' classes can inherit from a given 'i_' class.  Finally, note that the 'i_' classes do not inherit from anything by default, and if a given 'i_' class does inherit from anything, what it inherits from is a production that has an alternative that consists of only the production that created this 'i_' node.
+
+    For example, given the following simplified grammar piece:
+
+        /--------------------------------------------\
+        | ...                                        |
+        | production_a = token_a                     |
+        |              | production_b                |
+        |              | production_b token_a ;      |
+        | production_b = token_a                     |
+        |              | token_b ;                   |
+        | production_c = production_a production_b ; |
+        | ...                                        |
+        \--------------------------------------------/
+
+    The following node classes will be created, with the indicated inheritance:
+
+        * i_ProductionA
+        * i_ProductionB : i_ProductionA
+        * t_TokenA : Token, i_ProductionA, i_ProductionB
+        * t_TokenB : Token, i_ProductionB
+        * a_ProductionA_A2 : SpecializedProduction, i_ProductionA
+        * a_ProductionC : SpecializedProduction ;
+
+    The 'a_' classes are also given well-named accessors for each element or list of elements.  In the case of a single element, the accessor name is simply the element's class name, minus the two-character (one letter and an underscore) prefix.  In the case of a list of elements (any situation where there can be more than one occurances of an element), two methods are created--one to return the element at a given index in the list, and one to return the list itself.  The name of the indexed accessor is simply the name of the element minus the prefix, and the name of the list accessor is the name of the element minus the prefix plus the word "List".
+
+    For example, given the following production:
+
+        /----------------------------------------------------------------------------\
+        | production_1 = token_1 production_1 token_2* production_2? production_3+ ; |
+        \----------------------------------------------------------------------------/
+
+    The UML class diagram of the generated class will be the following:
+
+        /-------------------------------------------------\
+        |      a_Production1 : SpecializedProduction      |
+        |-------------------------------------------------|
+        |-------------------------------------------------|
+        | + Token1() : t_Token1                           |
+        | + Production1() : a_Production1                 |
+        | + Token2(int) : t_Token2                        |
+        | + Token2List() : ArrayList<t_Token2>            |
+        | + Production2() : i_Production2                 |
+        | + Production3(int) : i_Production3              |
+        | + Production3List() : ArrayList<i_Production3>  |
+        \-------------------------------------------------/
+
+    Note that this UML class diagram corresponds to Java output.  In C#, the class will be almost the same with the exception that instead of ArrayList<> objects, the list accessors return objects of type System.Collections.Generic.List<>.  Also note that the generated classes have no members--all members are handled by the children[] array that has been present in the Production class since long before Grammatica 1.6.
+
+    One last important note about the '--specialize' flag is that, due to certain limitations in the well-named accessors, "synthetic" classes are preserved.  These classes are used internally, and in previous versions of Grammatica were not seen by the users.  However, because they are created in situations where there are multiple possible different element combinations without them, the well-named accessors would not work were they still removed.  Usually, a synthetic node is created for anything between grouping symbols--e.g. "(" and ")" or "[" and "]".  Synthetic nodes are named with the name of the 'a_' node they appear in, with a postfix of '_S<synthetic number>'.  The synthetic number starts from zero and is incremented by 1 for each synthetic node in the same alternative.  This number resets to zero for each alternative and each production.
+
+    For example, given the following simplified grammar piece:
+
+        /-----------------------------------------------\
+        | ...                                           |
+        | production_a = [token_a token_b] production_b |
+        |              | [token_a token_b] ;            |
+        | production_b = ( token_a | token_b ) token_c  |
+        |              | token_c ;                      |
+        | ...                                           |
+        \-----------------------------------------------/
+
+    The following node classes will be created, with the indicated inheritance:
+
+        * i_ProductionA
+        * i_ProductionB : i_ProductionA
+        * t_TokenA : Token, i_ProductionA, i_ProductionB
+        * t_TokenB : Token, i_ProductionB
+        * a_ProductionA_A2 : SpecializedProduction, i_ProductionA
+        * a_ProductionC : SpecializedProduction ;
+
+    Note that the synthetic nodes are still removed if the '--specialize' flag is not specified.
+
+
+
+II. Old Analyzer Generation
+    As the old analyzers are not new to Grammatica 1.6, their function is not of importance to this document.  However, there is a single slight change to the default analyzer--the old generated exit() method called the node-specific exit() method and would return the parameter node as passed.  Now, however, it returns the return value of the node-specific exit() method, if one is found.  If no node-specific exit() method exists, the passed node is returned, just like the old system.
+
+    The old analyzers are still the default generated analyzers.  Thus, to create them, nothing different needs to be done from normal use.  Also, the use of the old analyzers is the same as earlier versions.
+
+
+
+III. New Analyzer Generation
+    Grammatica 1.6 introduces a new analyzer that can be generated through use of the '--newAnalyzers' flag.  They differ from the old analyzers in a number of ways:
+
+        * The node-specific enter(), exit(), and child() methods are each piped to a defaultEnter(), defaultExit(), and defaultChild() method.  For enter() and exit(), the return values are piped as the inputs to defaultEnter() and defaultExit().  When using '--specialize', these outputs will be of specific node types.  For child(), the output is piped as the second argument of defaultChild().  This is, by default, the node that should be added to the first argument node.
+        * The class <prefix>Analyzer is still abstract.  However, implementations for three separate actions are implemented: <prefix>TreeBuilder, <prefix>TreeTransformer, and <prefix>TreeAnalyzer.  Each one of these also provides a default implementation of defaultEnter(), defaultExit(), and defaultChild().
+
+    a. Constructing the Parse Tree
+    The class <prefix>TreeBuilder is the analyzer that should be used to construct a tree.  It creates new nodes and adds them to the correct parents.  It functions exactly as the old default analyzer did.
+
+    b. Transforming the Parse Tree
+    The class <prefix>TreeTransformer should be used to change the parse tree or substitute a subtree.  This analyzer only removes values in nodes that have changed--if a node has not changed, the analyzer leaves it untouched.  These nodes should be changed through use of the node-specific exit() methods.
+
+    c. Analyzing the Parse Tree
+    The class <prefix>TreeAnalyzer should be used for non-destructive tree analysis.  The generated class does not build or destroy any nodes--rather, it simply does nothing to the tree.  The class is useful in that the default enter, exit, or child or the node-specific enter, exit, or child methods can be rewritten or overridden to preform as neccessary depending on the application.  The default action is the null analyzer--it does not modify the tree in any way, and simply passes each node through enter(), exit(), and child(), which do nothing.
+
+    d. Basic Use
+    Basic use of the new analyzers is very similar to basic use of the old analyzers.  In the old system, java code for getting the head node of a parse tree for a file is:
+
+        /---------------------------------------------------------------------------------\
+        | Node head = new <prefix>Parser(file_reader, new <prefix>Analyzer() {}).parse(); |
+        \---------------------------------------------------------------------------------/
+
+    Under the new system (using '--newAnalyzers'), to get the head of a new parse tree, the following code is used:
+
+        /---------------------------------------------------------------------------------\
+        | Node head = new <prefix>Parser(file_reader, new <prefix>TreeBuilder()).parse(); |
+        \---------------------------------------------------------------------------------/
+
+    Also, if further using the new system to analyze or transform the tree, the code to do so is as follows:
+
+        /---------------------------------------------------------------------------------\
+        | // Building the tree.                                                           |
+        | Node head = new <prefix>Parser(file_reader, new <prefix>TreeBuilder()).parse(); |
+        |                                                                                 |
+        | // Transforming the tree.                                                       |
+        | Node transformedHead = new <prefix>TreeTransformer().analyze(head);             |
+        |                                                                                 |
+        | // Analyzing the two trees using a non-destructive analyzer.                    |
+        | new <prefix>TreeAnalyzer().analyze(head);                                       |
+        | new <prefix>TreeAnalyzer().analyze(transformedHead);                            |
+        \---------------------------------------------------------------------------------/
+
+    Note that it is possible to chain these commands and build, transform, and analyze a file through a single line of code:
+
+        /-----------------------------------------------------------------------------------\
+        | // Building, transforming, and analyzing the tree.                                |
+        | Node head = new <prefix>TreeAnalyzer().analyze(                                   |
+        |             new <prefix>TreeTransformer().analyze(                                |
+        |             new <prefix>Parser(file_reader, new <prefix>TreeBuilder()).parse())); |
+        \-----------------------------------------------------------------------------------/
