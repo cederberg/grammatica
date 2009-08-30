@@ -82,9 +82,11 @@ public abstract class Node {
         int  line;
 
         for (int i = 0; i < getChildCount(); i++) {
-            line = getChildAt(i).getStartLine();
-            if (line >= 0) {
-                return line;
+            if (getChildAt(i) != null) {
+                line = getChildAt(i).getStartLine();
+                if (line >= 0) {
+                    return line;
+                }
             }
         }
         return -1;

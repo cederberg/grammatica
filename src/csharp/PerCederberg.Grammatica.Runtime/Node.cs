@@ -113,9 +113,11 @@ namespace PerCederberg.Grammatica.Runtime {
                 int  line;
 
                 for (int i = 0; i < Count; i++) {
-                    line = this[i].StartLine;
-                    if (line >= 0) {
-                        return line;
+                    if (this[i] != null) {
+                        line = this[i].StartLine;
+                        if (line >= 0) {
+                            return line;
+                        }
                     }
                 }
                 return -1;
