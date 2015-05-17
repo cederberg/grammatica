@@ -36,7 +36,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * The C# analyzer file generator. This class encapsulates all the
  * C# code necessary for creating a analyzer class file.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 class CSharpAnalyzerFile {

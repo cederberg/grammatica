@@ -34,7 +34,7 @@ import net.percederberg.grammatica.parser.ReaderBuffer;
  * creating matchers. This class is thread-safe. Multiple matchers may
  * operate simultanously on the same regular expression.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class RegExp {

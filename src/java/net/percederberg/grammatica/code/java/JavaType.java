@@ -43,7 +43,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * An abstract superclass for the Java class and interface code
  * generators.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 abstract class JavaType extends CodeElementContainer {

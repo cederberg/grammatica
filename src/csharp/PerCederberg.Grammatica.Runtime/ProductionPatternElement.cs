@@ -31,7 +31,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * repetitions allowed. A production pattern element is always
      * contained within a production pattern rule.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public class ProductionPatternElement {

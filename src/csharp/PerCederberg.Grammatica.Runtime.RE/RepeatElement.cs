@@ -32,7 +32,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * matches from a specified element, attempting to reach the
      * maximum repetition count.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     internal class RepeatElement : Element {

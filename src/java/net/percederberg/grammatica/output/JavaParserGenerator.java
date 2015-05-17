@@ -34,7 +34,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * A Java parser generator. This class generates the source code files
  * needed for a Java parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class JavaParserGenerator extends ParserGenerator {

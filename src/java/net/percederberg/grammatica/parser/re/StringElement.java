@@ -30,7 +30,7 @@ import net.percederberg.grammatica.parser.ReaderBuffer;
  * A regular expression string element. This element only matches an
  * exact string. Once created, the string element is immutable.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 class StringElement extends Element {

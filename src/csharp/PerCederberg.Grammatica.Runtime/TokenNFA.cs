@@ -32,7 +32,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * unless the pre-allocated queues need to be enlarged. The NFA also
      * does not use recursion, but iterates in a loop instead.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      * @since    1.5
      */

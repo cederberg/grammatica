@@ -28,7 +28,7 @@ import net.percederberg.grammatica.Grammar;
  * grammar to some other form, normally source code. One or more
  * processing elements may be present in the Grammatica Ant task.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.4
  * @since    1.4
  */

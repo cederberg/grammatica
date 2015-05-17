@@ -26,7 +26,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * only the longest match is considered. It also prefers lower token
      * pattern identifiers if two matches have the same length.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      * @since    1.5
      */

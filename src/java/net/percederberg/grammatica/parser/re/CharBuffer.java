@@ -26,7 +26,7 @@ package net.percederberg.grammatica.parser.re;
  * StringBuffer, with the exception that none of the methods in this
  * class are synchronized.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  *
  * @deprecated The CharBuffer class has been deprecated in favor

@@ -39,8 +39,8 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * all the Visual Basic (.NET) code necessary for creating a analyzer
  * class file.
  *
- * @author   Adrian Moore, <adrianrob at hotmail dot com>
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Adrian Moore
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

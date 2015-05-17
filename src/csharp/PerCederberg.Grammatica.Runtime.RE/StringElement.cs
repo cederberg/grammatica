@@ -30,7 +30,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * A regular expression string element. This element only matches
      * an exact string. Once created, the string element is immutable.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     internal class StringElement : Element {

@@ -30,7 +30,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * an error in the token or production patterns, making it impossible
      * to create a working parser or tokenizer.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public class ParserCreationException : Exception {

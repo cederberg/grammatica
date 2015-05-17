@@ -27,7 +27,7 @@ package net.percederberg.grammatica.parser;
  * that groups characters together into tokens according to a set of
  * token patterns.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.4
  */
 public class Token extends Node {

@@ -38,7 +38,7 @@ package net.percederberg.grammatica.code.csharp;
  * be used directly, but each class should declare it's own constants
  * being equal to the constants here.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 abstract class CSharpModifier {

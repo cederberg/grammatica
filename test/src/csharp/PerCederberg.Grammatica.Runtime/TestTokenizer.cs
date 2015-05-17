@@ -26,7 +26,7 @@ using PerCederberg.Grammatica.Runtime;
 /**
  * A test case for the Tokenizer class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class TestTokenizer {

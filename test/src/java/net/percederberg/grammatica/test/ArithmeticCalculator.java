@@ -33,7 +33,7 @@ import net.percederberg.grammatica.parser.Token;
 /**
  * A simple arithmetic calculator.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 class ArithmeticCalculator extends ArithmeticAnalyzer {

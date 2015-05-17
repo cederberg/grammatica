@@ -39,7 +39,7 @@ package net.percederberg.grammatica.code;
  * code style classes also contain helper methods for the code
  * generators.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class CodeStyle {

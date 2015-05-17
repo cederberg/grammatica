@@ -44,8 +44,8 @@ import net.percederberg.grammatica.code.CodeStyle;
  * An abstract superclass for the various Visual Basic type code
  * generators.
  *
- * @author   Adrian Moore, <adrianrob at hotmail dot com>
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Adrian Moore
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

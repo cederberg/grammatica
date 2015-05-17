@@ -42,7 +42,7 @@ import net.percederberg.grammatica.code.CodeStyle;
 /**
  * A class generating a C# constructor declaration.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class CSharpConstructor extends CodeElement {

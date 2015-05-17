@@ -35,7 +35,7 @@ import net.percederberg.grammatica.parser.re.Matcher;
  * search for, or a regular expression. If the stream of characters
  * don't match any of the token patterns, a parse exception is thrown.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class Tokenizer {

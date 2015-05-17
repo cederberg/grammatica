@@ -41,7 +41,7 @@ import net.percederberg.grammatica.code.CodeStyle;
 /**
  * A class generating a C# class declaration.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class CSharpClass extends CSharpType {

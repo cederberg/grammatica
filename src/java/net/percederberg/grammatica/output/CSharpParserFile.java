@@ -40,7 +40,7 @@ import net.percederberg.grammatica.parser.ProductionPatternElement;
  * The C# parser file generator. This class encapsulates all the
  * C# code necessary for creating a parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 class CSharpParserFile {

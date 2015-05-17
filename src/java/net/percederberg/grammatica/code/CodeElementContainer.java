@@ -43,7 +43,7 @@ import java.util.LinkedList;
  * The abstract base class for all code element containers. The code
  * element containers contains other code elements.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public abstract class CodeElementContainer extends CodeElement {

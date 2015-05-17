@@ -31,7 +31,7 @@ import net.percederberg.grammatica.output.JavaParserGenerator;
  * A Java output element. This element creates Java source code for a
  * parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.4
  * @since    1.4
  */

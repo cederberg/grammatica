@@ -43,7 +43,7 @@ import net.percederberg.grammatica.code.CodeStyle;
  * A class generating a Java variable declaration. The variable
  * declaration should be placed as a member in a class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class JavaVariable extends CodeElement {

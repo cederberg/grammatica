@@ -28,7 +28,7 @@ using PerCederberg.Grammatica.Runtime.RE;
 /**
  * A test case for the RegExp class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class TestRegExp {

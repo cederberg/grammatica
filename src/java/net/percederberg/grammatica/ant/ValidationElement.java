@@ -41,7 +41,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * A grammar validation element. This element validates or tests the
  * grammar in various ways.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.4
  * @since    1.4
  */

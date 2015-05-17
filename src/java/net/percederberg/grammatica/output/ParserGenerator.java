@@ -29,7 +29,7 @@ import net.percederberg.grammatica.Grammar;
 /**
  * The grammar parser generator base class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public abstract class ParserGenerator {

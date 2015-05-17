@@ -26,7 +26,7 @@ GRAMMARTYPE = "LL"
 DESCRIPTION = "A grammar for simple regular expressions. The grammar is LL(1),
                meaning that it is best read with a recursive descent parser."
 
-AUTHOR      = "Per Cederberg, <per at percederberg dot net>"
+AUTHOR      = "Per Cederberg"
 VERSION     = "1.0"
 DATE        = "20 April 2003"
 

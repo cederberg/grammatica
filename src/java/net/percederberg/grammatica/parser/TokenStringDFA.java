@@ -30,7 +30,7 @@ import java.io.IOException;
  * footprint. It only supports a single character transition between
  * states, but may be run in an all case-insensitive mode.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */
@@ -171,7 +171,7 @@ class TokenStringDFA {
      * An automaton state. This class represents a state in the DFA
      * graph.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      * @since    1.5
      */
@@ -197,7 +197,7 @@ class TokenStringDFA {
      * state to another. All transitions are linked to a single
      * character.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      * @since    1.5
      */

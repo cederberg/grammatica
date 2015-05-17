@@ -31,7 +31,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * tokens. The parser is more efficient the fewer look-ahead tokens
      * that is has to consider.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public class RecursiveDescentParser : Parser {

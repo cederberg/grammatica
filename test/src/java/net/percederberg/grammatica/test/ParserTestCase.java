@@ -35,7 +35,7 @@ import net.percederberg.grammatica.parser.ParserLogException;
 /**
  * Base class for all the parser test cases.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 abstract class ParserTestCase extends TestCase {

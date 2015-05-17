@@ -43,7 +43,7 @@ import net.percederberg.grammatica.code.CodeStyle;
 /**
  * A class generating a Java method declaration.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class JavaMethod extends CodeElement {

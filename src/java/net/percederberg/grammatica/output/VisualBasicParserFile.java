@@ -41,8 +41,8 @@ import net.percederberg.grammatica.parser.ProductionPatternElement;
  * The Visual Basic parser file generator. This class encapsulates all
  * the Visual Basic (.NET) code necessary for creating a parser.
  *
- * @author   Adrian Moore, <adrianrob at hotmail dot com>
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Adrian Moore
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

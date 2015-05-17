@@ -30,7 +30,7 @@ import net.percederberg.grammatica.parser.ReaderBuffer;
  * A regular expression alternative element. This element matches the
  * longest alternative element.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 class AlternativeElement extends Element {

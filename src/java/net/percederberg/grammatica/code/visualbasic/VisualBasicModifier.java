@@ -39,8 +39,8 @@ package net.percederberg.grammatica.code.visualbasic;
  * shouldn't be used directly, but each class should declare it's own
  * constants being equal to the constants here.
  *
- * @author   Adrian Moore, <adrianrob at hotmail dot com>
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Adrian Moore
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

@@ -35,7 +35,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * characters. The set may also be inverted, meaning that only
      * characters not inside the set will be considered to match.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     internal class CharacterSetElement : Element {

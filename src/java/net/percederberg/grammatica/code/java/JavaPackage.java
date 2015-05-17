@@ -42,7 +42,7 @@ import net.percederberg.grammatica.code.CodeStyle;
 /**
  * A class generating a Java package declaration.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class JavaPackage extends CodeElement {

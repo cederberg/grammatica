@@ -41,7 +41,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * A grammar definition object. This object supports parsing a grammar
  * file and create a lexical analyzer (tokenizer) for the grammar.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class Grammar extends Object {

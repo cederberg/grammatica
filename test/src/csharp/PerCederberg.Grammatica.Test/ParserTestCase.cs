@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Test {
     /**
      * Base class for all the parser test cases.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.0
      */
     public abstract class ParserTestCase {

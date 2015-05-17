@@ -31,7 +31,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * all regular expression elements, i.e. the parts of the regular
      * expression.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     internal abstract class Element : ICloneable {

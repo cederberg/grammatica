@@ -40,7 +40,7 @@ import java.io.PrintWriter;
  * classes handles some source code construct and allows printing and
  * comparing it to other constructs.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public abstract class CodeElement implements Comparable {

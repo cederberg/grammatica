@@ -39,7 +39,7 @@ import net.percederberg.grammatica.parser.ProductionPatternElement;
  * The Java parser file generator. This class encapsulates all the
  * Java code necessary for creating a parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 class JavaParserFile {

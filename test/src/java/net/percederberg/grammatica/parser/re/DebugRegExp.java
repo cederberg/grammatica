@@ -26,7 +26,7 @@ import java.io.FileReader;
 /**
  * A test program for the RegExp class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class DebugRegExp {

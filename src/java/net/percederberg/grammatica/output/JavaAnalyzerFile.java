@@ -35,7 +35,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * The Java analyzer file generator. This class encapsulates all the
  * Java code necessary for creating a analyzer class file.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 class JavaAnalyzerFile {

@@ -37,7 +37,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * All required syntetic production patterns will also be added to
  * the grammar.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 class SecondPassAnalyzer extends GrammarAnalyzer {

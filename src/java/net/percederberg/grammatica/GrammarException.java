@@ -25,7 +25,7 @@ package net.percederberg.grammatica;
  * A grammar validation exception. This exception is used for
  * signalling an error in the grammar file.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class GrammarException extends Exception {

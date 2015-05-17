@@ -25,7 +25,7 @@ package net.percederberg.grammatica.parser.re;
  * A regular expression exception. This exception is thrown if a
  * regular expression couldn't be processed (or "compiled") properly.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class RegExpException extends Exception {

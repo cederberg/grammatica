@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * that groups characters together into tokens according to a set of
      * token patterns.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public class Token : Node {

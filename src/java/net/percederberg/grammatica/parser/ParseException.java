@@ -26,7 +26,7 @@ import java.util.ArrayList;
 /**
  * A parse exception.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.1
  */
 public class ParseException extends Exception {

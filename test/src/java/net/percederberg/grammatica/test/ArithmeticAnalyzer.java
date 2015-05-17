@@ -32,7 +32,7 @@ import net.percederberg.grammatica.parser.Token;
 /**
  * A class providing callback methods for the parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 abstract class ArithmeticAnalyzer extends Analyzer {

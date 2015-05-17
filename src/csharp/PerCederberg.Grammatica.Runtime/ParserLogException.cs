@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * A parser log exception. This class contains a list of all the
      * parse errors encountered while parsing.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      * @since    1.1
      */

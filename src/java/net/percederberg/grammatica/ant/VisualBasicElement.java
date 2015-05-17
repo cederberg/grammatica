@@ -31,7 +31,7 @@ import net.percederberg.grammatica.output.VisualBasicParserGenerator;
  * A Visual Basic output element. This element creates Visual
  * Basic.NET source code for a parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

@@ -31,7 +31,7 @@ import net.percederberg.grammatica.output.CSharpParserGenerator;
  * A C# output element. This element creates C# source code for a
  * parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.4
  * @since    1.4
  */

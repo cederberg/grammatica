@@ -40,7 +40,7 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * must be analyzed in a second pass. This analyzer also adds all
  * header declarations to the grammar.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 class FirstPassAnalyzer extends GrammarAnalyzer {

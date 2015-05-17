@@ -33,8 +33,8 @@ import net.percederberg.grammatica.parser.TokenPattern;
  * A Visual Basic parser generator. This class generates the source
  * code files needed for a Visual Basic (.NET) parser.
  *
- * @author   Adrian Moore, <adrianrob at hotmail dot com>
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Adrian Moore
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

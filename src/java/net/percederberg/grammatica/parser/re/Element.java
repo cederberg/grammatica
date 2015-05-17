@@ -32,7 +32,7 @@ import net.percederberg.grammatica.parser.ReaderBuffer;
  * regular expression elements, i.e. the parts of the regular
  * expression.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 abstract class Element implements Cloneable {

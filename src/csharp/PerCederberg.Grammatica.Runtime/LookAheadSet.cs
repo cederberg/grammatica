@@ -36,7 +36,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * resolved if the conflicting sequences can be repeated (would
      * cause infinite loop).
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.1
      */
     internal class LookAheadSet {
@@ -574,7 +574,7 @@ namespace PerCederberg.Grammatica.Runtime {
          * It is immutable after creation, meaning that no changes
          * will be made to an instance after creation.
          *
-         * @author   Per Cederberg, <per at percederberg dot net>
+         * @author   Per Cederberg
          * @version  1.0
          */
         private class Sequence {

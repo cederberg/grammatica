@@ -43,8 +43,8 @@ import net.percederberg.grammatica.code.CodeStyle;
 /**
  * A class generating a Visual Basic constructor declaration.
  *
- * @author   Adrian Moore, <adrianrob at hotmail dot com>
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Adrian Moore
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * upon creation. The pattern id is used for referencing the
  * production pattern from production pattern elements.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class ProductionPattern {

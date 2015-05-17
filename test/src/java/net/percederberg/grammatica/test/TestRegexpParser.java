@@ -30,7 +30,7 @@ import net.percederberg.grammatica.parser.ParserCreationException;
 /**
  * A test case for the generated RegexpParser class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class TestRegexpParser extends ParserTestCase {

@@ -28,7 +28,7 @@ package net.percederberg.grammatica.parser;
  * repetitions allowed. A production pattern element is always
  * contained within a production pattern rule.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class ProductionPatternElement {

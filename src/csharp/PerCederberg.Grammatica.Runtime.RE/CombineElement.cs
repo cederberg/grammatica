@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * A regular expression combination element. This element matches
      * two consecutive elements.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     internal class CombineElement : Element {

@@ -30,7 +30,7 @@ import java.util.Vector;
  * An abstract parse tree node. This class is inherited by all nodes
  * in the parse tree, i.e. by the token and production classes.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.2
  */
 public abstract class Node {

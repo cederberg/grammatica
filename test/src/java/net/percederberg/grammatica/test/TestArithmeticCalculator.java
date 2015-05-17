@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 /**
  * A test case for the ArithmeticCalculator class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class TestArithmeticCalculator extends TestCase {

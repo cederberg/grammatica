@@ -44,7 +44,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
  * interface for invoking the application. See separate documentation
  * for information on usage and command-line parameters.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  */
 public class Grammatica extends Object {

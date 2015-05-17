@@ -33,7 +33,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * pattern. A production pattern alternative is always contained
      * within a production pattern.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public class ProductionPatternAlternative {

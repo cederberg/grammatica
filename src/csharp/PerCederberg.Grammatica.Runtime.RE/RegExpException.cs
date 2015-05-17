@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * regular expression couldn't be processed (or "compiled")
      * properly.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.0
      */
     public class RegExpException : Exception {

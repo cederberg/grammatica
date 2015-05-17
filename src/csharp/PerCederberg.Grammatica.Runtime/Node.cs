@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * nodes in the parse tree, i.e. by the token and production
      * classes.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public abstract class Node {

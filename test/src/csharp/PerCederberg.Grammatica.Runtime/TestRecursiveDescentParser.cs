@@ -25,7 +25,7 @@ using PerCederberg.Grammatica.Runtime;
 /**
  * A test case for the RecursiveDescentParser class.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 public class TestRecursiveDescentParser {

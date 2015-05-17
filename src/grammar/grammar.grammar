@@ -27,7 +27,7 @@ DESCRIPTION = "A grammar for the grammar file format. The grammar is LL(1),
                meaning that it is best read with a recursive descent parser.
                The grammar file format is used for describing grammars."
 
-AUTHOR      = "Per Cederberg, <per at percederberg dot net>"
+AUTHOR      = "Per Cederberg"
 VERSION     = "1.5"
 DATE        = "7 May 2005"
 

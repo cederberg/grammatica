@@ -29,7 +29,7 @@ namespace PerCederberg.Grammatica.Test {
     /**
      * A simple arithmetic calculator.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.0
      */
     internal class ArithmeticCalculator : ArithmeticAnalyzer {

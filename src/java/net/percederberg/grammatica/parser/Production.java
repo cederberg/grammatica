@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * by a parser, that adds children a according to a set of production
  * patterns (i.e. grammar rules).
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.1
  */
 public class Production extends Node {

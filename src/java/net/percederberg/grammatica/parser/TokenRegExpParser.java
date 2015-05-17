@@ -29,7 +29,7 @@ import net.percederberg.grammatica.parser.re.RegExpException;
  * A regular expression parser. The parser creates an NFA for the
  * regular expression having a single start and acceptance states.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.5
  * @since    1.5
  */

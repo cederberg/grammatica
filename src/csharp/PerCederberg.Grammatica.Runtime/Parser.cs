@@ -30,7 +30,7 @@ namespace PerCederberg.Grammatica.Runtime {
      * A base parser class. This class provides the standard parser
      * interface, as well as token handling.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.6
      */
     public abstract class Parser {

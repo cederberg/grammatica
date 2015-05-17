@@ -32,7 +32,7 @@ namespace PerCederberg.Grammatica.Runtime.RE {
      * process, as for example the position of the latest match, and a
      * number of flags that were set. This class is not thread-safe.
      *
-     * @author   Per Cederberg, <per at percederberg dot net>
+     * @author   Per Cederberg
      * @version  1.5
      */
     public class Matcher {

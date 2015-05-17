@@ -34,7 +34,7 @@ import net.percederberg.grammatica.parser.Tokenizer;
 /**
  * A token stream parser.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.0
  */
 class ArithmeticParser extends RecursiveDescentParser {

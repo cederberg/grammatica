@@ -32,7 +32,7 @@ import net.percederberg.grammatica.parser.Node;
  * A parse tree printer. This class prints the parse tree while it is
  * being parsed.
  *
- * @author   Per Cederberg, <per at percederberg dot net>
+ * @author   Per Cederberg
  * @version  1.4
  * @since    1.4
  */
