@@ -2,3 +2,5 @@
 /doc/
 /grammatica-*.zip
 /lib/grammatica-*.jar
+/lib/grammatica-*.dll
+/lib/grammatica-*.dll.mdb

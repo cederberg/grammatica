@@ -87,7 +87,7 @@
   </target>
 
   <target name="compile-csharp" if="build.dotnet">
-    <exec executable="gmcs" dir="src/csharp" failonerror="true">
+    <exec executable="dmcs" dir="src/csharp" failonerror="true">
       <arg value="-target:library" />
       <arg value="-out:${basedir}/lib/${build.name}-${build.version}.dll" />
       <arg value="-debug" />
@@ -137,7 +137,7 @@
   </target>
 
   <target name="test-csharp" if="build.dotnet">
-    <exec executable="gmcs" dir="test/src/csharp" failonerror="true">
+    <exec executable="dmcs" dir="test/src/csharp" failonerror="true">
       <arg value="-target:exe" />
       <arg value="-out:${basedir}/lib/cstestall.exe" />
       <arg value="-main:TestAll" />
