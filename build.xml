@@ -31,6 +31,7 @@
   </tstamp>
   <property name="build.version" value="${DSTAMP}" />
   <property name="build.date" value="${DSTAMP}" />
+  <property name="build.sysclasspath" value="ignore" />
   <path id="project.class.path">
     <fileset dir="lib" includes="**/*.jar" />
   </path>
