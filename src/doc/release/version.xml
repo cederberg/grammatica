@@ -7,6 +7,8 @@
 
     <h1>Version <param name="version"/> (<param name="date"/>):</h1>
 
+    <h1>Version 1.6 (2015-05-17):</h1>
+
     <list>
       <item>
         <title>License modified to revised BSD</title>
