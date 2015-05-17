@@ -52,6 +52,6 @@ GRAMMATICA README
     http://grammatica.percederberg.net/
 
 _____________________________________________________________________
-Copyright (c) 2003-2009 Per Cederberg. Permission is granted to copy
+Copyright (c) 2003-2015 Per Cederberg. Permission is granted to copy
 this document verbatim in any medium, provided that this copyright
 notice  is left intact.

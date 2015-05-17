@@ -9,6 +9,13 @@
 
     <list>
       <item>
+        <title>License modified to revised BSD</title>
+        <text>The license agreement for this library has been changed
+        to revised BSD license. This change was made to avoid any confusion
+        related to usage in commercial (closed source) applications.</text>
+      </item>
+
+      <item>
         <title>Fixed minor API issues for reusing parsers</title>
         <text>The <code>Parser.reset</code> method is now available
         in a new flavor that allows replacing the <code>Analyzer</code>

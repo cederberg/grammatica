@@ -52,8 +52,8 @@ Grammatica </xsl:text>
     <xsl:text>). See http://grammatica.percederberg.net/
 for more information.
 
-Copyright (c) 2003-2009 Per Cederberg. This document is distributed
-as a part of Grammatica under the GNU LGPL license.</xsl:text>
+Copyright (c) 2003-2015 Per Cederberg. This document is distributed
+as a part of Grammatica under the BSD license.</xsl:text>
     &newline;
   </xsl:template>
 
