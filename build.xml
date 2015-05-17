@@ -215,12 +215,10 @@
   </target>
 
   <target name="doc-csharp" if="build.dotnet">
-    <exec executable="cppdoc"
-          dir="doc/api/csharp"
+    <exec executable="doxygen"
+          dir="."
           failonerror="true">
-      <arg value="-classdir=." />
-      <arg value="-title=${build.title} ${build.version} Documentation" />
-      <arg value="${basedir}/src/csharp" />
+      <arg value="doxygen.conf" />
     </exec>
   </target>
 
