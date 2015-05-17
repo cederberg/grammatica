@@ -236,7 +236,7 @@ public class ProductionPattern {
     /**
      * Returns an alternative in this pattern.
      *
-     * @param pos            the alternative position, 0 <= pos < count
+     * @param pos            the alternative position, starting at 0
      *
      * @return the alternative found
      */

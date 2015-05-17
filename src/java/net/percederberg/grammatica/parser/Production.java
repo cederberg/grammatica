@@ -106,7 +106,7 @@ public class Production extends Node {
     /**
      * Returns the child node with the specified index.
      *
-     * @param index          the child index, 0 <= index < count
+     * @param index          the child index, starting at 0
      *
      * @return the child node found, or
      *         null if index out of bounds

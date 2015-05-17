@@ -182,7 +182,7 @@ public abstract class Node {
     /**
      * Returns the child node with the specified index.
      *
-     * @param index          the child index, 0 <= index < count
+     * @param index          the child index, starting at 0
      *
      * @return the child node found, or
      *         null if index out of bounds
@@ -227,7 +227,7 @@ public abstract class Node {
      * value may be used for storing intermediate results in the parse
      * tree during analysis.
      *
-     * @param pos             the value position, 0 <= pos < count
+     * @param pos             the value position, starting at 0
      *
      * @return the computed node value, or
      *         null if not set

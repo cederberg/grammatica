@@ -152,7 +152,7 @@ public class ReaderBuffer implements CharSequence {
      * method may behave in unexpected ways when performing
      * operations that modifies the buffer content.
      *
-     * @param index          the char index, 0 <= index < length()
+     * @param index          the char index, starting at 0
      *
      * @return the character at the specified index
      *

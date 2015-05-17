@@ -179,7 +179,7 @@ public class ProductionPatternAlternative {
     /**
      * Returns an element in this alternative.
      *
-     * @param pos            the element position, 0 <= pos < count
+     * @param pos            the element position, starting at 0
      *
      * @return the element found
      */

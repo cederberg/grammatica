@@ -50,7 +50,7 @@ public class ParserLogException extends Exception {
     /**
      * Returns a specific error from the log.
      *
-     * @param index          the error index, 0 <= index < count
+     * @param index          the error index, starting at 0
      *
      * @return the parse error requested
      */

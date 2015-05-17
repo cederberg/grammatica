@@ -225,7 +225,7 @@ public class CharBuffer {
     /**
      * Returns a character in the buffer.
      *
-     * @param index          the character position, 0 <= index < length
+     * @param index          the character position, starting at 0
      *
      * @return the character found
      *
