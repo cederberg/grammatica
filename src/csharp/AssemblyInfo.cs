@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("2003-2015 Per Cederberg")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.5.0.*")]
+[assembly: AssemblyVersion("1.6.0.*")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
