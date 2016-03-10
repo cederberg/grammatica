@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file was automatically generated. DO NOT EDIT! -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml; charset=ISO-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <link rel="stylesheet" href="../style.css" type="text/css"/>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Grammatica Reference Manual</h1>
+
+
+    <h2>Tokens</h2>
+
+    <p>The token definitions in the grammar file consist of a token
+    name and a token pattern. The token name must consist of
+    characters from the set <code>[a-zA-Z0-9_]</code> and may not
+    conflict with any other token name, nor with any of the production
+    names.</p>
+
+    <p>The token patterns can be specified either as a string, in
+    double quotes (<code>"</code>), or as a regular expression, in
+    between special delimiters (<code>&lt;&lt;</code> and
+    <code>&gt;&gt;</code>). The regular expression syntax is largely
+    the one supported by JDK 1.4, as documented in the Java API to the 
+    <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/regex/Pattern.html">java.util.regexp.Pattern
+    class</a>. See the figure below for two example token
+    definitions.</p>
+
+    
+    <div class="figure">
+        <pre>STRING_TOKEN   = "Value"
+REGEXP_TOKEN   = &lt;&lt;.&gt;&gt;</pre>
+      
+      <p><strong>Figure 1.</strong>
+      Two example token definitions. The first for a simple
+      verbatim string, and the second for a regular
+      expression.</p>
+    </div>
+
+    <p>It is also possible to set an ignore or an error flag on a
+    token definition. The ignore flag is used to signal that the token
+    should be discarded after being read, whereas the error flag is
+    used to cause a parse error whenever the token is found. Two
+    example token declarations using these flags are listed in the
+    figure below.</p>
+
+    
+    <div class="figure">
+        <pre>WHITESPACE    = &lt;&lt;[ \t\n\r]+&gt;&gt; %ignore%
+UNKNOWN_CHAR  = &lt;&lt;.&gt;&gt; %error unexpected token%</pre>
+      
+      <p><strong>Figure 3.</strong>
+      Two example token definitions with ignore and error
+      flags. The error flag also allows adding a specific error
+      message to the parse error thrown when encountered.</p>
+    </div>
+
+  
+    <hr/>
+
+    <p class="footer">Grammatica 1.6 (2015-05-17). See the
+    <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
+    for more information.</p>
+
+    <p class="footer">Copyright &copy; 2003-2015 Per Cederberg. This document is
+    distributed as part of Grammatica under the BSD license.</p>
+
+  </body>
+</html>

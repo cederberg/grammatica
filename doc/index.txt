@@ -1,0 +1,45 @@
+GRAMMATICA RELEASE DOCUMENTATION
+================================
+
+Introduction
+------------
+
+  Grammatica is a parser generator for C#, Java and Visual Basic. It 
+  reads a grammar file and creates source code for a parser. The 
+  grammar file format describes the language in EBNF, with tokens 
+  described as regular expressions. More detailed information is 
+  available in the feature list (in features.txt).
+
+  See the Grammatica web site (http://www.nongnu.org/grammatica) for 
+  the latest version available.
+
+
+Release Notes
+-------------
+
+  The documents below are the release notes for Grammatica version 
+  1.6 (2015-05-17):
+
+    o Installation & Running (in install.txt)
+      Instructions for installing and running Grammatica.
+
+    o Features (in features.txt)
+      List of features supported in this version.
+
+    o Known Issues (in bugs.txt)
+      Information about known issues and future improvements.
+
+    o Version History (in version.txt)
+      Information about all public releases.
+
+    o Authors (in authors.txt)
+      Acknowledgements of persons and organizations that have 
+      contributed to Grammatica.
+
+
+_____________________________________________________________________
+Grammatica 1.6 (2015-05-17). See http://grammatica.percederberg.net/
+for more information.
+
+Copyright (c) 2003-2015 Per Cederberg. This document is distributed
+as a part of Grammatica under the BSD license.

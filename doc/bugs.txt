@@ -1,0 +1,97 @@
+GRAMMATICA TODO-LIST
+====================
+
+Known Issues
+------------
+
+  This is a list of the known issues as of the release of version 1.6 
+  (2015-05-17). Please verify that any new problem found is not in 
+  this list before sending a bug report.
+
+    o Parser: Some grammar ambiguities may go undetected
+      When the last element of an alternative is optional, some 
+      ambiguities may go undetected. This is due to not properly 
+      comparing the tokens in the optional element with the tokens 
+      after the production. The ambiguious grammar A = B ["x"]; B = 
+      "y" ["x"]; illustrates this. In some cases this may also lead 
+      to parse errors as ambiguities have not been resolved with the 
+      appropriate number of look-ahead tokens. This error is present 
+      in all versions of Grammatica, but occurs infrequently. [Bug 
+      #4117]
+
+
+Suggested Improvements
+----------------------
+
+  This is a list of the currently known suggested improvements.
+
+    o Grammar: Add support for modular grammars
+      By allowing one grammar to reference another, it would be 
+      possible to create more complex modular parsers. This feature 
+      also requires support for modular tokenizers and parses, as 
+      well as the generation of modular code. [Bug #3599]
+
+    o Grammar: Add localization support
+      This includes finding an architecture that works for grammar 
+      files, making it possible to localize the error messages 
+      without rewriting the grammar file. This architecture must 
+      support different methods depending on generated source 
+      (ResourceBundles in Java, Gnu Gettext in C & C++). [Bug #3600]
+
+    o Grammar: Production representation should be improved
+      The internal representation of a production makes it hard for 
+      several alternatives to share a several left-hand side 
+      elements. This may cause inherent ambiguities to be found, as 
+      the number of look-ahead tokens needed to separate the 
+      alternatives is infinite. If these alternatives could share the 
+      first elements, this ambiguity would not require a rewrite of 
+      the grammar. [Bug #4322]
+
+    o Grammar: Identical productions should be unified
+      Identical syntetic productions are not indentified as such. 
+      Instead, a new syntetic production is added in each case. This 
+      will cause problems for LR parsers, and is generally 
+      inefficient. Identical syntetic productions should be unified. 
+      [Bug #3602]
+
+    o Tokenizer: Add support for modes
+      When reading certain tokens the tokenizer should be able to 
+      enter some kind of "mode", limiting the set of tokens that are 
+      considered for a match. This is highly useful in some grammars, 
+      where the token syntax isn't easily represented with regular 
+      expressions. [Bug #3604]
+
+    o Parser: Add support for LR grammars
+      This probably means writing at least an LALR(1) parser, and 
+      probably also some kind of LR(k) parser. [Bug #3606]
+
+    o Parser: Add parsing through code callbacks
+      This would allow more complex grammars to be parsed where some 
+      productions cannot be expressed in EBNF. Instead a callback 
+      method would be called to parse some specific productions. [Bug 
+      #3607]
+
+    o Analyzer: Allow node values propagating downwards
+      Improve the analyzer framework to handle node values 
+      propagating downwards or sideways in the tree as well. [Bug 
+      #3608]
+
+    o Code Generation: Support creation of a C parser
+      This requires the writing of a C runtime library. [Bug #3609]
+
+    o Code Generation: Support creation of a C++ parser
+      This requires the writing of a C++ runtime library plus 
+      appropriate code generation classes. [Bug #3610]
+
+    o Error Handling: Add file reference in errors
+      The exceptions could be extended with a file location object (a 
+      file reference) to simplify the error handling when several 
+      files are parsed. [Bug #4180]
+
+
+_____________________________________________________________________
+Grammatica 1.6 (2015-05-17). See http://grammatica.percederberg.net/
+for more information.
+
+Copyright (c) 2003-2015 Per Cederberg. This document is distributed
+as a part of Grammatica under the BSD license.

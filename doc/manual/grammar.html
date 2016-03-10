@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file was automatically generated. DO NOT EDIT! -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml; charset=ISO-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <link rel="stylesheet" href="../style.css" type="text/css"/>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Grammatica Reference Manual</h1>
+
+
+    <h2>Grammar Structure &amp; Declarations</h2>
+
+    <p>Grammatica uses its own grammar format, normally stored in
+    files with a <code>.grammar</code> extension. The files are
+    divided into three parts -- header, tokens, and productions. The
+    header part is used for declarations about the grammar, such as
+    the grammar type. The token and production parts are used for
+    token and production declarations, which is explained in later
+    chapters. See the figure below for an example of the file
+    structure.</p>
+
+    
+    <div class="figure">
+        <pre>%header%
+GRAMMARTYPE = "LL"
+...
+
+%tokens%
+...
+
+%productions%
+...</pre>
+      
+      <p><strong>Figure 1.</strong>
+      The overall structure of a grammar file.</p>
+    </div>
+
+    <p>Grammar files also support comments anywhere in the file.
+    The comment syntax is similar to the comments in C# and Java (as
+    well as many other popular languages). Two example comments can be
+    seen in the example below.</p>
+
+    
+    <div class="figure">
+        <pre>/* A comment spanning 
+   multiple lines */
+
+// A comment reaching to end of line</pre>
+      
+      <p><strong>Figure 2.</strong>
+      The two types of comments available in grammar
+      files.</p>
+    </div>
+
+    <p>The header part in a grammar file contains definitions of 
+    grammar parameters. These are name-value pairs, with the name
+    normally being all upper-case. In order for Grammatica to process
+    a grammar file, at least the <code>GRAMMARTYPE</code> parameter
+    must be defined. See below for a list of the standard parameter 
+    names and values.</p>
+
+    <ul>
+      <li>
+        <strong>AUTHOR</strong><br/>
+        The grammar author name. Used by Grammatica for
+        creating <code>@author</code> tags in the Java 
+        output.
+      </li>
+
+      <li>
+        <strong>CASESENSITIVE</strong><br/>
+        The case-sensitive grammar flag. When set to "no" or
+        "false" Grammatica generates a case-insensitive parser,
+        otherwise (by default) the parsers are case-sensitive.
+      </li>
+
+      <li>
+        <strong>COPYRIGHT</strong><br/>
+        The grammar copyright statement. Used by Grammatica for
+        the file comments of generated files.
+      </li>
+
+      <li>
+        <strong>DATE</strong><br/>
+        The grammar version date. Not used by Grammatica.
+      </li>
+
+      <li>
+        <strong>DESCRIPTION</strong><br/>
+        Contains a description of the grammar. Not used by
+        Grammatica.
+      </li>
+
+      <li>
+        <strong>GRAMMARTYPE</strong><br/>
+        Defines the grammar type. Valid values are "LL" or "LR",
+        but currently Grammatica only supports LL grammars.
+      </li>
+
+      <li>
+        <strong>LICENSE</strong><br/>
+        The grammar license statement. Used by Grammatica for
+        the file comments of generated files.
+      </li>
+
+      <li>
+        <strong>VERSION</strong><br/>
+        The grammar version number. Used by Grammatica for
+        creating <code>@version</code> tags in the Java output.
+      </li>
+    </ul>
+
+  
+    <hr/>
+
+    <p class="footer">Grammatica 1.6 (2015-05-17). See the
+    <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
+    for more information.</p>
+
+    <p class="footer">Copyright &copy; 2003-2015 Per Cederberg. This document is
+    distributed as part of Grammatica under the BSD license.</p>
+
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file was automatically generated. DO NOT EDIT! -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml; charset=ISO-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <title>Grammatica Features</title>
+  </head>
+
+  <body>
+
+    <h1>Grammatica Features</h1>
+
+
+    <h2>Existing Features</h2>
+
+    <p>This is a summary of the features currently present in 
+    Grammatica.</p>
+
+    <ul>
+      <li>
+        <strong>Standard grammar syntax definitions</strong><br/>
+        The grammar files define the tokens with regular
+        expressions, and the syntax with plain EBNF. It is also 
+        possible to specify tokens as strings, avoiding escaping 
+        of any special regular expression characters.
+      </li>
+
+      <li>
+        <strong>Clean &amp; reusable grammar files</strong><br/>
+        No parser source code is present in the grammar files,
+        providing a cleaner separation between the grammar and the
+        parser. This means that the grammar files can be reused by 
+        other applications.
+      </li>
+
+      <li>
+        <strong>Support for LL(k) grammars</strong><br/>
+        LL grammars with various number of look-ahead tokens 
+        are supported. There is no need to declare the number of
+        look-ahead tokens needed.
+      </li>
+
+      <li>
+        <strong>Detailed error messages for generated parsers</strong><br/>
+        Messages generated when an error is found always 
+        describe the problem with all required details. In particular,
+        the list of expected tokens is always presented.
+      </li>
+
+      <li>
+        <strong>Automatic error recovery</strong><br/>
+        Error recovery is always attempted by the parsers
+        generated, without any changes needed in the grammar 
+        files. This makes generated parsers much more usable.
+      </li>
+
+      <li>
+        <strong>Analysis though callbacks or syntax trees</strong><br/>
+        It is possible to parse the grammar either through 
+        callbacks or by traversing the syntax tree. When using 
+        callbacks, the syntax tree creation can be avoided.
+      </li>
+
+      <li>
+        <strong>Parser generation for C# and Java</strong><br/>
+        Both C# and Java parsers can be generated from the same
+        grammar file. Both parsers behave in the same way and have the
+        same feature set, including the regular expression
+        support.
+      </li>
+
+      <li>
+        <strong>Full Unicode and regular expression support</strong><br/>
+        The generated parsers use the Java or .NET platform
+        support for Unicode and regular expressions to provide
+        optimal integration and compatibility.
+      </li>
+
+      <li>
+        <strong>Readable and commented output source code</strong><br/>
+        The source code generated is fully readable, being
+        correctly indented and commented.
+      </li>
+        
+      <li>
+        <strong>Run-time parser creation</strong><br/>
+        With the Grammatica parser libraries, an ad-hoc parser
+        can be created at run-time without the need for generating
+        source code. This can be used for easier debugging of 
+        grammars, or for creating parsers interactively.
+      </li>
+
+      <li>
+        <strong>Integration with Apache Ant</strong><br/>
+        Apache Ant tasks are available, integrating Grammatica 
+        with the standard build tool for Java developers.
+      </li>
+    </ul>
+
+
+    <h2>Upcoming Features</h2>
+
+    <p>No commitment has been made regarding which new features will
+    be present in future releases. See the 
+    <a href="bugs.html">TODO-list</a> for a the currently known 
+    future improvements.</p>
+
+  
+    <hr/>
+
+    <p class="footer">Grammatica 1.6 (2015-05-17). See the
+    <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
+    for more information.</p>
+
+    <p class="footer">Copyright &copy; 2003-2015 Per Cederberg. This document is
+    distributed as part of Grammatica under the BSD license.</p>
+
+  </body>
+</html>

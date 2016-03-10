@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file was automatically generated. DO NOT EDIT! -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml; charset=ISO-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <title>Grammatica TODO-List</title>
+  </head>
+
+  <body>
+
+    <h1>Grammatica TODO-List</h1>
+
+
+    <h2>Known Issues</h2>
+
+    <p>This is a list of the known issues as of the release of
+    version 1.6 (2015-05-17). Please 
+    verify that any new problem found is not in this list before 
+    sending a bug report.</p>
+
+    <ul>
+      <li>
+        <strong>Parser: Some grammar ambiguities may go undetected</strong><br/>
+        When the last element of an alternative is optional, 
+        some ambiguities may go undetected. This is due to not 
+        properly comparing the tokens in the optional element with 
+        the tokens after the production. The ambiguious grammar 
+        <code>A = B ["x"];  B = "y" ["x"];</code> illustrates this.
+        In some cases this may also lead to parse errors as ambiguities
+        have not been resolved with the appropriate number of look-ahead
+        tokens. This error is present in all versions of Grammatica,
+        but occurs infrequently. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4117">Bug #4117</a>
+      </li>
+    </ul>
+    
+
+    <h2>Suggested Improvements</h2>
+
+    <p>This is a list of the currently known suggested 
+    improvements.</p>
+
+    <ul>
+      <li>
+        <strong>Grammar: Add support for modular grammars</strong><br/>
+        By allowing one grammar to reference another, it 
+        would be possible to create more complex modular parsers.
+        This feature also requires support for modular tokenizers
+        and parses, as well as the generation of modular code. 
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3599">Bug #3599</a>
+      </li>
+
+      <li>
+        <strong>Grammar: Add localization support</strong><br/>
+        This includes finding an architecture that works for 
+        grammar files, making it possible to localize the error 
+        messages without rewriting the grammar file. This 
+        architecture must support different methods depending on 
+        generated source (ResourceBundles in Java, Gnu Gettext in C 
+        &amp; C++). <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3600">Bug #3600</a>
+      </li>
+
+      <li>
+        <strong>Grammar: Production representation should be improved</strong><br/>
+        The internal representation of a production makes it 
+        hard for several alternatives to share a several left-hand
+        side elements. This may cause inherent ambiguities to be
+        found, as the number of look-ahead tokens needed to separate
+        the alternatives is infinite. If these alternatives could 
+        share the first elements, this ambiguity would not require
+        a rewrite of the grammar. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4322">Bug #4322</a>
+      </li>
+
+      <li>
+        <strong>Grammar: Identical productions should be unified</strong><br/>
+        Identical syntetic productions are not indentified as 
+        such. Instead, a new syntetic production is added in each 
+        case. This will cause problems for LR parsers, and is 
+        generally inefficient. Identical syntetic productions should 
+        be unified. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3602">Bug #3602</a>
+      </li>
+
+      <li>
+        <strong>Tokenizer: Add support for modes</strong><br/>
+        When reading certain tokens the tokenizer should be 
+        able to enter some kind of "mode", limiting the set of tokens
+        that are considered for a match. This is highly useful in 
+        some grammars, where the token syntax isn't easily 
+        represented with regular expressions. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3604">Bug #3604</a>
+      </li>
+
+      <li>
+        <strong>Parser: Add support for LR grammars</strong><br/>
+        This probably means writing at least an LALR(1) parser, 
+        and probably also some kind of LR(k) parser.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3606">Bug #3606</a>
+      </li>
+
+      <li>
+        <strong>Parser: Add parsing through code callbacks</strong><br/>
+        This would allow more complex grammars to be parsed 
+        where some productions cannot be expressed in EBNF. Instead a
+        callback method would be called to parse some specific 
+        productions. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3607">Bug #3607</a>
+      </li>
+    
+      <li>
+        <strong>Analyzer: Allow node values propagating downwards</strong><br/>
+        Improve the analyzer framework to handle node values 
+        propagating downwards or sideways in the tree as well.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3608">Bug #3608</a>
+      </li>
+
+      <li>
+        <strong>Code Generation: Support creation of a C parser</strong><br/>
+        This requires the writing of a C runtime library.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3609">Bug #3609</a>
+      </li>
+  
+      <li>
+        <strong>Code Generation: Support creation of a C++ parser</strong><br/>
+        This requires the writing of a C++ runtime library plus 
+        appropriate code generation classes. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3610">Bug #3610</a>
+      </li>
+      
+      <li>
+        <strong>Error Handling: Add file reference in errors</strong><br/>
+        The exceptions could be extended with a file location
+        object (a file reference) to simplify the error handling 
+        when several files are parsed. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4180">Bug #4180</a>
+      </li>
+    </ul>
+
+  
+    <hr/>
+
+    <p class="footer">Grammatica 1.6 (2015-05-17). See the
+    <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
+    for more information.</p>
+
+    <p class="footer">Copyright &copy; 2003-2015 Per Cederberg. This document is
+    distributed as part of Grammatica under the BSD license.</p>
+
+  </body>
+</html>

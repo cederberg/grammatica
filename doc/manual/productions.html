@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file was automatically generated. DO NOT EDIT! -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml; charset=ISO-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <link rel="stylesheet" href="../style.css" type="text/css"/>
+    <title>Grammatica Reference Manual</title>
+  </head>
+
+  <body>
+
+    <h1>Grammatica Reference Manual</h1>
+
+
+    <h2>Productions</h2>
+
+    <p>The grammar productions are defined in EBNF. This is a common 
+    notation for grammars, and is <a href="http://www.garshol.priv.no/download/text/bnf.html">described
+    elsewhere</a>. Please be aware of that the grammar files use 
+    their own "dialect" of EBNF, explained below.</p>
+
+    <p>Each production definition consists of a production name and a
+    set of production alternatives. Each alternative in turn contains
+    references to tokens or other productions. Self-referencing is
+    also accepted. A simple example of a production definition is
+    shown in the figure below.</p>
+
+    
+    <div class="figure">
+        <pre>Prod = "TokenString" OtherProd
+     | TOKEN_NAME OtherProd ;</pre>
+      
+      <p><strong>Figure 2.</strong>
+      A simple example production. This production contains
+      two alternatives illustrating all the valid ways of referring
+      to a token or a production.</p>
+    </div>
+
+    <p>In the example above "=" is used for separating the production
+    name from the definition, instead of the standard EBNF ":=". Also
+    the definition must end with a ";" character. The production name
+    follows the same restrictions as the token name, i.e. it may only
+    contain characters from the set <code>[a-zA-Z0-9_]</code>.</p>
+
+    <p>The grammar files also allow some constructs that are not part
+    of standard BNF or EBNF. In particular this include parenthesizing
+    with the "{", "}", "[", and "]" characters. See the figure below
+    for an example of this. Normal grouping with "(" and ")" is of 
+    course also allowed.</p>
+
+    
+    <div class="figure">
+        <pre>Prod = "1"?
+     | "2"*
+     | "3"+
+     | {"4"}
+     | ["5"] ;</pre>
+      
+      <p><strong>Figure 2.</strong>
+      An example of the accepted forms of grouping and
+      repetitions allowed. The "?", "*", and "+" characters are
+      allowed after productions, tokens or normal parenthesis. The 
+      "<code>{...}</code>" parenthesis is a shortform for 
+      "<code>(...)*</code>", and the "<code>[...]</code>" parenthesis
+      is a shortform for "<code>(...)?</code>".</p>
+    </div>
+
+    <p>The EBNF dialect used in Grammatica currently does not allow
+    <code>null</code> (i.e. empty) production alternatives. Instead,
+    the same result can be obtained by making all references to the
+    production optional with the <code>[...]</code> construct or
+    similar.</p>
+
+  
+    <hr/>
+
+    <p class="footer">Grammatica 1.6 (2015-05-17). See the
+    <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
+    for more information.</p>
+
+    <p class="footer">Copyright &copy; 2003-2015 Per Cederberg. This document is
+    distributed as part of Grammatica under the BSD license.</p>
+
+  </body>
+</html>

@@ -1,0 +1,79 @@
+GRAMMATICA FEATURES
+===================
+
+Existing Features
+-----------------
+
+  This is a summary of the features currently present in Grammatica.
+
+    o Standard grammar syntax definitions
+      The grammar files define the tokens with regular expressions, 
+      and the syntax with plain EBNF. It is also possible to specify 
+      tokens as strings, avoiding escaping of any special regular 
+      expression characters.
+
+    o Clean & reusable grammar files
+      No parser source code is present in the grammar files, 
+      providing a cleaner separation between the grammar and the 
+      parser. This means that the grammar files can be reused by 
+      other applications.
+
+    o Support for LL(k) grammars
+      LL grammars with various number of look-ahead tokens are 
+      supported. There is no need to declare the number of look-ahead 
+      tokens needed.
+
+    o Detailed error messages for generated parsers
+      Messages generated when an error is found always describe the 
+      problem with all required details. In particular, the list of 
+      expected tokens is always presented.
+
+    o Automatic error recovery
+      Error recovery is always attempted by the parsers generated, 
+      without any changes needed in the grammar files. This makes 
+      generated parsers much more usable.
+
+    o Analysis though callbacks or syntax trees
+      It is possible to parse the grammar either through callbacks or 
+      by traversing the syntax tree. When using callbacks, the syntax 
+      tree creation can be avoided.
+
+    o Parser generation for C# and Java
+      Both C# and Java parsers can be generated from the same grammar 
+      file. Both parsers behave in the same way and have the same 
+      feature set, including the regular expression support.
+
+    o Full Unicode and regular expression support
+      The generated parsers use the Java or .NET platform support for 
+      Unicode and regular expressions to provide optimal integration 
+      and compatibility.
+
+    o Readable and commented output source code
+      The source code generated is fully readable, being correctly 
+      indented and commented.
+
+    o Run-time parser creation
+      With the Grammatica parser libraries, an ad-hoc parser can be 
+      created at run-time without the need for generating source 
+      code. This can be used for easier debugging of grammars, or for 
+      creating parsers interactively.
+
+    o Integration with Apache Ant
+      Apache Ant tasks are available, integrating Grammatica with the 
+      standard build tool for Java developers.
+
+
+Upcoming Features
+-----------------
+
+  No commitment has been made regarding which new features will be 
+  present in future releases. See the TODO-list (in bugs.txt) for a 
+  the currently known future improvements.
+
+
+_____________________________________________________________________
+Grammatica 1.6 (2015-05-17). See http://grammatica.percederberg.net/
+for more information.
+
+Copyright (c) 2003-2015 Per Cederberg. This document is distributed
+as a part of Grammatica under the BSD license.

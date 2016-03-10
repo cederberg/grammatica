@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This file was automatically generated. DO NOT EDIT! -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml; charset=ISO-8859-1"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <title>Grammatica Version Information</title>
+  </head>
+
+  <body>
+
+    <h1>Grammatica Version Information</h1>
+
+
+    <h2>Version 1.6 (2015-05-17):</h2>
+
+    <ul>
+      <li>
+        <strong>License modified to revised BSD</strong><br/>
+        The license agreement for this library has been changed
+        to revised BSD license. This change was made to avoid any confusion
+        related to usage in commercial (closed source) applications.
+      </li>
+
+      <li>
+        <strong>Fixed minor API issues for reusing parsers</strong><br/>
+        The <code>Parser.reset</code> method is now available
+        in a new flavor that allows replacing the <code>Analyzer</code>
+        being used. Also the <code>Tokenizer</code> now disposes the
+        input buffer and references to parsed tokens already when the
+        end of file is encountered.
+      </li>
+    </ul>
+
+
+    <h2>Version 1.5 (2009-03-07):</h2>
+
+    <ul>
+      <li>
+        <strong>License modified to GNU LGPL version 3</strong><br/>
+        The license agreement for this library has been changed
+        to GNU LGPL,
+        version 3. This change was made for compatibility reasons
+        and most users will remain unaffected.
+      </li>
+
+      <li>
+        <strong>Added Visual Basic.NET code generation</strong><br/>
+        A Visual Basic.NET source code generator has been
+        contributed by Adrian Moore. It uses the same run-time library
+        (DLL) as the C# .NET version. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=8199">Bug #8199</a>
+      </li>
+
+      <li>
+        <strong>Added support for case-insensitive parsing</strong><br/>
+        A <code>CASESENSITIVE</code> grammar declaration has
+        been added to make it possible to parse in case-insensitive
+        mode. By default all parsing is case-sensitive. Thanks to
+        Adrian Moore for providing a partial implementation.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=5060">Bug #5060</a>
+      </li>
+
+      <li>
+        <strong>Added support for reusing parsers and tokenizers</strong><br/>
+        A <code>reset()</code> method has been added to both the
+        Parser and the Tokenizer classes, allowing to reuse a parser
+        with a new input stream. By reusing a single parser and
+        tokenizer for various input files speed and memory gains can
+        be made, especially for complex grammars.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4500">Bug #4500</a>
+      </li>
+
+      <li>
+        <strong>Added factory methods for creating various objects</strong><br/>
+        New factory methods for creating tokens, productions,
+        tokenizers and analyzers have been added. These can be overridden
+        in subclasses to provide more specific classes if desired.
+      </li>
+
+      <li>
+        <strong>Improved the tokenizer processing speed</strong><br/>
+        The tokenizer speed has been improved by using a custom
+        DFA implementation for regular expressions. The tokenization
+        phase now runs some 20-30% faster in the general case.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3603">Bug #3603</a> &amp; <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=8202">Bug #8202</a>
+      </li>
+
+      <li>
+        <strong>Changed to use native Java regular expressions</strong><br/>
+        Since the built-in regular expression library is not used
+        as frequently after the implementation of DFA regular expression
+        handling, the native Java regular expression classes are now
+        used. This implies improved support for advanced regular
+        expression syntax (at a performance penalty).
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3597">Bug #3597</a> &amp; <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=17189">Bug #17189</a>
+      </li>
+
+      <li>
+        <strong>Changed .NET parser namespace for C# 2.0</strong><br/>
+        The C# parser namespace has been modified from
+        <code>PerCederberg.Grammatica.Parser</code> to
+        <code>PerCederberg.Grammatica.Runtime</code> due to the new
+        C# 2.0 compiler strictness. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=14302">Bug #14302</a>
+      </li>
+
+      <li>
+        <strong>Changed .NET parser API for better integration</strong><br/>
+        The .NET parser API has been modified for almost all
+        classes, introducing properties and indices instead of getter
+        and setter methods. The old methods have been deprecated, but
+        are still available to avoid breaking existing applications.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=8693">Bug #8693</a>
+      </li>
+
+      <li>
+        <strong>Changed built-in regular expression API subtly</strong><br/>
+        Due to fixes required to be able to reuse tokenizers,
+        the built-in regular expression class API had to be changed
+        subtly. In essence, all the methods can now throw IOException
+        which breaks a Java compile. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4500">Bug #4500</a>
+      </li>
+
+      <li>
+        <strong>Fixed possible divide by zero in profiling</strong><br/>
+        When profiling grammars with small input files, the time
+        measured could previously be zero (0). This caused a division
+        by zero exception when calculating the number of tokens parsed
+        per second. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=7998">Bug #7998</a>
+      </li>
+
+      <li>
+        <strong>Fixed parse error on some grammar comments</strong><br/>
+        Grammar comments ending with "**/" previously caused a
+        parse error. The comment token regular expression has now been
+        corrected to fix this. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=12767">Bug #12767</a>
+      </li>
+
+      <li>
+        <strong>Fixed premature EOF reported in some cases</strong><br/>
+        The tokenizer previously assumed EOF had been encountered
+        when a full look-ahead buffer couldn't be read. Thanks to 
+        Jeremy M Stone for finding this. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=23818">Bug #23818</a>
+      </li>
+
+      <li>
+        <strong>Fixed token match priority to use the grammar order</strong><br/>
+        String tokens were previously always checked and considered
+        first, unless a regular expression token matched more characters.
+        This has now been changed to depend on the grammar file ordering
+        instead. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=13009">Bug #13009</a>
+      </li>
+    </ul>
+
+
+    <h2>Version 1.4 (2003-08-27):</h2>
+
+    <ul>
+      <li>
+        <strong>Added Apache Ant task</strong><br/>
+        An Apache Ant task has been added to the distribution.
+        See the reference manual for details on how to use it. 
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3620">Bug #3620</a>
+      </li>
+
+      <li>
+        <strong>Added support for retrieving all tokens</strong><br/>
+        The <code>Tokenizer</code> class now supports enabling 
+        a <code>useTokenList</code> feature, that will link all 
+        tokens in a double-linked list. This can be used to access
+        whitespace and comment tokens, although otherwise ignored by 
+        the parser. By default this feature is off, to avoid potetial
+        garbage collection problems when parsing large files. 
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3605">Bug #3605</a>
+      </li>
+
+      <li>
+        <strong>Removed API documentation for unsupported API</strong><br/>
+        Java API documentation for the unsupported API:s in 
+        Grammatica is no longer created or distributed. 
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4969">Bug #4969</a>
+      </li>
+
+      <li>
+        <strong>Corrected a null pointer error in <code>--profile</code></strong><br/>
+        When using <code>--profile</code> a null pointer 
+        exception was thrown during the parsing of the file. This
+        was due to the analyzer being set to null, something that has
+        now been made impossible. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4967">Bug #4967</a>
+      </li>
+    </ul>
+
+
+    <h2>Version 1.3 (2003-07-27):</h2>
+
+    <ul>
+      <li>
+        <strong>Added C# API documentation</strong><br/>
+        C# API documentation has now been added to the 
+        release documentation. The build file uses CppDoc to
+        generate the HTML documents. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3612">Bug #3612</a>
+      </li>
+      
+      <li>
+        <strong>Added source code examples to documentation</strong><br/>
+        Some examples of Java source code for creating a
+        parser has been added to the reference manual. 
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4093">Bug #4093</a>
+      </li>
+
+      <li>
+        <strong>Improved and clarified the Analyzer API</strong><br/>
+        The Analyzer class API has been clarified by improving
+        the generated comments slightly and by adding a 
+        <code>getChildValues()</code> method. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4181">Bug #4181</a>
+      </li>
+
+      <li>
+        <strong>Corrected generation of C# analyzer classes</strong><br/>
+        The generation of C# analyzer classes was completely
+        broken in all previous releases, due to missing keywords and
+        erroneous casing of method names. Tests have now been added
+        to verify the generated analyzers. This was only an issue in
+        the C# code generation, as the Java version has been tested
+        continuously. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4416">Bug #4416</a> &amp; <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=4498">Bug #4498</a>
+      </li>
+	</ul>
+
+
+    <h2>Version 1.2 (2003-06-10):</h2>
+
+    <ul>
+      <li>
+        <strong>Added profiling for grammars</strong><br/>
+        A new action <code>--profile</code> has been added that
+        prints out the statistics from a profiling run of the 
+        grammar. This is useful for improving the grammar and parsing 
+        speed. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3936">Bug #3936</a>
+      </li>
+
+      <li>
+        <strong>Improved tokenizer performance</strong><br/>
+        The tokenizer performance has been much improved for
+        string tokens. The tokenization speed is now about twice as fast
+        (on average), meaning that the tokenizer will use half as much
+        time for most input and grammars. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3603">Bug #3603</a>
+      </li>
+      
+      <li>
+        <strong>Improved the parse tree output on error</strong><br/>
+        The parse tree was previously only printed when a file
+        could be parsed correctly. Now the parse tree is printed 
+        until the first syntax error is found.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3930">Bug #3930</a>
+      </li>
+
+      <li>
+        <strong>Improved error message for missing '%' character</strong><br/>
+        When missing the final '%' character in the grammar 
+        file, the error message printed was not logical. This has 
+        been improved by printing an 'unterminated directive' error
+        instead. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3931">Bug #3931</a>
+      </li>
+
+      <li>
+        <strong>Improved the reference manual</strong><br/>
+        The reference manual has been improved to the point 
+        where it is considered finished. There is still room for
+        much improvement, however, and such fixes will added in 
+        later versions. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3598">Bug #3598</a>
+      </li>
+
+      <li>
+        <strong>Corrected unexpected token error messages</strong><br/>
+        In some circumstances the unexpected token error 
+        messages didn't list all possible tokens. This only ocurred
+        for productions containing alternatives with ambiguities that
+        were resolved with one alternative being set as the default.
+        This has now been corrected, which should also improve the
+        error recovery in these cases. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3929">Bug #3929</a>
+      </li>
+    </ul>
+
+
+    <h2>Version 1.1 (2003-05-26):</h2>
+
+    <ul>
+      <li>
+        <strong>Added automatic error recovery</strong><br/>
+        Automatic error recovery is now always attempted 
+        without any changes to the grammar. Unfortunately the parser
+        library API had to be changed a bit to make this possible. 
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3601">Bug #3601</a>
+      </li>
+
+      <li>
+        <strong>Added debug printout of the interpreted grammar</strong><br/>
+        A new action <code>--debug</code> has been added that
+        prints out the internal representation of the grammar. This
+        is useful for debugging, as it also prints the look-ahead
+        token sets calculated. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3692">Bug #3692</a>
+      </li>
+
+      <li>
+        <strong>Improved speed of the look-ahead calculation</strong><br/>
+        Calculating look-ahead sequences longer than four (4)
+        tokens, could be very slow in previous versions. This was
+        due to the algorithm being used. A new algorithm has now
+        been implemented, speeding up the process and allowing
+        calculation of look-aheads of at least 10 tokens length.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3674">Bug #3674</a>
+      </li>
+    
+      <li>
+        <strong>Corrected stack overflow in regular expressions</strong><br/>
+        Regular expressions containing reluctant quantifiers 
+        (such as '*?') caused stack overflow errors when matching 
+        long input strings (about 4096 characters). This has now
+        been fixed in both the C# and Java versions, and new 
+        automatic test cases have been added.
+        <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3632">Bug #3632</a>
+      </li>
+
+      <li>
+        <strong>Corrected failing regular expression match</strong><br/>
+        Tokens with regular expression patterns sometimes 
+        didn't find a proper match. This only occured for expressions
+        containing quantifiers ('*', '+', '*?' and '+?'), and only 
+        extremely seldom due to a failure to reset previous matches.
+        This was only ever an issue in the Java version, where it has
+        now been fixed. <a href="http://savannah.nongnu.org/bugs/index.php?func=detailitem&amp;item_id=3653">Bug #3653</a>
+      </li>
+    </ul>
+
+
+    <h2>Version 1.0 (2003-05-14):</h2>
+
+    <ul>
+      <li>
+        <strong>Improved grammar error reporting</strong><br/>
+        Error messages printed by Grammatica have been much 
+        improved in various ways. First, the exception traces are
+        no longer printed by default. Secondly, the faulting line 
+        is printed on many errors (as done by javac). Thirdly, 
+        ambiguity errors are now reported with a list of conflicting
+        tokens, making them easier to understand.
+      </li>
+
+      <li>
+        <strong>Corrected parse tree analyzer child handling</strong><br/>
+        A bug in the base Analyzer class caused the child() 
+        methods not to be called when processing a parse tree after
+        creation (both for C# &amp; Java). When analyzing through 
+        callbacks things did work as expected, though.
+      </li>
+    </ul>
+
+
+    <h2>Version 0.4 (2003-05-08):</h2>
+
+    <ul>
+      <li>
+        <strong>Added creation of C# parsers (for .NET)</strong><br/>
+        The parser runtime library has been ported to C#, so it
+        is now possible to generate parsers for .NET languages. A C# 
+        parser output has also been added to the main program.
+      </li>
+  
+      <li>
+        <strong>Added unit tests for generated parsers</strong><br/>
+        Validation of the parsers generated for both C# and
+        Java has been automated in unit tests. A bug in the previous
+        release was detected through these tests (see below).
+      </li>
+
+      <li>
+        <strong>Added a first draft reference manual</strong><br/>
+        A first short reference manual has been added to the
+        documentation. The reference manual is generated to HTML from
+        XML just as the release notes.
+      </li>
+
+      <li>
+        <strong>Corrected parse exception creation bug</strong><br/>
+        When creating a parse exception, the LL(k) parser in
+        some situations caused a NullPointerException. This has now
+        been corrected.
+      </li>
+	</ul>
+
+
+    <h2>Version 0.3 (2003-05-04):</h2>
+    
+    <ul>
+      <li>
+        <strong>Created XML generated documentation</strong><br/>
+        The release documentation is now available in both text
+        and HTML format. Both formats are generated with XSLT from a
+        single source.
+      </li>
+
+      <li>
+        <strong>Added look-ahead loop detection</strong><br/>
+        The look-ahead calculation now detects grammar loops 
+        and all grammar ambiguities. It should no longer be possible
+        to cause infinite loops with a malformed grammar.
+      </li>
+      
+      <li>
+        <strong>Added ambiguity resolution inside alternatives</strong><br/>
+        Some ambiguities inside productions couldn't previously 
+        be resolved by the LL(k) parser. Productions like
+        <code>["one"] "one" "two"</code> contain an ambiguity between 
+        the first element and the second, but it is not inherent. This
+        is now handled correctly by adding look-ahead sets for 
+        individual production elements.
+      </li>
+  
+      <li>
+        <strong>Added expected tokens to parse errors</strong><br/>
+        The parse error exceptions now contains a list of the
+        expected tokens for the unexpected token errors.
+      </li>
+
+      <li>
+        <strong>Added automatic unit tests for the parser</strong><br/>
+        A JUnit class testing the LL(k) parser has been added.
+        These tests are executed upon every build to verify the 
+        integrity of the parser.
+      </li>
+    </ul>    
+
+
+    <h2>Version 0.2 (2003-04-20):</h2>
+
+    <ul>
+      <li>
+        <strong>Addition of an internal regular expression library</strong><br/>
+        This improves tokenizer performance by at least 100% 
+        compared to using the GNU RegExp library.
+      </li>
+
+      <li>
+        <strong>Addition of an analyzer framework with parser callbacks</strong><br/>
+        A code generator has also been added to create default 
+        methods for all tokens and productions in the grammar.
+      </li>
+
+      <li>
+        <strong>Major refactorings of the tokenizer and parser classes</strong><br/>
+        Various other classes have also been improved to simplify 
+        future feature additions.
+      </li>
+    </ul>
+
+
+    <h2>Version 0.1 (2003-03-29):</h2>
+
+    <ul>
+      <li>
+        <strong>Initial release</strong><br/>
+        The first alpha release. This version was only available
+        to a limited audience.
+      </li>
+    </ul>
+
+  
+    <hr/>
+
+    <p class="footer">Grammatica 1.6 (2015-05-17). See the
+    <a href="http://grammatica.percederberg.net/">Grammatica web site</a>
+    for more information.</p>
+
+    <p class="footer">Copyright &copy; 2003-2015 Per Cederberg. This document is
+    distributed as part of Grammatica under the BSD license.</p>
+
+  </body>
+</html>
