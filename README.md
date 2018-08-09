@@ -1,8 +1,8 @@
 GRAMMATICA README
 =================
 
-1. Introduction
----------------
+Introduction
+------------
 
 Grammatica is a C# and Java parser generator (compiler compiler).
 It reads a grammar file (in an EBNF format) and creates well-
@@ -19,30 +19,30 @@ separate LICENCE.txt file for more details.
 Please see http://grammatica.percederberg.net/ for more information.
 
 
-2. Installation & Usage
------------------------
+Installation & Usage
+--------------------
 
-See the separate doc/install.txt file for installation and usage 
+See the separate [doc/install.txt](https://grammatica.percederberg.net/doc/install.html) file for installation and usage 
 for instructions.
   
 
-3. Acknowledgements
--------------------
+Acknowledgements
+----------------
 
-See the separate doc/authors.txt file for author and 
+See the separate [doc/authors.txt](https://grammatica.percederberg.net/doc/authors.html) file for author and 
 acknowledgement details.
 
 
-4. Bug Reports
---------------
+Bug Reports
+-----------
 
 See the Github project page for reporting errors and issues:
 
 https://github.com/cederberg/grammatica/
 
 
-5. Contributing
----------------
+Contributing
+------------
 
 If you find this software package useful or interesting, please 
 consider contributing to the project. Please see the project web
