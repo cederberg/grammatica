@@ -242,7 +242,7 @@ class JavaParserFile {
                                    String.valueOf(constantId + 3000));
             var.addComment(new JavaComment(PRODUCTION_COMMENT));
             cls.addVariable(var);
-            constantNames.put(new Integer(pattern.getId()), constant);
+            constantNames.put(Integer.valueOf(pattern.getId()), constant);
             constantId++;
         }
     }
@@ -336,7 +336,7 @@ class JavaParserFile {
      * @return the constant name to use
      */
     private String getConstant(JavaConstantsFile constants, int id) {
-        Integer  value = new Integer(id);
+        Integer  value = Integer.valueOf(id);
 
         if (constantNames.containsKey(value)) {
             return (String) constantNames.get(value);

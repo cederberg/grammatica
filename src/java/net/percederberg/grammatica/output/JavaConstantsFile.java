@@ -132,7 +132,7 @@ class JavaConstantsFile {
                                "" + pattern.getId());
         var.addComment(new JavaComment(TOKEN_COMMENT));
         ifc.addVariable(var);
-        constantNames.put(new Integer(pattern.getId()), constant);
+        constantNames.put(Integer.valueOf(pattern.getId()), constant);
     }
 
     /**
@@ -156,7 +156,7 @@ class JavaConstantsFile {
                                    "" + pattern.getId());
             var.addComment(new JavaComment(PRODUCTION_COMMENT));
             ifc.addVariable(var);
-            constantNames.put(new Integer(pattern.getId()), constant);
+            constantNames.put(Integer.valueOf(pattern.getId()), constant);
         }
     }
 
@@ -170,7 +170,7 @@ class JavaConstantsFile {
      *         null if not found
      */
     public String getConstant(int id) {
-        String  name = (String) constantNames.get(new Integer(id));
+        String  name = (String) constantNames.get(Integer.valueOf(id));
 
         if (name == null) {
             return null;

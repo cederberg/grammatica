@@ -605,7 +605,7 @@ class LookAheadSet {
         public Sequence(boolean repeat, int token) {
             this.repeat = false;
             this.tokens = new ArrayList(1);
-            this.tokens.add(new Integer(token));
+            this.tokens.add(Integer.valueOf(token));
         }
 
         /**

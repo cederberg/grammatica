@@ -282,10 +282,10 @@ class FirstPassAnalyzer extends GrammarAnalyzer {
     protected Node exitTokenValue(Production node) throws ParseException {
         switch (getChildAt(node, 0).getId()) {
         case GrammarConstants.QUOTED_STRING:
-            node.addValue(new Integer(TokenPattern.STRING_TYPE));
+            node.addValue(Integer.valueOf(TokenPattern.STRING_TYPE));
             break;
         case GrammarConstants.REGEXP:
-            node.addValue(new Integer(TokenPattern.REGEXP_TYPE));
+            node.addValue(Integer.valueOf(TokenPattern.REGEXP_TYPE));
             break;
         }
         node.addValue(getStringValue(getChildAt(node, 0), 0));

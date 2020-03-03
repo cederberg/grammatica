@@ -655,7 +655,7 @@ class TokenNFA {
             if (ignoreCase) {
                 c = Character.toLowerCase(c);
             }
-            addContent(new Character(c));
+            addContent(Character.valueOf(c));
         }
 
         /**

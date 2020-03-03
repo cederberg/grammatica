@@ -244,7 +244,7 @@ class VisualBasicParserFile {
         if (pattern.isSynthetic()) {
             constant = "SUBPRODUCTION_" + constantId;
             enm.addConstant(constant, String.valueOf(constantId + 3000));
-            constantNames.put(new Integer(pattern.getId()), constant);
+            constantNames.put(Integer.valueOf(pattern.getId()), constant);
             constantId++;
         }
     }
@@ -266,7 +266,7 @@ class VisualBasicParserFile {
         code.append(getConstant(constants, pattern.getId()));
         code.append("), \"");
         if (pattern.isSynthetic()) {
-            str = (String) constantNames.get(new Integer(pattern.getId()));
+            str = (String) constantNames.get(Integer.valueOf(pattern.getId()));
             code.append(gen.getCodeStyle().getMixedCase(str, true));
         } else {
             code.append(pattern.getName());
@@ -338,7 +338,7 @@ class VisualBasicParserFile {
      * @return the constant name to use
      */
     private String getConstant(VisualBasicConstantsFile constants, int id) {
-        Integer  value = new Integer(id);
+        Integer  value = Integer.valueOf(id);
 
         if (constantNames.containsKey(value)) {
             return "SynteticPatterns." + constantNames.get(value);
