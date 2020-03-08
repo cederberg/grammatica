@@ -206,7 +206,7 @@ public abstract class Parser {
     public void addPattern(ProductionPattern pattern)
         throws ParserCreationException {
 
-        Integer  id = new Integer(pattern.getId());
+        Integer  id = Integer.valueOf(pattern.getId());
 
         if (pattern.getAlternativeCount() <= 0) {
             throw new ParserCreationException(
@@ -451,7 +451,7 @@ public abstract class Parser {
      *         null if non-existent
      */
     ProductionPattern getPattern(int id) {
-        Integer  value = new Integer(id);
+        Integer  value = Integer.valueOf(id);
 
         return (ProductionPattern) patternIds.get(value);
     }

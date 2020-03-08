@@ -192,7 +192,7 @@ class CharacterSetElement extends Element {
      * @param c              the character to add
      */
     public void addCharacter(char c) {
-        addContent(new Character(c));
+        addContent(Character.valueOf(c));
     }
 
     /**

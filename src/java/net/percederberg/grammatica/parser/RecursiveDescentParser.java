@@ -883,7 +883,7 @@ public class RecursiveDescentParser extends Parser {
          *         false otherwise
          */
         public boolean contains(String name, int value) {
-            Integer  obj = new Integer(value);
+            Integer  obj = Integer.valueOf(value);
 
             for (int i = 0; i < nameStack.size(); i++) {
                 if (nameStack.get(i).equals(name)
@@ -912,7 +912,7 @@ public class RecursiveDescentParser extends Parser {
          */
         public void push(String name, int value) {
             nameStack.add(name);
-            valueStack.add(new Integer(value));
+            valueStack.add(Integer.valueOf(value));
         }
 
         /**

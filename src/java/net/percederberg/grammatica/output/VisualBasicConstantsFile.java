@@ -120,7 +120,7 @@ class VisualBasicConstantsFile {
 
         constant = gen.getCodeStyle().getUpperCase(pattern.getName());
         enm.addConstant(constant, String.valueOf(pattern.getId()));
-        constantNames.put(new Integer(pattern.getId()), constant);
+        constantNames.put(Integer.valueOf(pattern.getId()), constant);
     }
 
     /**
@@ -135,7 +135,7 @@ class VisualBasicConstantsFile {
         if (!pattern.isSynthetic()) {
             constant = gen.getCodeStyle().getUpperCase(pattern.getName());
             enm.addConstant(constant, String.valueOf(pattern.getId()));
-            constantNames.put(new Integer(pattern.getId()), constant);
+            constantNames.put(Integer.valueOf(pattern.getId()), constant);
         }
     }
 
@@ -149,7 +149,7 @@ class VisualBasicConstantsFile {
      *         null if not found
      */
     public String getConstant(int id) {
-        String  name = (String) constantNames.get(new Integer(id));
+        String  name = (String) constantNames.get(Integer.valueOf(id));
 
         if (name == null) {
             return null;

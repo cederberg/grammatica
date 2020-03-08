@@ -45,7 +45,7 @@ public class TestArithmeticCalculator extends TestCase {
      */
     public TestArithmeticCalculator(String name) {
         super(name);
-        variables.put("a", new Integer(2));
+        variables.put("a", Integer.valueOf(2));
     }
 
     /**

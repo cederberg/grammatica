@@ -127,7 +127,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
      * @return the node to add to the parse tree
      */
     protected Node exitNumber(Token node) {
-        node.addValue(new Integer(node.getImage()));
+        node.addValue(Integer.valueOf(node.getImage()));
         return node;
     }
 
@@ -165,7 +165,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
             op = (String) values.get(1);
             result = operate(op, value1, value2);
         }
-        node.addValue(new Integer(result));
+        node.addValue(Integer.valueOf(result));
         return node;
     }
 
@@ -203,7 +203,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
             op = (String) values.get(1);
             result = operate(op, value1, value2);
         }
-        node.addValue(new Integer(result));
+        node.addValue(Integer.valueOf(result));
         return node;
     }
 
@@ -236,7 +236,7 @@ class ArithmeticCalculator extends ArithmeticAnalyzer {
         } else {
             result = getIntValue(getChildAt(node, 1), 0);
         }
-        node.addValue(new Integer(result));
+        node.addValue(Integer.valueOf(result));
         return node;
     }
 

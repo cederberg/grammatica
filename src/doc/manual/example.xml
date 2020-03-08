@@ -115,7 +115,7 @@ Atom = NUMBER
         <pre>class ArithmeticCalculator extends ArithmeticAnalyzer {
 
     protected Node exitNumber(Token node) {
-        node.addValue(new Integer(node.getImage()));
+        node.addValue(Integer.valueOf(node.getImage()));
         return node;
     }
 
@@ -134,7 +134,7 @@ Atom = NUMBER
             op = (String) values.get(1);
             result = operate(op, value1, value2);
         }
-        node.addValue(new Integer(result));
+        node.addValue(Integer.valueOf(result));
         return node;
     }
 
@@ -158,7 +158,7 @@ Atom = NUMBER
             op = (String) values.get(1);
             result = operate(op, value1, value2);
         }
-        node.addValue(new Integer(result));
+        node.addValue(Integer.valueOf(result));
         return node;
     }
 
@@ -175,7 +175,7 @@ Atom = NUMBER
         } else {
             result = getIntValue(getChildAt(node, 1), 0);
         }
-        node.addValue(new Integer(result));
+        node.addValue(Integer.valueOf(result));
         return node;
     }
 

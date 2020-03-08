@@ -352,7 +352,7 @@ public class Grammar extends Object {
      * @return the token pattern, or null
      */
     public TokenPattern getTokenPatternById(int id) {
-        return (TokenPattern) tokenIds.get(new Integer(id));
+        return (TokenPattern) tokenIds.get(Integer.valueOf(id));
     }
 
     /**
@@ -406,7 +406,7 @@ public class Grammar extends Object {
      * @return the production pattern, or null
      */
     public ProductionPattern getProductionPatternById(int id) {
-        return (ProductionPattern) productionIds.get(new Integer(id));
+        return (ProductionPattern) productionIds.get(Integer.valueOf(id));
     }
 
     /**
@@ -439,7 +439,7 @@ public class Grammar extends Object {
      */
     void addToken(TokenPattern token, int start, int end) {
         tokens.add(token);
-        tokenIds.put(new Integer(token.getId()), token);
+        tokenIds.put(Integer.valueOf(token.getId()), token);
         tokenNames.put(token.getName(), token);
         if (token.getType() == TokenPattern.STRING_TYPE) {
             tokenPatterns.put(token.getPattern(), token);
@@ -456,7 +456,7 @@ public class Grammar extends Object {
      */
     void addProduction(ProductionPattern production, int start, int end) {
         productions.add(production);
-        productionIds.put(new Integer(production.getId()), production);
+        productionIds.put(Integer.valueOf(production.getId()), production);
         productionNames.put(production.getName(), production);
         lines.put(production.getName(), new LineRange(start, end));
     }
