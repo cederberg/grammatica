@@ -18,6 +18,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+
 
 /**
  * A base parser class. This class provides the standard parser
@@ -397,6 +399,55 @@ public abstract class Parser {
         return root;
     }
 
+	/**
+     * Parses the token list and returns a parse tree. This method
+     * will call prepare() if not previously called. It will also call
+     * the reset() method, to making sure that only the
+     * Tokenizer.reset() method must be explicitly called in order to
+     * reuse a parser for multiple input streams. In case of a parse
+     * error, the parser will attempt to recover and throw all the
+     * errors found in a parser log exception at the end of the
+     * parsing.
+     *
+     * @return the parse tree
+     *
+     * @throws ParserCreationException if the parser couldn't be
+     *             initialized correctly
+     * @throws ParserLogException if the input couldn't be parsed
+     *             correctly
+     * @author Jose Guaro 
+     * @see #prepare
+     * @see #reset
+     * @see Tokenizer#reset
+     */
+    public Node parseFromTokenList(List<Token> tokenList)  throws ParserCreationException, ParserLogException {
+      Node root = null;
+
+      // Initialize parser
+      if (!initialized) {
+        prepare();
+      }
+      
+      this.tokens.clear();
+      this.tokens.addAll(tokenList);
+      this.errorLog = new ParserLogException();
+      this.errorRecovery = -1;
+
+      // Parse input
+      try {
+        root = parseStart();
+      } catch (ParseException e) {
+        addError(e, true);
+      }
+
+      // Check for errors
+      if (errorLog.getErrorCount() > 0) {
+        throw errorLog;
+      }
+
+      return root;
+    }
+	
     /**
      * Parses the token stream and returns a parse tree.
      *
