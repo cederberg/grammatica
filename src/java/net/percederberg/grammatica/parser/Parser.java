@@ -408,6 +408,8 @@ public abstract class Parser {
      * error, the parser will attempt to recover and throw all the
      * errors found in a parser log exception at the end of the
      * parsing.
+     * 
+     * @param tokenList - the List to parse tokens from
      *
      * @return the parse tree
      *
