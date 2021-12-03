@@ -397,6 +397,10 @@ public class TestRegExp extends TestCase {
      * (Bug #3632)
      */
     public void testQuantifierStackOverflow() {
+        if( System.getProperty("sun.arch.data.model") != "64" ) {
+            // Skip the test on non-64bit architectures
+            return;
+        }
         StringBuffer  buffer = new StringBuffer();
         String        str;
 
